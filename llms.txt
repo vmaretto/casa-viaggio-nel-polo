@@ -1,6 +1,6 @@
 # CASA — Il viaggio comincia da qui
 
-Presentazione del Polo per Cibo, Ambiente, Salute e Agricoltura (nome di lavoro: CASA).
+Presentazione di CASA, il Polo per Cibo, Ambiente, Salute e Agricoltura.
 Una visione integrata su Cibo, Ambiente, Salute e Agricoltura.
 
 ## Copertina
@@ -395,6 +395,6 @@ La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini, la cui
 
 Il momento è adesso. L'ecosistema esiste — competenze, partner, contenuti. Manca l'infrastruttura che lo tenga insieme e lo faccia scalare. CASA è quella infrastruttura. La costruiamo con chi ci sta.
 
-CASA — Cibo, Ambiente, Salute, Agricoltura · nome di lavoro
+CASA — Cibo, Ambiente, Salute, Agricoltura
 
 torna su ↑

@@ -1,11 +1,11 @@
 # CONTESTO — CASA · Il viaggio comincia da qui
 
 > File di handoff per chi (persona o AI agent) deve capire o continuare questo progetto.
-> Ultimo aggiornamento: 9 luglio 2026.
+> Ultimo aggiornamento: 10 luglio 2026.
 
 ## Che cos'è
 
-Pagina web narrativa/immersiva (one-page scroll) che presenta **CASA**, il Polo per **Cibo, Ambiente, Salute e Agricoltura** (nome di lavoro). È una presentazione istituzionale con animazioni scroll-driven, pensata per essere condivisa via link.
+Pagina web narrativa/immersiva (one-page scroll) che presenta **CASA**, il Polo per **Cibo, Ambiente, Salute e Agricoltura**. CASA è il nome ufficiale del progetto. È una presentazione istituzionale con animazioni scroll-driven, pensata per essere condivisa via link.
 
 - **Sito live**: https://casa-viaggio-nel-polo.vercel.app (deploy automatico da GitHub via Vercel)
 - **Repository**: https://github.com/vmaretto/casa-viaggio-nel-polo
@@ -18,6 +18,7 @@ Pagina web narrativa/immersiva (one-page scroll) che presenta **CASA**, il Polo 
 | `index.html` | L'intera presentazione in un unico file "bundled" (~2 MB): markup, JS, font e immagini incorporati |
 | `llms.txt` | Tutto il contenuto testuale in markdown — versione per AI agent (standard llms.txt) |
 | `leggimi.html` | Versione testuale semantica e accessibile (light/dark), linkata via `rel=alternate` |
+| `CASA_MASTER.md` | Fonte canonica per identità, posizionamento, lessico e decisioni aperte |
 | `CONTESTO.md` | Questo file |
 
 ## Architettura di index.html (IMPORTANTE per chi edita)
