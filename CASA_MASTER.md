@@ -1,7 +1,7 @@
 # CASA — Documento master
 
 > Fonte canonica per identità, posizionamento e contenuti del progetto.
-> Aggiornato al 10 luglio 2026.
+> Aggiornato al 12 luglio 2026.
 
 ## Identità
 
@@ -15,9 +15,15 @@ CASA non è più un nome di lavoro. Nei materiali correnti non deve essere prese
 
 ## Definizione
 
-CASA è un'infrastruttura integrata che mette in relazione ricerca, formazione, imprese, istituzioni e territori per operare sulle interazioni tra cibo, ambiente, salute e agricoltura.
+CASA è uno spazio sperimentale condiviso, collegato alle risorse dei partner, nel quale ambiente, agricoltura, cibo e salute possono essere studiati e innovati insieme.
 
-Non è un semplice centro tematico: è una piattaforma operativa con una regia comune, costruita per trasformare competenze e attività già esistenti in risultati concreti, misurabili e replicabili.
+Lo spazio fisico è una componente costitutiva di CASA, non un elemento accessorio. Non è una sede composta prevalentemente da uffici: è un ambiente operativo con aree aperte, campi sensorizzati, serre polifunzionali, laboratori modulari, infrastrutture digitali e spazi utilizzabili anche per formazione, divulgazione ed eventi.
+
+La localizzazione specifica non è ancora individuata. Il modello è definito nelle funzioni e deve poter essere adattato alle caratteristiche del luogo che verrà scelto. CASA ha quindi bisogno di uno spazio, ma non dipende da uno spazio già scelto.
+
+L'Internet delle risorse collega lo spazio comune ai laboratori, ai dati, alle tecnologie e alle competenze specialistiche che restano presso i partner. La rete amplia le capacità dello spazio CASA, ma non lo sostituisce.
+
+CASA non è un semplice centro tematico, un ecosistema generico o un catalogo di progetti: è una capacità stabile organizzata intorno a uno spazio sperimentale, a risorse condivise secondo regole comuni e a una regia che ne coordina l'utilizzo.
 
 ## Tesi centrale
 
@@ -53,11 +59,15 @@ L'offerta è organizzata in quattro filoni operativi, ai quali si affianca la ri
 
 ## Il modello
 
-CASA è un tavolo comune nel quale ogni soggetto conserva la propria autonomia. Il modello richiede:
+CASA concentra nello spazio comune le attività che richiedono integrazione e collega a questo spazio le capacità specialistiche distribuite presso i partner. Ogni soggetto conserva la propria autonomia e decide quali risorse condividere e a quali condizioni. Il modello richiede:
 
+- uno spazio sperimentale comune;
 - obiettivi che si incontrano;
 - un beneficio concreto e misurabile per ogni partecipante;
+- regole di accesso alle risorse condivise;
 - una regia che coordina connessioni, tempi e interfacce.
+
+Una prima configurazione preliminare è stata studiata su una superficie indicativa di circa un ettaro. È una prova di fattibilità e un riferimento modulare, non una superficie obbligatoria né un'area già disponibile.
 
 ## Ecosistema raccontato nella presentazione corrente
 
