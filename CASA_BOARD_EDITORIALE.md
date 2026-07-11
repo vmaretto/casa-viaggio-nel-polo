@@ -27,7 +27,7 @@ Stati:
 
 | Codice | Priorità |
 |---|---|
-| P1 | Ambiente, agricoltura, cibo e salute restano visibili lungo tutto il racconto. |
+| P1 | Ambiente, agricoltura, cibo e salute restano visibili attraverso relazioni concrete tra fenomeni, dati, pratiche e risultati; non basta ripeterne i nomi. |
 | P2 | CASA richiede uno spazio fisico comune; la localizzazione non è ancora individuata. |
 | P3 | Lo spazio è sperimentale: aree aperte, serre, campi sensorizzati, laboratori modulari, formazione ed eventi. |
 | P4 | L'Internet delle risorse amplia lo spazio comune attraverso le capacità dei partner, senza sostituirlo. |
@@ -43,9 +43,9 @@ Stati:
 | 01 | Copertina | A · Problema | DA RIVEDERE | Modifica lieve |
 | 02 | Il problema | A · Problema | DA RIVEDERE | Mantieni con raccordo |
 | 03 | Gli effetti attraversano gli ambiti | A · Problema | DA RIVEDERE | Modifica lieve |
-| 04 | Cosa manca davvero? | B · Identità | IN PROPOSTA | Modifica sostanziale |
-| 05 | Per questo nasce CASA | B · Identità | IN PROPOSTA | Modifica sostanziale |
-| 06 | Lo spazio CASA | B · Identità | IN PROPOSTA | Nuova pagina |
+| 04 | Cosa manca davvero? | B · Identità | APPROVATA | Modifica sostanziale |
+| 05 | Per questo nasce CASA | B · Identità | APPROVATA | Modifica sostanziale |
+| 06 | Lo spazio CASA | B · Identità | APPROVATA | Nuova pagina |
 | 07 | Internet delle risorse | B · Identità | IN PROPOSTA | Modifica sostanziale |
 | 08 | Quattro ambiti che lavorano insieme | B · Identità | DA RIVEDERE | Nuova funzione narrativa |
 | 09 | Come opera CASA | C · Funzionamento | DA RIVEDERE | Modifica sostanziale |
@@ -129,7 +129,7 @@ Stati:
 
 ### 04 · Cosa manca davvero?
 
-**Stato:** `IN PROPOSTA`  
+**Stato:** `APPROVATA`
 **Funzione:** trasformare il problema nella necessità di CASA.  
 **Priorità:** P1, P2, P3, P4, P5, P8.
 
@@ -139,21 +139,21 @@ Stati:
 - Non distingue le risorse specialistiche esistenti dall'assenza dello spazio comune.
 - Introduce CASA prima di averne fissato la gerarchia.
 
-**Proposta**
+**Testo approvato**
 
-#### Un luogo nel quale innovare sul sistema, non sui singoli ambiti
+#### Un luogo comune.
 
-Competenze, laboratori, tecnologie e dati esistono, ma sono distribuiti tra organizzazioni diverse e vengono utilizzati prevalentemente all'interno dei rispettivi ambiti.
+Ambiente, agricoltura, cibo e salute si influenzano ogni giorno.
 
-Manca uno spazio sperimentale comune nel quale osservare insieme ambiente e suolo, sperimentare pratiche agricole, studiare il cibo e collegarne gli effetti alla salute.
+Ma le risorse per studiarli e innovare restano separate.
 
-E manca l'infrastruttura digitale e organizzativa capace di collegare questo spazio alle risorse specialistiche dei partner, rendendole accessibili secondo regole comuni.
+Manca uno spazio dove metterle in relazione e farle lavorare insieme.
 
-**Decisioni e osservazioni:** da discutere.
+**Decisioni e osservazioni:** la pagina deve soltanto far percepire il vuoto. Spazio sperimentale, rete, infrastruttura digitale e regia vengono sviluppati nelle pagine successive.
 
 ### 05 · Per questo nasce CASA
 
-**Stato:** `IN PROPOSTA`  
+**Stato:** `APPROVATA`
 **Funzione:** fornire la definizione memorabile di CASA.  
 **Priorità:** P1, P2, P3, P4, P5, P8.
 
@@ -163,43 +163,49 @@ E manca l'infrastruttura digitale e organizzativa capace di collegare questo spa
 - Lo spazio è descritto in modo più generico della rete.
 - I quattro ambiti scompaiono proprio nella definizione.
 
-**Proposta**
+**Testo approvato**
 
-#### Lo spazio nel quale i quattro ambiti diventano una capacità comune
+#### Il luogo dove le connessioni diventano innovazione.
 
-CASA nasce intorno a uno spazio sperimentale condiviso nel quale ambiente, agricoltura, cibo e salute possono essere studiati e innovati insieme.
+CASA nasce come uno spazio sperimentale condiviso.
 
-Lo spazio concentra le attività che richiedono integrazione. La rete dei partner ne amplia le capacità. Una regia comune organizza l'accesso e accompagna le attività dalla formazione alla sperimentazione, fino alla ricerca, all'applicazione e alla comunicazione.
+Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.
 
-La localizzazione non è ancora individuata. Il modello, invece, è definito nelle sue funzioni ed è adattabile alle caratteristiche del luogo che verrà scelto.
+Formazione, sperimentazione e ricerca lavorano sulla stessa catena.
 
-**Decisioni e osservazioni:** da discutere.
+Le risorse dei partner ne ampliano le capacità. Una regia comune le mette in relazione.
+
+**Decisioni e osservazioni:** la pagina mostra una connessione concreta tra i quattro ambiti. Configurazione, localizzazione e funzionamento dello spazio vengono sviluppati nelle pagine successive.
 
 ### 06 · Lo spazio CASA
 
-**Stato:** `IN PROPOSTA`  
+**Stato:** `APPROVATA`
 **Funzione:** rendere CASA concreta e immaginabile.  
 **Priorità:** P1, P2, P3, P4, P5, P6, P8.
 
-**Nuova pagina**
+**Testo approvato**
 
-#### Non una sede. Un'infrastruttura sperimentale.
+#### Un ettaro di innovazione condivisa.
 
-- **Aree aperte e campi sensorizzati** per osservare clima, acqua, suolo e biodiversità e sperimentare pratiche agricole e colture.
-- **Serre polifunzionali** per ricerca, coltivazione controllata, formazione, dimostrazioni ed eventi.
-- **Laboratori modulari** per analisi, prototipazione e sperimentazione sul cibo in relazione alla salute.
-- **Infrastruttura digitale** per collegare sensori, dati, IoT, intelligenza artificiale, tracciabilità e digital twin.
-- **Percorsi e spazi condivisi** per rendere la ricerca visibile e accessibile a studenti, imprese, istituzioni e cittadini.
+Un modello fisico, modulare e adattabile.
 
-Una prima configurazione preliminare è stata studiata su una superficie indicativa di circa un ettaro. È un modello modulare e una prova di fattibilità, non un terreno già disponibile né una dimensione obbligatoria.
+**Aree di sperimentazione e monitoraggio**
 
-**Questioni da decidere**
+Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.
 
-- Dire esplicitamente “circa un ettaro” nella presentazione generale oppure conservarlo per l'add-on?
-- “Non una sede” è efficace oppure rischia di aprire il racconto con una negazione?
-- Quanto dettaglio dedicare al collegamento cibo-salute?
+**Ambienti controllati e laboratori**
 
-**Decisioni e osservazioni:** da discutere.
+Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.
+
+**Spazi per formare e condividere**
+
+Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.
+
+**Configurazione di riferimento**
+
+Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.
+
+**Decisioni e osservazioni:** il payoff dell'ettaro resta protagonista. “Configurazione di riferimento” chiarisce che si tratta di una scala progettuale già studiata, non di un terreno individuato o di un vincolo rigido.
 
 ### 07 · Il principio di CASA: un Internet delle risorse
 
@@ -333,6 +339,10 @@ CASA rende visibili queste risorse, ne organizza l'accesso e permette di combina
 | 12 luglio 2026 | Natura dello spazio | Non uffici: aree aperte, serre, campi sensorizzati, laboratori modulari, formazione ed eventi. | Cosa manca, definizione, funzionamento e benefici. |
 | 12 luglio 2026 | Internet delle risorse | La rete amplia lo spazio comune e non lo sostituisce. | Definizione, ecosistema, patrimonio e roadmap. |
 | 12 luglio 2026 | Metodo di revisione | Matrice priorità × pagine; riscrittura per blocchi con audit trasversali. | Intero processo editoriale. |
+| 12 luglio 2026 | Pagina 04 | Approvato un testo breve che introduce il bisogno di un luogo comune senza anticipare la soluzione. | Le pagine 05–07 devono distribuire definizione, spazio, rete e regia senza ripetizioni. |
+| 12 luglio 2026 | Concretezza dei quattro ambiti | Introdotto il test di sostituibilità: se un testo può descrivere un altro polo cambiando soltanto i nomi degli ambiti, è troppo generico. | Tutte le pagine devono mostrare relazioni concrete tra fenomeni, dati, pratiche o risultati. |
+| 12 luglio 2026 | Pagina 05 | Approvata la definizione di CASA come spazio sperimentale che collega dati ambientali, pratiche agricole, qualità del cibo ed effetti sulla salute. | La pagina 06 deve rendere fisicamente immaginabile lo spazio; la 07 deve spiegare la rete. |
+| 12 luglio 2026 | Pagina 06 | Approvato “Un ettaro di innovazione condivisa” come payoff; campi, serre e laboratori sono presentati come famiglie funzionali di un modello modulare. | La roadmap e l'add-on dovranno distinguere configurazione di riferimento, localizzazione e investimento. |
 
 ## Parcheggio — questioni non ancora decise
 
