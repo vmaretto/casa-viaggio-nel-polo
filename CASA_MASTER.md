@@ -21,7 +21,9 @@ Lo spazio fisico è una componente costitutiva di CASA, non un elemento accessor
 
 La localizzazione specifica non è ancora individuata. Il modello è definito nelle funzioni e deve poter essere adattato alle caratteristiche del luogo che verrà scelto. CASA ha quindi bisogno di uno spazio, ma non dipende da uno spazio già scelto.
 
-L'Internet delle risorse collega lo spazio comune ai laboratori, ai dati, alle tecnologie e alle competenze specialistiche che restano presso i partner. La rete amplia le capacità dello spazio CASA, ma non lo sostituisce.
+L'Internet delle risorse rende accessibili sia le infrastrutture condivise presenti nello spazio CASA sia laboratori, dati, tecnologie e competenze specialistiche che restano presso i partner. Permette di individuare, utilizzare e combinare capacità diverse secondo regole comuni. La rete amplia le capacità dello spazio CASA, ma non lo sostituisce.
+
+Il modello separa l'accesso dal possesso: anche piccole imprese, startup, ricercatori, professionisti e territori possono utilizzare capacità avanzate che difficilmente potrebbero costruire o acquisire autonomamente.
 
 CASA non è un semplice centro tematico, un ecosistema generico o un catalogo di progetti: è una capacità stabile organizzata intorno a uno spazio sperimentale, a risorse condivise secondo regole comuni e a una regia che ne coordina l'utilizzo.
 

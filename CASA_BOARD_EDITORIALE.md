@@ -46,7 +46,7 @@ Stati:
 | 04 | Cosa manca davvero? | B · Identità | APPROVATA | Modifica sostanziale |
 | 05 | Per questo nasce CASA | B · Identità | APPROVATA | Modifica sostanziale |
 | 06 | Lo spazio CASA | B · Identità | APPROVATA | Nuova pagina |
-| 07 | Internet delle risorse | B · Identità | IN PROPOSTA | Modifica sostanziale |
+| 07 | Internet delle risorse | B · Identità | DA VERIFICARE | Modifica sostanziale |
 | 08 | Quattro ambiti che lavorano insieme | B · Identità | DA RIVEDERE | Nuova funzione narrativa |
 | 09 | Come opera CASA | C · Funzionamento | DA RIVEDERE | Modifica sostanziale |
 | 10 | Per chi è CASA e benefici | C · Funzionamento | DA RIVEDERE | Modifica mirata/fusione |
@@ -209,7 +209,7 @@ Una prima configurazione è stata sviluppata su questa scala. La configurazione 
 
 ### 07 · Il principio di CASA: un Internet delle risorse
 
-**Stato:** `IN PROPOSTA`  
+**Stato:** `DA VERIFICARE`
 **Funzione:** spiegare come lo spazio si collega alle capacità distribuite.  
 **Priorità:** P1, P2, P3, P4, P5, P6, P8.
 
@@ -218,17 +218,29 @@ Una prima configurazione è stata sviluppata su questa scala. La configurazione 
 - “Senza concentrarle in un solo luogo” fa sembrare lo spazio non necessario.
 - CASA rischia di tornare a essere soltanto una rete di partner.
 
-**Proposta**
+**Testo approvato sul piano concettuale**
 
-CASA concentra nello spazio comune le attività che richiedono l'integrazione dei quattro ambiti e collega a questo spazio le risorse specialistiche che restano presso i partner.
+#### Un Internet delle risorse.
 
-Ogni partner mantiene autonomia e controllo e decide quali competenze, laboratori, dati e tecnologie rendere accessibili e a quali condizioni.
+**Accesso, non possesso**
 
-CASA rende visibili queste risorse, ne organizza l'accesso e permette di combinarle con lo spazio comune in percorsi di formazione, ricerca, sperimentazione e innovazione.
+Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente.
 
-> **Un luogo comune, esteso attraverso una rete di risorse.**
+**Le risorse dello spazio CASA**
 
-**Decisioni e osservazioni:** da discutere.
+Campi sperimentali, sensori, serre, laboratori e infrastrutture digitali vengono condivisi e resi accessibili secondo regole comuni.
+
+**Le risorse dei partner**
+
+Laboratori specialistici, dati, tecnologie e competenze che restano presso i partner vengono collegati allo stesso sistema di accesso.
+
+Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l'intera infrastruttura.
+
+Lo spazio è il luogo dell'integrazione.
+
+L'Internet delle risorse è il sistema che ne rende accessibili e ne estende le capacità.
+
+**Decisioni e osservazioni:** il testo dovrà essere nuovamente valutato insieme alla grafica, perché parte della spiegazione potrà essere affidata allo schema o all'animazione. IoR condivide sia le risorse interne allo spazio CASA sia quelle distribuite presso i partner; il beneficio distintivo è l'accesso a capacità avanzate senza doverle possedere.
 
 ### 08 · Quattro ambiti che lavorano insieme
 
@@ -343,6 +355,7 @@ CASA rende visibili queste risorse, ne organizza l'accesso e permette di combina
 | 12 luglio 2026 | Concretezza dei quattro ambiti | Introdotto il test di sostituibilità: se un testo può descrivere un altro polo cambiando soltanto i nomi degli ambiti, è troppo generico. | Tutte le pagine devono mostrare relazioni concrete tra fenomeni, dati, pratiche o risultati. |
 | 12 luglio 2026 | Pagina 05 | Approvata la definizione di CASA come spazio sperimentale che collega dati ambientali, pratiche agricole, qualità del cibo ed effetti sulla salute. | La pagina 06 deve rendere fisicamente immaginabile lo spazio; la 07 deve spiegare la rete. |
 | 12 luglio 2026 | Pagina 06 | Approvato “Un ettaro di innovazione condivisa” come payoff; campi, serre e laboratori sono presentati come famiglie funzionali di un modello modulare. | La roadmap e l'add-on dovranno distinguere configurazione di riferimento, localizzazione e investimento. |
+| 12 luglio 2026 | Pagina 07 | IoR rende accessibili e combinabili sia le risorse dello spazio CASA sia quelle dei partner; separa accesso e possesso. Testo da verificare con la grafica. | Benefici, destinatari e modello operativo devono esplicitare l'accesso delle piccole imprese a capacità altrimenti difficilmente raggiungibili. |
 
 ## Parcheggio — questioni non ancora decise
 
