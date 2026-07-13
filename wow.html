@@ -2,241 +2,2020 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071d21">
-  <title>CASA — Presentazione</title>
-  <meta name="description" content="CASA: lo spazio sperimentale condiviso per innovare tra cibo, ambiente, salute e agricoltura.">
-  <link rel="alternate" type="text/html" href="leggimi.html" title="Versione testuale accessibile">
-  <link rel="alternate" type="text/plain" href="llms.txt" title="Contenuto testuale">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>CASA — Cibo · Ambiente · Salute · Agricoltura</title>
+  <meta name="description" content="CASA: l'infrastruttura condivisa che abilita l'innovazione tra Cibo, Ambiente, Salute e Agricoltura.">
   <style>
+    @font-face {
+      font-family: "Cormorant CASA";
+      src: url("assets/originale/CormorantGaramond-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Cormorant CASA";
+      src: url("assets/originale/CormorantGaramond-Italic.woff2") format("woff2");
+      font-style: italic;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Outfit CASA";
+      src: url("assets/originale/Outfit.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 200 700;
+      font-display: swap;
+    }
+
     :root {
-      --ink:#071d21; --petrol:#0f2b30; --cream:#f7f4ec; --paper:#eee9dc;
-      --lime:#abb629; --gold:#d8a94e; --aqua:#75baae; --coral:#d58c7d;
-      --muted:#91a4a3; --line:rgba(247,244,236,.17); --ease:cubic-bezier(.22,1,.36,1);
-      --serif:"Cormorant Garamond",Georgia,serif; --sans:"Outfit",Arial,sans-serif;
+      --ink: #0f2b30;
+      --ink-deep: #071d21;
+      --paper: #f7f5ee;
+      --muted: #b7c2bd;
+      --acid: #aab322;
+      --food: #d8a94e;
+      --environment: #7ebdae;
+      --health: #d08b80;
+      --agriculture: #aab322;
+      --serif: "Cormorant CASA", Georgia, serif;
+      --sans: "Outfit CASA", system-ui, sans-serif;
+      --safe-x: clamp(32px, 5.2vw, 86px);
+      --safe-y: clamp(28px, 4.2vh, 54px);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --n-scenes: 15;
     }
-    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-snap-type:y proximity;background:var(--ink)}
-    body{margin:0;background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:300;overflow-x:hidden}
-    a{color:inherit} button{font:inherit} ::selection{background:var(--lime);color:var(--ink)}
-    .progress{position:fixed;z-index:100;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--lime),var(--aqua),var(--coral));transform:scaleX(0);transform-origin:left}
-    .rail{position:fixed;z-index:90;right:22px;top:50%;transform:translateY(-50%);display:grid;gap:9px}
-    .rail a{width:6px;height:6px;border:1px solid rgba(247,244,236,.45);border-radius:50%;transition:.35s var(--ease)}
-    .rail a.on{height:25px;border-radius:8px;background:var(--lime);border-color:var(--lime)}
-    .stage-tools{position:fixed;z-index:90;left:22px;bottom:18px;display:flex;gap:8px;opacity:.5;transition:.3s}
-    .stage-tools:hover{opacity:1}.stage-tools button,.stage-tools a{border:1px solid var(--line);background:rgba(7,29,33,.72);color:var(--cream);padding:7px 10px;border-radius:30px;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(10px);text-decoration:none}
-    .slide{position:relative;min-height:100svh;scroll-snap-align:start;overflow:hidden;display:flex;align-items:center;padding:clamp(82px,9vw,150px) clamp(28px,7vw,120px)}
-    .slide.light{background:var(--cream);color:var(--petrol)} .slide.dark{background:var(--petrol)} .slide.black{background:var(--ink)}
-    .inner{position:relative;z-index:3;width:min(1320px,100%);margin:auto}.narrow{width:min(980px,100%)}
-    .eyebrow{font-size:11px;line-height:1.4;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--lime);margin-bottom:24px}
-    .light .eyebrow{color:#697315}.kicker{font-size:clamp(15px,1.35vw,21px);letter-spacing:.06em;color:var(--muted)}
-    h1,h2,h3,p{margin-top:0} h1,h2{font-family:var(--serif);font-weight:400;letter-spacing:-.035em}
-    h1{font-size:clamp(96px,19vw,300px);line-height:.65;margin:0;font-style:italic}
-    h2{font-size:clamp(48px,7.4vw,112px);line-height:.9;margin:0 0 34px;max-width:1150px}
-    h3{font-size:clamp(19px,2vw,29px);font-weight:500;line-height:1.15;margin-bottom:12px}
-    .lead{font-family:var(--serif);font-size:clamp(28px,3.8vw,58px);line-height:1.08;max-width:1050px}
-    .body{font-size:clamp(17px,1.6vw,24px);line-height:1.5;max-width:850px}.small{font-size:14px;line-height:1.55}
-    .accent{color:var(--lime)} .gold{color:var(--gold)} .aqua{color:var(--aqua)} .coral{color:var(--coral)}
-    .reveal{opacity:0;transform:translateY(34px);filter:blur(7px);transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease)}
-    .slide.seen .reveal{opacity:1;transform:none;filter:none}.d1{transition-delay:.14s}.d2{transition-delay:.28s}.d3{transition-delay:.42s}.d4{transition-delay:.56s}.d5{transition-delay:.7s}
-    .grain{position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
-    .glow{position:absolute;width:80vmin;height:80vmin;border-radius:50%;background:radial-gradient(circle,rgba(171,182,41,.16),transparent 66%);filter:blur(14px);animation:breathe 7s ease-in-out infinite alternate}
-    .line-live{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.2s var(--ease)}.seen .line-live{stroke-dashoffset:0}
-    @keyframes breathe{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.12);opacity:.64}} @keyframes pulse{50%{opacity:.25}} @keyframes dash{to{stroke-dashoffset:-40}} @keyframes drift{to{transform:translate3d(30px,-18px,0)}}
 
-    /* 01 */
-    .hero{isolation:isolate}.hero .glow{left:50%;top:43%;transform:translate(-50%,-50%)}
-    .hero-orbits{position:absolute;inset:0;opacity:.84}.hero-orbits span{position:absolute;border-radius:50%;filter:blur(.2px);animation:orbitPulse 5s ease-in-out infinite}
-    .hero-orbits .o1{width:42vw;height:42vw;border:1px solid rgba(216,169,78,.25);left:-18vw;top:-14vw}.hero-orbits .o2{width:36vw;height:36vw;border:1px solid rgba(117,186,174,.25);right:-14vw;top:12vh;animation-delay:1s}.hero-orbits .o3{width:38vw;height:38vw;border:1px solid rgba(213,140,125,.22);right:7vw;bottom:-25vw;animation-delay:2s}.hero-orbits .o4{width:34vw;height:34vw;border:1px solid rgba(171,182,41,.24);left:7vw;bottom:-24vw;animation-delay:3s}
-    @keyframes orbitPulse{50%{transform:scale(1.05);opacity:.4}}
-    .hero-center{text-align:center}.hero-sub{display:flex;justify-content:center;gap:clamp(12px,2.4vw,40px);margin-top:65px;font-size:clamp(13px,1.4vw,20px);letter-spacing:.12em}.hero-promise{margin:28px auto 0;max-width:720px;color:rgba(247,244,236,.67);font-size:clamp(15px,1.3vw,20px)}
-
-    /* 02 */
-    .chain{display:grid;grid-template-columns:repeat(4,1fr);align-items:center;margin-top:70px;position:relative}.chain:before{content:"";position:absolute;height:1px;left:7%;right:7%;top:50%;background:linear-gradient(90deg,var(--aqua),var(--gold),var(--lime),var(--coral));transform:scaleX(0);transform-origin:left;transition:transform 2s var(--ease) .35s}.seen .chain:before{transform:scaleX(1)}
-    .chain-item{position:relative;text-align:center}.chain-dot{width:clamp(80px,9vw,130px);aspect-ratio:1;border-radius:50%;margin:auto;display:grid;place-items:center;background:var(--petrol);border:1px solid currentColor;box-shadow:0 0 0 12px var(--cream);font-family:var(--serif);font-size:clamp(25px,2.4vw,38px)}
-    .chain-item p{font-size:14px;max-width:180px;margin:20px auto 0;color:#526466}.return-arc{position:absolute;width:72%;height:45%;left:14%;bottom:-10%;border:1px dashed rgba(15,43,48,.28);border-top:0;border-radius:0 0 50% 50%}
-
-    /* 03 */
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(247,244,236,.12);margin-top:56px}.stat{background:var(--petrol);padding:clamp(30px,4.5vw,70px);min-height:330px;display:flex;flex-direction:column;justify-content:space-between}.number{font-family:var(--serif);font-style:italic;font-size:clamp(58px,8vw,118px);line-height:.8}.stat p{font-size:clamp(15px,1.25vw,19px);line-height:1.45;color:rgba(247,244,236,.68);margin:28px 0 0}.stat .tags{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime)}.sources{margin-top:20px;color:rgba(247,244,236,.42);font-size:11px}
-
-    /* 04 */
-    .void-stage{height:min(58vh,560px);position:relative;margin-top:35px}.resource{position:absolute;padding:10px 15px;border:1px solid rgba(247,244,236,.17);border-radius:30px;color:rgba(247,244,236,.65);font-size:13px}.r1{left:2%;top:8%}.r2{right:4%;top:4%}.r3{left:8%;bottom:13%}.r4{right:2%;bottom:17%}.r5{left:43%;top:0}.r6{right:43%;bottom:0}.broken{position:absolute;inset:5%;width:90%;height:90%}.broken line{stroke:rgba(247,244,236,.22);stroke-width:1;stroke-dasharray:8 11;animation:dash 12s linear infinite}.missing{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(52vw,500px);aspect-ratio:1;border:1px solid rgba(171,182,41,.38);border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,rgba(171,182,41,.12),transparent 65%)}.missing strong{font-family:var(--serif);font-size:clamp(45px,5vw,72px);font-weight:400}.missing span{display:block;font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--lime);margin-top:10px}
-
-    /* 05 */
-    .definition{display:grid;grid-template-columns:1.05fr .95fr;gap:6vw;align-items:center}.layers{position:relative;min-height:580px;display:grid;place-items:center}.layer{position:absolute;border-radius:50%;display:grid;place-items:center;text-align:center}.layer.regia{width:95%;aspect-ratio:1;border:1px solid rgba(171,182,41,.34);animation:spinSlow 45s linear infinite}.layer.rete{width:70%;aspect-ratio:1;border:1px dashed rgba(117,186,174,.5);animation:spinBack 40s linear infinite}.layer.spazio{width:44%;aspect-ratio:1;background:radial-gradient(circle at 40% 35%,#c5ce3c,var(--lime) 45%,#818a13);color:var(--ink);box-shadow:0 0 100px rgba(171,182,41,.24);font-family:var(--serif);font-style:italic;font-size:clamp(34px,4vw,62px)}.layer-label{position:absolute;background:var(--petrol);padding:8px 13px;font-size:11px;letter-spacing:.18em;text-transform:uppercase}.l-regia{top:0}.l-rete{right:4%;top:48%}
-    @keyframes spinSlow{to{transform:rotate(360deg)}} @keyframes spinBack{to{transform:rotate(-360deg)}}
-
-    /* 06 hectare */
-    .space-slide{background:linear-gradient(150deg,#06191c 0%,#0f2b30 55%,#102f30 100%)}.space-slide .inner{height:calc(100svh - 120px);min-height:720px}.space-head{position:absolute;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:flex-start;gap:30px;z-index:2}.space-head>div:first-child{max-width:760px}.space-head h2{margin:0;font-size:clamp(58px,6.1vw,98px)}.space-tag{border:1px solid rgba(247,244,236,.23);padding:12px 17px;border-radius:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,244,236,.65);white-space:nowrap;margin-top:58px}
-    .site{position:absolute;right:-4%;bottom:-2%;width:79%;height:74%;overflow:visible}.site .ground{transform-origin:50% 80%;opacity:0;transform:translateY(40px) scale(.92);transition:1.3s var(--ease)}.seen .site .ground{opacity:1;transform:none}.site .build{opacity:0;transform:translateY(-18px);transition:.8s var(--ease)}.seen .site .build{opacity:1;transform:none}.site .b1{transition-delay:.55s}.site .b2{transition-delay:.85s}.site .b3{transition-delay:1.15s}.site .b4{transition-delay:1.45s}.site .data-flow{stroke-dasharray:8 12;animation:dash 2.4s linear infinite}.site text{font-family:var(--sans);letter-spacing:.12em;text-transform:uppercase}.site-legend{position:absolute;z-index:5;right:0;top:118px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:720px}.site-legend span{padding:9px 12px;border:1px solid rgba(247,244,236,.22);background:rgba(7,29,33,.62);font-size:clamp(11px,.75vw,14px);letter-spacing:.06em}.space-note{position:absolute;z-index:4;left:0;bottom:34px;max-width:360px;font-family:var(--serif);font-style:italic;font-size:clamp(21px,2vw,30px);color:rgba(247,244,236,.75)}
-
-    /* 07 cycle */
-    .cycle-wrap{display:grid;grid-template-columns:.75fr 1.25fr;gap:5vw;align-items:center}.cycle{width:100%;aspect-ratio:1;position:relative}.cycle svg{width:100%;height:100%;transform:rotate(-90deg)}.cycle-ring{fill:none;stroke:rgba(247,244,236,.12);stroke-width:1}.cycle-live{fill:none;stroke:url(#cycleGradient);stroke-width:2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 3s var(--ease)}.seen .cycle-live{stroke-dashoffset:0}.cycle-center{position:absolute;inset:31%;border-radius:50%;display:grid;place-items:center;text-align:center;background:rgba(7,29,33,.78);border:1px solid rgba(171,182,41,.42);font-family:var(--serif);font-style:italic;font-size:clamp(28px,3vw,48px)}.cycle-node{position:absolute;width:26%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--petrol);border:1px solid currentColor;font-size:clamp(12px,1.2vw,17px);padding:12px}.cn1{left:37%;top:-2%}.cn2{right:-1%;top:37%}.cn3{left:37%;bottom:-2%}.cn4{left:-1%;top:37%}.tech-strip{display:grid;gap:15px;margin-top:35px}.tech-strip div{display:grid;grid-template-columns:70px 1fr;gap:16px;padding-top:14px;border-top:1px solid rgba(247,244,236,.12);font-size:14px;color:rgba(247,244,236,.68)}.tech-strip b{color:var(--cream);font-weight:500}
-
-    /* 08 ior */
-    .network{height:min(68vh,690px);position:relative}.net-svg{position:absolute;inset:0;width:100%;height:100%}.net-svg path{fill:none;stroke-width:1}.net-svg .beam{stroke-dasharray:7 11;animation:dash 3s linear infinite}.core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(27vw,300px);aspect-ratio:1;border-radius:36%;display:grid;place-items:center;text-align:center;background:var(--lime);color:var(--ink);box-shadow:0 0 90px rgba(171,182,41,.28);padding:25px}.core strong{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(34px,4vw,60px);font-weight:500}.core small{display:block;margin-top:7px;font-size:10px;letter-spacing:.15em;text-transform:uppercase}.node{position:absolute;width:min(18vw,220px);min-height:96px;padding:18px;border:1px solid rgba(247,244,236,.19);background:rgba(7,29,33,.72);backdrop-filter:blur(8px)}.node strong{display:block;font-size:clamp(15px,1vw,18px);margin-bottom:6px}.node span{font-size:clamp(12px,.85vw,15px);color:rgba(247,244,236,.55)}.n1{left:3%;top:8%}.n2{right:3%;top:8%}.n3{left:1%;bottom:10%}.n4{right:1%;bottom:10%}.gate{position:absolute;width:8px;height:24px;border:1px solid var(--lime);background:var(--ink);transform:rotate(45deg)}.g1{left:31%;top:30%}.g2{right:31%;top:30%}.g3{left:30%;bottom:27%}.g4{right:30%;bottom:27%}.ior-quote{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);width:100%;text-align:center;font-family:var(--serif);font-style:italic;font-size:clamp(19px,2vw,30px)}.ior-quote small{display:block;margin-top:7px;font-family:var(--sans);font-style:normal;font-size:clamp(11px,.8vw,14px);letter-spacing:.04em;color:rgba(247,244,236,.55)}
-
-    /* 09 method */
-    .method{display:grid;grid-template-columns:repeat(4,1fr);margin-top:60px;position:relative}.method:before{content:"";position:absolute;left:5%;right:5%;top:28px;height:1px;background:linear-gradient(90deg,var(--gold),var(--lime),var(--aqua),var(--coral));transform:scaleX(0);transform-origin:left;transition:2s var(--ease)}.seen .method:before{transform:scaleX(1)}.step{position:relative;padding:0 clamp(14px,2vw,30px)}.step:first-child{padding-left:0}.step:last-child{padding-right:0}.step-num{width:57px;height:57px;border-radius:50%;display:grid;place-items:center;background:var(--cream);border:1px solid currentColor;font-size:12px;font-weight:500;margin-bottom:32px}.step p{font-size:clamp(15px,1vw,19px);line-height:1.5;color:#526466}.loop-note{margin-top:45px;padding-top:25px;border-top:1px solid rgba(15,43,48,.15);display:flex;justify-content:space-between;gap:25px;color:#526466}.loop-note strong{font-family:var(--serif);font-style:italic;font-size:clamp(24px,2.4vw,38px);font-weight:400;color:var(--petrol)}
-
-    /* 10 audience */
-    .audience-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(247,244,236,.14);margin-top:48px}.aud{background:var(--petrol);padding:clamp(27px,3vw,46px);display:grid;grid-template-columns:1fr 1.4fr;gap:25px;min-height:210px}.aud h3{font-family:var(--serif);font-size:clamp(25px,2.5vw,38px);font-weight:400}.aud p{font-size:clamp(14px,.9vw,17px);line-height:1.5;color:rgba(247,244,236,.62)}.aud b{color:var(--lime);font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:11px}
-
-    /* 11 ecosystem */
-    .roles{display:grid;grid-template-columns:1fr 1.1fr 1fr;grid-template-rows:auto auto;gap:18px;margin-top:50px}.role{border:1px solid rgba(247,244,236,.15);padding:clamp(22px,2.5vw,38px);min-height:165px}.role.center{grid-row:1/3;grid-column:2;background:var(--lime);color:var(--ink);display:flex;flex-direction:column;justify-content:center;text-align:center}.role small{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}.role.center small{color:#4f5708}.role h3{margin-top:14px}.role p{font-size:clamp(13px,.9vw,17px);line-height:1.5;color:rgba(247,244,236,.58)}.role.center p{color:rgba(7,29,33,.68)}.academic-partners{margin-top:17px;padding-top:16px;border-top:1px solid rgba(247,244,236,.14);display:flex;justify-content:space-between;gap:20px;font-size:clamp(13px,.9vw,17px);color:rgba(247,244,236,.68)}.academic-partners b{font-weight:500;color:var(--cream)}
-
-    /* 12 heritage */
-    .heritage{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:55px}.cap{min-height:280px;padding:28px;border-top:2px solid var(--lime);background:#fff;display:flex;flex-direction:column;justify-content:space-between}.cap .icon{font-family:var(--serif);font-style:italic;font-size:54px;color:#7b8614}.cap p{font-size:clamp(14px,.95vw,18px);line-height:1.55;color:#526466}.heritage-line{margin-top:40px;font-family:var(--serif);font-style:italic;font-size:clamp(26px,3vw,44px)}
-
-    /* 13 roadmap */
-    .road{margin-top:60px;position:relative}.road-line{position:absolute;left:5%;right:5%;top:22px;height:2px;background:rgba(247,244,236,.13)}.road-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--lime),var(--aqua));transform:scaleX(0);transform-origin:left;transition:2.5s var(--ease)}.seen .road-fill{transform:scaleX(1)}.milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:6vw}.mile{position:relative;padding-top:65px}.mile:before{content:"";position:absolute;top:12px;left:0;width:21px;height:21px;border-radius:50%;background:var(--petrol);border:4px solid var(--lime);box-shadow:0 0 0 8px var(--petrol)}.mile time{font-family:var(--serif);font-style:italic;font-size:clamp(47px,5vw,74px)}.mile ul{padding:0;margin:20px 0 0;list-style:none}.mile li{font-size:clamp(14px,.9vw,17px);line-height:1.5;color:rgba(247,244,236,.62);padding:8px 0;border-top:1px solid rgba(247,244,236,.12)}
-
-    /* 14 */
-    .scientific{text-align:center}.scientific .halo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(70vmin,720px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(171,182,41,.22)}.scientific h2{margin:0 auto 25px}.scientific .name{font-family:var(--serif);font-size:clamp(39px,5vw,74px);font-style:italic}.scientific p{max-width:850px;margin:26px auto;color:#526466}
-
-    /* 15 */
-    .final{text-align:center}.final h2{margin:0 auto 38px;max-width:1160px}.triad{display:flex;justify-content:center;gap:clamp(18px,4vw,60px);font-size:clamp(14px,1.4vw,20px);margin-top:55px}.final-word{font-family:var(--serif);font-size:clamp(100px,17vw,260px);font-style:italic;line-height:.65;margin-top:95px;color:var(--lime);text-shadow:0 0 90px rgba(171,182,41,.22)}.final-domains{margin-top:47px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,236,.5)}
-
-    @media(max-width:900px){
-      html{scroll-snap-type:none}.slide{padding:90px 24px;min-height:auto}.rail,.stage-tools{display:none}h2{line-height:.96}.hero{min-height:100svh}.hero-sub{flex-wrap:wrap}.chain{grid-template-columns:1fr;gap:34px}.chain:before{left:50%;top:5%;bottom:5%;height:auto;width:1px;transform:scaleY(0)}.seen .chain:before{transform:scaleY(1)}.chain-dot{box-shadow:0 0 0 9px var(--cream)}.return-arc{display:none}.stats{grid-template-columns:1fr}.stat{min-height:270px}.void-stage{height:570px}.resource{font-size:11px}.missing{width:70vw}.definition,.cycle-wrap{grid-template-columns:1fr}.layers{min-height:420px}.space-slide .inner{height:auto;min-height:0}.space-head{position:relative;display:block}.space-head>div:first-child{max-width:none}.space-head h2{font-size:clamp(48px,13vw,72px)}.space-tag{display:inline-block;margin-top:18px;white-space:normal}.site-legend{position:relative;right:auto;top:auto;justify-content:flex-start;margin-top:20px}.site{position:relative;right:auto;bottom:auto;width:165%;height:470px;margin:10px 0 0 -33%}.space-note{position:relative;left:auto;bottom:auto;margin-top:-65px;max-width:250px}.cycle{max-width:none;margin:36px 0;aspect-ratio:auto;display:grid;gap:12px}.cycle svg,.cycle-center{display:none}.cycle-node{position:relative;inset:auto!important;width:100%;aspect-ratio:auto;border-radius:60px;min-height:72px;padding:16px 24px}.network{height:650px}.node{width:42%;min-height:100px}.core{width:42vw}.gate{display:none}.ior-quote{bottom:-22px;font-size:19px}.method{grid-template-columns:1fr;gap:28px}.method:before{left:28px;top:5%;bottom:5%;right:auto;width:1px;height:auto;transform:scaleY(0)}.seen .method:before{transform:scaleY(1)}.step{display:grid;grid-template-columns:58px 1fr;gap:18px;padding:0}.step-num{margin:0}.loop-note{display:block}.audience-grid,.roles,.heritage{grid-template-columns:1fr}.aud{grid-template-columns:1fr;gap:5px}.role.center{grid-column:auto;grid-row:auto}.academic-partners{display:block}.academic-partners span{display:block;margin-top:8px}.cap{min-height:230px}.milestones{grid-template-columns:1fr;gap:35px}.road-line{left:10px;right:auto;top:18px;bottom:18px;width:2px;height:auto}.road-fill{transform:scaleY(0);transform-origin:top}.seen .road-fill{transform:scaleY(1)}.mile{padding:0 0 0 54px}.mile:before{top:7px;left:0}.triad{flex-direction:column}.scientific,.final{min-height:100svh}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; background: var(--ink); }
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--sans);
+      overflow-x: hidden;
     }
-    @media(min-width:901px) and (max-height:850px){.slide{padding:52px 5vw}.stage-tools{display:none}.eyebrow{margin-bottom:14px}h2{font-size:clamp(42px,5.7vw,76px);margin-bottom:22px}.space-slide .inner{height:calc(100svh - 104px);min-height:0}.space-head h2{font-size:clamp(48px,5.3vw,72px)}.space-tag{margin-top:32px}.site-legend{top:88px}.site{height:72%;bottom:-5%}.space-note{bottom:12px}.cycle{max-width:590px;justify-self:end}.stats{margin-top:30px}.stat{min-height:235px;padding:28px}.number{font-size:clamp(52px,6vw,82px)}.method,.roles,.heritage,.road{margin-top:28px}.aud{min-height:180px;padding:20px}.role{min-height:130px;padding:19px}.cap{min-height:220px}.final h2{margin-bottom:22px}.triad{margin-top:28px}.final-word{margin-top:45px;font-size:clamp(82px,13vw,160px)}.final-domains{margin-top:25px}}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.line-live,.cycle-live{stroke-dashoffset:0}.site .ground,.site .build{opacity:1;transform:none}}
-    .motion-paused *,.motion-paused *:before,.motion-paused *:after{animation-play-state:paused!important;transition-duration:0s!important}
+    button { font: inherit; }
+    ::selection { background: var(--acid); color: var(--ink); }
+
+    .scene {
+      position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      isolation: isolate;
+    }
+    .scene__safe {
+      position: relative;
+      z-index: 4;
+      width: 100%;
+      min-height: 100svh;
+      padding: var(--safe-y) var(--safe-x);
+    }
+    .scene__center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--acid);
+      font-size: clamp(10px, .8vw, 13px);
+      font-weight: 500;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+    }
+    .display {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(48px, 6.3vw, 102px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .96;
+      letter-spacing: -.025em;
+    }
+    .lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: rgba(247,245,238,.83);
+      font-size: clamp(16px, 1.35vw, 22px);
+      font-weight: 300;
+      line-height: 1.48;
+    }
+    .reveal {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(26px);
+      transition: opacity 1.1s var(--ease), transform 1.1s var(--ease), filter 1.1s var(--ease);
+    }
+    .is-active .reveal { opacity: 1; filter: none; transform: none; }
+    .delay-1 { transition-delay: .12s; }
+    .delay-2 { transition-delay: .26s; }
+    .delay-3 { transition-delay: .42s; }
+    .delay-4 { transition-delay: .58s; }
+    .delay-5 { transition-delay: .74s; }
+    .fragment {
+      visibility: hidden;
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(18px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease), visibility 0s linear .7s;
+      pointer-events: none;
+    }
+    .fragment.is-current {
+      visibility: visible;
+      opacity: 1;
+      filter: none;
+      transform: none;
+      transition-delay: 0s;
+      pointer-events: auto;
+    }
+    .fragment.is-done {
+      visibility: visible;
+      opacity: 1;
+      filter: none;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    .brand-corner {
+      position: fixed;
+      z-index: 20;
+      top: 25px;
+      left: 30px;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: 24px;
+      font-style: italic;
+      letter-spacing: .04em;
+      mix-blend-mode: difference;
+      pointer-events: none;
+    }
+    .progress {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(247,245,238,.12);
+    }
+    .progress span {
+      display: block;
+      width: calc(100% / var(--n-scenes));
+      height: 100%;
+      background: linear-gradient(90deg, var(--acid), var(--environment), var(--food), var(--health));
+      transform-origin: left;
+      transition: transform .65s var(--ease);
+    }
+    .nav {
+      position: fixed;
+      z-index: 20;
+      right: 24px;
+      top: 50%;
+      display: grid;
+      gap: 9px;
+      transform: translateY(-50%);
+    }
+    .nav button {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 1px solid rgba(247,245,238,.56);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: transform .35s var(--ease), background .35s ease;
+    }
+    .nav button[aria-current="true"] { background: var(--acid); border-color: var(--acid); transform: scale(1.45); }
+    .controls {
+      position: fixed;
+      z-index: 20;
+      right: 26px;
+      bottom: 20px;
+      display: flex;
+      gap: 8px;
+    }
+    .controls button {
+      border: 1px solid rgba(247,245,238,.28);
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: rgba(247,245,238,.78);
+      background: rgba(7,29,33,.42);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    /* ============ 01 — COPERTINA ============ */
+    .cover { background: var(--ink-deep); }
+    .cover__image {
+      position: absolute;
+      inset: -8%;
+      z-index: -3;
+      background: url("assets/originale/foglie.jpg") center/cover no-repeat;
+      animation: coverZoom 24s ease-in-out infinite alternate;
+    }
+    .cover__veil {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(7,29,33,.24), rgba(7,29,33,.68)),
+        radial-gradient(circle at 50% 50%, rgba(170,179,34,.10), transparent 44%);
+    }
+    .cover__content {
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+    .cover__lockup { width: min(880px, 88vw); }
+    .cover__title {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(108px, 15vw, 220px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .72;
+      letter-spacing: -.035em;
+      text-shadow: 0 20px 80px rgba(0,0,0,.18);
+    }
+    .cover__domains {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      margin: clamp(34px, 5vh, 58px) 0 0;
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.2vw, 35px);
+      font-style: italic;
+    }
+    .cover__domains span + span::before { content: "\00a0\00b7\00a0"; color: rgba(247,245,238,.62); }
+    .food { color: var(--food); }
+    .environment { color: var(--environment); }
+    .health { color: var(--health); }
+    .agriculture { color: var(--agriculture); }
+    .cover__payoff {
+      margin: 20px auto 0;
+      color: var(--paper);
+      font-size: clamp(15px, 1.25vw, 20px);
+      font-weight: 300;
+      letter-spacing: .025em;
+    }
+    .cover__cue {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      color: rgba(247,245,238,.7);
+      font-size: 9px;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      transform: translateX(-50%);
+    }
+    .cover__cue::after {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 36px;
+      margin: 12px auto -28px;
+      background: var(--acid);
+      animation: cue 2.4s ease-in-out infinite;
+      transform-origin: top;
+    }
+
+    /* ============ 02 — IL PROBLEMA ============ */
+    .problem {
+      background:
+        radial-gradient(circle at 22% 30%, rgba(126,189,174,.07), transparent 34%),
+        var(--ink-deep);
+    }
+    .problem__chain {
+      position: relative;
+      max-width: 980px;
+      margin: 0 auto;
+      padding-left: clamp(28px, 4vw, 54px);
+    }
+    .problem__chain::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      bottom: 12px;
+      left: 6px;
+      width: 1px;
+      background: linear-gradient(180deg, var(--environment), var(--agriculture), var(--food), var(--health));
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 1.6s var(--ease) .3s;
+    }
+    .problem.is-active .problem__chain::before { transform: scaleY(1); }
+    .problem__line {
+      margin: clamp(18px, 3.4vh, 34px) 0;
+      font-family: var(--serif);
+      font-size: clamp(30px, 3.6vw, 58px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -.02em;
+      color: var(--paper);
+    }
+    .problem__line .k-env { color: var(--environment); }
+    .problem__line .k-agr { color: var(--agriculture); }
+    .problem__line .k-food { color: var(--food); }
+    .problem__line .k-health { color: var(--health); }
+    .problem__break {
+      max-width: 980px;
+      margin: clamp(30px, 6vh, 60px) auto 0;
+      padding: clamp(20px, 3vh, 30px) clamp(24px, 3.5vw, 44px);
+      border-left: 2px solid rgba(247,245,238,.35);
+      background: rgba(7,29,33,.5);
+      color: rgba(247,245,238,.92);
+      font-size: clamp(18px, 1.7vw, 27px);
+      font-weight: 300;
+      line-height: 1.45;
+      backdrop-filter: blur(8px);
+    }
+    .problem__break strong { font-weight: 500; color: var(--paper); }
+
+    /* ============ 03 — GLI EFFETTI ============ */
+    .effects {
+      background:
+        radial-gradient(circle at 80% 20%, rgba(216,169,78,.08), transparent 32%),
+        var(--ink-deep);
+    }
+    .effects__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(20px, 3vw, 44px);
+      width: min(1240px, 100%);
+      margin: clamp(26px, 5vh, 54px) auto 0;
+    }
+    .stat {
+      position: relative;
+      padding: clamp(20px, 3vh, 32px) clamp(18px, 2vw, 28px) clamp(18px, 2.6vh, 26px);
+      border-top: 2px solid var(--stat-color, var(--acid));
+      background: linear-gradient(180deg, rgba(7,29,33,.4), rgba(7,29,33,.75));
+      backdrop-filter: blur(10px);
+    }
+    .stat strong.stat__figure {
+      display: block;
+      margin: 0 0 12px;
+      color: var(--stat-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(40px, 4.2vw, 70px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .95;
+      letter-spacing: -.02em;
+    }
+    .stat p.stat__desc {
+      margin: 0 0 14px;
+      color: rgba(247,245,238,.82);
+      font-size: clamp(14px, 1.12vw, 18px);
+      font-weight: 300;
+      line-height: 1.45;
+    }
+    .stat p.stat__takeaway {
+      margin: 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(247,245,238,.14);
+      color: var(--paper);
+      font-size: clamp(13px, 1vw, 16px);
+      font-weight: 500;
+      letter-spacing: .04em;
+      line-height: 1.4;
+    }
+    .effects__sources {
+      width: min(1240px, 100%);
+      margin: clamp(20px, 4vh, 36px) auto 0;
+      color: rgba(247,245,238,.44);
+      font-size: clamp(10px, .8vw, 12px);
+      font-style: italic;
+      letter-spacing: .04em;
+    }
+
+    /* ============ 04 — COSA MANCA ============ */
+    .missing { background: var(--ink-deep); text-align: center; }
+    .missing__frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: -1;
+      width: min(76vw, 900px);
+      aspect-ratio: 16/9.5;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .missing__frame rect {
+      fill: none;
+      stroke: rgba(170,179,34,.4);
+      stroke-width: 1.4;
+      stroke-dasharray: 10 12;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 3.2s var(--ease) .4s;
+    }
+    .missing.is-active .missing__frame rect { stroke-dashoffset: 0; }
+    .missing__content { display: grid; place-items: center; }
+    .missing__inner { max-width: 860px; }
+    .missing .display { font-size: clamp(56px, 7.4vw, 120px); }
+    .missing__steps {
+      margin: clamp(26px, 5vh, 48px) 0 0;
+      display: grid;
+      gap: clamp(12px, 2vh, 20px);
+    }
+    .missing__steps p {
+      margin: 0;
+      color: rgba(247,245,238,.85);
+      font-size: clamp(17px, 1.6vw, 25px);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    .missing__steps p:last-child { color: var(--paper); font-weight: 400; }
+    .missing__steps p:last-child strong { color: var(--acid); font-weight: 500; }
+
+    /* ============ 05 — NASCE CASA ============ */
+    .birth {
+      background:
+        radial-gradient(circle at 50% 44%, rgba(170,179,34,.16), transparent 38%),
+        var(--ink-deep);
+      text-align: center;
+    }
+    .birth__halo {
+      position: absolute;
+      top: 44%;
+      left: 50%;
+      z-index: -1;
+      width: 120vmin;
+      height: 120vmin;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,179,34,.13) 0%, rgba(170,179,34,.04) 40%, transparent 66%);
+      transform: translate(-50%, -50%);
+      animation: halo 7s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .birth__dots {
+      position: relative;
+      width: min(320px, 60vw);
+      height: 56px;
+      margin: 0 auto clamp(22px, 4vh, 40px);
+    }
+    .birth__dots i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) translateX(var(--offset, 0px));
+      transition: transform 1.7s var(--ease) .5s, box-shadow 1.7s ease .5s;
+    }
+    .birth__dots i:nth-child(1) { background: var(--food); --offset: -120px; }
+    .birth__dots i:nth-child(2) { background: var(--environment); --offset: -40px; }
+    .birth__dots i:nth-child(3) { background: var(--health); --offset: 40px; }
+    .birth__dots i:nth-child(4) { background: var(--agriculture); --offset: 120px; }
+    .birth.is-active .birth__dots i {
+      --offset: 0px;
+      box-shadow: 0 0 26px 4px rgba(170,179,34,.4);
+    }
+    .birth__content { display: grid; place-items: center; }
+    .birth__inner { max-width: 880px; }
+    .birth__lines {
+      margin: clamp(26px, 4.6vh, 44px) 0 0;
+      display: grid;
+      gap: clamp(12px, 2vh, 18px);
+    }
+    .birth__lines p {
+      margin: 0;
+      color: rgba(247,245,238,.86);
+      font-size: clamp(16px, 1.5vw, 23px);
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .birth__lines p strong { color: var(--paper); font-weight: 500; }
+
+    /* ============ 06 — LO SPAZIO CASA ============ */
+    .space { background: var(--ink-deep); }
+    .space__image {
+      position: absolute;
+      inset: -4%;
+      z-index: -4;
+      background: url("assets/cinematic/casa-space-hero-v1.png") center/cover no-repeat;
+      transform: scale(1.035);
+      transition: transform 9s ease-out;
+    }
+    .space.is-active .space__image { transform: scale(1); }
+    .space__veil {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background: linear-gradient(90deg, rgba(7,29,33,.92) 0%, rgba(7,29,33,.70) 38%, rgba(7,29,33,.18) 70%, rgba(7,29,33,.30) 100%);
+    }
+    .space__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .space__intro { max-width: 710px; padding-top: clamp(36px, 7vh, 86px); }
+    .space__title { max-width: 680px; }
+    .space__reference {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 19px 0 0;
+      padding: 9px 13px 9px 14px;
+      border-left: 2px solid var(--acid);
+      background: rgba(7,29,33,.46);
+      color: rgba(247,245,238,.82);
+      font-size: clamp(14px, 1.05vw, 18px);
+      line-height: 1.3;
+      backdrop-filter: blur(8px);
+    }
+    .space__reference strong { color: var(--acid); font-size: .78em; letter-spacing: .17em; text-transform: uppercase; }
+    .space__story {
+      position: relative;
+      width: min(1160px, 100%);
+      min-height: 188px;
+      margin: 24px auto 24px;
+      border-top: 1px solid rgba(247,245,238,.20);
+      background: linear-gradient(90deg, rgba(7,29,33,.82), rgba(7,29,33,.56));
+      backdrop-filter: blur(12px);
+    }
+    .space__story-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid rgba(247,245,238,.14);
+    }
+    .space__story-tab {
+      padding: 13px 16px;
+      color: rgba(247,245,238,.46);
+      font-size: clamp(10px, .8vw, 13px);
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color .4s ease, background .4s ease;
+    }
+    .space[data-fragment-step="0"] .space__story-tab:nth-child(1),
+    .space[data-fragment-step="1"] .space__story-tab:nth-child(2),
+    .space[data-fragment-step="2"] .space__story-tab:nth-child(3) {
+      color: var(--paper);
+      background: rgba(170,179,34,.10);
+    }
+    .space__detail {
+      position: absolute;
+      inset: 54px 0 0;
+      display: grid;
+      grid-template-columns: minmax(260px, .42fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 30px;
+      padding: 20px 24px 23px;
+      border-left: 3px solid var(--detail-color);
+    }
+    .space__detail h3 {
+      margin: 0;
+      color: var(--detail-color);
+      font-family: var(--serif);
+      font-size: clamp(27px, 2.4vw, 39px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.05;
+    }
+    .space__detail p {
+      margin: 0;
+      color: rgba(247,245,238,.88);
+      font-size: clamp(16px, 1.28vw, 21px);
+      font-weight: 300;
+      line-height: 1.45;
+    }
+
+    /* ============ 07 — DENTRO CASA ============ */
+    .cycle {
+      background:
+        radial-gradient(circle at 76% 47%, rgba(170,179,34,.12), transparent 30%),
+        radial-gradient(circle at 16% 78%, rgba(126,189,174,.07), transparent 26%),
+        var(--ink-deep);
+    }
+    .cycle::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .22;
+      background-image: url("assets/originale/trama.jpg");
+      background-size: 920px 45px;
+      mix-blend-mode: soft-light;
+    }
+    .cycle__content {
+      display: grid;
+      grid-template-columns: minmax(390px, .9fr) minmax(560px, 1.1fr);
+      align-items: center;
+      gap: clamp(30px, 5vw, 90px);
+    }
+    .cycle__copy { max-width: 530px; }
+    .cycle__copy .display { font-size: clamp(48px, 4.4vw, 72px); line-height: 1.02; }
+    .cycle__map {
+      position: relative;
+      width: min(58vw, 680px);
+      aspect-ratio: 1;
+      justify-self: end;
+    }
+    .orbit {
+      position: absolute;
+      inset: 11%;
+      border: 1px solid rgba(247,245,238,.13);
+      border-radius: 50%;
+    }
+    .orbit::before,
+    .orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      inset: 10%;
+      border: 1px solid rgba(126,189,174,.16);
+    }
+    .orbit::after { inset: 26%; border-color: rgba(216,169,78,.15); }
+    .flow-ring {
+      position: absolute;
+      inset: 11%;
+      border-radius: 50%;
+      background: conic-gradient(from -90deg, var(--environment), var(--agriculture), var(--food), var(--health), var(--environment));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+      opacity: .88;
+      filter: drop-shadow(0 0 9px rgba(170,179,34,.24));
+    }
+    .flow-dot {
+      position: absolute;
+      inset: 11%;
+      border-radius: 50%;
+      animation: spin 8s linear infinite;
+    }
+    .flow-dot::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--paper);
+      box-shadow: 0 0 18px var(--paper);
+    }
+    .cycle__core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: 33%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(247,245,238,.12);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,179,34,.16), rgba(15,43,48,.88) 68%);
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .cycle__core strong {
+      display: block;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 43px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .cycle__core small {
+      color: rgba(247,245,238,.55);
+      font-size: 8px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .domain-node {
+      --x: 50%; --y: 0%; --node-color: var(--acid);
+      position: absolute;
+      top: var(--y);
+      left: var(--x);
+      width: 28%;
+      min-width: 154px;
+      padding: 13px 15px;
+      border: 1px solid color-mix(in srgb, var(--node-color), transparent 58%);
+      border-radius: 4px;
+      background: rgba(7,29,33,.82);
+      box-shadow: 0 16px 50px rgba(0,0,0,.18);
+      transform: translate(-50%, -50%);
+      text-align: center;
+      animation: nodeBreath 4s ease-in-out infinite;
+    }
+    .domain-node strong {
+      display: block;
+      color: var(--node-color);
+      font-family: var(--serif);
+      font-size: clamp(20px, 1.9vw, 29px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .node-environment { --x: 50%; --y: 8%; --node-color: var(--environment); }
+    .node-agriculture { --x: 92%; --y: 50%; --node-color: var(--agriculture); animation-delay: .7s; }
+    .node-food { --x: 50%; --y: 92%; --node-color: var(--food); animation-delay: 1.4s; }
+    .node-health { --x: 8%; --y: 50%; --node-color: var(--health); animation-delay: 2.1s; }
+    .cycle__story {
+      position: relative;
+      min-height: 238px;
+      margin-top: 34px;
+      border-top: 1px solid rgba(247,245,238,.18);
+    }
+    .cycle__detail {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px 8px 12px 0;
+    }
+    .cycle__detail .detail-label {
+      margin-bottom: 8px;
+      color: var(--detail-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(26px, 2.2vw, 36px);
+      font-style: italic;
+    }
+    .cycle__detail p {
+      margin: 0;
+      color: rgba(247,245,238,.86);
+      font-size: clamp(16px, 1.22vw, 20px);
+      font-weight: 300;
+      line-height: 1.46;
+    }
+    .cycle__tech-list { display: grid; gap: 8px; }
+    .cycle__tech-list p { font-size: clamp(14px, 1.03vw, 17px); }
+    .cycle__tech-list strong { color: var(--acid); font-weight: 500; }
+    .cycle[data-fragment-step="0"] .node-environment,
+    .cycle[data-fragment-step="1"] .node-agriculture,
+    .cycle[data-fragment-step="2"] .node-food,
+    .cycle[data-fragment-step="3"] .node-health {
+      background: rgba(247,245,238,.08);
+      box-shadow: 0 0 42px color-mix(in srgb, var(--node-color), transparent 64%);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    /* ============ 08 — INTERNET DELLE RISORSE ============ */
+    .ior {
+      background:
+        radial-gradient(circle at 68% 58%, rgba(170,179,34,.14), transparent 31%),
+        linear-gradient(135deg, #09252a, var(--ink-deep));
+    }
+    .ior__content {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+    }
+    .ior__header { max-width: 900px; padding-top: 24px; }
+    .ior__title { font-size: clamp(50px, 5.6vw, 88px); }
+    .ior__lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .ior__lines path {
+      fill: none;
+      stroke-width: 1.2;
+      stroke-dasharray: 7 11;
+      animation: dash 7s linear infinite;
+    }
+    .resource-zone {
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      border: 1px solid rgba(247,245,238,.10);
+      border-radius: 24px;
+    }
+    .resource-zone--partners { left: 1%; right: 1%; border-style: dashed; }
+    .resource-zone--casa { left: 27%; right: 27%; border-color: rgba(170,179,34,.34); background: rgba(170,179,34,.035); }
+    .resource-zone--partners .zone-label { left: 12%; }
+    .zone-label {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      padding: 3px 9px;
+      color: rgba(247,245,238,.58);
+      background: var(--ink-deep);
+      font-size: 8px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      transform: translateX(-50%);
+    }
+    .ior-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: clamp(128px, 13vw, 190px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 36% 28%, #c8cf4e, var(--acid) 52%, #7f8916);
+      color: var(--ink-deep);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 18px rgba(170,179,34,.06), 0 0 90px rgba(170,179,34,.25);
+      animation: coreBreath 4.6s ease-in-out infinite;
+    }
+    .ior-core strong { font-family: var(--serif); font-size: clamp(34px, 4vw, 58px); font-style: italic; font-weight: 400; }
+    .resource {
+      --x: 10%; --y: 20%; --c: var(--environment);
+      position: absolute;
+      top: var(--y);
+      left: var(--x);
+      min-width: 148px;
+      max-width: 230px;
+      padding: 9px 12px;
+      border-left: 2px solid var(--c);
+      background: rgba(7,29,33,.76);
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(16px, 1.35vw, 21px);
+      font-style: italic;
+      transform: translate(-50%, -50%);
+      animation: float 5.8s ease-in-out infinite;
+    }
+    .resource small { display: block; margin-top: 2px; color: rgba(247,245,238,.44); font-family: var(--sans); font-size: 8px; font-style: normal; letter-spacing: .10em; }
+    .r1 { --x: 10%; --y: 27%; --c: var(--environment); }
+    .r2 { --x: 11%; --y: 73%; --c: var(--health); animation-delay: .8s; }
+    .r3 { --x: 90%; --y: 27%; --c: var(--food); animation-delay: 1.6s; }
+    .r4 { --x: 89%; --y: 73%; --c: var(--agriculture); animation-delay: 2.4s; }
+    .r5 { --x: 34%; --y: 50%; --c: var(--environment); animation-delay: .4s; }
+    .r6 { --x: 66%; --y: 50%; --c: var(--agriculture); animation-delay: 1.2s; }
+    .ior__benefit {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: end;
+      gap: 36px;
+      padding-top: 4px;
+    }
+    .ior__benefit p { margin: 0; }
+    .ior__principle {
+      justify-self: end;
+      max-width: 920px;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(18px, 1.72vw, 27px);
+      font-style: italic;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .ior__principle span { display: block; color: var(--acid); }
+    .ior__stage-progressive {
+      display: grid;
+      grid-template-columns: minmax(0, 1.38fr) minmax(330px, .62fr);
+      gap: 28px;
+      min-height: 350px;
+      margin-top: 2px;
+    }
+    .ior__diagram {
+      position: relative;
+      min-width: 0;
+      border-top: 1px solid rgba(247,245,238,.10);
+      border-bottom: 1px solid rgba(247,245,238,.10);
+      background: linear-gradient(90deg, rgba(7,29,33,.2), rgba(170,179,34,.045) 50%, rgba(7,29,33,.2));
+      overflow: hidden;
+    }
+    .ior__explain {
+      position: relative;
+      min-height: 350px;
+      border-top: 1px solid rgba(247,245,238,.18);
+      border-bottom: 1px solid rgba(247,245,238,.18);
+    }
+    .ior__detail {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 6px 24px 4px;
+    }
+    .ior__detail h3 {
+      margin: 0 0 13px;
+      color: var(--detail-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(27px, 2.35vw, 39px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.06;
+    }
+    .ior__detail p {
+      margin: 0 0 12px;
+      color: rgba(247,245,238,.84);
+      font-size: clamp(15px, 1.12vw, 19px);
+      font-weight: 300;
+      line-height: 1.46;
+    }
+    .ior[data-fragment-step="0"] .resource-zone--casa { border-color: rgba(170,179,34,.72); background: rgba(170,179,34,.08); }
+    .ior[data-fragment-step="1"] .resource-zone--partners { border-color: rgba(126,189,174,.46); }
+    .ior[data-fragment-step="2"] .ior-core { box-shadow: 0 0 0 18px rgba(170,179,34,.09), 0 0 110px rgba(170,179,34,.42); }
+
+    /* ============ 09 — COME OPERA ============ */
+    .operate {
+      background:
+        radial-gradient(circle at 14% 24%, rgba(170,179,34,.08), transparent 30%),
+        var(--ink-deep);
+    }
+    .operate__rail {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(14px, 2vw, 26px);
+      width: min(1240px, 100%);
+      margin: clamp(26px, 5vh, 50px) auto 0;
+      counter-reset: op;
+    }
+    .op {
+      position: relative;
+      padding: clamp(18px, 2.6vh, 28px) clamp(16px, 1.8vw, 24px);
+      border-top: 2px solid rgba(247,245,238,.16);
+      background: linear-gradient(180deg, rgba(7,29,33,.38), rgba(7,29,33,.72));
+      backdrop-filter: blur(10px);
+      transition: border-color .5s ease, background .5s ease, transform .6s var(--ease), box-shadow .6s ease;
+    }
+    .op::before {
+      counter-increment: op;
+      content: "0" counter(op);
+      display: block;
+      margin-bottom: 10px;
+      color: var(--op-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(20px, 1.9vw, 30px);
+      font-style: italic;
+    }
+    .op h3 {
+      margin: 0 0 10px;
+      color: var(--paper);
+      font-size: clamp(12px, .95vw, 15px);
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .op p {
+      margin: 0;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(13px, 1.02vw, 16px);
+      font-weight: 300;
+      line-height: 1.45;
+    }
+    .op p + p { margin-top: 9px; }
+    .op--1 { --op-color: var(--environment); }
+    .op--2 { --op-color: var(--agriculture); }
+    .op--3 { --op-color: var(--food); }
+    .op--4 { --op-color: var(--health); }
+    .operate[data-fragment-step="0"] .op--1,
+    .operate[data-fragment-step="1"] .op--2,
+    .operate[data-fragment-step="2"] .op--3,
+    .operate[data-fragment-step="3"] .op--4 {
+      border-color: var(--op-color);
+      background: rgba(247,245,238,.06);
+      transform: translateY(-6px);
+      box-shadow: 0 22px 54px rgba(0,0,0,.26);
+    }
+    .operate__loop {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: min(1240px, 100%);
+      margin: clamp(22px, 4vh, 38px) auto 0;
+      color: rgba(247,245,238,.85);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.55vw, 25px);
+      font-style: italic;
+    }
+    .operate__loop::before {
+      content: "↻";
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(170,179,34,.5);
+      border-radius: 50%;
+      color: var(--acid);
+      font-size: 20px;
+      font-style: normal;
+      animation: spin 14s linear infinite;
+    }
+
+    /* ============ 10 — PER CHI È ============ */
+    .who {
+      background:
+        radial-gradient(circle at 84% 76%, rgba(208,139,128,.07), transparent 30%),
+        var(--ink-deep);
+    }
+    .who__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(14px, 2vw, 24px);
+      width: min(1160px, 100%);
+      margin: clamp(24px, 4.4vh, 44px) auto 0;
+    }
+    .aud {
+      padding: clamp(18px, 2.6vh, 28px) clamp(18px, 2vw, 26px);
+      border-left: 2px solid var(--aud-color, var(--acid));
+      background: linear-gradient(180deg, rgba(7,29,33,.4), rgba(7,29,33,.72));
+      backdrop-filter: blur(10px);
+      transition: background .5s ease, transform .6s var(--ease), box-shadow .6s ease;
+    }
+    .aud h3 {
+      margin: 0 0 10px;
+      color: var(--aud-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(22px, 2vw, 32px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .aud p {
+      margin: 0;
+      color: rgba(247,245,238,.8);
+      font-size: clamp(13px, 1.05vw, 17px);
+      font-weight: 300;
+      line-height: 1.48;
+    }
+    .aud p + p { margin-top: 9px; }
+    .aud--1 { --aud-color: var(--food); }
+    .aud--2 { --aud-color: var(--environment); }
+    .aud--3 { --aud-color: var(--health); }
+    .aud--4 { --aud-color: var(--agriculture); }
+    .who[data-fragment-step="0"] .aud--1,
+    .who[data-fragment-step="1"] .aud--2,
+    .who[data-fragment-step="2"] .aud--3,
+    .who[data-fragment-step="3"] .aud--4 {
+      background: rgba(247,245,238,.06);
+      transform: translateY(-6px);
+      box-shadow: 0 22px 54px rgba(0,0,0,.26);
+    }
+    .who__closing {
+      width: min(1160px, 100%);
+      margin: clamp(20px, 3.6vh, 34px) auto 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.55vw, 25px);
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    /* ============ 11 — CHI RENDE POSSIBILE ============ */
+    .actors {
+      background:
+        radial-gradient(circle at 20% 80%, rgba(126,189,174,.06), transparent 30%),
+        var(--ink-deep);
+    }
+    .actors__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(14px, 1.8vw, 24px);
+      width: min(1240px, 100%);
+      margin: clamp(24px, 4.4vh, 44px) auto 0;
+    }
+    .role {
+      padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 24px);
+      border-top: 2px solid rgba(247,245,238,.16);
+      background: linear-gradient(180deg, rgba(7,29,33,.4), rgba(7,29,33,.74));
+      backdrop-filter: blur(10px);
+      transition: border-color .5s ease, background .5s ease, transform .6s var(--ease), box-shadow .6s ease;
+    }
+    .role h3 {
+      margin: 0 0 4px;
+      color: var(--role-color, var(--acid));
+      font-size: clamp(10px, .8vw, 12px);
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .role h4 {
+      margin: 0 0 10px;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(21px, 1.9vw, 30px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.05;
+    }
+    .role p {
+      margin: 0;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(12.5px, .98vw, 15.5px);
+      font-weight: 300;
+      line-height: 1.45;
+    }
+    .role--wide { grid-column: span 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px); border-top: 0; padding: 0; background: none; backdrop-filter: none; }
+    .role--promote { --role-color: var(--acid); }
+    .role--manage { --role-color: var(--food); }
+    .role--train { --role-color: var(--health); }
+    .role--env { --role-color: var(--environment); }
+    .role--agri { --role-color: var(--agriculture); }
+    .role--health { --role-color: var(--health); }
+    .actors[data-fragment-step="0"] .role--promote,
+    .actors[data-fragment-step="1"] .role--manage,
+    .actors[data-fragment-step="2"] .role--train,
+    .actors[data-fragment-step="3"] .role--sci .role {
+      border-color: var(--role-color);
+      background: rgba(247,245,238,.06);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(0,0,0,.24);
+    }
+    .actors__closing {
+      width: min(1240px, 100%);
+      margin: clamp(18px, 3.4vh, 32px) auto 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.55vw, 25px);
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    /* ============ 12 — PATRIMONIO ============ */
+    .heritage {
+      background:
+        radial-gradient(circle at 78% 24%, rgba(216,169,78,.07), transparent 30%),
+        var(--ink-deep);
+    }
+    .heritage__grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(12px, 1.6vw, 22px);
+      width: min(1240px, 100%);
+      margin: clamp(24px, 4.4vh, 44px) auto 0;
+    }
+    .cap {
+      padding: clamp(16px, 2.4vh, 26px) clamp(14px, 1.6vw, 22px);
+      border-top: 2px solid var(--cap-color, var(--acid));
+      background: linear-gradient(180deg, rgba(7,29,33,.4), rgba(7,29,33,.72));
+      backdrop-filter: blur(10px);
+    }
+    .cap h3 {
+      margin: 0 0 10px;
+      color: var(--cap-color, var(--acid));
+      font-size: clamp(11px, .85vw, 13px);
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .cap p {
+      margin: 0;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(12.5px, 1vw, 16px);
+      font-weight: 300;
+      line-height: 1.48;
+    }
+    .cap--1 { --cap-color: var(--environment); }
+    .cap--2 { --cap-color: var(--food); }
+    .cap--3 { --cap-color: var(--agriculture); }
+    .cap--4 { --cap-color: var(--health); }
+    .heritage__closing {
+      width: min(1240px, 100%);
+      margin: clamp(22px, 4vh, 38px) auto 0;
+      padding: clamp(16px, 2.4vh, 24px) clamp(20px, 2.6vw, 34px);
+      border-left: 2px solid var(--acid);
+      background: rgba(7,29,33,.5);
+      color: rgba(247,245,238,.9);
+      font-size: clamp(15px, 1.3vw, 21px);
+      font-weight: 300;
+      line-height: 1.5;
+      backdrop-filter: blur(8px);
+    }
+    .heritage__closing strong { color: var(--acid); font-weight: 500; }
+
+    /* ============ 13 — ROADMAP ============ */
+    .roadmap {
+      background:
+        radial-gradient(circle at 50% 10%, rgba(170,179,34,.09), transparent 32%),
+        var(--ink-deep);
+    }
+    .roadmap__track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(16px, 2.2vw, 30px);
+      width: min(1240px, 100%);
+      margin: clamp(28px, 5vh, 52px) auto 0;
+      padding-top: 34px;
+    }
+    .roadmap__track::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--acid), var(--environment), var(--food));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 2.4s var(--ease) .3s;
+    }
+    .roadmap.is-active .roadmap__track::before { transform: scaleX(1); }
+    .phase { position: relative; transition: transform .6s var(--ease); }
+    .phase::before {
+      content: "";
+      position: absolute;
+      top: -32px;
+      left: 2px;
+      width: 11px;
+      height: 11px;
+      border: 1px solid var(--phase-color, var(--acid));
+      border-radius: 50%;
+      background: var(--ink-deep);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--phase-color, var(--acid)), transparent 45%);
+      transition: background .5s ease;
+    }
+    .phase__year {
+      margin: 0 0 4px;
+      color: var(--phase-color, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(30px, 3vw, 48px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .phase h3 {
+      margin: 0 0 12px;
+      color: var(--paper);
+      font-size: clamp(11px, .88vw, 14px);
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .phase p {
+      margin: 0 0 9px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(247,245,238,.18);
+      color: rgba(247,245,238,.78);
+      font-size: clamp(12.5px, 1vw, 16px);
+      font-weight: 300;
+      line-height: 1.45;
+    }
+    .phase--1 { --phase-color: var(--acid); }
+    .phase--2 { --phase-color: var(--environment); }
+    .phase--3 { --phase-color: var(--food); }
+    .roadmap[data-fragment-step="0"] .phase--1,
+    .roadmap[data-fragment-step="1"] .phase--2,
+    .roadmap[data-fragment-step="2"] .phase--3 { transform: translateY(-6px); }
+    .roadmap[data-fragment-step="0"] .phase--1::before,
+    .roadmap[data-fragment-step="1"] .phase--2::before,
+    .roadmap[data-fragment-step="2"] .phase--3::before { background: var(--phase-color); }
+    .roadmap__closing {
+      width: min(1240px, 100%);
+      margin: clamp(22px, 4vh, 38px) auto 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.6vw, 26px);
+      font-style: italic;
+    }
+
+    /* ============ 14 — DIREZIONE SCIENTIFICA ============ */
+    .science {
+      background:
+        radial-gradient(circle at 50% 40%, rgba(170,179,34,.10), transparent 40%),
+        var(--ink-deep);
+      text-align: center;
+    }
+    .science__content { display: grid; place-items: center; }
+    .science__inner { max-width: 880px; }
+    .science__seal {
+      position: relative;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto clamp(20px, 3.6vh, 34px);
+      border: 1px solid rgba(216,169,78,.55);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--food);
+      font-family: var(--serif);
+      font-size: 30px;
+      font-style: italic;
+    }
+    .science__seal::after {
+      content: "";
+      position: absolute;
+      inset: -9px;
+      border: 1px dashed rgba(216,169,78,.28);
+      border-radius: 50%;
+      animation: spin 26s linear infinite;
+    }
+    .science__name {
+      margin: clamp(22px, 4vh, 40px) 0 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(30px, 3.4vw, 54px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .science__nobel-inline { color: var(--food); font-style: normal; }
+    .science__body {
+      max-width: 760px;
+      margin: clamp(20px, 3.6vh, 32px) auto 0;
+      color: rgba(247,245,238,.84);
+      font-size: clamp(15px, 1.3vw, 20px);
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .science__body + .science__body { margin-top: 14px; }
+
+    /* ============ 15 — FINALE ============ */
+    .finale { background: var(--ink-deep); text-align: center; }
+    .finale__image {
+      position: absolute;
+      inset: -8%;
+      z-index: -3;
+      background: url("assets/originale/foglie.jpg") center/cover no-repeat;
+      opacity: .5;
+      animation: coverZoom 28s ease-in-out infinite alternate;
+    }
+    .finale__veil {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(7,29,33,.72), rgba(7,29,33,.52) 50%, rgba(7,29,33,.78)),
+        radial-gradient(circle at 50% 46%, rgba(170,179,34,.12), transparent 46%);
+    }
+    .finale__content { display: grid; place-items: center; }
+    .finale__inner { max-width: 940px; }
+    .finale .display { font-size: clamp(38px, 4.6vw, 74px); line-height: 1.1; }
+    .finale__pillars {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(10px, 2vw, 22px);
+      margin: clamp(28px, 5vh, 50px) 0 0;
+    }
+    .finale__pillars span {
+      padding: 10px 20px;
+      border: 1px solid rgba(247,245,238,.25);
+      border-radius: 999px;
+      color: rgba(247,245,238,.9);
+      font-size: clamp(13px, 1.1vw, 17px);
+      font-weight: 300;
+      letter-spacing: .06em;
+      backdrop-filter: blur(6px);
+    }
+    .finale__wordmark {
+      margin: clamp(40px, 8vh, 84px) 0 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(64px, 9vw, 140px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .8;
+      letter-spacing: -.03em;
+    }
+    .finale__domains {
+      margin: 18px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.7vw, 27px);
+      font-style: italic;
+    }
+    .finale__domains span + span::before { content: "\00a0\00b7\00a0"; color: rgba(247,245,238,.62); }
+
+    @keyframes coverZoom { from { transform: scale(1); } to { transform: scale(1.10); } }
+    @keyframes cue { 0%,100% { transform: scaleY(.15); opacity: .3; } 50% { transform: scaleY(1); opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes nodeBreath { 0%,100% { box-shadow: 0 14px 44px rgba(0,0,0,.18); } 50% { box-shadow: 0 14px 52px color-mix(in srgb, var(--node-color), transparent 75%); } }
+    @keyframes dash { to { stroke-dashoffset: -180; } }
+    @keyframes coreBreath { 0%,100% { filter: saturate(.96); transform: translate(-50%,-50%) scale(1); } 50% { filter: saturate(1.14) brightness(1.05); transform: translate(-50%,-50%) scale(1.025); } }
+    @keyframes float { 0%,100% { margin-top: 0; } 50% { margin-top: -8px; } }
+    @keyframes halo { from { transform: translate(-50%,-50%) scale(.94); opacity: .6; } to { transform: translate(-50%,-50%) scale(1.06); opacity: 1; } }
+
+    /* ============ MOBILE ============ */
+    @media (max-width: 900px) {
+      html { scroll-snap-type: none; }
+      .scene { min-height: 0; }
+      .scene__safe { min-height: 0; padding-top: clamp(56px, 9vh, 84px); padding-bottom: clamp(48px, 8vh, 72px); }
+      .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
+      .brand-corner { display: none; }
+      .nav { display: none; }
+      .controls { display: none; }
+
+      /* su mobile i fragment diventano contenuto normale, impilato */
+      .fragment {
+        visibility: visible;
+        opacity: 1;
+        filter: none;
+        transform: none;
+        pointer-events: auto;
+        position: static !important;
+      }
+
+      .problem__chain { padding-left: 22px; }
+      .problem__line { font-size: clamp(26px, 7.4vw, 34px); }
+
+      .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
+
+      .missing__frame { width: 88vw; aspect-ratio: 4/5.4; }
+      .missing .display { font-size: clamp(46px, 12vw, 72px); }
+
+      .space__story { min-height: 0; }
+      .space__story-tabs { display: none; }
+      .space__detail { inset: auto; grid-template-columns: 1fr; gap: 10px; padding: 18px 4px; border-left: 0; border-top: 3px solid var(--detail-color); }
+      .space__detail + .space__detail { border-top-width: 1px; }
+
+      .cycle__content { grid-template-columns: 1fr; align-content: start; padding-top: 90px; }
+      .cycle__copy { max-width: none; }
+      .cycle__map { width: min(88vw, 620px); justify-self: center; margin-top: 8px; }
+      .cycle__story { min-height: 0; margin-top: 20px; }
+      .cycle__detail { padding: 16px 0; }
+      .domain-node { min-width: 118px; padding: 9px 10px; }
+
+      .ior__stage-progressive { grid-template-columns: 1fr; }
+      .ior__diagram { min-height: 460px; }
+      .ior__explain { min-height: 0; border-bottom: 0; }
+      .ior__detail { padding: 16px 0; }
+      .ior__lines { display: none; }
+      .resource-zone--partners { left: 2%; right: 2%; }
+      .resource-zone--casa { left: 16%; right: 16%; }
+      .zone-label { font-size: 7px; max-width: 60vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .resource-zone--partners .zone-label { left: 50%; top: auto; bottom: -8px; }
+      .ior-core { width: clamp(92px, 26vw, 120px); }
+      .resource { min-width: 0; max-width: 34vw; font-size: 13.5px; padding: 7px 9px; }
+      .resource small { font-size: 7px; }
+      .r1 { --x: 26%; --y: 13%; }
+      .r3 { --x: 74%; --y: 13%; }
+      .r2 { --x: 22%; --y: 46%; }
+      .r4 { --x: 78%; --y: 56%; }
+      .r5 { --x: 26%; --y: 87%; }
+      .r6 { --x: 74%; --y: 87%; }
+      .ior__principle { text-align: left; justify-self: start; }
+
+      .operate__rail { grid-template-columns: 1fr; max-width: 620px; }
+      .who__grid { grid-template-columns: 1fr; max-width: 620px; }
+      .actors__grid { grid-template-columns: 1fr; max-width: 620px; }
+      .role--wide { grid-column: auto; grid-template-columns: 1fr; }
+      .heritage__grid { grid-template-columns: 1fr; max-width: 620px; }
+      .roadmap__track { grid-template-columns: 1fr; padding-top: 0; }
+      .roadmap__track::before { display: none; }
+      .phase { padding-left: 20px; border-left: 1px solid rgba(247,245,238,.16); }
+      .phase::before { top: 6px; left: -6px; }
+      .phase + .phase { margin-top: 26px; }
+    }
+
+    @media (max-height: 720px) and (min-width: 901px) {
+      :root { --safe-y: 28px; }
+      .display { font-size: clamp(46px, 5.7vw, 82px); }
+      .space__intro { padding-top: 42px; }
+      .cycle__map { width: min(50vw, 590px); }
+      .ior__header { padding-top: 12px; }
+      .ior__stage-progressive { min-height: 300px; }
+      .ior__diagram, .ior__explain { min-height: 300px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; filter: none; transform: none; }
+    }
   </style>
 </head>
 <body>
-  <div class="progress" aria-hidden="true"></div>
-  <nav class="rail" aria-label="Indice"></nav>
-  <div class="stage-tools"><button id="full">Schermo intero · F</button><button id="motion">Pausa motion · M</button><a href="appendici.html">Appendici</a></div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <div class="brand-corner" aria-hidden="true">CASA</div>
+  <nav class="nav" aria-label="Pagine" id="sceneNav"></nav>
+  <div class="controls">
+    <button type="button" id="prev" aria-label="Indietro">←</button>
+    <button type="button" id="fullscreen">Schermo intero · F</button>
+    <button type="button" id="next" aria-label="Avanti">→</button>
+  </div>
 
   <main>
-    <section class="slide black hero" id="s1" data-title="CASA">
-      <div class="grain"></div><div class="glow"></div><div class="hero-orbits"><span class="o1"></span><span class="o2"></span><span class="o3"></span><span class="o4"></span></div>
-      <div class="inner hero-center">
-        <h1 class="reveal">CASA</h1>
-        <div class="hero-sub reveal d2"><span class="gold">Cibo</span><span class="aqua">Ambiente</span><span class="coral">Salute</span><span class="accent">Agricoltura</span></div>
-        <p class="hero-promise reveal d3">L’infrastruttura condivisa per innovare dove i quattro ambiti si incontrano.</p>
+    <!-- 01 · COPERTINA -->
+    <section class="scene cover is-active" id="p01" data-index="0" data-title="Copertina" aria-label="Copertina">
+      <div class="cover__image" aria-hidden="true"></div>
+      <div class="cover__veil" aria-hidden="true"></div>
+      <div class="scene__safe cover__content">
+        <div class="cover__lockup">
+          <h1 class="cover__title reveal">casa</h1>
+          <div class="cover__domains reveal delay-1" aria-label="Cibo, Ambiente, Salute, Agricoltura">
+            <span class="food">Cibo</span><span class="environment">Ambiente</span><span class="health">Salute</span><span class="agriculture">Agricoltura</span>
+          </div>
+          <p class="cover__payoff reveal delay-2">L’infrastruttura condivisa che abilita l’innovazione tra settori.</p>
+        </div>
+        <div class="cover__cue reveal delay-3">entra</div>
       </div>
     </section>
 
-    <section class="slide light" id="s2" data-title="Tutto è collegato">
-      <div class="inner">
-        <div class="eyebrow reveal">01 · Il sistema</div>
-        <h2 class="reveal d1">Ciò che accade in un ambito cambia tutti gli altri.</h2>
-        <div class="chain">
-          <div class="chain-item reveal d1 aqua"><div class="chain-dot">Ambiente</div><p>Clima, acqua, suolo e biodiversità.</p></div>
-          <div class="chain-item reveal d2 gold"><div class="chain-dot">Agricoltura</div><p>Dà forma al cibo che produciamo.</p></div>
-          <div class="chain-item reveal d3 accent"><div class="chain-dot">Cibo</div><p>Qualità e trasformazione incidono sulla salute.</p></div>
-          <div class="chain-item reveal d4 coral"><div class="chain-dot">Salute</div><p>Gli effetti generano nuove evidenze per il sistema.</p></div>
-          <div class="return-arc"></div>
+    <!-- 02 · IL PROBLEMA -->
+    <section class="scene problem" id="p02" data-index="1" data-title="Il problema" aria-label="Il problema">
+      <div class="scene__safe scene__center">
+        <div class="problem__chain">
+          <p class="eyebrow reveal">02 · Il problema</p>
+          <p class="problem__line reveal delay-1">L’<span class="k-env">ambiente</span> condiziona l’<span class="k-agr">agricoltura</span>.</p>
+          <p class="problem__line reveal delay-2">L’<span class="k-agr">agricoltura</span> dà forma al <span class="k-food">cibo</span> che produciamo.</p>
+          <p class="problem__line reveal delay-3">Il <span class="k-food">cibo</span> incide sulla nostra <span class="k-health">salute</span>.</p>
+        </div>
+        <p class="problem__break reveal delay-4">Eppure continuiamo a organizzare <strong>competenze, decisioni e interventi separatamente</strong>.</p>
+      </div>
+    </section>
+
+    <!-- 03 · GLI EFFETTI -->
+    <section class="scene effects" id="p03" data-index="2" data-title="Gli effetti attraversano gli ambiti" aria-label="Gli effetti attraversano gli ambiti">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">03 · Gli effetti attraversano gli ambiti</p>
+        </header>
+        <div class="effects__grid" data-fragment-cumulative>
+          <article class="stat fragment is-current" data-fragment="0" style="--stat-color: var(--environment)">
+            <strong class="stat__figure">Circa 1/3</strong>
+            <p class="stat__desc">delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari.</p>
+            <p class="stat__takeaway">Agricoltura e cibo incidono sull’ambiente.</p>
+          </article>
+          <article class="stat fragment" data-fragment="1" style="--stat-color: var(--food)">
+            <strong class="stat__figure">−21%</strong>
+            <p class="stat__desc">l’impatto del cambiamento climatico sulla produttività agricola globale dal 1961.</p>
+            <p class="stat__takeaway">L’ambiente torna a incidere sull’agricoltura e sul cibo.</p>
+          </article>
+          <article class="stat fragment" data-fragment="2" style="--stat-color: var(--health)">
+            <strong class="stat__figure">Oltre 10.000 miliardi di dollari l’anno</strong>
+            <p class="stat__desc">i costi nascosti generati dai sistemi agroalimentari sulla salute, sull’ambiente e sulla società.</p>
+            <p class="stat__takeaway">Le conseguenze non rimangono confinate in un solo ambito.</p>
+          </article>
+        </div>
+        <p class="effects__sources reveal delay-3">Fonti: FAO, The State of Food and Agriculture; FAOSTAT; Nature Climate Change.</p>
+      </div>
+    </section>
+
+    <!-- 04 · COSA MANCA DAVVERO? -->
+    <section class="scene missing" id="p04" data-index="3" data-title="Cosa manca davvero?" aria-label="Cosa manca davvero?">
+      <svg class="missing__frame" viewBox="0 0 800 480" preserveAspectRatio="none" aria-hidden="true">
+        <rect x="4" y="4" width="792" height="472" rx="8" pathLength="1200"/>
+      </svg>
+      <div class="scene__safe missing__content">
+        <div class="missing__inner">
+          <p class="eyebrow reveal">04 · Cosa manca davvero?</p>
+          <h2 class="display reveal delay-1">Un luogo comune.</h2>
+          <div class="missing__steps">
+            <p class="reveal delay-2">Ambiente, agricoltura, cibo e salute si influenzano ogni giorno.</p>
+            <p class="reveal delay-3">Ma le risorse per studiarli e innovare restano separate.</p>
+            <p class="reveal delay-4">Manca uno <strong>spazio</strong> dove metterle in relazione e farle lavorare insieme.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="slide dark" id="s3" data-title="Gli effetti">
-      <div class="grain"></div><div class="inner">
-        <div class="eyebrow reveal">02 · Le evidenze</div>
-        <h2 class="reveal d1">Gli effetti attraversano gli ambiti.</h2>
-        <div class="stats">
-          <article class="stat reveal d1"><div><div class="number gold">≈ 1/3</div><p>delle emissioni umane proviene dai sistemi agroalimentari.</p></div><div class="tags">Agricoltura · Cibo → Ambiente</div></article>
-          <article class="stat reveal d2"><div><div class="number aqua">−21%</div><p>circa, di produttività agricola globale rispetto allo scenario senza cambiamento climatico antropogenico.</p></div><div class="tags">Ambiente → Agricoltura · Cibo</div></article>
-          <article class="stat reveal d3"><div><div class="number coral">&gt;10.000</div><p>miliardi di dollari l’anno di costi nascosti dei sistemi agroalimentari.</p></div><div class="tags">Agricoltura · Cibo → Salute · Ambiente · Società</div></article>
-        </div>
-        <div class="sources reveal d4">Fonti: FAO, FAOSTAT, Nature Climate Change. Dettaglio in appendice.</div>
-      </div>
-    </section>
-
-    <section class="slide black" id="s4" data-title="Cosa manca">
-      <div class="grain"></div><div class="inner">
-        <div class="eyebrow reveal">03 · Il vuoto</div>
-        <h2 class="reveal d1">Cosa manca davvero?</h2>
-        <div class="void-stage reveal d2">
-          <span class="resource r1">competenze</span><span class="resource r2">dati</span><span class="resource r3">laboratori</span><span class="resource r4">tecnologie</span><span class="resource r5">ricerca</span><span class="resource r6">relazioni</span>
-          <svg class="broken" viewBox="0 0 1000 500" preserveAspectRatio="none"><line x1="30" y1="35" x2="400" y2="210"/><line x1="970" y1="35" x2="600" y2="210"/><line x1="50" y1="465" x2="405" y2="290"/><line x1="950" y1="465" x2="595" y2="290"/></svg>
-          <div class="missing"><div><strong>Uno spazio<br>sperimentale.</strong><span>dove costruire competenze e innovare insieme</span></div></div>
+    <!-- 05 · PER QUESTO NASCE CASA -->
+    <section class="scene birth" id="p05" data-index="4" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
+      <div class="birth__halo" aria-hidden="true"></div>
+      <div class="scene__safe birth__content">
+        <div class="birth__inner">
+          <div class="birth__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <p class="eyebrow reveal">05 · Per questo nasce CASA</p>
+          <h2 class="display reveal delay-1">Il luogo dove le connessioni diventano innovazione.</h2>
+          <div class="birth__lines">
+            <p class="reveal delay-2"><strong>CASA nasce come uno spazio sperimentale condiviso.</strong></p>
+            <p class="reveal delay-3">Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p>
+            <p class="reveal delay-4">Formazione, sperimentazione e ricerca lavorano sulla stessa catena.</p>
+            <p class="reveal delay-5">Le risorse dei partner ne ampliano le capacità. <strong>Una regia comune le mette in relazione.</strong></p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="slide dark" id="s5" data-title="Nasce CASA">
-      <div class="grain"></div><div class="inner definition">
-        <div><div class="eyebrow reveal">04 · La risposta</div><h2 class="reveal d1">Per questo nasce CASA.</h2><p class="lead reveal d2">Il luogo dove ambiente, agricoltura, cibo e salute diventano un unico campo di <span class="accent">innovazione.</span></p><p class="body reveal d3">Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p><p class="body reveal d4">Uno spazio sperimentale condiviso, esteso dalle risorse dei partner e organizzato da una regia comune.</p></div>
-        <div class="layers reveal d2"><div class="layer regia"></div><div class="layer rete"></div><div class="layer spazio">spazio</div><span class="layer-label l-regia">regia comune</span><span class="layer-label l-rete">risorse</span></div>
+    <!-- 06 · LO SPAZIO CASA -->
+    <section class="scene space" id="p06" data-index="5" data-title="Lo spazio CASA" aria-label="Lo spazio CASA">
+      <div class="space__image" aria-hidden="true"></div>
+      <div class="space__veil" aria-hidden="true"></div>
+      <div class="scene__safe space__content">
+        <header class="space__intro">
+          <p class="eyebrow reveal">06 · Lo spazio CASA</p>
+          <h2 class="display space__title reveal delay-1">Un ettaro di innovazione condivisa.</h2>
+          <p class="lead reveal delay-2">Un modello fisico, modulare e adattabile.</p>
+          <p class="space__reference reveal delay-3"><strong>Configurazione di riferimento</strong><span>Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</span></p>
+        </header>
+
+        <div class="space__story reveal delay-2">
+          <div class="space__story-tabs" aria-hidden="true">
+            <span class="space__story-tab">Sperimentare e monitorare</span>
+            <span class="space__story-tab">Ambienti controllati</span>
+            <span class="space__story-tab">Formare e condividere</span>
+          </div>
+          <article class="space__detail fragment is-current" data-fragment="0" style="--detail-color: var(--environment)">
+            <h3>Aree di sperimentazione e monitoraggio</h3>
+            <p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.</p>
+          </article>
+          <article class="space__detail fragment" data-fragment="1" style="--detail-color: var(--food)">
+            <h3>Ambienti controllati e laboratori</h3>
+            <p>Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.</p>
+          </article>
+          <article class="space__detail fragment" data-fragment="2" style="--detail-color: var(--health)">
+            <h3>Spazi per formare e condividere</h3>
+            <p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section class="slide space-slide" id="s6" data-title="Lo spazio CASA">
-      <div class="grain"></div><div class="inner">
-        <div class="space-head"><div><div class="eyebrow reveal">05 · Il luogo</div><h2 class="reveal d1">Un ettaro di innovazione condivisa.</h2></div><div class="space-tag reveal d2">configurazione di riferimento · modulare e adattabile</div></div>
-        <div class="site-legend reveal d3"><span>Campi e ambienti sensorizzati</span><span>Serre e laboratori modulari</span><span>Formazione, dimostrazione ed eventi</span></div>
-        <svg class="site" viewBox="0 0 1200 660" role="img" aria-label="Configurazione sperimentale di CASA con campi, serre, laboratori e spazi per le persone">
-          <defs><linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#355749"/><stop offset="1" stop-color="#183a35"/></linearGradient><linearGradient id="glass" x1="0" x2="1"><stop stop-color="#a7ddd3" stop-opacity=".25"/><stop offset="1" stop-color="#75baae" stop-opacity=".08"/></linearGradient></defs>
-          <g class="ground"><path d="M145 270 650 40 1060 300 550 605Z" fill="url(#ground)" stroke="#abb629" stroke-opacity=".48" stroke-dasharray="10 12"/><path d="M180 283 477 148 620 238 323 374Z" fill="#7e8e29" opacity=".55"/><path d="m210 290 286-129M236 309l285-130M264 328l284-130M293 347l282-129" stroke="#d8a94e" stroke-opacity=".45"/><path d="M335 401 600 280 731 365 466 486Z" fill="#264f44"/><path d="M683 128 934 286 817 354 568 196Z" fill="#214741" opacity=".82"/></g>
-          <g class="build b1"><path d="M680 137 812 215 734 260 602 182Z" fill="url(#glass)" stroke="#75baae"/><path d="M602 182v77l132 78v-77M812 215v77l-78 45" fill="none" stroke="#75baae" stroke-opacity=".7"/><path d="m641 204 78 46M674 185l78 46M716 159v78" stroke="#75baae" stroke-opacity=".45"/><text x="710" y="138" fill="#75baae" font-size="12">serre</text></g>
-          <g class="build b2"><path d="M744 385 894 300 1005 368 853 455Z" fill="#eee9dc"/><path d="m744 385 109 68v70l-109-68z" fill="#b7b6aa"/><path d="m853 455 152-87v70l-152 85z" fill="#d8d6ca"/><rect x="848" y="405" width="38" height="45" fill="#0f2b30" transform="skewY(-29)"/><text x="902" y="319" fill="#f7f4ec" font-size="12">laboratori modulari</text></g>
-          <g class="build b3"><path d="M340 402 461 347 558 408 436 464Z" fill="#d8a94e" opacity=".85"/><path d="M436 464v50l122-56v-50" fill="#9e762f"/><circle cx="412" cy="396" r="6" fill="#071d21"/><circle cx="446" cy="382" r="6" fill="#071d21"/><circle cx="480" cy="397" r="6" fill="#071d21"/><text x="356" y="344" fill="#d8a94e" font-size="12">formazione · eventi</text></g>
-          <g class="build b4"><path d="M205 468C405 535 591 550 827 504" fill="none" stroke="#f7f4ec" stroke-opacity=".65" stroke-width="7"/><path d="M254 270C315 243 355 226 447 183" fill="none" stroke="#a7b8ae" stroke-width="4"/><g fill="#f7f4ec"><circle cx="586" cy="511" r="8"/><circle cx="610" cy="518" r="8"/><circle cx="635" cy="510" r="8"/></g><g stroke="#75baae" fill="none"><path d="M286 286v-53m-7 7 7-7 7 7"/><path d="M343 260v-57m-7 7 7-7 7 7"/><path d="M405 231v-54m-7 7 7-7 7 7"/></g><path class="data-flow" d="M286 233C435 90 664 80 820 213S934 425 852 478" fill="none" stroke="#abb629" stroke-width="2"/></g>
-        </svg>
-        <div class="space-note reveal d4">La configurazione cambia con il luogo. La funzione resta.</div>
+    <!-- 07 · DENTRO CASA -->
+    <section class="scene cycle" id="p07" data-index="6" data-title="Dentro CASA" aria-label="Dentro CASA">
+      <div class="scene__safe cycle__content">
+        <div class="cycle__copy">
+          <p class="eyebrow reveal">07 · Dentro CASA</p>
+          <h2 class="display reveal delay-1">Un ciclo di dati, sperimentazione ed evidenze.</h2>
+          <div class="cycle__story reveal delay-2">
+            <article class="cycle__detail fragment is-current" data-fragment="0" style="--detail-color: var(--environment)">
+              <span class="detail-label">Ambiente</span>
+              <p>Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="1" style="--detail-color: var(--agriculture)">
+              <span class="detail-label">Agricoltura</span>
+              <p>I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="2" style="--detail-color: var(--food)">
+              <span class="detail-label">Cibo</span>
+              <p>Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="3" style="--detail-color: var(--health)">
+              <span class="detail-label">Salute</span>
+              <p>Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="4">
+              <span class="detail-label">Le tecnologie lungo il ciclo</span>
+              <div class="cycle__tech-list">
+                <p><strong>L’IoT</strong> raccoglie i dati.</p>
+                <p><strong>L’intelligenza artificiale</strong> mette in relazione dati ambientali e agricoli, qualità del cibo ed evidenze sulla salute.</p>
+                <p><strong>Le piattaforme dati</strong> rendono le informazioni accessibili e combinabili secondo regole condivise.</p>
+                <p><strong>La blockchain</strong>, quando utile, rafforza la provenienza e la tracciabilità dei processi e degli alimenti.</p>
+              </div>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="5">
+              <span class="detail-label">Dal luogo alla rete</span>
+              <p>Ciò che CASA osserva e sperimenta nello spazio comune si collega alle capacità specialistiche dei partner.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="cycle__map reveal delay-2" aria-label="Ciclo ambiente, agricoltura, cibo e salute">
+          <div class="orbit" aria-hidden="true"></div>
+          <div class="flow-ring" aria-hidden="true"></div>
+          <div class="flow-dot" aria-hidden="true"></div>
+          <div class="cycle__core"><div><strong>evidenze</strong><small>dati · sperimentazione</small></div></div>
+          <div class="domain-node node-environment"><strong>Ambiente</strong></div>
+          <div class="domain-node node-agriculture"><strong>Agricoltura</strong></div>
+          <div class="domain-node node-food"><strong>Cibo</strong></div>
+          <div class="domain-node node-health"><strong>Salute</strong></div>
+        </div>
       </div>
     </section>
 
-    <section class="slide dark" id="s7" data-title="Un unico ciclo">
-      <div class="grain"></div><div class="inner cycle-wrap">
-        <div><div class="eyebrow reveal">06 · Dentro CASA</div><h2 class="reveal d1">Quattro ambiti.<br>Un unico ciclo.</h2><p class="body reveal d2">Dati, sperimentazione ed evidenze attraversano lo stesso spazio e ritornano al sistema.</p></div>
-        <div class="cycle reveal d2"><svg viewBox="0 0 500 500"><defs><linearGradient id="cycleGradient"><stop stop-color="#75baae"/><stop offset=".34" stop-color="#abb629"/><stop offset=".67" stop-color="#d8a94e"/><stop offset="1" stop-color="#d58c7d"/></linearGradient></defs><circle class="cycle-ring" cx="250" cy="250" r="190"/><circle class="cycle-live" pathLength="1" cx="250" cy="250" r="190"/></svg><div class="cycle-center">CASA</div><div class="cycle-node cn1 aqua">osservare<br>l’ambiente</div><div class="cycle-node cn2 accent">sperimentare<br>l’agricoltura</div><div class="cycle-node cn3 gold">studiare<br>il cibo</div><div class="cycle-node cn4 coral">produrre evidenze<br>sulla salute</div></div>
+    <!-- 08 · IL PRINCIPIO DI CASA -->
+    <section class="scene ior" id="p08" data-index="7" data-title="Il principio di CASA" aria-label="Il principio di CASA">
+      <div class="scene__safe ior__content">
+        <header class="ior__header">
+          <p class="eyebrow reveal">08 · Il principio di CASA</p>
+          <h2 class="display ior__title reveal delay-1">Un Internet delle risorse.</h2>
+        </header>
+
+        <div class="ior__stage-progressive reveal delay-2">
+          <div class="ior__diagram">
+            <svg class="ior__lines" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M145 95 C330 105 390 205 600 200" stroke="#7ebdae"/>
+              <path d="M175 305 C335 286 415 210 600 200" stroke="#d08b80"/>
+              <path d="M1055 92 C870 110 820 195 600 200" stroke="#d8a94e"/>
+              <path d="M1028 308 C850 285 790 215 600 200" stroke="#aab322"/>
+              <path d="M420 200 C490 200 520 200 600 200" stroke="#7ebdae"/>
+              <path d="M780 200 C710 200 680 200 600 200" stroke="#aab322"/>
+            </svg>
+            <div class="resource-zone resource-zone--partners"><span class="zone-label">Risorse presso i partner</span></div>
+            <div class="resource-zone resource-zone--casa"><span class="zone-label">Risorse dello spazio CASA</span></div>
+            <div class="ior-core"><strong>CASA</strong></div>
+            <div class="resource r1">Dati e modelli<small>clima · suolo · salute</small></div>
+            <div class="resource r2">Laboratori specialistici<small>capacità che restano ai partner</small></div>
+            <div class="resource r3">Competenze<small>ricerca · docenza · conoscenza</small></div>
+            <div class="resource r4">Tecnologie<small>IoT · AI · tracciabilità</small></div>
+            <div class="resource r5">Campi e serre<small>sperimentazione condivisa</small></div>
+            <div class="resource r6">Laboratori e infrastrutture digitali<small>accesso secondo regole comuni</small></div>
+          </div>
+          <aside class="ior__explain">
+            <article class="ior__detail fragment is-current" data-fragment="0" style="--detail-color: var(--agriculture)">
+              <h3>Le risorse dello spazio CASA</h3>
+              <p>Campi sperimentali, sensori, serre, laboratori e infrastrutture digitali vengono condivisi e resi accessibili secondo regole comuni.</p>
+            </article>
+            <article class="ior__detail fragment" data-fragment="1" style="--detail-color: var(--environment)">
+              <h3>Le risorse dei partner</h3>
+              <p>Laboratori specialistici, dati, tecnologie e competenze che restano presso i partner vengono collegati allo stesso sistema di accesso.</p>
+            </article>
+            <article class="ior__detail fragment" data-fragment="2" style="--detail-color: var(--food)">
+              <h3>Accesso condiviso a capacità avanzate</h3>
+              <p>Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente.</p>
+              <p>Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l’intera infrastruttura.</p>
+            </article>
+          </aside>
+        </div>
+
+        <footer class="ior__benefit">
+          <p class="ior__principle reveal delay-4">Lo spazio è il luogo dell’integrazione.<span>L’Internet delle risorse è il sistema che ne rende accessibili e ne estende le capacità.</span></p>
+        </footer>
       </div>
     </section>
 
-    <section class="slide black" id="s8" data-title="Internet delle risorse">
-      <div class="grain"></div><div class="inner">
-        <div class="eyebrow reveal">07 · Il principio di CASA</div><h2 class="reveal d1">Un Internet delle risorse.</h2>
-        <div class="network reveal d2"><svg class="net-svg" viewBox="0 0 1200 650" preserveAspectRatio="none"><path class="beam" d="M600 325 160 105" stroke="#d8a94e"/><path class="beam" d="M600 325 1040 105" stroke="#75baae"/><path class="beam" d="M600 325 140 545" stroke="#d58c7d"/><path class="beam" d="M600 325 1060 545" stroke="#abb629"/></svg><div class="node n1"><strong>Competenze</strong><span>formazione e conoscenza specialistica</span></div><div class="node n2"><strong>Dati e modelli</strong><span>clima, suolo, filiere, salute</span></div><div class="node n3"><strong>Laboratori</strong><span>capacità distribuite presso i partner</span></div><div class="node n4"><strong>Tecnologie</strong><span>IoT raccoglie · AI analizza · piattaforme e tracciabilità rendono accessibili e auditabili</span></div><i class="gate g1"></i><i class="gate g2"></i><i class="gate g3"></i><i class="gate g4"></i><div class="core"><div><strong>CASA</strong><small>spazio condiviso</small></div></div><div class="ior-quote">I partner mantengono le risorse. CASA ne organizza l’accesso e la combinazione.<small>Secondo regole comuni, anche per chi non potrebbe costruire da solo l’intera infrastruttura.</small></div></div>
+    <!-- 09 · COME OPERA CASA -->
+    <section class="scene operate" id="p09" data-index="8" data-title="Come opera CASA" aria-label="Come opera CASA">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">09 · Come opera CASA</p>
+          <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
+        </header>
+        <div class="operate__rail" data-fragment-cumulative>
+          <article class="op op--1 fragment is-current" data-fragment="0">
+            <h3>Formare sul sistema</h3>
+            <p>Persone, ricercatori e imprese imparano a leggere insieme dati climatici, condizioni del suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.</p>
+          </article>
+          <article class="op op--2 fragment" data-fragment="1">
+            <h3>Sperimentare nello spazio CASA</h3>
+            <p>Campi, sensori, serre e laboratori permettono di testare pratiche, tecnologie e alimenti in condizioni reali.</p>
+          </article>
+          <article class="op op--3 fragment" data-fragment="2">
+            <h3>Co-sviluppare e fare ricerca applicata</h3>
+            <p>Grandi imprese, startup, università e centri di ricerca lavorano insieme su bisogni che attraversano ambiente, agricoltura, cibo e salute.</p>
+            <p>L’open innovation mette in relazione problemi, tecnologie e capacità imprenditoriali. La ricerca applicata trasforma la sperimentazione in evidenze, metodi e soluzioni validate.</p>
+          </article>
+          <article class="op op--4 fragment" data-fragment="3">
+            <h3>Trasferire e comunicare</h3>
+            <p>I risultati diventano nuove competenze, strumenti per le imprese, indicazioni per istituzioni e territori, attività dimostrative e contenuti per formazione, divulgazione ed eventi.</p>
+          </article>
+        </div>
+        <p class="operate__loop reveal delay-3">Ogni risultato alimenta un nuovo ciclo di formazione, sperimentazione, ricerca e innovazione.</p>
       </div>
     </section>
 
-    <section class="slide light" id="s9" data-title="Come opera CASA">
-        <div class="inner"><div class="eyebrow reveal">08 · Il metodo</div><h2 class="reveal d1">Dalle competenze all’impatto, senza spezzare il percorso.</h2><div class="method"><article class="step reveal d1"><div class="step-num gold">01</div><div><h3>Formare</h3><p>Leggere insieme dati climatici, suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.</p></div></article><article class="step reveal d2"><div class="step-num accent">02</div><div><h3>Sperimentare</h3><p>Testare pratiche, tecnologie e alimenti in campi, serre e laboratori.</p></div></article><article class="step reveal d3"><div class="step-num aqua">03</div><div><h3>Sviluppare insieme</h3><p>Trasformare bisogni e risultati delle prove in ricerca applicata e soluzioni sviluppate insieme.</p></div></article><article class="step reveal d4"><div class="step-num coral">04</div><div><h3>Trasferire</h3><p>Trasformare i risultati in competenze, strumenti, evidenze e contenuti utilizzabili.</p></div></article></div><div class="loop-note reveal d5"><strong>Ogni risultato alimenta un nuovo ciclo.</strong><span>Formazione · sperimentazione · ricerca · innovazione · comunicazione</span></div></div>
+    <!-- 10 · PER CHI È CASA -->
+    <section class="scene who" id="p10" data-index="9" data-title="Per chi è CASA" aria-label="Per chi è CASA">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">10 · Per chi è CASA</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
+          <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
+        </header>
+        <div class="who__grid" data-fragment-cumulative>
+          <article class="aud aud--1 fragment is-current" data-fragment="0">
+            <h3>Imprese e startup</h3>
+            <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
+            <p>Anche le imprese più piccole accedono a campi, sensori, laboratori, dati e competenze senza dover possedere l’intera infrastruttura.</p>
+          </article>
+          <article class="aud aud--2 fragment" data-fragment="1">
+            <h3>Università e ricerca</h3>
+            <p>Collegano dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute in attività di ricerca applicata, formazione congiunta e validazione.</p>
+          </article>
+          <article class="aud aud--3 fragment" data-fragment="2">
+            <h3>Persone e professionisti</h3>
+            <p>Sviluppano competenze interdisciplinari lavorando con tecnologie, dati e contesti reali di sperimentazione.</p>
+          </article>
+          <article class="aud aud--4 fragment" data-fragment="3">
+            <h3>Istituzioni e territori</h3>
+            <p>Possono osservare e misurare insieme condizioni ambientali, sistemi agricoli, qualità del cibo ed effetti sulla salute, ottenendo evidenze utili per decisioni e politiche.</p>
+          </article>
+        </div>
+        <p class="who__closing reveal delay-3">In CASA ogni soggetto può utilizzare risorse, metterne a disposizione e contribuire a sviluppare nuova capacità condivisa.</p>
+      </div>
     </section>
 
-    <section class="slide dark" id="s10" data-title="Per chi è CASA">
-      <div class="grain"></div><div class="inner"><div class="eyebrow reveal">09 · Gli ingressi</div><h2 class="reveal d1">Si entra da punti diversi.<br>Si innova insieme.</h2><div class="audience-grid"><article class="aud reveal d1"><h3>Imprese<br>e startup</h3><p><b>Portano</b><br>bisogni e tecnologie.<br><br><b>Accedono a</b><br>capacità non sostenibili individualmente; le corporate attivano open innovation e ricerca applicata.</p></article><article class="aud reveal d2"><h3>Università<br>e ricerca</h3><p><b>Portano</b><br>conoscenza e metodi.<br><br><b>Accedono a</b><br>contesti reali e partner per applicarli e valutarli.</p></article><article class="aud reveal d3"><h3>Persone e<br>professionisti</h3><p><b>Portano</b><br>esperienze e domande.<br><br><b>Accedono a</b><br>competenze, tecnologie e sperimentazione.</p></article><article class="aud reveal d4"><h3>Istituzioni<br>e territori</h3><p><b>Portano</b><br>priorità e problemi.<br><br><b>Accedono a</b><br>evidenze integrate per decidere su ambiente, agricoltura, cibo e salute.</p></article></div></div>
+    <!-- 11 · CHI RENDE POSSIBILE CASA -->
+    <section class="scene actors" id="p11" data-index="10" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">11 · Chi rende possibile CASA</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Ruoli distinti, una capacità comune.</h2>
+        </header>
+        <div class="actors__grid" data-fragment-cumulative>
+          <article class="role role--promote fragment is-current" data-fragment="0">
+            <h3>Promuove e sostiene</h3>
+            <h4>InnovaliaTech</h4>
+            <p>Sostiene lo sviluppo di CASA e porta capacità di investimento, visione di lungo periodo e connessioni con il sistema accademico e internazionale.</p>
+          </article>
+          <article class="role role--manage fragment" data-fragment="1">
+            <h3>Gestisce e mette in relazione</h3>
+            <h4>FIB — Food Innovation Broker</h4>
+            <p>Organizza l’accesso agli spazi e alle risorse, costruisce i percorsi tra i partner e assicura continuità tra formazione, sperimentazione, ricerca applicata, open innovation e comunicazione.</p>
+          </article>
+          <article class="role role--train fragment" data-fragment="2">
+            <h3>Forma</h3>
+            <h4>UNIUST</h4>
+            <p>Costruisce percorsi interdisciplinari che collegano tecnologie digitali, ambiente, agricoltura, cibo e salute e prepara le competenze necessarie per operare in CASA.</p>
+          </article>
+          <div class="role--wide role--sci fragment" data-fragment="3">
+            <article class="role role--env">
+              <h3>Capacità scientifiche · Ambiente</h3>
+              <h4>CMCC</h4>
+              <p>Dati, modelli e competenze su clima, acqua e condizioni ambientali.</p>
+            </article>
+            <article class="role role--agri">
+              <h3>Capacità scientifiche · Agricoltura e cibo</h3>
+              <h4>CREA</h4>
+              <p>Ricerca applicata su suolo, colture, pratiche agricole, filiere e qualità alimentare.</p>
+            </article>
+            <article class="role role--health">
+              <h3>Capacità scientifiche · Salute</h3>
+              <h4>Fondazione Santa Lucia</h4>
+              <p>Competenze scientifiche per collegare alimentazione e condizioni ambientali agli effetti sulla salute.</p>
+            </article>
+          </div>
+        </div>
+        <p class="actors__closing reveal delay-3">CASA permette a queste capacità di lavorare nello stesso spazio e attraverso lo stesso sistema di accesso.</p>
+      </div>
     </section>
 
-    <section class="slide black" id="s11" data-title="Ecosistema">
-      <div class="grain"></div><div class="inner"><div class="eyebrow reveal">10 · L’ecosistema</div><h2 class="reveal d1">Ruoli distinti.<br>Una capacità comune.</h2><div class="roles"><article class="role reveal d1"><small>promuove e sostiene</small><h3>InnovaliaTech</h3><p>Investimento, visione di lungo periodo e connessioni accademiche internazionali.</p></article><article class="role center reveal d2"><small>gestisce e mette in relazione</small><h3>FIB</h3><p>Organizza accesso, percorsi e continuità tra formazione, sperimentazione, ricerca, innovazione e comunicazione.</p></article><article class="role reveal d3"><small>forma</small><h3>UNIUST</h3><p>Percorsi interdisciplinari tra tecnologie digitali e i quattro ambiti.</p></article><article class="role reveal d4"><small>presìdi scientifici</small><h3>CMCC · CREA</h3><p>Ambiente e clima · agricoltura e cibo.</p></article><article class="role reveal d5"><small>presidio scientifico</small><h3>Fondazione Santa Lucia</h3><p>Competenze per collegare alimentazione e condizioni ambientali alla salute.</p></article></div><div class="academic-partners reveal d5"><b>Partner accademici strategici</b><span>Università della Tuscia · Università di Malta</span><span>Docenza, ricerca, percorsi congiunti e apertura mediterranea.</span></div></div>
+    <!-- 12 · IL PATRIMONIO DI PARTENZA -->
+    <section class="scene heritage" id="p12" data-index="11" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">12 · Il patrimonio di partenza</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
+        </header>
+        <div class="heritage__grid" data-fragment-cumulative>
+          <article class="cap cap--1 fragment is-current" data-fragment="0">
+            <h3>Formazione</h3>
+            <p>Esperienze su carbon farming, agricoltura digitale e competenze ibride collegano clima, suolo, pratiche agricole e tecnologie.</p>
+          </article>
+          <article class="cap cap--2 fragment" data-fragment="1">
+            <h3>Capacità scientifiche</h3>
+            <p>L’ecosistema riunisce dati e modelli ambientali, ricerca su agricoltura e cibo e competenze scientifiche sulla salute.</p>
+          </article>
+          <article class="cap cap--3 fragment" data-fragment="2">
+            <h3>Esperienza operativa</h3>
+            <p>Esistono capacità per costruire percorsi formativi, sperimentazioni, ricerca applicata e iniziative di open innovation insieme a imprese e istituzioni.</p>
+          </article>
+          <article class="cap cap--4 fragment" data-fragment="3">
+            <h3>Relazioni</h3>
+            <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
+          </article>
+        </div>
+        <p class="heritage__closing reveal delay-3">CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’Internet delle risorse</strong>, trasformandolo in una capacità stabile e accessibile.</p>
+      </div>
     </section>
 
-    <section class="slide light" id="s12" data-title="Patrimonio">
-      <div class="inner"><div class="eyebrow reveal">11 · Il patrimonio di partenza</div><h2 class="reveal d1">CASA non parte da zero.</h2><div class="heritage"><article class="cap reveal d1"><div class="icon">01</div><div><h3>Formazione già attiva</h3><p>Competenze ibride su clima, suolo, agricoltura digitale e tecnologie.</p></div></article><article class="cap reveal d2"><div class="icon">02</div><div><h3>Ricerca e sperimentazione applicata</h3><p>Dati ambientali, agricoltura e cibo, salute, imprese e contesti reali.</p></div></article><article class="cap reveal d3"><div class="icon">03</div><div><h3>Relazioni industriali e istituzionali</h3><p>Università, centri di ricerca, imprese, istituzioni e territori.</p></div></article></div><div class="heritage-line reveal d4">Un patrimonio da trasformare in capacità comune.</div></div>
+    <!-- 13 · ROADMAP -->
+    <section class="scene roadmap" id="p13" data-index="12" data-title="Roadmap" aria-label="Roadmap">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">13 · Roadmap</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
+        </header>
+        <div class="roadmap__track" data-fragment-cumulative>
+          <article class="phase phase--1 fragment is-current" data-fragment="0">
+            <p class="phase__year">2026</p>
+            <h3>Costruire le fondamenta</h3>
+            <p>Definire la configurazione funzionale dello spazio CASA e i criteri per individuare l’area.</p>
+            <p>Consolidare governance, accordi e regole di accesso.</p>
+            <p>Mappare campi, laboratori, dati, tecnologie e competenze disponibili nei quattro ambiti.</p>
+          </article>
+          <article class="phase phase--2 fragment" data-fragment="1">
+            <p class="phase__year">2027</p>
+            <h3>Attivare CASA</h3>
+            <p>Progettare e predisporre lo spazio con le prime aree sperimentali, infrastrutture digitali e ambienti condivisi.</p>
+            <p>Attivare l’Internet delle risorse.</p>
+            <p>Avviare i primi cicli integrati di formazione, sperimentazione, ricerca applicata e open innovation su ambiente, agricoltura, cibo e salute.</p>
+          </article>
+          <article class="phase phase--3 fragment" data-fragment="2">
+            <p class="phase__year">2028–2030</p>
+            <h3>Estendere la capacità</h3>
+            <p>Ampliare lo spazio, le risorse accessibili e la rete scientifica e industriale.</p>
+            <p>Collegare nuovi territori e partner europei e mediterranei.</p>
+            <p>Replicare il modello CASA attraverso nuovi spazi connessi dallo stesso sistema di accesso.</p>
+          </article>
+        </div>
+        <p class="roadmap__closing reveal delay-3">Ogni fase costruisce le capacità necessarie per quella successiva.</p>
+      </div>
     </section>
 
-    <section class="slide dark" id="s13" data-title="Roadmap">
-      <div class="grain"></div><div class="inner"><div class="eyebrow reveal">12 · La realizzazione</div><h2 class="reveal d1">Costruire. Attivare. Estendere.</h2><div class="road"><div class="road-line"><div class="road-fill"></div></div><div class="milestones"><article class="mile reveal d1"><time>2026</time><h3>Costruire le fondamenta</h3><ul><li>Modello dello spazio, governance e mappa delle risorse.</li></ul></article><article class="mile reveal d2"><time>2027</time><h3>Attivare CASA</h3><ul><li>Spazio sperimentale, Internet delle risorse e primi cicli integrati.</li></ul></article><article class="mile reveal d3"><time>2028—30</time><h3>Estendere la capacità</h3><ul><li>Nuovi partner, nuovi territori e replicazione dopo la verifica del modello.</li></ul></article></div></div></div>
+    <!-- 14 · DIREZIONE SCIENTIFICA -->
+    <section class="scene science" id="p14" data-index="13" data-title="Direzione scientifica" aria-label="Direzione scientifica">
+      <div class="scene__safe science__content">
+        <div class="science__inner">
+          <p class="eyebrow reveal">14 · Direzione scientifica</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 5vw, 80px)">Un presidio comune ai quattro ambiti.</h2>
+          <p class="science__name reveal delay-2">Prof. Riccardo Valentini</p>
+          <p class="science__body reveal delay-3">La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini <em class="science__nobel-inline">(Premio Nobel per la Pace 2007 con l’IPCC)</em>.</p>
+          <p class="science__body reveal delay-3">La sua esperienza internazionale sul rapporto tra clima, ecosistemi e società guida l’integrazione scientifica tra ambiente, agricoltura, cibo e salute.</p>
+          <p class="science__body reveal delay-4">La direzione scientifica presidia qualità, rigore e indipendenza nelle attività di formazione, sperimentazione, ricerca applicata e innovazione.</p>
+        </div>
+      </div>
     </section>
 
-    <section class="slide light scientific" id="s14" data-title="Direzione scientifica">
-      <div class="halo"></div><div class="inner narrow"><div class="eyebrow reveal">13 · Direzione scientifica</div><h2 class="reveal d1">Rigore, qualità, indipendenza.</h2><div class="name reveal d2">Prof. Riccardo Valentini</div><p class="body reveal d3">Premio Nobel per la Pace 2007 con l’IPCC. La sua esperienza internazionale guida l’integrazione scientifica tra ambiente, agricoltura, cibo e salute.</p></div>
-    </section>
-
-    <section class="slide black final" id="s15" data-title="CASA">
-      <div class="grain"></div><div class="glow" style="left:50%;top:55%;transform:translate(-50%,-50%)"></div><div class="inner"><h2 class="reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2><div class="triad reveal d2"><span>Uno spazio sperimentale.</span><span>Una rete di risorse.</span><span>Una regia comune.</span></div><div class="final-word reveal d3">CASA</div><div class="final-domains reveal d4">Cibo · Ambiente · Salute · Agricoltura</div></div>
+    <!-- 15 · CASA (FINALE) -->
+    <section class="scene finale" id="p15" data-index="14" data-title="CASA" aria-label="CASA">
+      <div class="finale__image" aria-hidden="true"></div>
+      <div class="finale__veil" aria-hidden="true"></div>
+      <div class="scene__safe finale__content">
+        <div class="finale__inner">
+          <h2 class="display reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
+          <div class="finale__pillars">
+            <span class="reveal delay-1">Uno spazio sperimentale.</span>
+            <span class="reveal delay-2">Una rete di risorse.</span>
+            <span class="reveal delay-3">Una regia comune.</span>
+          </div>
+          <p class="finale__wordmark reveal delay-4">casa</p>
+          <div class="finale__domains reveal delay-5" aria-label="Cibo, Ambiente, Salute, Agricoltura">
+            <span class="food">Cibo</span><span class="environment">Ambiente</span><span class="health">Salute</span><span class="agriculture">Agricoltura</span>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
   <script>
-    const slides=[...document.querySelectorAll('.slide')],rail=document.querySelector('.rail'),progress=document.querySelector('.progress');
-    slides.forEach((s,i)=>{const a=document.createElement('a');a.href='#'+s.id;a.title=(i+1)+' · '+s.dataset.title;a.setAttribute('aria-label',a.title);rail.append(a)});
-    const dots=[...rail.children];let current=0,paused=false;
-    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>=.45)e.target.classList.add('seen');if(e.isIntersecting&&e.intersectionRatio>.5){current=slides.indexOf(e.target);dots.forEach((d,i)=>d.classList.toggle('on',i===current))}}),{threshold:[.12,.45,.5,.75]});slides.forEach(s=>io.observe(s));
-    addEventListener('scroll',()=>{const d=document.documentElement;progress.style.transform=`scaleX(${scrollY/(d.scrollHeight-innerHeight)})`},{passive:true});
-    addEventListener('keydown',e=>{if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();slides[Math.min(slides.length-1,current+1)].scrollIntoView({behavior:'smooth'})}if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();slides[Math.max(0,current-1)].scrollIntoView({behavior:'smooth'})}if(e.key.toLowerCase()==='f')toggleFull();if(e.key.toLowerCase()==='m')toggleMotion()});
-    function toggleFull(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
-    function toggleMotion(){paused=!paused;document.documentElement.classList.toggle('motion-paused',paused);document.querySelector('#motion').textContent=paused?'Riprendi motion · M':'Pausa motion · M'}
-    document.querySelector('#full').onclick=toggleFull;document.querySelector('#motion').onclick=toggleMotion;
+    (() => {
+      const scenes = [...document.querySelectorAll('.scene')];
+      const progress = document.getElementById('progressBar');
+      const navBox = document.getElementById('sceneNav');
+      const isMobile = () => matchMedia('(max-width: 900px)').matches;
+      let active = 0;
+
+      // nav dots generati dalle scene
+      scenes.forEach((scene, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.go = String(i);
+        b.setAttribute('aria-label', scene.dataset.title || ('Pagina ' + (i + 1)));
+        if (i === 0) b.setAttribute('aria-current', 'true');
+        navBox.appendChild(b);
+      });
+      const dots = [...navBox.querySelectorAll('[data-go]')];
+
+      const fragments = scene => [...scene.querySelectorAll('[data-fragment]')];
+      const fragmentCount = scene => {
+        const list = fragments(scene);
+        if (!list.length) return 0;
+        return Math.max(...list.map(item => Number(item.dataset.fragment))) + 1;
+      };
+
+      const setFragment = (scene, step) => {
+        const count = fragmentCount(scene);
+        const bounded = count ? Math.max(0, Math.min(count - 1, step)) : 0;
+        scene.dataset.fragmentStep = String(bounded);
+        const cumulative = !!scene.querySelector('[data-fragment-cumulative]');
+        fragments(scene).forEach(item => {
+          const n = Number(item.dataset.fragment);
+          item.classList.toggle('is-current', n === bounded);
+          item.classList.toggle('is-done', cumulative && n < bounded);
+        });
+      };
+
+      scenes.forEach(scene => setFragment(scene, 0));
+
+      const setActive = (index) => {
+        active = Math.max(0, Math.min(scenes.length - 1, index));
+        scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
+        dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
+        progress.style.transform = `scaleX(${active + 1})`;
+      };
+
+      const go = (index, openAtEnd = false) => {
+        const target = Math.max(0, Math.min(scenes.length - 1, index));
+        const count = fragmentCount(scenes[target]);
+        setFragment(scenes[target], openAtEnd && count ? count - 1 : 0);
+        scenes[target].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        setActive(target);
+      };
+
+      const advance = () => {
+        const scene = scenes[active];
+        const count = fragmentCount(scene);
+        const step = Number(scene.dataset.fragmentStep || 0);
+        if (!isMobile() && count && step < count - 1) setFragment(scene, step + 1);
+        else if (active < scenes.length - 1) go(active + 1);
+      };
+
+      const retreat = () => {
+        const scene = scenes[active];
+        const step = Number(scene.dataset.fragmentStep || 0);
+        if (!isMobile() && step > 0) setFragment(scene, step - 1);
+        else if (active > 0) go(active - 1, !isMobile());
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) setActive(Number(entry.target.dataset.index));
+        });
+      }, { threshold: [.42] });
+      scenes.forEach(scene => observer.observe(scene));
+
+      dots.forEach(dot => dot.addEventListener('click', () => go(Number(dot.dataset.go))));
+      document.getElementById('prev').addEventListener('click', retreat);
+      document.getElementById('next').addEventListener('click', advance);
+
+      const toggleFullscreen = async () => {
+        try {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (_) {}
+      };
+      document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+
+      addEventListener('keydown', event => {
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); advance(); }
+        if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); retreat(); }
+        if (event.key.toLowerCase() === 'f') toggleFullscreen();
+        if (event.key === 'Home') go(0);
+        if (event.key === 'End') go(scenes.length - 1);
+      });
+
+      setActive(0);
+    })();
   </script>
 </body>
 </html>
