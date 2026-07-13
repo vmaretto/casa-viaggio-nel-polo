@@ -808,24 +808,11 @@
     }
     .ior__content {
       display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 20px;
+      grid-template-rows: auto 1fr;
+      gap: 24px;
     }
     .ior__header { max-width: 900px; padding-top: clamp(44px, 8vh, 90px); }
     .ior__title { font-size: clamp(44px, 4.8vw, 76px); }
-    .ior__lines {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .ior__lines path {
-      fill: none;
-      stroke-width: 1.2;
-      stroke-dasharray: 7 11;
-      animation: dash 7s linear infinite;
-    }
     .resource-zone {
       position: absolute;
       top: 18px;
@@ -888,25 +875,15 @@
     .r4 { --x: 84%; --y: 76%; --c: var(--agriculture); animation-delay: 2.4s; }
     .r5 { --x: 38%; --y: 22%; --c: var(--environment); animation-delay: .4s; }
     .r6 { --x: 62%; --y: 80%; --c: var(--agriculture); animation-delay: 1.2s; }
-    .ior__benefit {
-      display: grid;
-      grid-template-columns: 1fr;
-      align-items: end;
-      gap: 36px;
-      padding: 4px 120px 10px 0;
-    }
-    .ior__benefit p { margin: 0; }
-    .ior__principle {
-      justify-self: end;
-      max-width: 680px;
+    .ior__detail--principle p {
+      margin: 0 0 14px;
       color: var(--paper);
       font-family: var(--serif);
-      font-size: clamp(14px, 1.25vw, 19px);
+      font-size: clamp(20px, 1.9vw, 30px);
       font-style: italic;
-      line-height: 1.35;
-      text-align: right;
+      line-height: 1.3;
     }
-    .ior__principle span { display: block; color: var(--acid); }
+    .ior__detail--principle p:last-child { color: var(--acid); }
     .ior__stage-progressive {
       display: grid;
       grid-template-columns: minmax(0, 1.38fr) minmax(330px, .62fr);
@@ -952,9 +929,15 @@
       font-weight: 300;
       line-height: 1.46;
     }
-    .ior[data-fragment-step="0"] .resource-zone--casa { border-color: rgba(170,179,34,.72); background: rgba(170,179,34,.08); }
-    .ior[data-fragment-step="1"] .resource-zone--partners { border-color: rgba(126,189,174,.46); }
-    .ior[data-fragment-step="2"] .ior-core { box-shadow: 0 0 0 18px rgba(170,179,34,.09), 0 0 110px rgba(170,179,34,.42); }
+    .resource, .resource-zone, .zone-label { transition: opacity .55s ease, border-color .55s ease, background .55s ease; }
+    .ior[data-fragment-step="0"] .resource--partner,
+    .ior[data-fragment-step="0"] .resource-zone--partners,
+    .ior[data-fragment-step="1"] .resource--casa,
+    .ior[data-fragment-step="1"] .resource-zone--casa { opacity: .18; }
+    .ior[data-fragment-step="0"] .resource-zone--casa { border-color: rgba(170,179,34,.8); background: rgba(170,179,34,.09); }
+    .ior[data-fragment-step="1"] .resource-zone--partners { border-color: rgba(126,189,174,.65); background: rgba(126,189,174,.04); }
+    .ior[data-fragment-step="2"] .ior-core,
+    .ior[data-fragment-step="3"] .ior-core { box-shadow: 0 0 0 18px rgba(170,179,34,.09), 0 0 110px rgba(170,179,34,.45); }
 
     /* ============ 09 — COME OPERA ============ */
     .operate {
@@ -1515,13 +1498,13 @@
       .ior__diagram { min-height: 460px; }
       .ior__explain { min-height: 0; border-bottom: 0; }
       .ior__detail { padding: 16px 0; }
-      .ior__lines { display: none; }
       .resource-zone--partners { left: 2%; right: 2%; }
       .resource-zone--casa { left: 16%; right: 16%; }
       .zone-label { font-size: 7px; max-width: 60vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .resource-zone--partners .zone-label { left: 50%; top: auto; bottom: -8px; }
       .ior-core { width: clamp(92px, 26vw, 120px); }
       .resource { min-width: 0; max-width: 34vw; font-size: 13.5px; padding: 7px 9px; }
+      .ior .resource, .ior .resource-zone { opacity: 1 !important; }
       .resource small { font-size: 7px; }
       .r1 { --x: 26%; --y: 13%; }
       .r3 { --x: 74%; --y: 13%; }
@@ -1768,28 +1751,20 @@
       <div class="scene__safe ior__content">
         <header class="ior__header">
           <p class="eyebrow reveal">07 · Il principio di CASA</p>
-          <h2 class="display ior__title reveal delay-1">Un Internet delle risorse.</h2>
+          <h2 class="display ior__title reveal delay-1">L’Internet delle Risorse.</h2>
         </header>
 
         <div class="ior__stage-progressive reveal delay-2">
           <div class="ior__diagram">
-            <svg class="ior__lines" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M145 95 C330 105 390 205 600 200" stroke="#7ebdae"/>
-              <path d="M175 305 C335 286 415 210 600 200" stroke="#d08b80"/>
-              <path d="M1055 92 C870 110 820 195 600 200" stroke="#d8a94e"/>
-              <path d="M1028 308 C850 285 790 215 600 200" stroke="#aab322"/>
-              <path d="M420 200 C490 200 520 200 600 200" stroke="#7ebdae"/>
-              <path d="M780 200 C710 200 680 200 600 200" stroke="#aab322"/>
-            </svg>
             <div class="resource-zone resource-zone--partners"><span class="zone-label">Risorse presso i partner</span></div>
             <div class="resource-zone resource-zone--casa"><span class="zone-label">Risorse dello spazio CASA</span></div>
             <div class="ior-core"><strong>CASA</strong></div>
-            <div class="resource r1">Dati e modelli<small>clima · suolo · salute</small></div>
-            <div class="resource r2">Laboratori specialistici<small>capacità che restano ai partner</small></div>
-            <div class="resource r3">Competenze<small>ricerca · docenza · conoscenza</small></div>
-            <div class="resource r4">Tecnologie<small>IoT · AI · tracciabilità</small></div>
-            <div class="resource r5">Campi e serre<small>sperimentazione condivisa</small></div>
-            <div class="resource r6">Laboratori e infrastrutture digitali<small>accesso secondo regole comuni</small></div>
+            <div class="resource resource--partner r1">Dati e modelli<small>clima · suolo · salute</small></div>
+            <div class="resource resource--partner r2">Laboratori specialistici<small>capacità che restano ai partner</small></div>
+            <div class="resource resource--partner r3">Competenze<small>ricerca · docenza · conoscenza</small></div>
+            <div class="resource resource--partner r4">Tecnologie<small>IoT · AI · tracciabilità</small></div>
+            <div class="resource resource--casa r5">Campi e serre<small>sperimentazione condivisa</small></div>
+            <div class="resource resource--casa r6">Laboratori e infrastrutture digitali<small>accesso secondo regole comuni</small></div>
           </div>
           <aside class="ior__explain">
             <article class="ior__detail fragment is-current" data-fragment="0" style="--detail-color: var(--agriculture)">
@@ -1805,12 +1780,12 @@
               <p>Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente.</p>
               <p>Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l’intera infrastruttura.</p>
             </article>
+            <article class="ior__detail ior__detail--principle fragment" data-fragment="3">
+              <p>Lo spazio è il luogo dell’integrazione.</p>
+              <p>L’Internet delle risorse è il sistema che ne rende accessibili e ne estende le capacità.</p>
+            </article>
           </aside>
         </div>
-
-        <footer class="ior__benefit">
-          <p class="ior__principle reveal delay-4">Lo spazio è il luogo dell’integrazione.<span>L’Internet delle risorse è il sistema che ne rende accessibili e ne estende le capacità.</span></p>
-        </footer>
       </div>
     </section>
 
