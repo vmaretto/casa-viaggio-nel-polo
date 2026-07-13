@@ -79,12 +79,13 @@
       justify-content: center;
     }
     .eyebrow {
-      margin: 0 0 18px;
+      margin: 0 0 20px;
       color: var(--acid);
-      font-size: clamp(10px, .8vw, 13px);
-      font-weight: 500;
-      letter-spacing: .36em;
+      font-size: clamp(14px, 1.15vw, 18px);
+      font-weight: 600;
+      letter-spacing: .3em;
       text-transform: uppercase;
+      text-shadow: 0 1px 14px rgba(7,29,33,.6);
     }
     .display {
       margin: 0;
@@ -388,6 +389,8 @@
       letter-spacing: .04em;
       line-height: 1.4;
     }
+    .stat__figure--one-line { white-space: nowrap; }
+    .stat__unit { color: var(--paper); font-weight: 500; }
     .effects__sources {
       width: min(1240px, 100%);
       margin: clamp(20px, 4vh, 36px) auto 0;
@@ -401,23 +404,25 @@
     .missing { background: var(--ink-deep); text-align: center; }
     .missing__frame {
       position: absolute;
-      top: 50%;
+      top: 52%;
       left: 50%;
       z-index: -1;
-      width: min(76vw, 900px);
-      aspect-ratio: 16/9.5;
+      width: min(74vw, 860px);
+      aspect-ratio: 10/7;
       transform: translate(-50%, -50%);
       pointer-events: none;
+      filter: drop-shadow(0 0 18px rgba(170,179,34,.22));
     }
-    .missing__frame rect {
+    .missing__frame path {
       fill: none;
-      stroke: rgba(170,179,34,.4);
-      stroke-width: 1.4;
+      stroke: rgba(170,179,34,.55);
+      stroke-width: 1.6;
+      stroke-linejoin: round;
       stroke-dasharray: 10 12;
       stroke-dashoffset: 1200;
-      transition: stroke-dashoffset 3.2s var(--ease) .4s;
+      transition: stroke-dashoffset 3.4s var(--ease) .4s;
     }
-    .missing.is-active .missing__frame rect { stroke-dashoffset: 0; }
+    .missing.is-active .missing__frame path { stroke-dashoffset: 0; }
     .missing__content { display: grid; place-items: center; }
     .missing__inner { max-width: 860px; }
     .missing .display { font-size: clamp(56px, 7.4vw, 120px); }
@@ -441,7 +446,6 @@
       background:
         radial-gradient(circle at 50% 44%, rgba(170,179,34,.16), transparent 38%),
         var(--ink-deep);
-      text-align: center;
     }
     .birth__halo {
       position: absolute;
@@ -456,32 +460,34 @@
       animation: halo 7s ease-in-out infinite alternate;
       pointer-events: none;
     }
-    .birth__dots {
-      position: relative;
-      width: min(320px, 60vw);
-      height: 56px;
-      margin: 0 auto clamp(22px, 4vh, 40px);
+    .birth__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, .8fr);
+      gap: clamp(28px, 4.5vw, 70px);
+      align-items: center;
+      width: min(1240px, 100%);
+      margin: 0 auto;
     }
-    .birth__dots i {
+    .birth__viz {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      aspect-ratio: 1;
+      justify-self: center;
+    }
+    .birth__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .birth__coreword {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      transform: translate(-50%, -50%) translateX(var(--offset, 0px));
-      transition: transform 1.7s var(--ease) .5s, box-shadow 1.7s ease .5s;
+      transform: translate(-50%, -50%);
+      color: var(--paper);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(40px, 4.4vw, 64px);
+      opacity: 0;
+      text-shadow: 0 6px 40px rgba(0,0,0,.45);
     }
-    .birth__dots i:nth-child(1) { background: var(--food); --offset: -120px; }
-    .birth__dots i:nth-child(2) { background: var(--environment); --offset: -40px; }
-    .birth__dots i:nth-child(3) { background: var(--health); --offset: 40px; }
-    .birth__dots i:nth-child(4) { background: var(--agriculture); --offset: 120px; }
-    .birth.is-active .birth__dots i {
-      --offset: 0px;
-      box-shadow: 0 0 26px 4px rgba(170,179,34,.4);
-    }
-    .birth__content { display: grid; place-items: center; }
-    .birth__inner { max-width: 880px; }
     .birth__lines {
       margin: clamp(26px, 4.6vh, 44px) 0 0;
       display: grid;
@@ -502,7 +508,7 @@
       position: absolute;
       inset: -4%;
       z-index: -4;
-      background: url("assets/cinematic/casa-space-hero-v1.png") center/cover no-repeat;
+      background: url("assets/cinematic/casa-space-hero-v2.jpg") center/cover no-repeat;
       transform: scale(1.035);
       transition: transform 9s ease-out;
     }
@@ -511,7 +517,9 @@
       position: absolute;
       inset: 0;
       z-index: -3;
-      background: linear-gradient(90deg, rgba(7,29,33,.92) 0%, rgba(7,29,33,.70) 38%, rgba(7,29,33,.18) 70%, rgba(7,29,33,.30) 100%);
+      background:
+        linear-gradient(180deg, rgba(7,29,33,.30), rgba(7,29,33,.42)),
+        linear-gradient(90deg, rgba(7,29,33,.94) 0%, rgba(7,29,33,.76) 40%, rgba(7,29,33,.26) 72%, rgba(7,29,33,.36) 100%);
     }
     .space__content {
       display: flex;
@@ -520,20 +528,49 @@
     }
     .space__intro { max-width: 710px; padding-top: clamp(36px, 7vh, 86px); }
     .space__title { max-width: 680px; }
-    .space__reference {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin: 19px 0 0;
-      padding: 9px 13px 9px 14px;
-      border-left: 2px solid var(--acid);
-      background: rgba(7,29,33,.46);
-      color: rgba(247,245,238,.82);
-      font-size: clamp(14px, 1.05vw, 18px);
-      line-height: 1.3;
-      backdrop-filter: blur(8px);
+    .info-dot {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      margin-left: 6px;
+      padding: 0;
+      border: 1px solid rgba(170,179,34,.6);
+      border-radius: 50%;
+      background: rgba(7,29,33,.5);
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: 15px;
+      font-style: italic;
+      vertical-align: middle;
+      cursor: help;
     }
-    .space__reference strong { color: var(--acid); font-size: .78em; letter-spacing: .17em; text-transform: uppercase; }
+    .info-dot__tip {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 0;
+      z-index: 6;
+      width: min(340px, 72vw);
+      padding: 13px 16px;
+      border: 1px solid rgba(170,179,34,.4);
+      border-radius: 4px;
+      background: rgba(7,29,33,.96);
+      color: rgba(247,245,238,.9);
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 1.5;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .35s var(--ease), transform .35s var(--ease);
+      pointer-events: none;
+    }
+    .info-dot:hover .info-dot__tip,
+    .info-dot:focus .info-dot__tip,
+    .info-dot.is-open .info-dot__tip { opacity: 1; transform: none; }
     .space__story {
       position: relative;
       width: min(1160px, 100%);
@@ -1391,6 +1428,7 @@
       .scene__safe { min-height: 0; padding-top: clamp(56px, 9vh, 84px); padding-bottom: clamp(48px, 8vh, 72px); }
       .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
       .brand-corner { display: none; }
+      .eyebrow { font-size: 14px; letter-spacing: .24em; }
       .nav { display: none; }
       .controls { display: none; }
 
@@ -1410,6 +1448,10 @@
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
       .missing__frame { width: 88vw; aspect-ratio: 4/5.4; }
+
+      .birth__grid { grid-template-columns: 1fr; gap: 24px; }
+      .birth__viz { order: -1; max-width: min(68vw, 320px); }
+      .birth__coreword { font-size: 34px; }
       .missing .display { font-size: clamp(46px, 12vw, 72px); }
 
       .space__story { min-height: 0; }
@@ -1504,7 +1546,7 @@
     <section class="scene problem" id="p02" data-index="1" data-title="Il problema" aria-label="Il problema">
       <div class="scene__safe scene__center">
         <div class="problem__chain">
-          <p class="eyebrow reveal">02 · Il problema</p>
+          <p class="eyebrow reveal">01 · Il problema</p>
           <p class="problem__line reveal delay-1">L’<span class="k-env">ambiente</span> condiziona l’<span class="k-agr">agricoltura</span>.</p>
           <p class="problem__line reveal delay-2">L’<span class="k-agr">agricoltura</span> dà forma al <span class="k-food">cibo</span> che produciamo.</p>
           <p class="problem__line reveal delay-3">Il <span class="k-food">cibo</span> incide sulla nostra <span class="k-health">salute</span>.</p>
@@ -1517,22 +1559,22 @@
     <section class="scene effects" id="p03" data-index="2" data-title="Gli effetti attraversano gli ambiti" aria-label="Gli effetti attraversano gli ambiti">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">03 · Gli effetti attraversano gli ambiti</p>
+          <p class="eyebrow reveal">02 · Gli effetti attraversano gli ambiti</p>
         </header>
         <div class="effects__grid" data-fragment-cumulative>
           <article class="stat fragment is-current" data-fragment="0" style="--stat-color: var(--environment)">
-            <strong class="stat__figure">Circa 1/3</strong>
+            <strong class="stat__figure">Circa <span data-fraction="3" data-from="9">1/3</span></strong>
             <p class="stat__desc">delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari.</p>
             <p class="stat__takeaway">Agricoltura e cibo incidono sull’ambiente.</p>
           </article>
           <article class="stat fragment" data-fragment="1" style="--stat-color: var(--food)">
-            <strong class="stat__figure">−21%</strong>
+            <strong class="stat__figure"><span data-countup="21" data-prefix="−" data-suffix="%">−21%</span></strong>
             <p class="stat__desc">l’impatto del cambiamento climatico sulla produttività agricola globale dal 1961.</p>
             <p class="stat__takeaway">L’ambiente torna a incidere sull’agricoltura e sul cibo.</p>
           </article>
           <article class="stat fragment" data-fragment="2" style="--stat-color: var(--health)">
-            <strong class="stat__figure">Oltre 10.000 miliardi di dollari l’anno</strong>
-            <p class="stat__desc">i costi nascosti generati dai sistemi agroalimentari sulla salute, sull’ambiente e sulla società.</p>
+            <strong class="stat__figure stat__figure--one-line"><span data-countup="10000" data-prefix="Oltre " data-format="it">Oltre 10.000</span></strong>
+            <p class="stat__desc"><strong class="stat__unit">miliardi di dollari l’anno</strong> — i costi nascosti generati dai sistemi agroalimentari sulla salute, sull’ambiente e sulla società.</p>
             <p class="stat__takeaway">Le conseguenze non rimangono confinate in un solo ambito.</p>
           </article>
         </div>
@@ -1542,12 +1584,12 @@
 
     <!-- 04 · COSA MANCA DAVVERO? -->
     <section class="scene missing" id="p04" data-index="3" data-title="Cosa manca davvero?" aria-label="Cosa manca davvero?">
-      <svg class="missing__frame" viewBox="0 0 800 480" preserveAspectRatio="none" aria-hidden="true">
-        <rect x="4" y="4" width="792" height="472" rx="8" pathLength="1200"/>
+      <svg class="missing__frame" viewBox="0 0 800 560" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M84 552 L84 258 L400 44 L716 258 L716 552 Z" pathLength="1200"/>
       </svg>
       <div class="scene__safe missing__content">
         <div class="missing__inner">
-          <p class="eyebrow reveal">04 · Cosa manca davvero?</p>
+          <p class="eyebrow reveal">03 · Cosa manca davvero?</p>
           <h2 class="display reveal delay-1">Un luogo comune.</h2>
           <div class="missing__steps">
             <p class="reveal delay-2">Ambiente, agricoltura, cibo e salute si influenzano ogni giorno.</p>
@@ -1561,16 +1603,21 @@
     <!-- 05 · PER QUESTO NASCE CASA -->
     <section class="scene birth" id="p05" data-index="4" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
       <div class="birth__halo" aria-hidden="true"></div>
-      <div class="scene__safe birth__content">
-        <div class="birth__inner">
-          <div class="birth__dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-          <p class="eyebrow reveal">05 · Per questo nasce CASA</p>
-          <h2 class="display reveal delay-1">Il luogo dove le connessioni diventano innovazione.</h2>
+      <div class="scene__safe scene__center">
+        <div class="birth__grid">
+          <div class="birth__copy">
+          <p class="eyebrow reveal">04 · Per questo nasce CASA</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Il luogo dove le connessioni diventano innovazione.</h2>
           <div class="birth__lines">
             <p class="reveal delay-2"><strong>CASA nasce come uno spazio sperimentale condiviso.</strong></p>
             <p class="reveal delay-3">Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p>
             <p class="reveal delay-4">Formazione, sperimentazione e ricerca lavorano sulla stessa catena.</p>
             <p class="reveal delay-5">Le risorse dei partner ne ampliano le capacità. <strong>Una regia comune le mette in relazione.</strong></p>
+          </div>
+          </div>
+          <div class="birth__viz reveal delay-2" aria-hidden="true">
+            <canvas class="birth__canvas" data-birth-canvas></canvas>
+            <div class="birth__coreword">casa</div>
           </div>
         </div>
       </div>
@@ -1582,10 +1629,9 @@
       <div class="space__veil" aria-hidden="true"></div>
       <div class="scene__safe space__content">
         <header class="space__intro">
-          <p class="eyebrow reveal">06 · Lo spazio CASA</p>
+          <p class="eyebrow reveal">05 · Lo spazio CASA</p>
           <h2 class="display space__title reveal delay-1">Un ettaro di innovazione condivisa.</h2>
-          <p class="lead reveal delay-2">Un modello fisico, modulare e adattabile.</p>
-          <p class="space__reference reveal delay-3"><strong>Configurazione di riferimento</strong><span>Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</span></p>
+          <p class="lead reveal delay-2">Un modello fisico, modulare e adattabile. <button type="button" class="info-dot" aria-label="Nota: configurazione di riferimento"><span class="info-dot__tip">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</span>i</button></p>
         </header>
 
         <div class="space__story reveal delay-2">
@@ -1614,7 +1660,7 @@
     <section class="scene cycle" id="p07" data-index="6" data-title="Dentro CASA" aria-label="Dentro CASA">
       <div class="scene__safe cycle__content">
         <div class="cycle__copy">
-          <p class="eyebrow reveal">07 · Dentro CASA</p>
+          <p class="eyebrow reveal">06 · Dentro CASA</p>
           <h2 class="display reveal delay-1">Un ciclo di dati, sperimentazione ed evidenze.</h2>
           <div class="cycle__story reveal delay-2">
             <article class="cycle__detail fragment is-current" data-fragment="0" style="--detail-color: var(--environment)">
@@ -1666,7 +1712,7 @@
     <section class="scene ior" id="p08" data-index="7" data-title="Il principio di CASA" aria-label="Il principio di CASA">
       <div class="scene__safe ior__content">
         <header class="ior__header">
-          <p class="eyebrow reveal">08 · Il principio di CASA</p>
+          <p class="eyebrow reveal">07 · Il principio di CASA</p>
           <h2 class="display ior__title reveal delay-1">Un Internet delle risorse.</h2>
         </header>
 
@@ -1717,7 +1763,7 @@
     <section class="scene operate" id="p09" data-index="8" data-title="Come opera CASA" aria-label="Come opera CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">09 · Come opera CASA</p>
+          <p class="eyebrow reveal">08 · Come opera CASA</p>
           <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
         </header>
         <div class="operate__rail" data-fragment-cumulative>
@@ -1747,7 +1793,7 @@
     <section class="scene who" id="p10" data-index="9" data-title="Per chi è CASA" aria-label="Per chi è CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">10 · Per chi è CASA</p>
+          <p class="eyebrow reveal">09 · Per chi è CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
           <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
@@ -1778,7 +1824,7 @@
     <section class="scene actors" id="p11" data-index="10" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">11 · Chi rende possibile CASA</p>
+          <p class="eyebrow reveal">10 · Chi rende possibile CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Ruoli distinti, una capacità comune.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
@@ -1823,7 +1869,7 @@
     <section class="scene heritage" id="p12" data-index="11" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">12 · Il patrimonio di partenza</p>
+          <p class="eyebrow reveal">11 · Il patrimonio di partenza</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
         </header>
         <div class="heritage__grid" data-fragment-cumulative>
@@ -1852,7 +1898,7 @@
     <section class="scene roadmap" id="p13" data-index="12" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">13 · Roadmap</p>
+          <p class="eyebrow reveal">12 · Roadmap</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
@@ -1886,7 +1932,7 @@
     <section class="scene science" id="p14" data-index="13" data-title="Direzione scientifica" aria-label="Direzione scientifica">
       <div class="scene__safe science__content">
         <div class="science__inner">
-          <p class="eyebrow reveal">14 · Direzione scientifica</p>
+          <p class="eyebrow reveal">13 · Direzione scientifica</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 5vw, 80px)">Un presidio comune ai quattro ambiti.</h2>
           <p class="science__name reveal delay-2">Prof. Riccardo Valentini</p>
           <p class="science__body reveal delay-3">La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini <em class="science__nobel-inline">(Premio Nobel per la Pace 2007 con l’IPCC)</em>.</p>
@@ -1923,7 +1969,117 @@
       const progress = document.getElementById('progressBar');
       const navBox = document.getElementById('sceneNav');
       const isMobile = () => matchMedia('(max-width: 900px)').matches;
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
       let active = 0;
+
+      // ---- contatori animati ----
+      const animateValue = el => {
+        const run = (el._run = (el._run || 0) + 1);
+        const final = Number(el.dataset.countup);
+        const pre = el.dataset.prefix || '';
+        const suf = el.dataset.suffix || '';
+        const fmt = v => el.dataset.format === 'it' ? v.toLocaleString('it-IT') : String(v);
+        if (reducedMotion) { el.textContent = pre + fmt(final) + suf; return; }
+        const t0 = performance.now(), dur = 1600;
+        const tick = now => {
+          if (el._run !== run) return;
+          const p = Math.min(1, (now - t0) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = pre + fmt(Math.round(final * e)) + suf;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+      const animateFraction = el => {
+        const run = (el._run = (el._run || 0) + 1);
+        const den = Number(el.dataset.fraction);
+        const from = Number(el.dataset.from || 9);
+        if (reducedMotion) { el.textContent = '1/' + den; return; }
+        const t0 = performance.now(), dur = 1300;
+        const tick = now => {
+          if (el._run !== run) return;
+          const p = Math.min(1, (now - t0) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = '1/' + Math.round(from + (den - from) * e);
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+      const animateCounters = root => {
+        root.querySelectorAll('[data-countup]').forEach(animateValue);
+        root.querySelectorAll('[data-fraction]').forEach(animateFraction);
+      };
+
+      // ---- nascita: 4 sciami che convergono nel cerchio di CASA ----
+      const birth = (() => {
+        const canvas = document.querySelector('[data-birth-canvas]');
+        if (!canvas) return null;
+        const scene = canvas.closest('.scene');
+        const word = scene.querySelector('.birth__coreword');
+        const ctx = canvas.getContext('2d');
+        const colors = ['#d8a94e', '#7ebdae', '#d08b80', '#aab322'];
+        const rnd = (a, b) => a + Math.random() * (b - a);
+        const parts = [];
+        colors.forEach((c, gi) => {
+          const homeAng = Math.PI / 4 + gi * Math.PI / 2;
+          for (let i = 0; i < 46; i++) {
+            parts.push({
+              c,
+              hx: Math.cos(homeAng) * rnd(.5, .92), hy: Math.sin(homeAng) * rnd(.5, .92),
+              ja: rnd(0, Math.PI * 2), jr: rnd(0, .17),
+              a: rnd(0, Math.PI * 2),
+              sp: rnd(.15, .5), ph: rnd(0, Math.PI * 2), sz: rnd(1.2, 2.6),
+            });
+          }
+        });
+        let W = 0, H = 0, raf = 0, t0 = 0, on = false;
+        const resize = () => {
+          const dpr = Math.min(2, devicePixelRatio || 1);
+          W = canvas.clientWidth; H = canvas.clientHeight;
+          canvas.width = W * dpr; canvas.height = H * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        };
+        const frame = now => {
+          if (!W || !H) resize();
+          const time = now / 1000;
+          const p = reducedMotion ? 1 : Math.min(1, (now - t0) / 2600);
+          const e = 1 - Math.pow(1 - p, 3);
+          const cx = W / 2, cy = H / 2, R = Math.min(W, H) * .33;
+          ctx.clearRect(0, 0, W, H);
+          for (const pt of parts) {
+            const hx = cx + pt.hx * W * .52 + Math.cos(pt.ja) * pt.jr * W + Math.sin(time * pt.sp + pt.ph) * 12 * (1 - e);
+            const hy = cy + pt.hy * H * .52 + Math.sin(pt.ja) * pt.jr * H + Math.cos(time * pt.sp * .8 + pt.ph) * 12 * (1 - e);
+            const wob = Math.sin(time * .7 + pt.ph) * 6;
+            const tx = cx + Math.cos(pt.a + time * .07) * (R + wob * .5);
+            const ty = cy + Math.sin(pt.a + time * .07) * (R + wob * .5);
+            const x = hx + (tx - hx) * e, y = hy + (ty - hy) * e;
+            ctx.fillStyle = pt.c;
+            ctx.globalAlpha = .16;
+            ctx.beginPath(); ctx.arc(x, y, pt.sz * 3.4, 0, Math.PI * 2); ctx.fill();
+            ctx.globalAlpha = .92;
+            ctx.beginPath(); ctx.arc(x, y, pt.sz, 0, Math.PI * 2); ctx.fill();
+          }
+          if (e > .55) {
+            ctx.globalAlpha = (e - .55) * 1.8;
+            ctx.strokeStyle = '#aab322';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.arc(cx, cy, R * 1.24, 0, Math.PI * 2); ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+          word.style.opacity = String(Math.min(1, Math.max(0, (p - .6) / .4)));
+          if (reducedMotion) { on = false; return; }
+          raf = requestAnimationFrame(frame);
+        };
+        addEventListener('resize', () => { if (on) resize(); });
+        return {
+          scene,
+          start() {
+            t0 = performance.now();
+            if (!on) { on = true; resize(); raf = requestAnimationFrame(frame); }
+          },
+          stop() { on = false; cancelAnimationFrame(raf); },
+        };
+      })();
 
       // nav dots generati dalle scene
       scenes.forEach((scene, i) => {
@@ -1946,22 +2102,32 @@
       const setFragment = (scene, step) => {
         const count = fragmentCount(scene);
         const bounded = count ? Math.max(0, Math.min(count - 1, step)) : 0;
+        const prev = scene.dataset.fragmentStep === undefined ? -1 : Number(scene.dataset.fragmentStep);
         scene.dataset.fragmentStep = String(bounded);
         const cumulative = !!scene.querySelector('[data-fragment-cumulative]');
         fragments(scene).forEach(item => {
           const n = Number(item.dataset.fragment);
           item.classList.toggle('is-current', n === bounded);
           item.classList.toggle('is-done', cumulative && n < bounded);
+          if (n === bounded && bounded !== prev) animateCounters(item);
         });
       };
 
       scenes.forEach(scene => setFragment(scene, 0));
 
+      let lastActive = -1;
       const setActive = (index) => {
         active = Math.max(0, Math.min(scenes.length - 1, index));
+        if (active === lastActive) return;
+        lastActive = active;
         scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
         dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
         progress.style.transform = `scaleX(${active + 1})`;
+        animateCounters(scenes[active]);
+        if (birth) {
+          if (scenes[active] === birth.scene) birth.start();
+          else birth.stop();
+        }
       };
 
       const go = (index, openAtEnd = false) => {
@@ -2005,6 +2171,13 @@
         } catch (_) {}
       };
       document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+
+      document.querySelectorAll('.info-dot').forEach(dot => {
+        dot.addEventListener('click', e => { e.stopPropagation(); dot.classList.toggle('is-open'); });
+      });
+      addEventListener('click', e => {
+        document.querySelectorAll('.info-dot.is-open').forEach(d => { if (!d.contains(e.target)) d.classList.remove('is-open'); });
+      });
 
       addEventListener('keydown', event => {
         if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); advance(); }
