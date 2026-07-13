@@ -187,6 +187,7 @@
       border: 1px solid rgba(247,245,238,.56);
       border-radius: 50%;
       background: transparent;
+      box-shadow: 0 0 5px rgba(7,29,33,.35);
       cursor: pointer;
       transition: transform .35s var(--ease), background .35s ease;
     }
@@ -1057,15 +1058,15 @@
     }
     .who__grid {
       width: min(1240px, 100%);
-      margin: clamp(24px, 4.4vh, 44px) auto 0;
+      margin: clamp(16px, 2.8vh, 28px) auto 0;
       border-bottom: 1px solid rgba(247,245,238,.16);
     }
     .aud {
       display: grid;
-      grid-template-columns: minmax(240px, .4fr) 1fr;
+      grid-template-columns: minmax(230px, .4fr) 1fr;
       align-items: start;
-      gap: clamp(18px, 3vw, 44px);
-      padding: clamp(16px, 2.4vh, 24px) 10px;
+      gap: 8px clamp(18px, 3vw, 44px);
+      padding: clamp(11px, 1.7vh, 17px) 10px;
       border-top: 1px solid rgba(247,245,238,.16);
       transition: background .5s ease, transform .6s var(--ease);
     }
@@ -1073,7 +1074,7 @@
       margin: 0;
       color: var(--aud-color, var(--acid));
       font-family: var(--serif);
-      font-size: clamp(26px, 2.5vw, 42px);
+      font-size: clamp(22px, 2vw, 32px);
       font-style: italic;
       font-weight: 400;
       line-height: 1.05;
@@ -1083,11 +1084,11 @@
       grid-column: 2;
       margin: 0;
       color: rgba(247,245,238,.8);
-      font-size: clamp(13px, 1.05vw, 17px);
+      font-size: clamp(12.5px, .95vw, 15.5px);
       font-weight: 300;
-      line-height: 1.48;
+      line-height: 1.45;
     }
-    .aud p + p { margin-top: 9px; }
+    .aud p + p { margin-top: 7px; }
     .aud--1 { --aud-color: var(--food); }
     .aud--2 { --aud-color: var(--environment); }
     .aud--3 { --aud-color: var(--health); }
@@ -1100,11 +1101,11 @@
       transform: translateX(12px);
     }
     .who__closing {
-      width: min(1160px, 100%);
-      margin: clamp(20px, 3.6vh, 34px) auto 0;
+      width: min(1240px, 100%);
+      margin: clamp(14px, 2.4vh, 24px) auto 0;
       color: var(--paper);
       font-family: var(--serif);
-      font-size: clamp(17px, 1.55vw, 25px);
+      font-size: clamp(15px, 1.3vw, 21px);
       font-style: italic;
       line-height: 1.35;
     }
@@ -1118,9 +1119,9 @@
     .actors__grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(14px, 1.8vw, 24px);
+      gap: clamp(10px, 1.4vw, 18px);
       width: min(1240px, 100%);
-      margin: clamp(24px, 4.4vh, 44px) auto 0;
+      margin: clamp(16px, 2.8vh, 30px) auto 0;
     }
     .role {
       padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 24px);
@@ -1162,7 +1163,17 @@
       border-top: 0;
       border-left: 2px solid var(--role-color, var(--acid));
       background: linear-gradient(90deg, rgba(7,29,33,.55), rgba(7,29,33,.1));
+      padding: clamp(10px, 1.5vh, 16px) clamp(16px, 1.8vw, 24px);
     }
+    .role--promote {
+      border-left-width: 5px;
+      background: linear-gradient(90deg, rgba(170,179,34,.16), rgba(7,29,33,.12));
+      padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 24px);
+    }
+    .role--promote h4 { font-size: clamp(30px, 2.9vw, 46px); }
+    .role--manage h4 { font-size: clamp(24px, 2.2vw, 34px); }
+    .role--train h4 { font-size: clamp(20px, 1.8vw, 28px); }
+    .role--wide .role h4 { font-size: clamp(17px, 1.5vw, 24px); }
     .actors__grid > .role h3, .actors__grid > .role h4 { margin: 0; }
     .role--wide { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px); border-top: 0; border-left: 0; background: none; padding: 0; backdrop-filter: none; }
     .role--promote { --role-color: var(--acid); }
@@ -1182,10 +1193,10 @@
     }
     .actors__closing {
       width: min(1240px, 100%);
-      margin: clamp(18px, 3.4vh, 32px) auto 0;
+      margin: clamp(12px, 2.2vh, 20px) auto 0;
       color: var(--paper);
       font-family: var(--serif);
-      font-size: clamp(17px, 1.55vw, 25px);
+      font-size: clamp(15px, 1.3vw, 21px);
       font-style: italic;
       line-height: 1.35;
     }
@@ -1342,30 +1353,27 @@
     }
     .science__content { display: grid; place-items: center; }
     .science__inner { max-width: 880px; }
-    .science__seal {
+    .science__figure { margin: clamp(20px, 4vh, 36px) 0 0; }
+    .science__photo {
       position: relative;
-      width: 74px;
-      height: 74px;
-      margin: 0 auto clamp(20px, 3.6vh, 34px);
-      border: 1px solid rgba(216,169,78,.55);
+      width: clamp(120px, 14vw, 176px);
+      aspect-ratio: 1;
+      margin: 0 auto 16px;
+      border: 2px solid rgba(216,169,78,.65);
       border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: var(--food);
-      font-family: var(--serif);
-      font-size: 30px;
-      font-style: italic;
+      background: url("assets/cinematic/valentini.jpg") 32% center / cover no-repeat;
+      box-shadow: 0 0 0 10px rgba(216,169,78,.07), 0 18px 50px rgba(0,0,0,.35);
     }
-    .science__seal::after {
+    .science__photo::after {
       content: "";
       position: absolute;
-      inset: -9px;
-      border: 1px dashed rgba(216,169,78,.28);
+      inset: -11px;
+      border: 1px dashed rgba(216,169,78,.3);
       border-radius: 50%;
-      animation: spin 26s linear infinite;
+      animation: spin 30s linear infinite;
     }
     .science__name {
-      margin: clamp(22px, 4vh, 40px) 0 0;
+      margin: 0;
       color: var(--paper);
       font-family: var(--serif);
       font-size: clamp(30px, 3.4vw, 54px);
@@ -1385,60 +1393,119 @@
     .science__body + .science__body { margin-top: 14px; }
 
     /* ============ 15 — FINALE ============ */
-    .finale { background: var(--ink-deep); text-align: center; }
-    .finale__image {
+    .sr-only {
       position: absolute;
-      inset: -8%;
-      z-index: -3;
-      background: url("assets/originale/foglie.jpg") center/cover no-repeat;
-      opacity: .5;
-      animation: coverZoom 28s ease-in-out infinite alternate;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
     }
-    .finale__veil {
-      position: absolute;
-      inset: 0;
-      z-index: -2;
+    .finale {
       background:
-        linear-gradient(180deg, rgba(7,29,33,.72), rgba(7,29,33,.52) 50%, rgba(7,29,33,.78)),
-        radial-gradient(circle at 50% 46%, rgba(170,179,34,.12), transparent 46%);
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,.5), transparent 55%),
+        #efebdd;
+      color: var(--ink);
+      text-align: center;
     }
     .finale__content { display: grid; place-items: center; }
-    .finale__inner { max-width: 940px; }
-    .finale .display { font-size: clamp(38px, 4.6vw, 74px); line-height: 1.1; }
+    .finale__inner { max-width: 1100px; }
+    .finale__statement {
+      max-width: 980px;
+      margin: 0 auto;
+      color: #12343a;
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.2vw, 50px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: -.015em;
+    }
+    .finale__lockup {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: clamp(20px, 5.5vw, 84px);
+      margin: clamp(40px, 8vh, 80px) 0 0;
+    }
+    .finale__letter span {
+      display: block;
+      color: var(--c);
+      font-family: var(--serif);
+      font-size: clamp(88px, 12.5vw, 190px);
+      font-weight: 400;
+      line-height: .9;
+    }
+    .finale__letter small {
+      display: block;
+      margin-top: clamp(12px, 2.4vh, 22px);
+      color: color-mix(in srgb, var(--c), #12343a 22%);
+      font-size: clamp(10px, .95vw, 14px);
+      font-weight: 500;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+    }
     .finale__pillars {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: clamp(10px, 2vw, 22px);
-      margin: clamp(28px, 5vh, 50px) 0 0;
+      gap: clamp(18px, 4vw, 60px);
+      margin: clamp(40px, 8vh, 84px) 0 0;
     }
     .finale__pillars span {
-      padding: 10px 20px;
-      border: 1px solid rgba(247,245,238,.25);
-      border-radius: 999px;
-      color: rgba(247,245,238,.9);
-      font-size: clamp(13px, 1.1vw, 17px);
+      color: rgba(15,43,48,.82);
+      font-size: clamp(14px, 1.2vw, 18px);
       font-weight: 300;
-      letter-spacing: .06em;
-      backdrop-filter: blur(6px);
+      letter-spacing: .03em;
     }
-    .finale__wordmark {
-      margin: clamp(40px, 8vh, 84px) 0 0;
-      color: var(--paper);
-      font-family: var(--serif);
-      font-size: clamp(64px, 9vw, 140px);
-      font-style: italic;
-      font-weight: 400;
-      line-height: .8;
-      letter-spacing: -.03em;
+
+    /* ---- scene chiare (alternanza) ---- */
+    .scene--light { color: var(--ink); }
+    .scene--light .eyebrow { color: #77821c; text-shadow: none; }
+    .scene--light .display { color: var(--ink); }
+    .scene--light .lead { color: rgba(15,43,48,.78); }
+    .effects.scene--light {
+      background:
+        radial-gradient(circle at 80% 18%, rgba(216,169,78,.14), transparent 34%),
+        var(--paper);
     }
-    .finale__domains {
-      margin: 18px 0 0;
-      font-family: var(--serif);
-      font-size: clamp(17px, 1.7vw, 27px);
-      font-style: italic;
+    .scene--light .stat {
+      background: #ffffff;
+      backdrop-filter: none;
+      box-shadow: 0 16px 44px rgba(15,43,48,.09);
     }
-    .finale__domains span + span::before { content: "\00a0\00b7\00a0"; color: rgba(247,245,238,.62); }
+    .scene--light .stat p.stat__desc { color: rgba(15,43,48,.72); }
+    .scene--light .stat p.stat__takeaway { color: var(--ink); border-top-color: rgba(15,43,48,.12); }
+    .scene--light .stat__unit { color: var(--ink); }
+    .scene--light .effects__sources { color: rgba(15,43,48,.45); }
+    .operate.scene--light {
+      background:
+        radial-gradient(circle at 14% 24%, rgba(170,179,34,.1), transparent 30%),
+        var(--paper);
+    }
+    .scene--light .op::before { background: var(--paper); }
+    .scene--light .op h3 { color: var(--ink); }
+    .scene--light .op p { color: rgba(15,43,48,.72); }
+    .scene--light .operate__loop { color: rgba(15,43,48,.85); }
+    .heritage.scene--light {
+      background:
+        radial-gradient(circle at 78% 24%, rgba(216,169,78,.12), transparent 32%),
+        #efebdd;
+    }
+    .scene--light .cap {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--cap-color, var(--acid)), transparent 91%), #ffffff);
+      backdrop-filter: none;
+      box-shadow: 0 16px 44px rgba(15,43,48,.08);
+    }
+    .scene--light .cap p { color: rgba(15,43,48,.72); }
+    .scene--light .heritage__closing {
+      background: rgba(170,179,34,.12);
+      color: var(--ink);
+      backdrop-filter: none;
+    }
 
     @keyframes coverZoom { from { transform: scale(1); } to { transform: scale(1.10); } }
     @keyframes cue { 0%,100% { transform: scaleY(.15); opacity: .3; } 50% { transform: scaleY(1); opacity: 1; } }
@@ -1476,6 +1543,12 @@
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
       .missing__frame { width: 88vw; aspect-ratio: 4/5.4; }
+
+      .finale__statement { font-size: clamp(24px, 6.6vw, 32px); }
+      .finale__lockup { gap: 6vw; }
+      .finale__letter span { font-size: 19vw; }
+      .finale__letter small { font-size: 8px; letter-spacing: .22em; }
+      .finale__pillars { flex-direction: column; gap: 10px; }
 
       .birth__grid { grid-template-columns: 1fr; gap: 24px; }
       .birth__viz { order: -1; max-width: min(68vw, 320px); }
@@ -1590,7 +1663,7 @@
     </section>
 
     <!-- 03 · GLI EFFETTI -->
-    <section class="scene effects" id="p03" data-index="2" data-title="Gli effetti attraversano gli ambiti" aria-label="Gli effetti attraversano gli ambiti">
+    <section class="scene effects scene--light" id="p03" data-index="2" data-title="Gli effetti attraversano gli ambiti" aria-label="Gli effetti attraversano gli ambiti">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">02 · Gli effetti attraversano gli ambiti</p>
@@ -1790,7 +1863,7 @@
     </section>
 
     <!-- 09 · COME OPERA CASA -->
-    <section class="scene operate" id="p09" data-index="8" data-title="Come opera CASA" aria-label="Come opera CASA">
+    <section class="scene operate scene--light" id="p09" data-index="8" data-title="Come opera CASA" aria-label="Come opera CASA">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">08 · Come opera CASA</p>
@@ -1824,7 +1897,7 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">09 · Per chi è CASA</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
+          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
           <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
         <div class="who__grid" data-fragment-cumulative>
@@ -1855,7 +1928,7 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">10 · Chi rende possibile CASA</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Ruoli distinti, una capacità comune.</h2>
+          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Ruoli distinti, una capacità comune.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
           <article class="role role--promote fragment is-current" data-fragment="0">
@@ -1896,7 +1969,7 @@
     </section>
 
     <!-- 12 · IL PATRIMONIO DI PARTENZA -->
-    <section class="scene heritage" id="p12" data-index="11" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
+    <section class="scene heritage scene--light" id="p12" data-index="11" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">11 · Il patrimonio di partenza</p>
@@ -1964,7 +2037,10 @@
         <div class="science__inner">
           <p class="eyebrow reveal">13 · Direzione scientifica</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 5vw, 80px)">Un presidio comune ai quattro ambiti.</h2>
-          <p class="science__name reveal delay-2">Prof. Riccardo Valentini</p>
+          <div class="science__figure reveal delay-2">
+            <div class="science__photo" role="img" aria-label="Ritratto del Prof. Riccardo Valentini"></div>
+            <p class="science__name">Prof. Riccardo Valentini</p>
+          </div>
           <p class="science__body reveal delay-3">La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini <em class="science__nobel-inline">(Premio Nobel per la Pace 2007 con l’IPCC)</em>.</p>
           <p class="science__body reveal delay-3">La sua esperienza internazionale sul rapporto tra clima, ecosistemi e società guida l’integrazione scientifica tra ambiente, agricoltura, cibo e salute.</p>
           <p class="science__body reveal delay-4">La direzione scientifica presidia qualità, rigore e indipendenza nelle attività di formazione, sperimentazione, ricerca applicata e innovazione.</p>
@@ -1974,19 +2050,20 @@
 
     <!-- 15 · CASA (FINALE) -->
     <section class="scene finale" id="p15" data-index="14" data-title="CASA" aria-label="CASA">
-      <div class="finale__image" aria-hidden="true"></div>
-      <div class="finale__veil" aria-hidden="true"></div>
       <div class="scene__safe finale__content">
         <div class="finale__inner">
-          <h2 class="display reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
-          <div class="finale__pillars">
-            <span class="reveal delay-1">Uno spazio sperimentale.</span>
-            <span class="reveal delay-2">Una rete di risorse.</span>
-            <span class="reveal delay-3">Una regia comune.</span>
+          <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
+          <div class="finale__lockup" aria-hidden="true">
+            <div class="finale__letter reveal delay-1" style="--c: var(--food)"><span>C</span><small>cibo</small></div>
+            <div class="finale__letter reveal delay-2" style="--c: var(--environment)"><span>A</span><small>ambiente</small></div>
+            <div class="finale__letter reveal delay-3" style="--c: var(--health)"><span>S</span><small>salute</small></div>
+            <div class="finale__letter reveal delay-4" style="--c: var(--agriculture)"><span>A</span><small>agricoltura</small></div>
           </div>
-          <p class="finale__wordmark reveal delay-4">casa</p>
-          <div class="finale__domains reveal delay-5" aria-label="Cibo, Ambiente, Salute, Agricoltura">
-            <span class="food">Cibo</span><span class="environment">Ambiente</span><span class="health">Salute</span><span class="agriculture">Agricoltura</span>
+          <span class="sr-only">CASA — Cibo · Ambiente · Salute · Agricoltura</span>
+          <div class="finale__pillars reveal delay-5">
+            <span>Uno spazio sperimentale.</span>
+            <span>Una rete di risorse.</span>
+            <span>Una regia comune.</span>
           </div>
         </div>
       </div>
