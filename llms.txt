@@ -1,261 +1,136 @@
-# CASA — Il viaggio comincia da qui
-
-CASA è l'infrastruttura condivisa che abilita l'innovazione tra Cibo, Ambiente, Salute e Agricoltura.
-
-## Copertina
-
 # CASA
 
 Cibo · Ambiente · Salute · Agricoltura
 
-L'infrastruttura condivisa che abilita l'innovazione tra settori.
+L’infrastruttura condivisa per innovare dove i quattro ambiti si incontrano.
 
-## Il problema
+## 01 · Ciò che accade in un ambito cambia tutti gli altri
 
-L'ambiente condiziona l'agricoltura.
+L’ambiente condiziona l’agricoltura. L’agricoltura dà forma al cibo che produciamo. Qualità e trasformazione del cibo incidono sulla salute. Gli effetti osservati generano nuove evidenze per il sistema.
 
-L'agricoltura dà forma al cibo che produciamo.
+## 02 · Gli effetti attraversano gli ambiti
 
-Il cibo incide sulla nostra salute.
+- Circa 1/3 delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari. Agricoltura e cibo incidono sull’ambiente.
+- Il cambiamento climatico antropogenico ha ridotto di circa il 21% la produttività agricola globale rispetto allo scenario senza cambiamento climatico. L’ambiente incide sull’agricoltura e sul cibo.
+- Oltre 10.000 miliardi di dollari l’anno di costi nascosti dei sistemi agroalimentari attraversano salute, ambiente e società.
 
-Eppure continuiamo a organizzare competenze, decisioni e interventi separatamente.
+Fonti: FAO, FAOSTAT, Nature Climate Change.
 
-## Gli effetti attraversano gli ambiti
+## 03 · Cosa manca davvero?
 
-### Circa 1/3
+Uno spazio sperimentale comune dove costruire competenze e innovare insieme, mettendo in relazione dati, laboratori, tecnologie, ricerca e relazioni.
 
-delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari. Agricoltura e cibo incidono sull'ambiente.
+## 04 · Per questo nasce CASA
 
-### −21%
+Il luogo dove ambiente, agricoltura, cibo e salute diventano un unico campo di innovazione.
 
-Il cambiamento climatico ha ridotto di circa il 21% la produttività agricola globale rispetto a quanto sarebbe cresciuta senza il riscaldamento antropogenico. L'ambiente torna a incidere sull'agricoltura e sul cibo.
+Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.
 
-### Oltre 10.000 miliardi di dollari l'anno
+CASA nasce come spazio sperimentale condiviso, esteso dalle risorse dei partner e organizzato da una regia comune.
 
-i costi nascosti generati dai sistemi agroalimentari sulla salute, sull'ambiente e sulla società. Le conseguenze non rimangono confinate in un solo ambito.
+## 05 · Un ettaro di innovazione condivisa
 
-Fonti: FAO, *The State of Food and Agriculture*; FAOSTAT; *Nature Climate Change*.
+Una configurazione di riferimento, modulare e adattabile:
 
-## Cosa manca davvero?
+- campi e ambienti sensorizzati per clima, acqua, suolo, biodiversità e pratiche agricole;
+- serre e laboratori modulari per colture, tecnologie, alimenti e relazioni con la salute;
+- spazi per formazione, dimostrazione ed eventi.
 
-### Gli spazi e l'infrastruttura per innovare insieme
+La configurazione cambia con il luogo. La funzione resta. Lo spazio specifico deve ancora essere individuato.
 
-Competenze, laboratori, tecnologie e dati esistono, ma sono distribuiti tra organizzazioni diverse.
+## 06 · Quattro ambiti. Un unico ciclo
 
-Mancano spazi dedicati nei quali formarsi, sperimentare, sviluppare innovazione e comunicarne i risultati.
+1. Osservare l’ambiente.
+2. Sperimentare l’agricoltura.
+3. Studiare il cibo.
+4. Produrre evidenze sulla salute.
 
-E manca un'infrastruttura condivisa, fisica e digitale, che colleghi anche le risorse dei partner e le renda accessibili e combinabili secondo regole comuni.
+Dati, sperimentazione ed evidenze attraversano lo stesso spazio e ritornano al sistema.
 
-CASA nasce per colmare questo vuoto: crea il nodo comune senza duplicare ciò che già esiste.
+## 07 · Un Internet delle risorse
 
-## Per questo nasce CASA
+I partner mantengono competenze, dati, laboratori e tecnologie. CASA ne organizza l’accesso e la combinazione secondo regole comuni.
 
-CASA offre uno spazio fisico per le attività comuni e coordina l'accesso alle risorse dei partner.
+Anche imprese piccole possono utilizzare capacità che non potrebbero costruire autonomamente. IoT, intelligenza artificiale, piattaforme dati e tracciabilità sostengono raccolta, analisi, accessibilità, provenienza e auditabilità.
 
-### Uno spazio fisico
+## 08 · Dalle competenze all’impatto
 
-Spazi attrezzati nei quali formarsi, sperimentare, sviluppare ricerca e innovazione, lavorare con le imprese e comunicare i risultati.
+### Formare
 
-### Una rete di risorse
+Leggere insieme dati climatici, suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.
 
-Competenze, laboratori, dati e tecnologie che restano presso i partner, ma diventano accessibili e utilizzabili attraverso CASA secondo regole comuni.
+### Sperimentare
 
-### Una regia comune
+Testare pratiche, tecnologie e alimenti in campi, serre e laboratori.
 
-Un'organizzazione che costruisce le connessioni necessarie e accompagna le attività dalla formazione alla sperimentazione, fino all'applicazione e alla comunicazione.
+### Sviluppare insieme
 
-## Il principio di CASA: un Internet delle risorse
+Trasformare bisogni e risultati delle prove in ricerca applicata e soluzioni sviluppate insieme.
 
-Ogni partner mantiene le proprie competenze, i propri spazi, laboratori, dati e tecnologie e decide quali risorse condividere e a quali condizioni.
+### Trasferire
 
-CASA collega queste risorse e ne organizza l'accesso, permettendo di combinarle in percorsi di formazione, ricerca, sperimentazione e innovazione.
+Trasformare i risultati in competenze, strumenti, evidenze e contenuti utilizzabili.
 
-Come Internet connette risorse distribuite senza concentrarle in un solo luogo, CASA mette in relazione ciò che i partner rendono disponibile.
+Ogni risultato alimenta un nuovo ciclo di formazione, sperimentazione, ricerca, innovazione e comunicazione.
 
-Da risorse separate a una capacità comune.
+## 09 · Per chi è CASA
 
-## Quattro ambiti che lavorano insieme
+### Imprese e startup
 
-### Cibo · Ambiente · Salute · Agricoltura
+Portano bisogni e tecnologie. Accedono a capacità non sostenibili individualmente; le corporate attivano open innovation e ricerca applicata.
 
-CASA non li organizza come quattro filoni separati.
+### Università e ricerca
 
-Li porta nello stesso spazio di lavoro, mette in comune risorse e competenze e permette di osservare gli effetti che ogni ambito produce sugli altri.
-
-Le tecnologie digitali — IoT, intelligenza artificiale, blockchain e piattaforme dati — attraversano tutti e quattro gli ambiti e ne rendono possibile l'integrazione.
-
-Quattro prospettive diventano una capacità comune di innovazione.
-
-## A cosa serve CASA
-
-### Trasformare competenze e risorse in innovazione applicabile
-
-### 01 · Creare competenze
-
-Sviluppare competenze trasversali attraverso percorsi formativi costruiti con università, centri di ricerca, imprese e istituzioni.
-
-### 02 · Sperimentare
-
-Utilizzare spazi, laboratori, dati e tecnologie per testare soluzioni insieme a imprese, filiere, città e territori.
-
-### 03 · Sviluppare
-
-Trasformare bisogni e risultati della sperimentazione in ricerca, soluzioni e iniziative di innovazione condivise.
-
-### 04 · Misurare e diffondere
-
-Valutare i risultati, comunicarli in modo comprensibile e renderli utilizzabili e replicabili in altri contesti.
-
-Le tecnologie digitali accompagnano tutte le fasi: raccolgono e collegano i dati, supportano la sperimentazione, tracciano i processi e rendono visibili i risultati.
-
-CASA può attivare l'intero ciclo oppure comporre le fasi necessarie in base al bisogno.
-
-## Per chi è CASA
-
-Si entra con un bisogno, una competenza o una risorsa. Si accede a capacità che da soli sarebbe difficile costruire.
+Portano conoscenza e metodi. Accedono a contesti reali e partner per applicarli e valutarli.
 
 ### Persone e professionisti
 
-Entrano per sviluppare nuove competenze. Trovano formazione interdisciplinare, accesso a tecnologie e contesti reali di sperimentazione e una rete scientifica e professionale.
-
-### Università ed enti di ricerca
-
-Mettono in relazione competenze, docenti, laboratori e dati. Ottengono nuove occasioni di collaborazione, formazione congiunta e applicazione della ricerca a bisogni reali.
-
-### Imprese
-
-Entrano con un bisogno, una tecnologia o una soluzione da verificare. Accedono a competenze, talenti, spazi, dati e ricerca senza dover costruire ogni volta una nuova rete di partner.
+Portano esperienze e domande. Accedono a competenze, tecnologie e sperimentazione.
 
 ### Istituzioni e territori
 
-Portano problemi, priorità e contesti nei quali intervenire. Ottengono capacità integrate, evidenze misurabili e soluzioni che possono essere applicate e trasferite.
+Portano priorità e problemi. Accedono a evidenze integrate per decidere su ambiente, agricoltura, cibo e salute.
 
-In CASA ogni soggetto può essere allo stesso tempo utilizzatore, partner e portatore di risorse.
+## 10 · Ecosistema e ruoli
 
-## L'ecosistema
+- InnovaliaTech promuove e sostiene CASA.
+- FIB gestisce e mette in relazione accesso, percorsi e attività.
+- UNIUST costruisce percorsi interdisciplinari.
+- CMCC, CREA e Fondazione Santa Lucia portano capacità scientifiche su ambiente e clima, agricoltura e cibo, salute.
+- Università della Tuscia e Università di Malta portano docenza, ricerca, percorsi congiunti e apertura mediterranea.
 
-### InnovaliaTech — promotore e sostenitore di CASA
+## 11 · CASA non parte da zero
 
-Investitore strategico impegnato nell'educazione e nell'innovazione. Promuove UNIUST, a Roma e in fase di accreditamento, e l'Università di Malta, come hub mediterraneo.
+Il patrimonio di partenza comprende formazione già attiva, ricerca e sperimentazione applicata, relazioni industriali e istituzionali. CASA lo trasforma in capacità comune.
 
-CASA è il luogo nel quale le sue università incontrano ricerca, imprese e territori. InnovaliaTech porta la cornice accademica di UNIUST e Malta, una rete internazionale di reclutamento, capacità di investimento e una visione di lungo periodo.
+## 12 · Roadmap
 
-### CREA — agricoltura e cibo
+- 2026 — modello dello spazio, governance e mappa delle risorse.
+- 2027 — spazio sperimentale, Internet delle risorse e primi cicli integrati.
+- 2028–2030 — nuovi partner, nuovi territori e replicazione dopo la verifica del modello.
 
-Principale ente pubblico italiano di ricerca su agricoltura e alimentazione. Porta autorevolezza scientifica e ricerca applicata alle filiere.
+## 13 · Direzione scientifica
 
-### CMCC — clima e ambiente
-
-Centro euro-mediterraneo sui cambiamenti climatici. Porta scienza del clima, modelli e dati ambientali.
-
-### Fondazione Santa Lucia — salute
-
-IRCCS di riferimento per neuroscienze e salute. Porta competenze scientifiche e l'esperienza sviluppata nel progetto One Health con INAIL e CREA.
-
-### UNIUST — il motore accademico
-
-Costruisce programmi ibridi tra discipline e tecnologie. Parte dai sistemi autonomi applicati all'agroalimentare, per estendersi successivamente al campo della salute.
-
-### FIB — Food Innovation Broker — il soggetto gestore
-
-Orchestra e gestisce CASA, coordina il tavolo comune e assicura continuità operativa tra partner, risorse e attività.
-
-## L'accordo UNIUST–Università della Tuscia
-
-### Formazione, docenza e ricerca: valore per entrambe le parti
-
-La convenzione prevede:
-
-- docenti dell'Università della Tuscia per l'avvio dei programmi di UNIUST;
-- iscrizione congiunta degli studenti ai percorsi previsti;
-- finanziamento di attività di ricerca;
-- collaborazione su agricoltura, filiere agroalimentari e carbon farming.
-
-### I vantaggi per CASA
-
-- partire con docenti e competenze accademiche già disponibili;
-- collegare fin dall'inizio formazione e ricerca;
-- integrare competenze scientifiche sull'agricoltura e sul carbon farming;
-- sviluppare programmi capaci di attrarre studenti, imprese e nuovi partner.
-
-### I vantaggi per l'Università della Tuscia
-
-- raggiungere nuovi studenti attraverso i programmi sviluppati con UNIUST;
-- ampliare la propria presenza su Roma e nelle reti internazionali collegate a CASA;
-- applicare le proprie competenze scientifiche a bisogni espressi da imprese e territori;
-- sviluppare nuove attività di ricerca e collaborazione nei quattro ambiti di CASA.
-
-## CASA non parte da zero
-
-### Una nuova infrastruttura, costruita su capacità già operative
-
-CASA nasce da un ecosistema che ha già prodotto formazione, ricerca applicata, relazioni industriali e sperimentazioni nei quattro ambiti.
-
-Esistono già esperienze su carbon farming, agricoltura digitale, tracciabilità, sistemi di supporto alle decisioni, salute e tecnologie applicate all'agrifood.
-
-Queste esperienze non sono il catalogo di CASA. Sono la prova che le competenze, i contenuti, le relazioni e le tecnologie esistono già.
-
-Il punto non è sommare progetti. È trasformare un patrimonio distribuito in una capacità stabile di innovazione.
-
-## Università di Malta
-
-### L'hub accademico anglofono verso il Mediterraneo e l'Africa
-
-L'Università di Malta collega CASA a una rete internazionale di studenti, docenti e programmi in lingua inglese.
-
-Il modello prevede percorsi di laurea a Malta collegati a magistrali, master e dottorati sviluppati in Italia con le università dell'ecosistema.
-
-Per CASA significa ampliare la capacità di attrazione internazionale e costruire iniziative di formazione, ricerca e innovazione rivolte al Mediterraneo e all'Africa.
-
-## Dimensione europea e mediterranea
-
-### Dal territorio a una rete internazionale
-
-CASA nasce in Italia e sviluppa connessioni con l'Europa, il Mediterraneo e l'Africa.
-
-### Programmi europei
-
-CASA mette a disposizione competenze e partenariati per partecipare a programmi europei di ricerca, formazione e innovazione, a partire da Horizon Europe e dal Cluster 6.
-
-### Piano Mattei
-
-CASA può sostenere iniziative di formazione, ricerca e innovazione agroalimentare rivolte ai Paesi africani, in coerenza con le direttrici della strategia nazionale.
-
-La dimensione internazionale amplia la rete di CASA, attrae competenze e studenti e permette di applicare il suo modello in nuovi territori.
-
-## Roadmap
-
-### 2026 · Attivazione
-
-- predisposizione dello spazio fisico e attivazione della regia comune;
-- mappatura delle risorse e prime regole di accesso;
-- avvio di formazione, ricerca applicata, collaborazioni industriali e comunicazione scientifica;
-- sviluppo della collaborazione con Fondazione Santa Lucia nell'ambito One Health.
-
-### 2027 · Consolidamento
-
-- utilizzo continuativo degli spazi e delle risorse condivise;
-- attività che integrano cibo, ambiente, salute e agricoltura;
-- presentazione delle prime proposte Horizon Europe;
-- sviluppo dei percorsi accademici internazionali con l'Università di Malta.
-
-### 2027–2030 · Estensione
-
-- rafforzamento della componente salute e One Health;
-- nuovi partner europei e mediterranei;
-- collaborazioni con centri europei di riferimento;
-- replicazione del modello CASA attraverso nuovi nodi collegati.
-
-Ogni fase rende disponibili le capacità necessarie per affrontare la successiva.
-
-## Direzione scientifica
-
-La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini (membro del Bureau dell'IPCC, Premio Nobel per la Pace 2007), la cui autorevolezza scientifica nazionale e internazionale garantisce qualità, rigore e terzietà.
+La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini (Premio Nobel per la Pace 2007 con l’IPCC). La sua esperienza internazionale guida l’integrazione scientifica tra ambiente, agricoltura, cibo e salute.
 
 ## Chiusura
 
-CASA mette in comune spazi, competenze, dati e tecnologie per trasformarli in una capacità condivisa di innovazione.
+Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.
 
-Un luogo fisico. Una rete di risorse. Una regia comune.
+Uno spazio sperimentale. Una rete di risorse. Una regia comune.
 
-CASA — Cibo, Ambiente, Salute, Agricoltura
+## Appendice A1 · UNIUST e Università della Tuscia
+
+La convenzione prevede docenti dell’Università della Tuscia per l’avvio di UNIUST, iscrizione congiunta degli studenti, finanziamento di attività di ricerca e collaborazione su agricoltura, filiere e carbon farming.
+
+## Appendice A2 · Università di Malta
+
+Malta collega CASA a percorsi accademici in lingua inglese e a una rete internazionale di studenti e docenti, con apertura verso Mediterraneo e Africa.
+
+## Appendice A3 · Europa, Mediterraneo e Piano Mattei
+
+CASA costruisce competenze e partenariati per programmi europei di ricerca, formazione e innovazione e può sostenere iniziative agroalimentari rivolte ai Paesi africani in coerenza con gli strumenti della strategia nazionale.
+
+## Appendice A4 · Modello spaziale
+
+Un ettaro è la configurazione di riferimento, non il confine di CASA. Localizzazione, superficie e distribuzione degli elementi dipendono dall’area che verrà individuata.

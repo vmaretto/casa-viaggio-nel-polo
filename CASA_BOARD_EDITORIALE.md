@@ -1,5 +1,7 @@
 # CASA — Board editoriale della presentazione
 
+> **Aggiornamento 13 luglio 2026:** la revisione pagina per pagina è stata consolidata nella nuova presentazione core di 15 schermate (`wow.html`, pubblicata sul branch anche come `index.html`) e negli approfondimenti separati (`appendici.html`). `leggimi.html` e `llms.txt` sono stati riallineati. Le schede sottostanti restano come tracciato delle decisioni editoriali.
+
 > Documento operativo per discutere, approvare e tracciare tutte le modifiche.
 > `leggimi.html`, `llms.txt` e la presentazione interattiva sono output: verranno aggiornati solo dopo l'approvazione dei contenuti in questo board.
 
