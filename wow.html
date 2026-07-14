@@ -1680,6 +1680,11 @@
       .ior__diagram, .ior__explain { min-height: 300px; }
     }
 
+    html.static-mode { scroll-snap-type: none; scroll-behavior: auto; }
+    .static-mode .reveal { opacity: 1 !important; filter: none !important; transform: none !important; transition: none !important; }
+    .static-mode .fragment { opacity: 1 !important; filter: none !important; transform: none !important; }
+    .static-mode *, .static-mode *::before, .static-mode *::after { animation: none !important; }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
@@ -2141,7 +2146,8 @@
       const progress = document.getElementById('progressBar');
       const navBox = document.getElementById('sceneNav');
       const isMobile = () => matchMedia('(max-width: 900px)').matches;
-      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const staticMode = new URLSearchParams(location.search).has('static');
+      const reducedMotion = staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches;
       let active = 0;
 
       // ---- contatori animati ----
@@ -2400,6 +2406,19 @@
       });
 
       setActive(0);
+
+      if (staticMode) {
+        document.documentElement.classList.add('static-mode');
+        scenes.forEach(scene => {
+          scene.classList.add('is-active');
+          const count = fragmentCount(scene);
+          if (count) setFragment(scene, count - 1);
+          animateCounters(scene);
+        });
+        if (birth) birth.start();
+        const only = new URLSearchParams(location.search).get('scene');
+        if (only) scenes.forEach(scene => { if (scene.id !== only) scene.style.display = 'none'; });
+      }
     })();
   </script>
 </body>
