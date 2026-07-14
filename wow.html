@@ -415,8 +415,9 @@
       top: 52%;
       left: 50%;
       z-index: -1;
-      width: min(74vw, 860px);
-      aspect-ratio: 10/7;
+      width: min(74vw, 880px);
+      aspect-ratio: 800/660;
+      overflow: visible;
       transform: translate(-50%, -50%);
       pointer-events: none;
       filter: drop-shadow(0 0 18px rgba(170,179,34,.22));
@@ -432,15 +433,23 @@
       transition: stroke-dashoffset 3.4s var(--ease) .4s;
     }
     .missing.is-active .missing__frame path { stroke-dashoffset: 0; }
-    .missing__runners circle {
+    .missing__runners > g {
       opacity: 0;
       filter: drop-shadow(0 0 8px currentColor);
       transition: opacity .8s ease 2.8s;
     }
-    .missing.is-active .missing__runners circle { opacity: 1; }
+    .missing.is-active .missing__runners > g { opacity: 1; }
+    .missing__runners text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 17px;
+      paint-order: stroke;
+      stroke: rgba(7,29,33,.85);
+      stroke-width: 3px;
+    }
     .static-mode .missing__runners { display: none; }
     .missing__content { display: grid; place-items: center; }
-    .missing__inner { max-width: min(56vw, 620px); }
+    .missing__inner { max-width: min(52vw, 600px); transform: translateY(clamp(80px, 16.5vh, 150px)); }
     .missing .display { font-size: clamp(38px, 4.6vw, 72px); }
     .missing__steps {
       margin: clamp(26px, 5vh, 48px) 0 0;
@@ -1596,7 +1605,9 @@
 
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
-      .missing__frame { width: 88vw; aspect-ratio: 4/5.4; }
+      .missing__frame { width: 88vw; aspect-ratio: 4/5.8; }
+      .missing__inner { transform: translateY(7vh); }
+      .missing__runners text { display: none; }
 
       .finale__statement { font-size: clamp(24px, 6.6vw, 32px); }
       .finale__lockup { gap: 6vw; }
@@ -1756,13 +1767,13 @@
 
     <!-- 04 · COSA MANCA DAVVERO? -->
     <section class="scene missing" id="p04" data-index="3" data-title="Cosa manca davvero?" aria-label="Cosa manca davvero?">
-      <svg class="missing__frame" viewBox="0 0 800 560" preserveAspectRatio="none" aria-hidden="true">
-        <path id="housePath" d="M84 552 L84 258 L400 44 L716 258 L716 552 Z" pathLength="1200"/>
+      <svg class="missing__frame" viewBox="0 0 800 660" preserveAspectRatio="none" aria-hidden="true">
+        <path id="housePath" d="M84 648 L84 258 L400 44 L716 258 L716 648 Z" pathLength="1200"/>
         <g class="missing__runners">
-          <circle r="6" fill="#d8a94e"><animateMotion dur="16s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
-          <circle r="6" fill="#7ebdae"><animateMotion dur="16s" begin="-4s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
-          <circle r="6" fill="#d08b80"><animateMotion dur="16s" begin="-8s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
-          <circle r="6" fill="#aab322"><animateMotion dur="16s" begin="-12s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
+          <g fill="#d8a94e"><circle r="6"/><text x="13" y="5">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#7ebdae"><circle r="6"/><text x="13" y="5">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#d08b80"><circle r="6"/><text x="13" y="5">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#aab322"><circle r="6"/><text x="13" y="5">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
         </g>
       </svg>
       <div class="scene__safe missing__content">
