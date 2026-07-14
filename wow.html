@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#071d21">
   <title>CASA — Cibo · Ambiente · Salute · Agricoltura</title>
   <meta name="description" content="CASA: l'infrastruttura condivisa che abilita l'innovazione tra Cibo, Ambiente, Salute e Agricoltura.">
+  <link rel="preload" as="image" href="assets/originale/foglie.jpg">
   <style>
     @font-face {
       font-family: "Cormorant CASA";
@@ -118,29 +119,32 @@
     .delay-4 { transition-delay: .58s; }
     .delay-5 { transition-delay: .74s; }
     .fragment {
-      visibility: hidden;
       opacity: 0;
       filter: blur(8px);
       transform: translateY(18px);
-      transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease), visibility 0s linear .7s;
+      transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease);
       pointer-events: none;
     }
-    .fragment.is-current {
-      visibility: visible;
-      opacity: 1;
-      filter: none;
-      transform: none;
-      transition-delay: 0s;
-      pointer-events: auto;
-    }
+    .fragment.is-current,
     .fragment.is-done {
-      visibility: visible;
       opacity: 1;
       filter: none;
       transform: none;
       pointer-events: auto;
     }
 
+    .step-hint {
+      position: absolute;
+      left: var(--safe-x);
+      bottom: 20px;
+      z-index: 6;
+      color: rgba(247,245,238,.55);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .scene--light .step-hint { color: rgba(15,43,48,.55); }
     .brand-corner {
       position: fixed;
       z-index: 20;
@@ -179,18 +183,20 @@
       display: grid;
       gap: 9px;
       transform: translateY(-50%);
+      mix-blend-mode: difference;
     }
     .nav button {
+      position: relative;
       width: 9px;
       height: 9px;
       padding: 0;
-      border: 1px solid rgba(247,245,238,.56);
+      border: 1px solid rgba(247,245,238,.62);
       border-radius: 50%;
       background: transparent;
-      box-shadow: 0 0 5px rgba(7,29,33,.35);
       cursor: pointer;
       transition: transform .35s var(--ease), background .35s ease;
     }
+    .nav button::after { content: ""; position: absolute; inset: -8px; }
     .nav button[aria-current="true"] { background: var(--acid); border-color: var(--acid); transform: scale(1.45); }
     .controls {
       position: fixed;
@@ -396,7 +402,7 @@
     .effects__sources {
       width: min(1240px, 100%);
       margin: clamp(20px, 4vh, 36px) auto 0;
-      color: rgba(247,245,238,.44);
+      color: rgba(247,245,238,.62);
       font-size: clamp(10px, .8vw, 12px);
       font-style: italic;
       letter-spacing: .04em;
@@ -544,21 +550,35 @@
     .space__title { max-width: 680px; }
     .info-dot {
       position: relative;
-      display: inline-grid;
-      place-items: center;
-      width: 22px;
-      height: 22px;
-      margin-left: 6px;
-      padding: 0;
-      border: 1px solid rgba(170,179,34,.6);
-      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 8px;
+      padding: 5px 12px;
+      border: 1px solid rgba(170,179,34,.55);
+      border-radius: 999px;
       background: rgba(7,29,33,.5);
       color: var(--acid);
-      font-family: var(--serif);
-      font-size: 15px;
-      font-style: italic;
       vertical-align: middle;
       cursor: help;
+    }
+    .info-dot__label {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .info-dot__icon {
+      display: inline-grid;
+      place-items: center;
+      width: 17px;
+      height: 17px;
+      border: 1px solid rgba(170,179,34,.6);
+      border-radius: 50%;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-style: italic;
     }
     .info-dot__tip {
       position: absolute;
@@ -660,7 +680,7 @@
     }
     .cycle__content {
       display: grid;
-      grid-template-columns: minmax(390px, .9fr) minmax(560px, 1.1fr);
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
       align-items: center;
       gap: clamp(30px, 5vw, 90px);
     }
@@ -668,7 +688,7 @@
     .cycle__copy .display { font-size: clamp(48px, 4.4vw, 72px); line-height: 1.02; }
     .cycle__map {
       position: relative;
-      width: min(58vw, 680px);
+      width: min(100%, 640px);
       aspect-ratio: 1;
       justify-self: end;
     }
@@ -728,8 +748,8 @@
       font-weight: 400;
     }
     .cycle__core small {
-      color: rgba(247,245,238,.55);
-      font-size: 8px;
+      color: rgba(247,245,238,.66);
+      font-size: 10px;
       letter-spacing: .22em;
       text-transform: uppercase;
     }
@@ -739,7 +759,7 @@
       top: var(--y);
       left: var(--x);
       width: 28%;
-      min-width: 154px;
+      min-width: 132px;
       padding: 13px 15px;
       border: 1px solid color-mix(in srgb, var(--node-color), transparent 58%);
       border-radius: 4px;
@@ -758,9 +778,9 @@
       font-weight: 400;
     }
     .node-environment { --x: 50%; --y: 8%; --node-color: var(--environment); }
-    .node-agriculture { --x: 92%; --y: 50%; --node-color: var(--agriculture); animation-delay: .7s; }
+    .node-agriculture { --x: 88%; --y: 50%; --node-color: var(--agriculture); animation-delay: .7s; }
     .node-food { --x: 50%; --y: 92%; --node-color: var(--food); animation-delay: 1.4s; }
-    .node-health { --x: 8%; --y: 50%; --node-color: var(--health); animation-delay: 2.1s; }
+    .node-health { --x: 12%; --y: 50%; --node-color: var(--health); animation-delay: 2.1s; }
     .cycle__story {
       position: relative;
       min-height: 238px;
@@ -831,8 +851,8 @@
       padding: 3px 9px;
       color: rgba(247,245,238,.58);
       background: var(--ink-deep);
-      font-size: 8px;
-      letter-spacing: .22em;
+      font-size: 10px;
+      letter-spacing: .18em;
       text-transform: uppercase;
       transform: translateX(-50%);
     }
@@ -869,7 +889,7 @@
       transform: translate(-50%, -50%);
       animation: float 5.8s ease-in-out infinite;
     }
-    .resource small { display: block; margin-top: 2px; color: rgba(247,245,238,.44); font-family: var(--sans); font-size: 8px; font-style: normal; letter-spacing: .10em; }
+    .resource small { display: block; margin-top: 2px; color: rgba(247,245,238,.58); font-family: var(--sans); font-size: 10px; font-style: normal; letter-spacing: .08em; }
     .r1 { --x: 16%; --y: 24%; --c: var(--environment); }
     .r2 { --x: 16%; --y: 76%; --c: var(--health); animation-delay: .8s; }
     .r3 { --x: 84%; --y: 24%; --c: var(--food); animation-delay: 1.6s; }
@@ -1433,7 +1453,7 @@
     }
     .finale__letter span {
       display: block;
-      color: var(--c);
+      color: color-mix(in srgb, var(--c), #12343a 22%);
       font-family: var(--serif);
       font-size: clamp(88px, 12.5vw, 190px);
       font-weight: 400;
@@ -1442,8 +1462,8 @@
     .finale__letter small {
       display: block;
       margin-top: clamp(12px, 2.4vh, 22px);
-      color: color-mix(in srgb, var(--c), #12343a 22%);
-      font-size: clamp(10px, .95vw, 14px);
+      color: color-mix(in srgb, var(--c), #12343a 50%);
+      font-size: clamp(11px, .95vw, 14px);
       font-weight: 500;
       letter-spacing: .34em;
       text-transform: uppercase;
@@ -1463,8 +1483,15 @@
     }
 
     /* ---- scene chiare (alternanza) ---- */
-    .scene--light { color: var(--ink); }
-    .scene--light .eyebrow { color: #77821c; text-shadow: none; }
+    .scene--light {
+      color: var(--ink);
+      --food: #8f6112;
+      --environment: #2f6d5e;
+      --health: #a04a3c;
+      --agriculture: #5d6614;
+      --acid: #5d6614;
+    }
+    .scene--light .eyebrow { color: #66701a; text-shadow: none; }
     .scene--light .display { color: var(--ink); }
     .scene--light .lead { color: rgba(15,43,48,.78); }
     .effects.scene--light {
@@ -1480,7 +1507,7 @@
     .scene--light .stat p.stat__desc { color: rgba(15,43,48,.72); }
     .scene--light .stat p.stat__takeaway { color: var(--ink); border-top-color: rgba(15,43,48,.12); }
     .scene--light .stat__unit { color: var(--ink); }
-    .scene--light .effects__sources { color: rgba(15,43,48,.45); }
+    .scene--light .effects__sources { color: rgba(15,43,48,.6); }
     .operate.scene--light {
       background:
         radial-gradient(circle at 14% 24%, rgba(170,179,34,.1), transparent 30%),
@@ -1507,6 +1534,14 @@
       backdrop-filter: none;
     }
 
+    .scene:not(.is-active) .cover__image,
+    .scene:not(.is-active) .birth__halo,
+    .scene:not(.is-active) .flow-dot,
+    .scene:not(.is-active) .domain-node,
+    .scene:not(.is-active) .resource,
+    .scene:not(.is-active) .ior-core,
+    .scene:not(.is-active) .science__photo::after { animation-play-state: paused; }
+
     @keyframes coverZoom { from { transform: scale(1); } to { transform: scale(1.10); } }
     @keyframes cue { 0%,100% { transform: scaleY(.15); opacity: .3; } 50% { transform: scaleY(1); opacity: 1; } }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -1523,6 +1558,7 @@
       .scene__safe { min-height: 0; padding-top: clamp(56px, 9vh, 84px); padding-bottom: clamp(48px, 8vh, 72px); }
       .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
       .brand-corner { display: none; }
+      .step-hint { display: none; }
       .eyebrow { font-size: 14px; letter-spacing: .24em; }
       .nav { display: none; }
       .controls { display: none; }
@@ -1547,7 +1583,7 @@
       .finale__statement { font-size: clamp(24px, 6.6vw, 32px); }
       .finale__lockup { gap: 6vw; }
       .finale__letter span { font-size: 19vw; }
-      .finale__letter small { font-size: 8px; letter-spacing: .22em; }
+      .finale__letter small { font-size: 10px; letter-spacing: .18em; }
       .finale__pillars { flex-direction: column; gap: 10px; }
 
       .birth__grid { grid-template-columns: 1fr; gap: 24px; }
@@ -1605,6 +1641,15 @@
       .phase + .phase { margin-top: 26px; }
     }
 
+    @media (pointer: coarse) and (min-width: 901px) {
+      .fragment { opacity: 1; filter: none; transform: none; pointer-events: auto; position: static !important; }
+      .space__detail { grid-template-columns: 1fr; gap: 10px; padding: 16px 4px; border-left: 0; border-top: 3px solid var(--detail-color); }
+      .space__story, .cycle__story, .ior__explain { min-height: 0; }
+      .cycle__detail, .ior__detail { padding: 14px 0; }
+      .ior .resource, .ior .resource-zone { opacity: 1 !important; }
+      .step-hint { display: none; }
+    }
+
     @media (max-height: 720px) and (min-width: 901px) {
       :root { --safe-y: 28px; }
       .display { font-size: clamp(46px, 5.7vw, 82px); }
@@ -1617,7 +1662,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
       .reveal { opacity: 1; filter: none; transform: none; }
     }
   </style>
@@ -1676,7 +1721,7 @@
           </article>
           <article class="stat fragment" data-fragment="1" style="--stat-color: var(--food)">
             <strong class="stat__figure"><span data-countup="21" data-prefix="−" data-suffix="%">−21%</span></strong>
-            <p class="stat__desc">l’impatto del cambiamento climatico sulla produttività agricola globale dal 1961.</p>
+            <p class="stat__desc">l’impatto del cambiamento climatico sulla produttività agricola globale dal 1961, rispetto a uno scenario senza cambiamento climatico.</p>
             <p class="stat__takeaway">L’ambiente torna a incidere sull’agricoltura e sul cibo.</p>
           </article>
           <article class="stat fragment" data-fragment="2" style="--stat-color: var(--health)">
@@ -1742,7 +1787,7 @@
         <header class="space__intro">
           <p class="eyebrow reveal">05 · Lo spazio CASA</p>
           <h2 class="display space__title reveal delay-1">Un ettaro di innovazione condivisa.</h2>
-          <p class="lead reveal delay-2">Un modello fisico, modulare e adattabile. <button type="button" class="info-dot" aria-label="Nota: configurazione di riferimento"><span class="info-dot__tip">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</span>i</button></p>
+          <p class="lead reveal delay-2">Un modello fisico, modulare e adattabile. <button type="button" class="info-dot" aria-expanded="false"><span class="info-dot__tip" id="tipConfig" role="note">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</span><span class="info-dot__label">modello di riferimento</span><span class="info-dot__icon" aria-hidden="true">i</span></button></p>
         </header>
 
         <div class="space__story reveal delay-2">
@@ -1855,7 +1900,7 @@
             </article>
             <article class="ior__detail ior__detail--principle fragment" data-fragment="3">
               <p>Lo spazio è il luogo dell’integrazione.</p>
-              <p>L’Internet delle risorse è il sistema che ne rende accessibili e ne estende le capacità.</p>
+              <p>L’Internet delle Risorse (IoR) è il sistema che ne rende accessibili e ne estende le capacità.</p>
             </article>
           </aside>
         </div>
@@ -1943,7 +1988,7 @@
           </article>
           <article class="role role--train fragment" data-fragment="2">
             <h3>Forma</h3>
-            <h4>UNIUST</h4>
+            <h4>UNIUST — Università non statale</h4>
             <p>Costruisce percorsi interdisciplinari che collegano tecnologie digitali, ambiente, agricoltura, cibo e salute e prepara le competenze necessarie per operare in CASA.</p>
           </article>
           <div class="role--wide role--sci fragment" data-fragment="3">
@@ -1993,7 +2038,7 @@
             <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
           </article>
         </div>
-        <p class="heritage__closing reveal delay-3">CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’Internet delle risorse</strong>, trasformandolo in una capacità stabile e accessibile.</p>
+        <p class="heritage__closing reveal delay-3">CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’IoR</strong>, trasformandolo in una capacità stabile e accessibile.</p>
       </div>
     </section>
 
@@ -2016,7 +2061,7 @@
             <p class="phase__year">2027</p>
             <h3>Attivare CASA</h3>
             <p>Progettare e predisporre lo spazio con le prime aree sperimentali, infrastrutture digitali e ambienti condivisi.</p>
-            <p>Attivare l’Internet delle risorse.</p>
+            <p>Attivare l’IoR.</p>
             <p>Avviare i primi cicli integrati di formazione, sperimentazione, ricerca applicata e open innovation su ambiente, agricoltura, cibo e salute.</p>
           </article>
           <article class="phase phase--3 fragment" data-fragment="2">
@@ -2227,12 +2272,25 @@
           item.classList.toggle('is-done', cumulative && n < bounded);
           if (n === bounded && bounded !== prev) animateCounters(item);
         });
+        const hint = scene.querySelector('.step-hint');
+        if (hint) hint.textContent = 'passo ' + (bounded + 1) + ' di ' + count + '  →';
       };
+
+      // indicatore di passi per le scene a pannelli alternativi
+      scenes.forEach(scene => {
+        const count = fragmentCount(scene);
+        if (count > 1 && !scene.querySelector('[data-fragment-cumulative]')) {
+          const hint = document.createElement('div');
+          hint.className = 'step-hint';
+          hint.setAttribute('aria-hidden', 'true');
+          scene.querySelector('.scene__safe').appendChild(hint);
+        }
+      });
 
       scenes.forEach(scene => setFragment(scene, 0));
 
       let lastActive = -1;
-      const setActive = (index) => {
+      const setActive = (index, fromNav = false) => {
         active = Math.max(0, Math.min(scenes.length - 1, index));
         if (active === lastActive) return;
         lastActive = active;
@@ -2240,6 +2298,11 @@
         dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
         progress.style.transform = `scaleX(${active + 1})`;
         animateCounters(scenes[active]);
+        // chi scrolla non deve perdersi i contenuti progressivi
+        if (!fromNav && !isMobile()) {
+          const sc = scenes[active];
+          if (sc.querySelector('[data-fragment-cumulative]')) setFragment(sc, fragmentCount(sc) - 1);
+        }
       };
 
       const go = (index, openAtEnd = false) => {
@@ -2247,7 +2310,7 @@
         const count = fragmentCount(scenes[target]);
         setFragment(scenes[target], openAtEnd && count ? count - 1 : 0);
         scenes[target].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-        setActive(target);
+        setActive(target, true);
       };
 
       const advance = () => {
@@ -2265,11 +2328,13 @@
         else if (active > 0) go(active - 1, !isMobile());
       };
 
+      const ratios = new Map();
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) setActive(Number(entry.target.dataset.index));
-        });
-      }, { threshold: [.42] });
+        entries.forEach(entry => ratios.set(Number(entry.target.dataset.index), entry.isIntersecting ? entry.intersectionRatio : 0));
+        let best = -1, bestRatio = 0;
+        ratios.forEach((r, i) => { if (r > bestRatio) { bestRatio = r; best = i; } });
+        if (best >= 0) setActive(best);
+      }, { threshold: [.12, .3, .5, .7] });
       scenes.forEach(scene => observer.observe(scene));
 
       dots.forEach(dot => dot.addEventListener('click', () => go(Number(dot.dataset.go))));
@@ -2285,16 +2350,31 @@
       document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
 
       document.querySelectorAll('.info-dot').forEach(dot => {
-        dot.addEventListener('click', e => { e.stopPropagation(); dot.classList.toggle('is-open'); });
+        dot.addEventListener('click', e => {
+          e.stopPropagation();
+          const open = dot.classList.toggle('is-open');
+          dot.setAttribute('aria-expanded', String(open));
+        });
+      });
+      const closeDots = () => document.querySelectorAll('.info-dot.is-open').forEach(d => {
+        d.classList.remove('is-open');
+        d.setAttribute('aria-expanded', 'false');
       });
       addEventListener('click', e => {
-        document.querySelectorAll('.info-dot.is-open').forEach(d => { if (!d.contains(e.target)) d.classList.remove('is-open'); });
+        document.querySelectorAll('.info-dot.is-open').forEach(d => { if (!d.contains(e.target)) { d.classList.remove('is-open'); d.setAttribute('aria-expanded', 'false'); } });
+      });
+      addEventListener('keydown', e => { if (e.key === 'Escape') closeDots(); });
+
+      const fsBtn = document.getElementById('fullscreen');
+      fsBtn.setAttribute('aria-pressed', 'false');
+      document.addEventListener('fullscreenchange', () => {
+        fsBtn.setAttribute('aria-pressed', String(!!document.fullscreenElement));
       });
 
       addEventListener('keydown', event => {
         if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); advance(); }
         if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); retreat(); }
-        if (event.key.toLowerCase() === 'f') toggleFullscreen();
+        if (event.key.toLowerCase() === 'f' && !event.metaKey && !event.ctrlKey && !event.altKey) toggleFullscreen();
         if (event.key === 'Home') go(0);
         if (event.key === 'End') go(scenes.length - 1);
       });
