@@ -2339,8 +2339,10 @@
         // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
         if (!fromNav && !isMobile()) {
           const sc = scenes[active];
-          if (sc.querySelector('[data-fragment-cumulative]')) {
-            const count = fragmentCount(sc);
+          const count = fragmentCount(sc);
+          if (count > 1) {
+            const cumulative = !!sc.querySelector('[data-fragment-cumulative]');
+            const stepMs = cumulative ? 620 : 3400;
             clearInterval(sc._cascade);
             setFragment(sc, 0);
             let step = 0;
@@ -2348,7 +2350,7 @@
               if (scenes[active] !== sc || step >= count - 1) { clearInterval(sc._cascade); return; }
               step += 1;
               setFragment(sc, step);
-            }, 620);
+            }, stepMs);
           }
         }
       };
