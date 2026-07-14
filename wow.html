@@ -423,17 +423,25 @@
     }
     .missing__frame path {
       fill: none;
-      stroke: rgba(170,179,34,.55);
-      stroke-width: 1.6;
+      stroke: rgba(170,179,34,.85);
+      stroke-width: 3;
       stroke-linejoin: round;
-      stroke-dasharray: 10 12;
+      stroke-linecap: round;
+      stroke-dasharray: 14 10;
       stroke-dashoffset: 1200;
       transition: stroke-dashoffset 3.4s var(--ease) .4s;
     }
     .missing.is-active .missing__frame path { stroke-dashoffset: 0; }
+    .missing__runners circle {
+      opacity: 0;
+      filter: drop-shadow(0 0 8px currentColor);
+      transition: opacity .8s ease 2.8s;
+    }
+    .missing.is-active .missing__runners circle { opacity: 1; }
+    .static-mode .missing__runners { display: none; }
     .missing__content { display: grid; place-items: center; }
-    .missing__inner { max-width: 860px; }
-    .missing .display { font-size: clamp(56px, 7.4vw, 120px); }
+    .missing__inner { max-width: min(56vw, 620px); }
+    .missing .display { font-size: clamp(38px, 4.6vw, 72px); }
     .missing__steps {
       margin: clamp(26px, 5vh, 48px) 0 0;
       display: grid;
@@ -1599,7 +1607,8 @@
       .birth__grid { grid-template-columns: 1fr; gap: 24px; }
       .birth__viz { order: -1; max-width: min(68vw, 320px); }
       .birth__coreword { font-size: 34px; }
-      .missing .display { font-size: clamp(46px, 12vw, 72px); }
+      .missing .display { font-size: clamp(32px, 9vw, 44px); }
+      .missing__inner { max-width: 74vw; }
 
       .space__image { animation: none; background-size: auto 148%; background-position: 52% 86%; }
       .space__veil {
@@ -1748,7 +1757,13 @@
     <!-- 04 · COSA MANCA DAVVERO? -->
     <section class="scene missing" id="p04" data-index="3" data-title="Cosa manca davvero?" aria-label="Cosa manca davvero?">
       <svg class="missing__frame" viewBox="0 0 800 560" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M84 552 L84 258 L400 44 L716 258 L716 552 Z" pathLength="1200"/>
+        <path id="housePath" d="M84 552 L84 258 L400 44 L716 258 L716 552 Z" pathLength="1200"/>
+        <g class="missing__runners">
+          <circle r="6" fill="#d8a94e"><animateMotion dur="16s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
+          <circle r="6" fill="#7ebdae"><animateMotion dur="16s" begin="-4s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
+          <circle r="6" fill="#d08b80"><animateMotion dur="16s" begin="-8s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
+          <circle r="6" fill="#aab322"><animateMotion dur="16s" begin="-12s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></circle>
+        </g>
       </svg>
       <div class="scene__safe missing__content">
         <div class="missing__inner">
@@ -2310,10 +2325,20 @@
         dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
         progress.style.transform = `scaleX(${active + 1})`;
         animateCounters(scenes[active]);
-        // chi scrolla non deve perdersi i contenuti progressivi
+        // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
         if (!fromNav && !isMobile()) {
           const sc = scenes[active];
-          if (sc.querySelector('[data-fragment-cumulative]')) setFragment(sc, fragmentCount(sc) - 1);
+          if (sc.querySelector('[data-fragment-cumulative]')) {
+            const count = fragmentCount(sc);
+            clearInterval(sc._cascade);
+            setFragment(sc, 0);
+            let step = 0;
+            sc._cascade = setInterval(() => {
+              if (scenes[active] !== sc || step >= count - 1) { clearInterval(sc._cascade); return; }
+              step += 1;
+              setFragment(sc, step);
+            }, 620);
+          }
         }
       };
 
@@ -2327,6 +2352,7 @@
 
       const advance = () => {
         const scene = scenes[active];
+        clearInterval(scene._cascade);
         const count = fragmentCount(scene);
         const step = Number(scene.dataset.fragmentStep || 0);
         if (!isMobile() && count && step < count - 1) setFragment(scene, step + 1);
@@ -2335,6 +2361,7 @@
 
       const retreat = () => {
         const scene = scenes[active];
+        clearInterval(scene._cascade);
         const step = Number(scene.dataset.fragmentStep || 0);
         if (!isMobile() && step > 0) setFragment(scene, step - 1);
         else if (active > 0) go(active - 1, !isMobile());
