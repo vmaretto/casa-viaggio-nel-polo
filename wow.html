@@ -145,19 +145,6 @@
       text-transform: uppercase;
     }
     .scene--light .step-hint { color: rgba(15,43,48,.55); }
-    .brand-corner {
-      position: fixed;
-      z-index: 20;
-      top: 25px;
-      left: 30px;
-      color: var(--paper);
-      font-family: var(--serif);
-      font-size: 24px;
-      font-style: italic;
-      letter-spacing: .04em;
-      mix-blend-mode: difference;
-      pointer-events: none;
-    }
     .progress {
       position: fixed;
       z-index: 20;
@@ -242,36 +229,28 @@
       text-align: center;
     }
     .cover__lockup { width: min(880px, 88vw); }
-    .cover__title {
-      margin: 0;
-      color: var(--paper);
-      font-family: var(--serif);
-      font-size: clamp(108px, 15vw, 220px);
-      font-style: italic;
-      font-weight: 400;
-      line-height: .72;
-      letter-spacing: -.035em;
-      text-shadow: 0 20px 80px rgba(0,0,0,.18);
-    }
     .cover__domains {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0;
-      margin: clamp(34px, 5vh, 58px) 0 0;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(4px, 1vh, 12px);
+      margin: 0;
       font-family: var(--serif);
-      font-size: clamp(22px, 2.2vw, 35px);
+      font-size: clamp(46px, 8.2vh, 84px);
       font-style: italic;
+      font-weight: 400;
+      line-height: 1.04;
+      letter-spacing: -.02em;
     }
-    .cover__domains span + span::before { content: "\00a0\00b7\00a0"; color: rgba(247,245,238,.62); }
+    .cover__domains span { display: block; text-shadow: 0 10px 50px rgba(0,0,0,.3); }
     .food { color: var(--food); }
     .environment { color: var(--environment); }
     .health { color: var(--health); }
     .agriculture { color: var(--agriculture); }
     .cover__payoff {
-      margin: 20px auto 0;
+      margin: clamp(30px, 5vh, 52px) auto 0;
       color: var(--paper);
-      font-size: clamp(15px, 1.25vw, 20px);
+      font-size: clamp(16px, 1.4vw, 22px);
       font-weight: 300;
       letter-spacing: .025em;
     }
@@ -1583,7 +1562,6 @@
       .stat { padding: 16px 14px 14px; }
       .stat strong.stat__figure { font-size: clamp(30px, 8.6vw, 40px); }
       .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
-      .brand-corner { display: none; }
       .step-hint { display: none; }
       .eyebrow { font-size: 14px; letter-spacing: .24em; }
       .nav { display: none; }
@@ -1700,7 +1678,6 @@
 </head>
 <body>
   <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
-  <div class="brand-corner" aria-hidden="true">CASA</div>
   <nav class="nav" aria-label="Pagine" id="sceneNav"></nav>
   <div class="controls">
     <button type="button" id="prev" aria-label="Indietro">←</button>
@@ -1715,13 +1692,12 @@
       <div class="cover__veil" aria-hidden="true"></div>
       <div class="scene__safe cover__content">
         <div class="cover__lockup">
-          <h1 class="cover__title reveal">casa</h1>
-          <div class="cover__domains reveal delay-1" aria-label="Cibo, Ambiente, Salute, Agricoltura">
-            <span class="food">Cibo</span><span class="environment">Ambiente</span><span class="health">Salute</span><span class="agriculture">Agricoltura</span>
-          </div>
-          <p class="cover__payoff reveal delay-2">L’infrastruttura condivisa che abilita l’innovazione tra settori.</p>
+          <h1 class="cover__domains" aria-label="Cibo, Ambiente, Salute, Agricoltura">
+            <span class="food reveal">Cibo</span><span class="environment reveal delay-1">Ambiente</span><span class="health reveal delay-2">Salute</span><span class="agriculture reveal delay-3">Agricoltura</span>
+          </h1>
+          <p class="cover__payoff reveal delay-4">L’infrastruttura condivisa che abilita l’innovazione tra settori.</p>
         </div>
-        <div class="cover__cue reveal delay-3">entra</div>
+        <div class="cover__cue reveal delay-5">entra</div>
       </div>
     </section>
 
@@ -2339,8 +2315,10 @@
         // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
         if (!fromNav && !isMobile()) {
           const sc = scenes[active];
-          if (sc.querySelector('[data-fragment-cumulative]')) {
-            const count = fragmentCount(sc);
+          const count = fragmentCount(sc);
+          if (count > 1) {
+            const cumulative = !!sc.querySelector('[data-fragment-cumulative]');
+            const stepMs = cumulative ? 620 : 3400;
             clearInterval(sc._cascade);
             setFragment(sc, 0);
             let step = 0;
@@ -2348,7 +2326,7 @@
               if (scenes[active] !== sc || step >= count - 1) { clearInterval(sc._cascade); return; }
               step += 1;
               setFragment(sc, step);
-            }, 620);
+            }, stepMs);
           }
         }
       };
