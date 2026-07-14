@@ -1185,12 +1185,14 @@
       background: linear-gradient(90deg, rgba(7,29,33,.55), rgba(7,29,33,.1));
       padding: clamp(10px, 1.5vh, 16px) clamp(16px, 1.8vw, 24px);
     }
-    .role--promote {
-      border-left-width: 5px;
-      background: linear-gradient(90deg, rgba(170,179,34,.16), rgba(7,29,33,.12));
-      padding: clamp(14px, 2vh, 22px) clamp(16px, 1.8vw, 24px);
+    .actors__grid > .role--promote {
+      border: 1px solid rgba(170,179,34,.45);
+      border-left: 5px solid var(--acid);
+      background: linear-gradient(90deg, rgba(170,179,34,.22), rgba(170,179,34,.05));
+      box-shadow: 0 14px 40px rgba(0,0,0,.2), inset 0 0 60px rgba(170,179,34,.05);
+      padding: clamp(18px, 2.8vh, 30px) clamp(16px, 1.8vw, 24px);
     }
-    .role--promote h4 { font-size: clamp(28px, 2.5vw, 38px); }
+    .role--promote h4 { font-size: clamp(30px, 3vw, 44px); }
     .role--manage h4 { font-size: clamp(23px, 2vw, 30px); }
     .role--train h4 { font-size: clamp(20px, 1.7vw, 25px); }
     .role--wide .role h4 { font-size: clamp(17px, 1.5vw, 24px); }
@@ -1568,7 +1570,15 @@
     @media (max-width: 900px) {
       html { scroll-snap-type: none; }
       .scene { min-height: 0; }
-      .scene__safe { min-height: 0; padding-top: clamp(56px, 9vh, 84px); padding-bottom: clamp(48px, 8vh, 72px); }
+      .scene__safe { min-height: 0; padding-top: 54px; padding-bottom: 42px; }
+      .scene__center { padding-top: 54px; }
+      .lead { font-size: 15px; margin-top: 14px; }
+      .aud p, .role p, .cap p, .phase p, .op p, .ior__detail p, .stat p.stat__desc { font-size: 13px; }
+      .who__closing, .actors__closing, .roadmap__closing, .operate__loop { font-size: 15px; }
+      .heritage__closing { font-size: 13.5px; padding: 14px 16px; }
+      .ior__detail--principle p { font-size: 17px; }
+      .stat { padding: 16px 14px 14px; }
+      .stat strong.stat__figure { font-size: clamp(30px, 8.6vw, 40px); }
       .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
       .brand-corner { display: none; }
       .step-hint { display: none; }
@@ -1604,6 +1614,16 @@
       .birth__coreword { font-size: 34px; }
       .missing .display { font-size: clamp(46px, 12vw, 72px); }
 
+      .space__image { animation: none; background-size: auto 148%; background-position: 52% 86%; }
+      .space__veil {
+        background: linear-gradient(180deg,
+          rgba(7,29,33,.16) 0%,
+          rgba(7,29,33,.3) 20vh,
+          rgba(7,29,33,.9) 36vh,
+          rgba(7,29,33,.98) 47vh,
+          rgba(7,29,33,.98) 100%);
+      }
+      .space__intro { padding-top: 29vh; }
       .space__story { min-height: 0; }
       .space__story-tabs { display: none; }
       .space__detail { inset: auto; grid-template-columns: 1fr; gap: 10px; padding: 18px 4px; border-left: 0; border-top: 3px solid var(--detail-color); }
@@ -1616,25 +1636,12 @@
       .cycle__detail { padding: 16px 0; }
       .domain-node { min-width: 118px; padding: 9px 10px; }
 
-      .ior__stage-progressive { grid-template-columns: 1fr; }
-      .ior__diagram { min-height: 460px; }
-      .ior__explain { min-height: 0; border-bottom: 0; }
-      .ior__detail { padding: 16px 0; }
-      .resource-zone--partners { left: 2%; right: 2%; }
-      .resource-zone--casa { left: 16%; right: 16%; }
-      .zone-label { font-size: 7px; max-width: 60vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .resource-zone--partners .zone-label { left: 50%; top: auto; bottom: -8px; }
-      .ior-core { width: clamp(92px, 26vw, 120px); }
-      .resource { min-width: 0; max-width: 34vw; font-size: 13.5px; padding: 7px 9px; }
-      .ior .resource, .ior .resource-zone { opacity: 1 !important; }
-      .resource small { font-size: 7px; }
-      .r1 { --x: 26%; --y: 13%; }
-      .r3 { --x: 74%; --y: 13%; }
-      .r2 { --x: 22%; --y: 46%; }
-      .r4 { --x: 78%; --y: 56%; }
-      .r5 { --x: 26%; --y: 87%; }
-      .r6 { --x: 74%; --y: 87%; }
-      .ior__principle { text-align: left; justify-self: start; }
+      .ior__stage-progressive { grid-template-columns: 1fr; min-height: 0; gap: 0; }
+      .ior__diagram { display: none; }
+      .ior__explain { min-height: 0; border-top: 0; border-bottom: 0; }
+      .ior__detail { padding: 15px 0; border-top: 1px solid rgba(247,245,238,.14); }
+      .ior__detail--principle { border-top: 1px solid rgba(170,179,34,.45); }
+      .ior__header { padding-top: 0; }
 
       .operate__rail { grid-template-columns: 1fr; max-width: 620px; gap: 26px; }
       .operate__rail::before { display: none; }
