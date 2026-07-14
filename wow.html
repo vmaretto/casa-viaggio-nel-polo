@@ -1188,12 +1188,25 @@
     .role--promote {
       border-left-width: 5px;
       background: linear-gradient(90deg, rgba(170,179,34,.16), rgba(7,29,33,.12));
-      padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 24px);
+      padding: clamp(14px, 2vh, 22px) clamp(16px, 1.8vw, 24px);
     }
-    .role--promote h4 { font-size: clamp(30px, 2.9vw, 46px); }
-    .role--manage h4 { font-size: clamp(24px, 2.2vw, 34px); }
-    .role--train h4 { font-size: clamp(20px, 1.8vw, 28px); }
+    .role--promote h4 { font-size: clamp(28px, 2.5vw, 38px); }
+    .role--manage h4 { font-size: clamp(23px, 2vw, 30px); }
+    .role--train h4 { font-size: clamp(20px, 1.7vw, 25px); }
     .role--wide .role h4 { font-size: clamp(17px, 1.5vw, 24px); }
+    .actors__grid > .role h4 { white-space: nowrap; }
+    .actors__grid > .role h4 small {
+      display: block;
+      margin-top: 4px;
+      color: rgba(247,245,238,.6);
+      font-family: var(--sans);
+      font-size: clamp(10px, .8vw, 12px);
+      font-style: normal;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      white-space: normal;
+    }
     .actors__grid > .role h3, .actors__grid > .role h4 { margin: 0; }
     .role--wide { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.8vw, 24px); border-top: 0; border-left: 0; background: none; padding: 0; backdrop-filter: none; }
     .role--promote { --role-color: var(--acid); }
@@ -1983,12 +1996,12 @@
           </article>
           <article class="role role--manage fragment" data-fragment="1">
             <h3>Gestisce e mette in relazione</h3>
-            <h4>FIB — Food Innovation Broker</h4>
+            <h4>FIB<small>Food Innovation Broker</small></h4>
             <p>Organizza l’accesso agli spazi e alle risorse, costruisce i percorsi tra i partner e assicura continuità tra formazione, sperimentazione, ricerca applicata, open innovation e comunicazione.</p>
           </article>
           <article class="role role--train fragment" data-fragment="2">
             <h3>Forma</h3>
-            <h4>UNIUST — Università non statale</h4>
+            <h4>UNIUST<small>Università non statale</small></h4>
             <p>Costruisce percorsi interdisciplinari che collegano tecnologie digitali, ambiente, agricoltura, cibo e salute e prepara le competenze necessarie per operare in CASA.</p>
           </article>
           <div class="role--wide role--sci fragment" data-fragment="3">
