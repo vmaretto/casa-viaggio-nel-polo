@@ -1176,7 +1176,7 @@
     }
     .actors__grid {
       width: min(1180px, 100%);
-      margin: clamp(14px, 2.4vh, 26px) auto 0;
+      margin: clamp(14px, 2.4vh, 26px) 0 0;
     }
     .role, .role--sci {
       display: grid;
@@ -1192,12 +1192,13 @@
       border-radius: 8px;
       background: linear-gradient(90deg, rgba(170,179,34,.17), rgba(170,179,34,.03));
       box-shadow: 0 12px 36px rgba(0,0,0,.18);
-      padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 26px);
-      margin-bottom: clamp(6px, 1vh, 12px);
+      padding: clamp(14px, 2.4vh, 26px) clamp(16px, 1.8vw, 26px);
+      margin-bottom: clamp(10px, 1.8vh, 18px);
+      margin-inline: calc(-1 * clamp(16px, 1.8vw, 26px) - 4px) calc(-1 * clamp(16px, 1.8vw, 26px) - 1px);
     }
     .role h3 {
       margin: 0;
-      color: color-mix(in srgb, var(--role-color, var(--acid)), rgba(247,245,238,.55) 35%);
+      color: rgba(247,245,238,.6);
       font-size: clamp(11px, .85vw, 13px);
       font-weight: 500;
       letter-spacing: .05em;
@@ -1206,6 +1207,7 @@
       margin: 0;
       color: var(--paper);
       font-family: var(--serif);
+      font-size: clamp(18px, 1.6vw, 23px);
       font-style: italic;
       font-weight: 400;
       line-height: 1.05;
@@ -1225,21 +1227,15 @@
     .role p {
       margin: 0;
       max-width: 60ch;
+      text-wrap: pretty;
       color: rgba(247,245,238,.8);
       font-size: clamp(13px, 1.05vw, 15.5px);
       font-weight: 300;
       line-height: 1.55;
     }
-    .role--promote {
-      --role-color: var(--acid);
-      position: relative;
-      padding-block: clamp(18px, 3vh, 32px);
-    }
-    .role--promote h4 { font-size: clamp(30px, 2.9vw, 42px); }
-    .role--manage { --role-color: var(--food); padding-block: clamp(14px, 2.2vh, 24px); }
-    .role--manage h4 { font-size: clamp(22px, 2.1vw, 30px); }
-    .role--train { --role-color: var(--health); padding-block: clamp(14px, 2.2vh, 24px); }
-    .role--train h4 { font-size: clamp(20px, 1.8vw, 26px); }
+    .role--promote { position: relative; padding-block: clamp(14px, 2.4vh, 26px); }
+    .role--manage, .role--train, .role--net { padding-block: clamp(14px, 2.2vh, 24px); }
+    .role__body { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
     .role--sci {
       grid-template-columns: minmax(150px, 185px) 1fr;
       align-items: start;
@@ -1292,16 +1288,17 @@
       color: rgba(247,245,238,.65);
       margin-left: 2px;
     }
-    .sci__note {
-      grid-column: 1 / -1;
-      margin: 10px 0 0;
-      font-size: 12px;
+    .actors__note {
+      width: min(1180px, 100%);
+      margin: clamp(12px, 2vh, 18px) 0 0;
+      font-size: 12.5px;
       font-style: italic;
-      color: rgba(247,245,238,.5);
+      color: rgba(247,245,238,.62);
       text-align: left;
     }
     .sci p {
       margin: 0;
+      text-wrap: pretty;
       color: rgba(247,245,238,.72);
       font-size: clamp(12px, .95vw, 13.5px);
       font-weight: 300;
@@ -1313,6 +1310,7 @@
       transform: translateX(10px);
     }
     .actors[data-fragment-step="3"] .role--sci { transform: translateX(10px); }
+    .actors[data-fragment-step="4"] .role--net { transform: translateX(10px); }
     .actors__closing {
       width: min(1240px, 100%);
       margin: clamp(12px, 2.2vh, 20px) auto 0;
@@ -1680,11 +1678,11 @@
     .more-link {
       border: 1px solid rgba(170,179,34,.5);
       border-radius: 999px;
-      padding: 10px 22px;
+      padding: 7px 16px;
       background: rgba(170,179,34,.08);
       color: var(--acid);
       font-family: var(--serif);
-      font-size: clamp(15px, 1.2vw, 18px);
+      font-size: clamp(13px, 1vw, 15px);
       font-style: italic;
       cursor: pointer;
       transition: background .3s ease, transform .3s var(--ease);
@@ -1834,7 +1832,7 @@
     }
     .overlay__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 2.4vh, 24px); }
     .action__links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .action__links .more-link { padding: 5px 14px; font-size: clamp(12px, .95vw, 14px); }
+    .action__links .more-link, .more-link--sm { padding: 5px 13px; font-size: clamp(12px, .9vw, 13.5px); }
 
     /* mini-gantt del piano di predisposizione */
     .ov-gantt { display: grid; gap: 9px; margin: clamp(14px, 2.2vh, 22px) 0 clamp(18px, 2.8vh, 30px); }
@@ -2031,6 +2029,7 @@
       .aud h3, .aud p { grid-column: 1; }
       .actors__grid { max-width: 620px; }
       .role, .role--sci { grid-template-columns: 1fr; gap: 7px; align-items: start; padding-block: 14px; }
+      .actors__grid .role--promote { margin-inline: 0; }
       .role h4 { white-space: normal; }
       .sci__grid { grid-template-columns: 1fr; }
       .sci { padding: 10px 0; }
@@ -2320,7 +2319,7 @@
                 <p>Dati, modelli e competenze su clima, acqua e condizioni ambientali.</p>
               </div>
               <div class="sci" style="--c: var(--agriculture)">
-                <i aria-hidden="true"></i>
+                <i aria-hidden="true" style="margin-right: 4px"></i><i aria-hidden="true" style="background: var(--food)"></i>
                 <h4>CREA<sup class="sci__mark">*</sup></h4>
                 <small>Agricoltura e cibo</small>
                 <p>Ricerca applicata su suolo, colture, pratiche agricole, filiere e qualità alimentare.</p>
@@ -2332,13 +2331,17 @@
                 <p>Competenze scientifiche per collegare alimentazione e condizioni ambientali agli effetti sulla salute.</p>
               </div>
             </div>
-            <p class="sci__note">* collaborazioni in corso di definizione, non ancora formalizzate.</p>
           </div>
+          <article class="role role--net fragment" data-fragment="4">
+            <h3>Ampliano le capacità</h3>
+            <h4>Convenzioni<small>con università, ricerca e imprese</small></h4>
+            <div class="role__body">
+              <p>Accordi che CASA e i singoli partner attivano con altri soggetti, per portare nei quattro ambiti nuove competenze, tecnologie e relazioni.</p>
+              <button type="button" class="more-link more-link--sm" data-overlay="ov-tuscia">L’accordo UNIUST × Tuscia ↗</button>
+            </div>
+          </article>
         </div>
-        <p class="actors__closing reveal delay-3">CASA permette a queste capacità di lavorare nello stesso spazio e attraverso lo stesso sistema di accesso.</p>
-        <div class="operate__more reveal delay-4">
-          <button type="button" class="more-link" data-overlay="ov-tuscia">L’accordo UNIUST × Tuscia ↗</button>
-        </div>
+        <p class="actors__note reveal delay-3">* collaborazioni in corso di definizione, non ancora formalizzate.</p>
       </div>
     </section>
 
