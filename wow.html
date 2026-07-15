@@ -45,7 +45,7 @@
       --safe-x: clamp(32px, 5.2vw, 86px);
       --safe-y: clamp(28px, 4.2vh, 54px);
       --ease: cubic-bezier(.22, 1, .36, 1);
-      --n-scenes: 15;
+      --n-scenes: 16;
     }
 
     * { box-sizing: border-box; }
@@ -398,7 +398,7 @@
       top: 52%;
       left: 50%;
       z-index: -1;
-      width: min(74vw, 880px);
+      width: min(64vw, 760px);
       aspect-ratio: 800/660;
       overflow: visible;
       transform: translate(-50%, -50%);
@@ -436,13 +436,13 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: calc(52% - min(74vw, 880px) * 0.145);
+      top: calc(52% - min(64vw, 760px) * 0.145);
       z-index: 5;
       margin: 0;
       text-align: center;
       white-space: nowrap;
     }
-    .missing__inner { max-width: min(52vw, 600px); transform: translateY(clamp(96px, 19vh, 170px)); }
+    .missing__inner { max-width: min(46vw, 540px); transform: translateY(clamp(80px, 15.5vh, 135px)); }
     .missing__inner .display { margin-bottom: clamp(10px, 2vh, 22px); }
     .missing .display { font-size: clamp(38px, 4.6vw, 72px); }
     .missing__steps {
@@ -459,6 +459,41 @@
     }
     .missing__steps p:last-child { color: rgba(247,245,238,.85); font-weight: 300; }
     .missing__steps p:last-child strong { color: var(--acid); font-weight: 600; }
+
+    /* ============ 04b — LA PAROLA CASA ============ */
+    .brand {
+      background:
+        radial-gradient(circle at 50% 46%, rgba(170,179,34,.11), transparent 46%),
+        var(--ink-deep);
+    }
+    .brand__content { display: grid; place-items: center; }
+    .brand__lockup {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(22px, 6vw, 96px);
+    }
+    .brand__letter { text-align: center; }
+    .brand__letter span {
+      display: block;
+      color: var(--c);
+      font-family: var(--serif);
+      font-size: clamp(104px, 16.5vw, 250px);
+      font-weight: 400;
+      line-height: .9;
+      text-shadow: 0 14px 80px rgba(0,0,0,.35);
+    }
+    .brand__letter small {
+      display: block;
+      margin-top: clamp(14px, 3vh, 28px);
+      color: color-mix(in srgb, var(--c), var(--paper) 30%);
+      font-family: var(--serif);
+      font-size: clamp(16px, 1.6vw, 26px);
+      font-style: italic;
+    }
+    .brand .fragment {
+      transform: translateY(34px) scale(.9);
+      transition-duration: 1.05s;
+    }
 
     /* ============ 05 — NASCE CASA ============ */
     .birth {
@@ -531,8 +566,7 @@
       font-weight: 300;
       line-height: 1.55;
     }
-    .birth__lines p strong { color: var(--paper); font-weight: 400; }
-    .birth__lines p:last-child strong { font-weight: 500; }
+    .birth__lines p strong { color: var(--acid); font-weight: 500; }
 
     /* ============ 06 — LO SPAZIO CASA ============ */
     .space { background: var(--ink-deep); }
@@ -1800,8 +1834,21 @@
       </div>
     </section>
 
+    <!-- 04b · LA PAROLA CASA (reveal del brand) -->
+    <section class="scene brand" id="p04b" data-index="4" data-title="CASA" data-cascade="1150" aria-label="La parola CASA">
+      <div class="scene__safe brand__content">
+        <div class="brand__lockup" data-fragment-cumulative>
+          <div class="brand__letter fragment is-current" data-fragment="0" style="--c: var(--food)"><span>C</span><small>cibo</small></div>
+          <div class="brand__letter fragment" data-fragment="1" style="--c: var(--environment)"><span>A</span><small>ambiente</small></div>
+          <div class="brand__letter fragment" data-fragment="2" style="--c: var(--health)"><span>S</span><small>salute</small></div>
+          <div class="brand__letter fragment" data-fragment="3" style="--c: var(--agriculture)"><span>A</span><small>agricoltura</small></div>
+        </div>
+        <span class="sr-only">CASA — Cibo, Ambiente, Salute, Agricoltura</span>
+      </div>
+    </section>
+
     <!-- 05 · PER QUESTO NASCE CASA -->
-    <section class="scene birth" id="p05" data-index="4" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
+    <section class="scene birth" id="p05" data-index="5" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
       <div class="birth__halo" aria-hidden="true"></div>
       <div class="scene__safe scene__center">
         <div class="birth__grid">
@@ -1828,7 +1875,7 @@
     </section>
 
     <!-- 06 · LO SPAZIO CASA -->
-    <section class="scene space" id="p06" data-index="5" data-title="Lo spazio CASA" aria-label="Lo spazio CASA">
+    <section class="scene space" id="p06" data-index="6" data-title="Lo spazio CASA" aria-label="Lo spazio CASA">
       <div class="space__image" aria-hidden="true"></div>
       <div class="space__veil" aria-hidden="true"></div>
       <div class="space__marker" data-marker="0" style="--mx: 46%; --my: 74%" aria-hidden="true"><span>01</span></div>
@@ -1863,7 +1910,7 @@
     </section>
 
     <!-- 07 · DENTRO CASA -->
-    <section class="scene cycle" id="p07" data-index="6" data-title="Dentro CASA" aria-label="Dentro CASA">
+    <section class="scene cycle" id="p07" data-index="7" data-title="Dentro CASA" aria-label="Dentro CASA">
       <div class="scene__safe cycle__content">
         <div class="cycle__copy">
           <p class="eyebrow reveal">06 · Dentro CASA</p>
@@ -1915,7 +1962,7 @@
     </section>
 
     <!-- 08 · IL PRINCIPIO DI CASA -->
-    <section class="scene ior" id="p08" data-index="7" data-title="Il principio di CASA" aria-label="Il principio di CASA">
+    <section class="scene ior" id="p08" data-index="8" data-title="Il principio di CASA" aria-label="Il principio di CASA">
       <div class="scene__safe ior__content">
         <header class="ior__header">
           <p class="eyebrow reveal">07 · Il principio di CASA</p>
@@ -1958,7 +2005,7 @@
     </section>
 
     <!-- 09 · COME OPERA CASA -->
-    <section class="scene operate scene--light" id="p09" data-index="8" data-title="Come opera CASA" aria-label="Come opera CASA">
+    <section class="scene operate scene--light" id="p09" data-index="9" data-title="Come opera CASA" aria-label="Come opera CASA">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">08 · Come opera CASA</p>
@@ -1987,7 +2034,7 @@
     </section>
 
     <!-- 10 · PER CHI È CASA -->
-    <section class="scene who" id="p10" data-index="9" data-title="Per chi è CASA" aria-label="Per chi è CASA">
+    <section class="scene who" id="p10" data-index="10" data-title="Per chi è CASA" aria-label="Per chi è CASA">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">09 · Per chi è CASA</p>
@@ -2017,7 +2064,7 @@
     </section>
 
     <!-- 11 · CHI RENDE POSSIBILE CASA -->
-    <section class="scene actors" id="p11" data-index="10" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
+    <section class="scene actors" id="p11" data-index="11" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">10 · Chi rende possibile CASA</p>
@@ -2069,7 +2116,7 @@
     </section>
 
     <!-- 12 · IL PATRIMONIO DI PARTENZA -->
-    <section class="scene heritage scene--light" id="p12" data-index="11" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
+    <section class="scene heritage scene--light" id="p12" data-index="12" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">11 · Il patrimonio di partenza</p>
@@ -2098,7 +2145,7 @@
     </section>
 
     <!-- 13 · ROADMAP -->
-    <section class="scene roadmap" id="p13" data-index="12" data-title="Roadmap" aria-label="Roadmap">
+    <section class="scene roadmap" id="p13" data-index="13" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">12 · Roadmap</p>
@@ -2132,7 +2179,7 @@
     </section>
 
     <!-- 14 · DIREZIONE SCIENTIFICA -->
-    <section class="scene science" id="p14" data-index="13" data-title="Direzione scientifica" aria-label="Direzione scientifica">
+    <section class="scene science" id="p14" data-index="14" data-title="Direzione scientifica" aria-label="Direzione scientifica">
       <div class="scene__safe science__content">
         <div class="science__inner">
           <p class="eyebrow reveal">13 · Direzione scientifica</p>
@@ -2147,7 +2194,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" id="p15" data-index="14" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" id="p15" data-index="15" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -2359,7 +2406,7 @@
           const count = fragmentCount(sc);
           if (count > 1) {
             const cumulative = !!sc.querySelector('[data-fragment-cumulative]');
-            const stepMs = cumulative ? 620 : 3400;
+            const stepMs = Number(sc.dataset.cascade) || (cumulative ? 620 : 3400);
             clearInterval(sc._cascade);
             setFragment(sc, 0);
             let step = 0;
