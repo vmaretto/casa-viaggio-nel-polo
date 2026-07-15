@@ -429,6 +429,7 @@
       transition: stroke-dashoffset 3.4s var(--ease) .4s;
     }
     .missing.is-active .missing__frame path { stroke-dashoffset: 0; }
+    .missing__frame--mobile { display: none; }
     .missing__runners > g {
       opacity: 0;
       filter: drop-shadow(0 0 8px currentColor);
@@ -1572,6 +1573,8 @@
       letter-spacing: -.015em;
     }
     .finale__lockup {
+      user-select: none;
+      -webkit-user-select: none;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -1882,10 +1885,19 @@
 
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
-      .missing__frame { width: 72vw; aspect-ratio: 800/660; top: 6vh; left: 50%; transform: translateX(-50%); }
-      .missing__kicker { position: static; transform: none; white-space: normal; margin-bottom: 12px; }
-      .missing__content { align-items: start; padding-top: calc(72vw * .85 + 6vh); }
-      .missing__inner { max-width: none; transform: none; }
+      .missing__frame { display: none; }
+      .missing__frame--mobile {
+        display: block;
+        width: 88vw;
+        aspect-ratio: 800/1150;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .missing__frame--mobile .missing__runners text { font-size: 34px; stroke-width: 6px; }
+      .missing__kicker { position: static; transform: none; white-space: normal; margin-bottom: 14px; }
+      .missing__content { place-items: start center; align-content: start; padding-top: calc(50vh - 32vw); }
+      .missing__inner { transform: none; text-align: center; }
       .missing__name { margin-top: 14px; }
 
       .finale__statement { font-size: clamp(24px, 6.6vw, 32px); }
@@ -1897,8 +1909,8 @@
       .birth__grid { grid-template-columns: 1fr; gap: 24px; }
       .birth__viz { order: -1; max-width: min(68vw, 320px); }
       .birth__coreword { font-size: 34px; }
-      .missing .display { font-size: clamp(32px, 9vw, 44px); }
-      .missing__inner { max-width: 74vw; }
+      .missing .display { font-size: clamp(30px, 8.4vw, 40px); }
+      .missing__inner { max-width: 66vw; }
 
       .space__image { animation: none; background-size: auto 148%; background-position: 52% 86%; }
       .space__veil {
@@ -2028,7 +2040,7 @@
           <p class="eyebrow reveal">02 · Le conseguenze</p>
         </header>
         <div class="effects__grid" data-fragment-cumulative>
-          <article class="stat fragment is-current" data-fragment="0" style="--stat-color: var(--environment)">
+          <article class="stat fragment" data-fragment="0" style="--stat-color: var(--environment)">
             <strong class="stat__figure">Circa <span data-fraction="3" data-from="9">1/3</span></strong>
             <p class="stat__desc">delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari.</p>
             <p class="stat__takeaway">Agricoltura e cibo incidono sull’ambiente.</p>
@@ -2059,6 +2071,15 @@
           <g fill="#aab322"><circle r="6"/><text x="13" y="5">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
         </g>
       </svg>
+      <svg class="missing__frame missing__frame--mobile" viewBox="0 0 800 1150" preserveAspectRatio="none" aria-hidden="true">
+        <path id="housePathM" d="M84 1138 L84 258 L400 44 L716 258 L716 1138 Z" pathLength="1200"/>
+        <g class="missing__runners">
+          <g fill="#d8a94e"><circle r="9"/><text x="18" y="7">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#7ebdae"><circle r="9"/><text x="18" y="7">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#d08b80"><circle r="9"/><text x="18" y="7">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#aab322"><circle r="9"/><text x="18" y="7">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+        </g>
+      </svg>
       <div class="scene__safe missing__content">
         <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
@@ -2076,7 +2097,7 @@
     <section class="scene brand" id="p04b" data-index="4" data-title="CASA" data-cascade="1150" aria-label="La parola CASA">
       <div class="scene__safe brand__content">
         <div class="brand__lockup" data-fragment-cumulative>
-          <div class="brand__letter fragment is-current" data-fragment="0" style="--c: var(--food)"><span>C</span><small>cibo</small></div>
+          <div class="brand__letter fragment" data-fragment="0" style="--c: var(--food)"><span>C</span><small>cibo</small></div>
           <div class="brand__letter fragment" data-fragment="1" style="--c: var(--environment)"><span>A</span><small>ambiente</small></div>
           <div class="brand__letter fragment" data-fragment="2" style="--c: var(--health)"><span>S</span><small>salute</small></div>
           <div class="brand__letter fragment" data-fragment="3" style="--c: var(--agriculture)"><span>A</span><small>agricoltura</small></div>
@@ -2129,7 +2150,7 @@
           <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
         </header>
         <div class="operate__rail" data-fragment-cumulative>
-          <article class="op op--1 fragment is-current" data-fragment="0">
+          <article class="op op--1 fragment" data-fragment="0">
             <h3>Formare sul sistema</h3>
             <p>Persone, ricercatori e imprese imparano a leggere insieme dati climatici, condizioni del suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.</p>
           </article>
@@ -2163,7 +2184,7 @@
           <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
         <div class="who__grid" data-fragment-cumulative>
-          <article class="aud aud--1 fragment is-current" data-fragment="0">
+          <article class="aud aud--1 fragment" data-fragment="0">
             <h3>Imprese e startup</h3>
             <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
           </article>
@@ -2192,7 +2213,7 @@
           <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Ruoli distinti, una capacità comune.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
-          <article class="role role--promote fragment is-current" data-fragment="0">
+          <article class="role role--promote fragment" data-fragment="0">
             <h3>Promuove e sostiene</h3>
             <h4>InnovaliaTech</h4>
             <p>Capitale, visione di lungo periodo e connessioni con il sistema accademico e internazionale.</p>
@@ -2246,7 +2267,7 @@
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
         </header>
         <div class="heritage__grid" data-fragment-cumulative>
-          <article class="cap cap--1 fragment is-current" data-fragment="0">
+          <article class="cap cap--1 fragment" data-fragment="0">
             <h3>Formazione</h3>
             <p>Esperienze su carbon farming, agricoltura digitale e competenze ibride collegano clima, suolo, pratiche agricole e tecnologie.</p>
           </article>
@@ -2278,7 +2299,7 @@
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
-          <article class="phase phase--1 fragment is-current" data-fragment="0">
+          <article class="phase phase--1 fragment" data-fragment="0">
             <p class="phase__year">2026</p>
             <h3>Costruire le fondamenta</h3>
             <p>Definire la configurazione funzionale dello spazio CASA e i criteri per individuare l’area.</p>
@@ -2330,7 +2351,7 @@
           <h2 class="display reveal delay-1" style="font-size: clamp(36px, 4vw, 64px)">Da dove si comincia.</h2>
         </header>
         <div class="actions__list" data-fragment-cumulative>
-          <article class="action fragment is-current" data-fragment="0">
+          <article class="action fragment" data-fragment="0">
             <span class="action__num">01</span>
             <div>
               <h3>Coinvolgimento del CMCC</h3>
@@ -2356,7 +2377,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" id="p15" data-index="12" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -2696,7 +2717,7 @@
 
       const setFragment = (scene, step) => {
         const count = fragmentCount(scene);
-        const bounded = count ? Math.max(0, Math.min(count - 1, step)) : 0;
+        const bounded = count ? Math.max(-1, Math.min(count - 1, step)) : 0;
         const prev = scene.dataset.fragmentStep === undefined ? -1 : Number(scene.dataset.fragmentStep);
         scene.dataset.fragmentStep = String(bounded);
         const cumulative = !!scene.querySelector('[data-fragment-cumulative]');
@@ -2721,7 +2742,7 @@
         }
       });
 
-      scenes.forEach(scene => setFragment(scene, 0));
+      scenes.forEach(scene => setFragment(scene, -1));
 
       let lastActive = -1;
       const setActive = (index, fromNav = false) => {
@@ -2741,8 +2762,8 @@
             const cumulative = !!sc.querySelector('[data-fragment-cumulative]');
             const stepMs = Number(sc.dataset.cascade) || (cumulative ? 620 : 3400);
             clearInterval(sc._cascade);
-            setFragment(sc, 0);
-            let step = 0;
+            setFragment(sc, -1);
+            let step = -1;
             sc._cascade = setInterval(() => {
               if (scenes[active] !== sc || step >= count - 1) { clearInterval(sc._cascade); return; }
               step += 1;
