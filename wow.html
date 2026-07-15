@@ -49,6 +49,8 @@
     }
 
     * { box-sizing: border-box; }
+    h1, h2, h3, h4, .display, .lead, .finale__statement, .missing__steps p, .birth__lines p, .science__body, .cover__payoff, .problem__break, .who__closing, .actors__closing, .roadmap__closing, .heritage__closing, .operate__loop { text-wrap: balance; }
+    p { text-wrap: pretty; }
     html { scroll-behavior: smooth; scroll-snap-type: y mandatory; background: var(--ink); }
     body {
       margin: 0;
@@ -430,7 +432,18 @@
     }
     .static-mode .missing__runners { display: none; }
     .missing__content { display: grid; place-items: center; }
+    .missing__kicker {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(52% - min(74vw, 880px) * 0.145);
+      z-index: 5;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+    }
     .missing__inner { max-width: min(52vw, 600px); transform: translateY(clamp(96px, 19vh, 170px)); }
+    .missing__inner .display { margin-bottom: clamp(10px, 2vh, 22px); }
     .missing .display { font-size: clamp(38px, 4.6vw, 72px); }
     .missing__steps {
       margin: clamp(26px, 5vh, 48px) 0 0;
@@ -1598,6 +1611,8 @@
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
       .missing__frame { width: 88vw; aspect-ratio: 4/5.8; }
+      .missing__kicker { position: static; transform: none; white-space: normal; margin-bottom: 14px; }
+      .missing__content { align-content: center; justify-items: center; }
       .missing__inner { transform: translateY(7vh); }
       .missing__runners text { display: none; }
 
@@ -1774,8 +1789,8 @@
         </g>
       </svg>
       <div class="scene__safe missing__content">
+        <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
-          <p class="eyebrow reveal">03 · Cosa manca davvero?</p>
           <h2 class="display reveal delay-1">Un luogo comune.</h2>
           <div class="missing__steps">
             <p class="reveal delay-2">Non mancano competenze, dati o tecnologie.</p>
