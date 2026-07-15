@@ -122,7 +122,7 @@
   }
 </style>
 </head>
-<body>
+<body class="nosubs">
   <iframe id="stage" src="wow.html?cinema" title="CASA — presentazione"></iframe>
 
   <div id="subs" aria-live="polite"></div>
@@ -162,32 +162,43 @@
      pre  = attesa dopo il cambio scena prima della voce (ms)
      post = respiro dopo la voce prima della scena successiva (ms)
      duck = volume musica mentre la voce parla (0..1)                    */
+  /* cues: [secondi dal via del clip, comando postMessage per il deck] */
   const BLOCKS = [
     { scene: 0,  clip: 'assets/audio/voce/01.mp3', pre: 900,  post: 900,  duck: .14,
+      cues: [[.4,{casa:'fx',name:'cover-word',n:0}],[2.0,{casa:'fx',name:'cover-word',n:1}],[4.6,{casa:'fx',name:'cover-word',n:2}],[7.2,{casa:'fx',name:'cover-word',n:3}]],
       sub: "C'è il cibo che mangiamo. L'ambiente che ci circonda. La salute che ci sta a cuore. E l'agricoltura, che li tiene insieme da diecimila anni. | Quattro mondi. Un'unica storia. | Eppure… noi li abbiamo divisi." },
     { scene: 1,  clip: 'assets/audio/voce/02.mp3', pre: 700,  post: 800,  duck: .13,
       sub: "L'ambiente condiziona l'agricoltura. L'agricoltura dà forma al cibo. Il cibo decide la nostra salute. | È una catena senza interruzioni. | Ma noi continuiamo a organizzare competenze, decisioni e attività… separatamente." },
     { scene: 2,  clip: 'assets/audio/voce/03.mp3', pre: 800,  post: 900,  duck: .13,
+      cues: [[3.1,{casa:'fx',name:'step',n:0}],[10.0,{casa:'fx',name:'step',n:1}],[16.3,{casa:'fx',name:'step',n:2}]],
       sub: "E il conto arriva. Un terzo delle emissioni globali nasce dai sistemi agroalimentari. | La produttività agricola ha già perso il 21% a causa del clima. | E i costi nascosti del cibo superano i diecimila miliardi di dollari. Ogni anno. | Non sono tre crisi diverse. È la stessa crisi… guardata da tre finestre." },
     { scene: 3,  clip: 'assets/audio/voce/04.mp3', pre: 900,  post: 1600, duck: .13,
       sub: "Non mancano le competenze. Non mancano i dati, né le tecnologie. | Manca un luogo dove metterli in relazione. Uno spazio dove chi osserva il clima, chi coltiva, chi trasforma e chi cura lavorino fianco a fianco. | Questo spazio ha un nome." },
     { scene: 4,  clip: 'assets/audio/voce/05.mp3', pre: 600,  post: 1400, duck: .42,
+      cues: [[.3,{casa:'fx',name:'step',n:0}],[1.9,{casa:'fx',name:'step',n:1}],[4.8,{casa:'fx',name:'step',n:2}],[7.5,{casa:'fx',name:'step',n:3}]],
       sub: "Cibo. | Ambiente. | Salute. | Agricoltura. | CASA. | Benvenuti a casa." },
-    { scene: 5,  clip: 'assets/audio/voce/06.mp3', pre: 800,  post: 800,  duck: .14,
+    { scene: 5,  clip: 'assets/audio/voce/06.mp3', pre: 800,  post: 1200, duck: .14,
+      cues: [[10.4,{casa:'overlay',id:'ov-spazio'}],[18.9,{casa:'overlay'}]],
       sub: "CASA è un luogo fisico. Campi, serre, laboratori e aule, dove i quattro ambiti diventano un unico campo di innovazione. | Uno spazio sperimentale condiviso, con risorse proprie, esteso dalle risorse dei partner, guidato da una regia comune." },
-    { scene: 6,  clip: 'assets/audio/voce/07.mp3', pre: 800,  post: 800,  duck: .14,
+    { scene: 6,  clip: 'assets/audio/voce/07.mp3', pre: 800,  post: 1200, duck: .14,
+      cues: [[2.3,{casa:'fx',name:'step',n:0}],[6.0,{casa:'fx',name:'step',n:1}],[9.2,{casa:'fx',name:'step',n:2}],[13.0,{casa:'fx',name:'step',n:3}],[18.9,{casa:'overlay',id:'ov-ciclo'}],[24.6,{casa:'overlay'}]],
       sub: "Come funziona? Si osserva il campo, con sensori e dati. Si sperimenta, in serra e in laboratorio. Si studia, si forma, si misura. | E ogni evidenza torna al punto di partenza, e migliora il ciclo. | Osservare. Sperimentare. Comprendere. E ricominciare." },
     { scene: 7,  clip: 'assets/audio/voce/08.mp3', pre: 800,  post: 800,  duck: .14,
+      cues: [[2.1,{casa:'fx',name:'step',n:0}],[7.4,{casa:'fx',name:'step',n:1}],[13.9,{casa:'fx',name:'step',n:2}],[19.3,{casa:'fx',name:'step',n:3}]],
       sub: "Per chi è CASA? Per le imprese, che trovano ricerca applicata e open innovation. | Per le startup, che accedono a campi, dati e laboratori che non potrebbero permettersi da sole. | Per ricercatori e studenti, che trasformano lo studio in esperienza. | E per i territori, che vedono l'innovazione accadere… a casa loro." },
     { scene: 8,  clip: 'assets/audio/voce/09.mp3', pre: 800,  post: 800,  duck: .14,
+      cues: [[5.0,{casa:'fx',name:'step',n:0}],[11.2,{casa:'fx',name:'step',n:1}],[13.8,{casa:'fx',name:'step',n:2}],[16.6,{casa:'fx',name:'step',n:3}],[27.5,{casa:'fx',name:'step',n:4}]],
       sub: "Dietro CASA: ruoli distinti, una capacità comune. | InnovaliaTech promuove e sostiene, con capitale e visione di lungo periodo. FIB cura la regia operativa. UNIUST forma le competenze. | E la scienza entra con CMCC per l'ambiente, CREA per agricoltura e cibo, la Fondazione Santa Lucia per la salute. | Convenzioni con università, ricerca e imprese estendono la rete." },
     { scene: 9,  clip: 'assets/audio/voce/10.mp3', pre: 800,  post: 800,  duck: .14,
+      cues: [[2.6,{casa:'fx',name:'step',n:0}],[4.8,{casa:'fx',name:'step',n:1}],[6.9,{casa:'fx',name:'step',n:2}],[9.0,{casa:'fx',name:'step',n:3}]],
       sub: "E non si parte da zero. Formazione già attiva. Capacità scientifiche. Relazioni internazionali. Tecnologie pronte. | La casa… è già arredata. | CASA le trasforma in una capacità stabile, accessibile, condivisa." },
     { scene: 10, clip: 'assets/audio/voce/11.mp3', pre: 800,  post: 800,  duck: .14,
+      cues: [[2.8,{casa:'fx',name:'step',n:0}],[7.4,{casa:'fx',name:'step',n:1}],[10.9,{casa:'fx',name:'step',n:2}]],
       sub: "Il percorso è definito. Prima: spazio, governance e risorse. Poi, l'attivazione del luogo e della rete. Quindi, l'estensione a nuovi partner e territori. | Passo dopo passo. Verificando, prima di replicare." },
     { scene: 11, clip: 'assets/audio/voce/12.mp3', pre: 900,  post: 900,  duck: .13,
       sub: "A garantire il rigore scientifico, il professor Riccardo Valentini. Premio Nobel per la Pace nel 2007 con il panel dell'ONU sul clima. | Perché l'ambizione ha bisogno di scienza." },
-    { scene: 12, clip: 'assets/audio/voce/13.mp3', pre: 800,  post: 900,  duck: .14,
+    { scene: 12, clip: 'assets/audio/voce/13.mp3', pre: 800,  post: 1400, duck: .14,
+      cues: [[2.5,{casa:'fx',name:'step',n:0}],[6.8,{casa:'fx',name:'step',n:1}],[12.4,{casa:'fx',name:'step',n:2}],[15.9,{casa:'overlay',id:'ov-piano'}],[20.6,{casa:'overlay'}]],
       sub: "E si comincia adesso. Il coinvolgimento del CMCC è già avviato. La convenzione tra UNIUST e l'Università della Tuscia è in preparazione. | E la ricerca dello spazio è aperta: tre mesi per trasformare un'area in un campo attivo." },
     { scene: 13, clip: 'assets/audio/voce/14.mp3', pre: 900,  post: 500,  duck: .3,
       sub: "Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme. | Uno spazio sperimentale. Una rete di risorse. Una regia comune. | Questa… è CASA." },
@@ -242,6 +253,13 @@
 
   const wait = ms => new Promise(res => { waitTimer = setTimeout(res, ms); });
 
+  let cueTimers = [];
+  const clearCues = () => { cueTimers.forEach(clearTimeout); cueTimers = []; };
+  const scheduleCues = block => {
+    clearCues();
+    (block.cues || []).forEach(([t, cmd]) => cueTimers.push(setTimeout(() => deck(cmd), t * 1000)));
+  };
+
   const playClip = n => new Promise(res => {
     const a = clips[n];
     current = a;
@@ -251,6 +269,7 @@
     a.play().catch(() => setTimeout(done, 4000)); // clip mancante: 4s di sola musica
     const d = a.duration && isFinite(a.duration) ? a.duration : 20;
     scheduleSubs(BLOCKS[n], d);
+    scheduleCues(BLOCKS[n]);
   });
 
   async function run(from = 0) {
@@ -268,8 +287,10 @@
       rampMusic(b.scene === 4 ? MUSIC_PEAK : MUSIC_BASE, 900);
       await wait(b.post); if (cancelled) return;
     }
-    // finale: musica piena, poi dissolvenza
+    // finale: musica piena, le lettere partono per il viaggio verso il futuro
     rampMusic(MUSIC_PEAK, 1500);
+    await wait(1200); if (cancelled) return;
+    deck({ casa: 'fx', name: 'finale-exit' });
     await wait(FINAL_HOLD); if (cancelled) return;
     rampMusic(0, 4000);
     await wait(4200);
@@ -279,18 +300,24 @@
 
   const stopAll = () => {
     cancelled = true; playing = false;
-    clearTimeout(waitTimer); clearSubs();
+    clearTimeout(waitTimer); clearSubs(); clearCues();
     if (current) { current.pause(); current = null; }
     clips.forEach(a => { a.pause(); a.currentTime = 0; });
   };
 
   /* ============ avvio / controlli ============ */
   const start = () => {
+    if (new URLSearchParams(location.search).has('muto')) {
+      music.muted = true;
+      clips.forEach(c => { c.muted = true; });
+    }
     open.classList.add('hidden');
     endScreen.classList.remove('shown');
     document.body.classList.remove('paused');
     pausedAt = false;
-    deck({ casa: 'auto', on: true });
+    deck({ casa: 'auto', on: false });
+    deck({ casa: 'fx', name: 'reset' });
+    deck({ casa: 'overlay' });
     music.currentTime = 0;
     music.play().catch(() => {});
     rampMusic(MUSIC_BASE, 2500);
@@ -312,7 +339,13 @@
   document.getElementById('btnPause').addEventListener('click', togglePause);
 
   document.getElementById('btnSkip').addEventListener('click', () => {
-    if (current) { current.pause(); current.dispatchEvent(new Event('ended')); }
+    if (current) {
+      const n = clips.indexOf(current);
+      clearCues();
+      if (n >= 0) (BLOCKS[n].cues || []).forEach(([, cmd]) => deck(cmd));
+      current.pause();
+      current.dispatchEvent(new Event('ended'));
+    }
   });
   document.getElementById('btnSubs').addEventListener('click', () => document.body.classList.toggle('nosubs'));
   document.getElementById('btnFull').addEventListener('click', () => {
