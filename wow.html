@@ -82,6 +82,18 @@
       justify-content: center;
       padding-top: clamp(58px, 8.5vh, 96px);
     }
+    .eyebrow::after {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-left: 14px;
+      border-radius: 50%;
+      background: var(--food);
+      box-shadow: 12px 0 0 var(--environment), 24px 0 0 var(--health), 36px 0 0 var(--agriculture);
+      vertical-align: middle;
+    }
+    .overlay .eyebrow::after { display: none; }
     .eyebrow {
       margin: 0 0 20px;
       color: var(--acid);
@@ -262,12 +274,13 @@
     .cover__cue {
       position: absolute;
       bottom: 28px;
-      left: 50%;
+      left: 0;
+      right: 0;
       color: rgba(247,245,238,.7);
-      font-size: 9px;
+      font-size: 10px;
       letter-spacing: .35em;
       text-transform: uppercase;
-      transform: translateX(-50%);
+      text-align: center;
     }
     .cover__cue::after {
       content: "";
@@ -444,6 +457,13 @@
     }
     .missing__inner { max-width: min(46vw, 540px); transform: translateY(clamp(80px, 15.5vh, 135px)); }
     .missing__inner .display { margin-bottom: clamp(10px, 2vh, 22px); }
+    .missing__name {
+      margin: clamp(18px, 3.2vh, 30px) 0 0;
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(19px, 1.8vw, 27px);
+      font-style: italic;
+    }
     .missing .display { font-size: clamp(38px, 4.6vw, 72px); }
     .missing__steps {
       margin: clamp(26px, 5vh, 48px) 0 0;
@@ -1471,6 +1491,54 @@
     }
     .science__body + .science__body { margin-top: 14px; }
 
+    /* ============ 12 — LE PROSSIME AZIONI ============ */
+    .actions {
+      background:
+        radial-gradient(circle at 80% 20%, rgba(170,179,34,.09), transparent 34%),
+        var(--ink-deep);
+    }
+    .actions__list {
+      display: grid;
+      gap: clamp(18px, 3.4vh, 34px);
+      width: min(980px, 100%);
+      margin: clamp(26px, 5vh, 50px) auto 0;
+    }
+    .action {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      column-gap: clamp(18px, 2.6vw, 36px);
+      align-items: center;
+      padding-bottom: clamp(16px, 2.8vh, 28px);
+      border-bottom: 1px solid rgba(247,245,238,.14);
+    }
+    .action__num {
+      display: grid;
+      place-items: center;
+      width: 62px;
+      height: 62px;
+      border: 1px solid rgba(170,179,34,.55);
+      border-radius: 50%;
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+    }
+    .action h3 {
+      margin: 0 0 6px;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(22px, 2vw, 30px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .action p {
+      margin: 0;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(13.5px, 1.05vw, 16px);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
     /* ============ 15 — FINALE ============ */
     .sr-only {
       position: absolute;
@@ -1684,6 +1752,61 @@
     .overlay__diagram .r5 { --y: 16%; }
     .overlay__diagram .r6 { --y: 87%; }
     .overlay__list--cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+    .ov-photo {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 21/9;
+      margin-bottom: clamp(16px, 2.6vh, 26px);
+      border-radius: 12px;
+      background: url("assets/cinematic/casa-space-hero-v2.jpg") center 62% / cover no-repeat;
+      overflow: hidden;
+    }
+    .ov-marker {
+      position: absolute;
+      left: var(--mx);
+      top: var(--my);
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid var(--acid);
+      border-radius: 50%;
+      background: rgba(7,29,33,.55);
+      backdrop-filter: blur(3px);
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: 14px;
+      font-style: italic;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 6px rgba(170,179,34,.18);
+    }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin-top: clamp(14px, 2.2vh, 22px);
+    }
+    .tile {
+      aspect-ratio: 4/3;
+      display: grid;
+      place-items: center;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid color-mix(in srgb, var(--c), transparent 60%);
+      background: linear-gradient(160deg, color-mix(in srgb, var(--c), transparent 82%), rgba(7,29,33,.6));
+      opacity: 0;
+      transform: scale(.8);
+    }
+    .overlay.is-open .tile { animation: tileIn .6s var(--ease) forwards; animation-delay: calc(var(--d) * 60ms); }
+    @keyframes tileIn { to { opacity: 1; transform: none; } }
+    .tile span {
+      color: rgba(247,245,238,.85);
+      font-family: var(--serif);
+      font-size: clamp(10px, .85vw, 13px);
+      font-style: italic;
+      text-align: center;
+      line-height: 1.2;
+    }
     .overlay__lead {
       margin: 0 0 clamp(14px, 2.2vh, 22px);
       color: rgba(247,245,238,.85);
@@ -1715,6 +1838,8 @@
     @media (max-width: 900px) {
       .overlay__grid { grid-template-columns: 1fr; }
       .overlay__list--cols, .overlay__list--two { grid-template-columns: 1fr; }
+      .tiles { grid-template-columns: repeat(4, 1fr); }
+      .ov-photo { aspect-ratio: 16/10; }
       .overlay .cycle__map { max-width: min(78vw, 360px); }
       .overlay__diagram { display: none; }
     }
@@ -1740,22 +1865,16 @@
       .heritage__closing { font-size: 13.5px; padding: 14px 16px; }
       .ior__detail--principle p { font-size: 17px; }
       .stat { padding: 16px 14px 14px; }
-      .stat strong.stat__figure { font-size: clamp(30px, 8.6vw, 40px); }
-      .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .science .scene__safe, .finale .scene__safe { min-height: 100svh; }
+      .stat strong.stat__figure { font-size: clamp(26px, 7.6vw, 36px); }
+      .stat__figure--one-line { white-space: normal; }
+      .cover .scene__safe, .missing .scene__safe, .birth .scene__safe, .brand .scene__safe, .science .scene__safe, .actions .scene__safe, .finale .scene__safe { min-height: 100svh; }
       .step-hint { display: none; }
       .eyebrow { font-size: 14px; letter-spacing: .24em; }
       .nav { display: none; }
       .controls { display: none; }
 
-      /* su mobile i fragment diventano contenuto normale, impilato */
-      .fragment {
-        visibility: visible;
-        opacity: 1;
-        filter: none;
-        transform: none;
-        pointer-events: auto;
-        position: static !important;
-      }
+      /* su mobile i fragment si animano in cascata come su desktop */
+      .fragment { position: static !important; pointer-events: auto; }
 
       .problem__chain { padding-left: 22px; }
       .problem__break { padding-left: 22px; font-size: 19px; }
@@ -1763,11 +1882,11 @@
 
       .effects__grid { grid-template-columns: 1fr; max-width: 620px; }
 
-      .missing__frame { width: 88vw; aspect-ratio: 4/5.8; }
-      .missing__kicker { position: static; transform: none; white-space: normal; margin-bottom: 14px; }
-      .missing__content { align-content: center; justify-items: center; }
-      .missing__inner { transform: translateY(7vh); }
-      .missing__runners text { display: none; }
+      .missing__frame { width: 72vw; aspect-ratio: 800/660; top: 6vh; left: 50%; transform: translateX(-50%); }
+      .missing__kicker { position: static; transform: none; white-space: normal; margin-bottom: 12px; }
+      .missing__content { align-items: start; padding-top: calc(72vw * .85 + 6vh); }
+      .missing__inner { max-width: none; transform: none; }
+      .missing__name { margin-top: 14px; }
 
       .finale__statement { font-size: clamp(24px, 6.6vw, 32px); }
       .finale__lockup { gap: 6vw; }
@@ -1884,9 +2003,8 @@
           <h1 class="cover__domains" aria-label="Cibo, Ambiente, Salute, Agricoltura">
             <span class="food reveal">Cibo</span><span class="environment reveal delay-1">Ambiente</span><span class="health reveal delay-2">Salute</span><span class="agriculture reveal delay-3">Agricoltura</span>
           </h1>
-          <p class="cover__payoff reveal delay-4">L’infrastruttura condivisa che abilita l’innovazione tra settori.</p>
         </div>
-        <div class="cover__cue reveal delay-5">entra</div>
+        <div class="cover__cue reveal delay-4">entra</div>
       </div>
     </section>
 
@@ -1899,7 +2017,7 @@
           <p class="problem__line reveal delay-2">L’<span class="k-agr">agricoltura</span> dà forma al <span class="k-food">cibo</span> che produciamo.</p>
           <p class="problem__line reveal delay-3">Il <span class="k-food">cibo</span> incide sulla nostra <span class="k-health">salute</span>.</p>
         </div>
-        <p class="problem__break reveal delay-4">Eppure continuiamo a organizzare competenze, decisioni e interventi <strong>separatamente</strong>.</p>
+        <p class="problem__break reveal delay-4">Eppure continuiamo a organizzare competenze, decisioni e attività <strong>separatamente</strong>.</p>
       </div>
     </section>
 
@@ -1907,7 +2025,7 @@
     <section class="scene effects scene--light" id="p03" data-index="2" data-title="Gli effetti attraversano gli ambiti" aria-label="Gli effetti attraversano gli ambiti">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">02 · Gli effetti attraversano gli ambiti</p>
+          <p class="eyebrow reveal">02 · Le conseguenze</p>
         </header>
         <div class="effects__grid" data-fragment-cumulative>
           <article class="stat fragment is-current" data-fragment="0" style="--stat-color: var(--environment)">
@@ -1948,6 +2066,7 @@
           <div class="missing__steps">
             <p class="reveal delay-2">Non mancano competenze, dati o tecnologie.</p>
             <p class="reveal delay-3"><strong>Manca uno spazio</strong> dove metterli in relazione e farli lavorare insieme.</p>
+            <p class="missing__name reveal delay-4">Questo spazio ha un nome…</p>
           </div>
         </div>
       </div>
@@ -1972,13 +2091,16 @@
       <div class="scene__safe scene__center">
         <div class="birth__grid">
           <div class="birth__copy">
-          <p class="eyebrow reveal">04 · Per questo nasce CASA</p>
+          <p class="eyebrow reveal">04 · CASA, infatti</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Il luogo dove le connessioni diventano innovazione.</h2>
           <div class="birth__lines">
-            <p class="reveal delay-2">CASA è <strong>un luogo fisico di un ettaro</strong> — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su cibo, ambiente, salute e agricoltura.</p>
+            <p class="reveal delay-2">CASA è <strong>un luogo fisico</strong> — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su cibo, ambiente, salute e agricoltura.</p>
             <p class="reveal delay-3">Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p>
             <p class="reveal delay-4">Formazione, sperimentazione e ricerca lavorano sulla stessa catena.</p>
             <p class="reveal delay-5">Le risorse dei partner ne ampliano le capacità. Una regia comune le mette in relazione.</p>
+          </div>
+          <div class="operate__more reveal delay-5" style="margin-top: clamp(16px, 2.6vh, 24px);">
+            <button type="button" class="more-link" data-overlay="ov-spazio">Un ettaro di innovazione condivisa ↗</button>
           </div>
           </div>
           <div class="birth__viz reveal delay-2" aria-hidden="true">
@@ -1993,49 +2115,17 @@
       </div>
     </section>
 
-    <!-- 06 · LO SPAZIO CASA -->
-    <section class="scene space" id="p06" data-index="6" data-title="Lo spazio CASA" aria-label="Lo spazio CASA">
-      <div class="space__image" aria-hidden="true"></div>
-      <div class="space__veil" aria-hidden="true"></div>
-      <div class="space__marker" data-marker="0" style="--mx: 46%; --my: 74%" aria-hidden="true"><span>01</span></div>
-      <div class="space__marker" data-marker="1" style="--mx: 64%; --my: 48%" aria-hidden="true"><span>02</span></div>
-      <div class="space__marker" data-marker="2" style="--mx: 17%; --my: 58%" aria-hidden="true"><span>03</span></div>
-      <div class="scene__safe space__content">
-        <header class="space__intro">
-          <p class="eyebrow reveal">05 · Lo spazio CASA</p>
-          <h2 class="display space__title reveal delay-1">Un ettaro di innovazione condivisa.</h2>
-        </header>
-
-        <div class="space__card reveal delay-2">
-          <article class="space__detail fragment is-current" data-fragment="0">
-            <span class="space__num">01 / 03</span>
-            <h3>Aree di sperimentazione e monitoraggio</h3>
-            <p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.</p>
-          </article>
-          <article class="space__detail fragment" data-fragment="1">
-            <span class="space__num">02 / 03</span>
-            <h3>Ambienti controllati e laboratori</h3>
-            <p>Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.</p>
-          </article>
-          <article class="space__detail fragment" data-fragment="2">
-            <span class="space__num">03 / 03</span>
-            <h3>Spazi per formare e condividere</h3>
-            <p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p>
-          </article>
-        </div>
-        <p class="space__note reveal delay-3">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</p>
-      </div>
-    </section>
+    
 
     
 
     
 
     <!-- 09 · COME OPERA CASA -->
-    <section class="scene operate scene--light" id="p09" data-index="7" data-title="Come opera CASA" aria-label="Come opera CASA">
+    <section class="scene operate scene--light" id="p09" data-index="6" data-title="Come opera CASA" aria-label="Come opera CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">06 · Come opera CASA</p>
+          <p class="eyebrow reveal">05 · Come opera CASA</p>
           <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
         </header>
         <div class="operate__rail" data-fragment-cumulative>
@@ -2065,10 +2155,10 @@
     </section>
 
     <!-- 10 · PER CHI È CASA -->
-    <section class="scene who" id="p10" data-index="8" data-title="Per chi è CASA" aria-label="Per chi è CASA">
+    <section class="scene who" id="p10" data-index="7" data-title="Per chi è CASA" aria-label="Per chi è CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">07 · Per chi è CASA</p>
+          <p class="eyebrow reveal">06 · Per chi è CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
           <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
@@ -2095,12 +2185,11 @@
     </section>
 
     <!-- 11 · CHI RENDE POSSIBILE CASA -->
-    <section class="scene actors" id="p11" data-index="9" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
+    <section class="scene actors" id="p11" data-index="8" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">08 · Chi rende possibile CASA</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Sei partner, nessuno basta da solo.</h2>
-          <p class="lead reveal delay-2">Ruoli distinti, una capacità comune.</p>
+          <p class="eyebrow reveal">07 · Chi rende possibile CASA</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Ruoli distinti, una capacità comune.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
           <article class="role role--promote fragment is-current" data-fragment="0">
@@ -2150,10 +2239,10 @@
     </section>
 
     <!-- 12 · IL PATRIMONIO DI PARTENZA -->
-    <section class="scene heritage scene--light" id="p12" data-index="10" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
+    <section class="scene heritage scene--light" id="p12" data-index="9" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">09 · Il patrimonio di partenza</p>
+          <p class="eyebrow reveal">08 · Il patrimonio di partenza</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
         </header>
         <div class="heritage__grid" data-fragment-cumulative>
@@ -2175,14 +2264,17 @@
           </article>
         </div>
         <p class="heritage__closing reveal delay-3">CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’IoR</strong>, trasformandolo in una capacità stabile e accessibile.</p>
+        <div class="operate__more reveal delay-4" style="justify-content: center;">
+          <button type="button" class="more-link" data-overlay="ov-arredo">La casa è già arredata ↗</button>
+        </div>
       </div>
     </section>
 
     <!-- 13 · ROADMAP -->
-    <section class="scene roadmap" id="p13" data-index="11" data-title="Roadmap" aria-label="Roadmap">
+    <section class="scene roadmap" id="p13" data-index="10" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">10 · Roadmap</p>
+          <p class="eyebrow reveal">09 · Roadmap</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
@@ -2216,10 +2308,10 @@
     </section>
 
     <!-- 14 · DIREZIONE SCIENTIFICA -->
-    <section class="scene science" id="p14" data-index="12" data-title="Direzione scientifica" aria-label="Direzione scientifica">
+    <section class="scene science" id="p14" data-index="11" data-title="Direzione scientifica" aria-label="Direzione scientifica">
       <div class="scene__safe science__content">
         <div class="science__inner">
-          <p class="eyebrow reveal">11 · Direzione scientifica</p>
+          <p class="eyebrow reveal">10 · Direzione scientifica</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 5vw, 80px)">Un presidio comune ai quattro ambiti.</h2>
           <div class="science__figure reveal delay-2">
             <div class="science__photo" role="img" aria-label="Ritratto del Prof. Riccardo Valentini"></div>
@@ -2230,8 +2322,41 @@
       </div>
     </section>
 
+    <!-- 12 · LE PROSSIME AZIONI -->
+    <section class="scene actions" id="p14b" data-index="12" data-title="Le prossime azioni" aria-label="Le prossime azioni">
+      <div class="scene__safe scene__center">
+        <header>
+          <p class="eyebrow reveal">11 · Le prossime azioni</p>
+          <h2 class="display reveal delay-1" style="font-size: clamp(36px, 4vw, 64px)">Da dove si comincia.</h2>
+        </header>
+        <div class="actions__list" data-fragment-cumulative>
+          <article class="action fragment is-current" data-fragment="0">
+            <span class="action__num">01</span>
+            <div>
+              <h3>Coinvolgimento del CMCC</h3>
+              <p>Attivare la collaborazione per l’ambito ambiente — il percorso è già avviato.</p>
+            </div>
+          </article>
+          <article class="action fragment" data-fragment="1">
+            <span class="action__num">02</span>
+            <div>
+              <h3>Convenzione UNIUST × Università della Tuscia</h3>
+              <p>Finalizzata ai docenti per l’avvio dei programmi e alle attività di ricerca nei quattro ambiti.</p>
+            </div>
+          </article>
+          <article class="action fragment" data-fragment="2">
+            <span class="action__num">03</span>
+            <div>
+              <h3>Ricerca dello spazio e sua predisposizione</h3>
+              <p>Individuare l’area secondo le caratteristiche del modello e predisporla ad accogliere le prime attività.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" id="p15" data-index="12" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -2253,6 +2378,76 @@
   </main>
 
   <!-- APPROFONDIMENTI -->
+  <div class="overlay" id="ov-spazio" role="dialog" aria-modal="true" aria-label="Approfondimento: lo spazio CASA">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Lo spazio CASA</p>
+      <h2 class="display overlay__title">Un ettaro di innovazione condivisa.</h2>
+      <div class="ov-photo">
+        <div class="ov-marker" style="--mx: 46%; --my: 74%"><span>01</span></div>
+        <div class="ov-marker" style="--mx: 64%; --my: 48%"><span>02</span></div>
+        <div class="ov-marker" style="--mx: 17%; --my: 58%"><span>03</span></div>
+      </div>
+      <div class="overlay__list overlay__list--cols">
+        <div class="ov-item" style="--c: var(--environment)"><h3>01 · Aree di sperimentazione e monitoraggio</h3><p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.</p></div>
+        <div class="ov-item" style="--c: var(--food)"><h3>02 · Ambienti controllati e laboratori</h3><p>Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.</p></div>
+        <div class="ov-item" style="--c: var(--health)"><h3>03 · Spazi per formare e condividere</h3><p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p></div>
+      </div>
+      <p class="overlay__note">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov-arredo" role="dialog" aria-modal="true" aria-label="Approfondimento: la casa è già arredata">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Il patrimonio</p>
+      <h2 class="display overlay__title">La casa è già arredata.</h2>
+      <p class="overlay__lead">Trovato lo spazio, i contenuti ci sono già: progetti, tecnologie, eventi e competenze pronti a trasferirsi.</p>
+      <div class="tiles" aria-hidden="true">
+        <div class="tile" style="--c: var(--food); --d: 0"><span>Avatar</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 7"><span>Cubo immersivo</span></div>
+        <div class="tile" style="--c: var(--health); --d: 14"><span>Tracciabilità</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 1"><span>Sensori in campo</span></div>
+        <div class="tile" style="--c: var(--food); --d: 8"><span>Eventi</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 15"><span>Workshop</span></div>
+        <div class="tile" style="--c: var(--health); --d: 2"><span>Formazione</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 9"><span>Dati ambientali</span></div>
+        <div class="tile" style="--c: var(--food); --d: 16"><span>Arte & Natura</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 3"><span>Conferenze</span></div>
+        <div class="tile" style="--c: var(--health); --d: 10"><span>Carbon farming</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 17"><span>Agricoltura digitale</span></div>
+        <div class="tile" style="--c: var(--food); --d: 4"><span>Open innovation</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 11"><span>Divulgazione</span></div>
+        <div class="tile" style="--c: var(--health); --d: 18"><span>Percorsi sensoriali</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 5"><span>Laboratori</span></div>
+        <div class="tile" style="--c: var(--food); --d: 12"><span>Ricerca applicata</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 19"><span>Serre sperimentali</span></div>
+        <div class="tile" style="--c: var(--health); --d: 6"><span>Osservazione</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 13"><span>Competenze ibride</span></div>
+        <div class="tile" style="--c: var(--food); --d: 0"><span>Avatar</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 7"><span>Cubo immersivo</span></div>
+        <div class="tile" style="--c: var(--health); --d: 14"><span>Tracciabilità</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 1"><span>Sensori in campo</span></div>
+        <div class="tile" style="--c: var(--food); --d: 8"><span>Eventi</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 15"><span>Workshop</span></div>
+        <div class="tile" style="--c: var(--health); --d: 2"><span>Formazione</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 9"><span>Dati ambientali</span></div>
+        <div class="tile" style="--c: var(--food); --d: 16"><span>Arte & Natura</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 3"><span>Conferenze</span></div>
+        <div class="tile" style="--c: var(--health); --d: 10"><span>Carbon farming</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 17"><span>Agricoltura digitale</span></div>
+        <div class="tile" style="--c: var(--food); --d: 4"><span>Open innovation</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 11"><span>Divulgazione</span></div>
+        <div class="tile" style="--c: var(--health); --d: 18"><span>Percorsi sensoriali</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 5"><span>Laboratori</span></div>
+        <div class="tile" style="--c: var(--food); --d: 12"><span>Ricerca applicata</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 19"><span>Serre sperimentali</span></div>
+        <div class="tile" style="--c: var(--health); --d: 6"><span>Osservazione</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 13"><span>Competenze ibride</span></div>
+      </div>
+    </div>
+  </div>
+
   <div class="overlay" id="ov-tuscia" role="dialog" aria-modal="true" aria-label="Approfondimento: accordo UNIUST e Tuscia">
     <div class="overlay__panel">
       <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
@@ -2360,6 +2555,7 @@
       const isMobile = () => matchMedia('(max-width: 900px)').matches;
       const staticMode = new URLSearchParams(location.search).has('static');
       const reducedMotion = staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let autoCascade = true;
       let active = 0;
 
       // ---- contatori animati ----
@@ -2538,7 +2734,7 @@
         progress.style.transform = `scaleX(${active + 1})`;
         animateCounters(scenes[active]);
         // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
-        if (!staticMode && !isMobile()) {
+        if (!staticMode && autoCascade) {
           const sc = scenes[active];
           const count = fragmentCount(sc);
           if (count > 1) {
@@ -2635,6 +2831,16 @@
       });
 
       setActive(0);
+
+      // API di regia per la versione cinematografica (cinema.html)
+      addEventListener('message', event => {
+        const d = event.data || {};
+        if (d.casa === 'auto') autoCascade = d.on !== false;
+        else if (d.casa === 'go') go(Number(d.index) || 0);
+        else if (d.casa === 'advance') advance();
+        else if (d.casa === 'retreat') retreat();
+        else if (d.casa === 'overlay') { if (d.id) openOverlay(d.id); else closeOverlays(); }
+      });
 
       const ovParam = new URLSearchParams(location.search).get('overlay');
       if (ovParam) openOverlay(ovParam);
