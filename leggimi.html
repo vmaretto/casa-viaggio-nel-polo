@@ -4,41 +4,208 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CASA — Versione testuale</title>
-  <meta name="description" content="Versione testuale accessibile della presentazione CASA.">
+  <meta name="description" content="Versione testuale accessibile della presentazione CASA: Cibo, Ambiente, Salute, Agricoltura.">
+  <meta name="color-scheme" content="light dark">
   <style>
-    :root{--ink:#0f2b30;--cream:#f7f4ec;--lime:#abb629;--muted:#526466}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:18px/1.65 Arial,sans-serif}main{width:min(920px,calc(100% - 40px));margin:auto;padding:70px 0 120px}nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:70px}nav a{color:var(--ink);border:1px solid rgba(15,43,48,.2);padding:8px 12px;border-radius:30px;text-decoration:none;font-size:14px}section{padding:54px 0;border-top:1px solid rgba(15,43,48,.16)}h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.08}h1{font-size:clamp(64px,13vw,130px);font-style:italic;margin:0}h2{font-size:clamp(38px,6vw,64px);margin:0 0 24px}h3{margin:28px 0 8px}p{max-width:780px}.eyebrow{color:#6d7711;text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:bold}.lead{font-family:Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{padding:22px;background:white;border-top:2px solid var(--lime)}small{color:var(--muted)}@media(max-width:700px){.cards{grid-template-columns:1fr}}
+    :root{--bg:#f7f4ec;--ink:#0f2b30;--muted:#526466;--accent:#6d7711;--line:rgba(15,43,48,.16);--card:#ffffff}
+    @media (prefers-color-scheme:dark){:root{--bg:#101d20;--ink:#eef0e6;--muted:#a8b6b3;--accent:#c7d155;--line:rgba(238,240,230,.2);--card:#18292d}}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 -apple-system,"Segoe UI",Arial,sans-serif}
+    main{width:min(860px,calc(100% - 40px));margin:auto;padding:48px 0 110px}
+    a{color:var(--accent)}
+    .back{display:inline-block;margin-bottom:44px;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:9px 16px;border-radius:30px;color:var(--ink)}
+    .back:hover,.back:focus{border-color:var(--accent)}
+    h1,h2{font-family:Georgia,serif;font-weight:400;line-height:1.12}
+    h1{font-size:clamp(52px,10vw,96px);margin:0}
+    h2{font-size:clamp(30px,4.5vw,44px);margin:0 0 18px}
+    h3{margin:26px 0 6px;font-size:20px}
+    section{padding:44px 0;border-top:1px solid var(--line)}
+    header.top{padding-bottom:34px}
+    p{max-width:760px;margin:12px 0}
+    ul{max-width:760px;padding-left:22px}
+    li{margin:8px 0}
+    .eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.16em;font-size:13px;font-weight:700;margin:0 0 8px}
+    .lead{font-family:Georgia,serif;font-size:clamp(22px,2.6vw,29px);line-height:1.35}
+    .muted{color:var(--muted);font-size:15px}
+    footer{border-top:1px solid var(--line);padding-top:34px;color:var(--muted);font-size:15px}
   </style>
 </head>
-<body><main>
-  <nav><a href="index.html">Presentazione interattiva</a><a href="appendici.html">Appendici</a><a href="llms.txt">Testo semplice</a></nav>
+<body>
+<main>
+  <a class="back" href="/wow.html">← Versione interattiva</a>
 
-  <header><div class="eyebrow">CASA</div><h1>CASA</h1><p class="lead">Cibo · Ambiente · Salute · Agricoltura</p><p>L’infrastruttura condivisa per innovare dove i quattro ambiti si incontrano.</p></header>
+  <header class="top">
+    <p class="eyebrow">Cibo · Ambiente · Salute · Agricoltura</p>
+    <h1>CASA</h1>
+    <p class="lead">L’infrastruttura condivisa che abilita l’innovazione tra settori.</p>
+  </header>
 
-  <section><div class="eyebrow">01 · Il sistema</div><h2>Ciò che accade in un ambito cambia tutti gli altri.</h2><p>L’ambiente condiziona l’agricoltura. L’agricoltura dà forma al cibo che produciamo. Qualità e trasformazione del cibo incidono sulla salute. Gli effetti osservati generano nuove evidenze per il sistema.</p></section>
+  <section aria-labelledby="s01">
+    <p class="eyebrow">01 · Il problema</p>
+    <h2 id="s01">Il problema</h2>
+    <p>L’ambiente condiziona l’agricoltura. L’agricoltura dà forma al cibo che produciamo. Il cibo incide sulla nostra salute.</p>
+    <p>Eppure continuiamo a organizzare competenze, decisioni e interventi <strong>separatamente</strong>.</p>
+  </section>
 
-  <section><div class="eyebrow">02 · Le evidenze</div><h2>Gli effetti attraversano gli ambiti.</h2><div class="cards"><article class="card"><h3>Circa 1/3</h3><p>delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari.</p><small>Agricoltura · Cibo → Ambiente</small></article><article class="card"><h3>−21%</h3><p>circa, di produttività agricola globale rispetto allo scenario senza cambiamento climatico antropogenico.</p><small>Ambiente → Agricoltura · Cibo</small></article><article class="card"><h3>Oltre 10.000 miliardi di dollari l’anno</h3><p>di costi nascosti dei sistemi agroalimentari.</p><small>Agricoltura · Cibo → Salute · Ambiente · Società</small></article></div><p><small>Fonti: FAO, FAOSTAT, Nature Climate Change.</small></p></section>
+  <section aria-labelledby="s02">
+    <p class="eyebrow">02 · Le evidenze</p>
+    <h2 id="s02">Gli effetti attraversano gli ambiti</h2>
+    <ul>
+      <li><strong>Circa 1/3</strong> delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari. Agricoltura e cibo incidono sull’ambiente.</li>
+      <li><strong>−21%</strong>: l’impatto del cambiamento climatico sulla produttività agricola globale dal 1961, rispetto a uno scenario senza cambiamento climatico. L’ambiente torna a incidere sull’agricoltura e sul cibo.</li>
+      <li><strong>Oltre 10.000 miliardi di dollari l’anno</strong> — i costi nascosti generati dai sistemi agroalimentari sulla salute, sull’ambiente e sulla società. Le conseguenze non rimangono confinate in un solo ambito.</li>
+    </ul>
+    <p class="muted">Fonti: FAO, The State of Food and Agriculture; FAOSTAT; Nature Climate Change.</p>
+  </section>
 
-  <section><div class="eyebrow">03 · Il vuoto</div><h2>Cosa manca davvero?</h2><p class="lead">Uno spazio sperimentale comune.</p><p>Un luogo dove costruire competenze e innovare insieme, mettendo in relazione dati, laboratori, tecnologie, ricerca e relazioni.</p></section>
+  <section aria-labelledby="s03">
+    <p class="eyebrow">03 · Il vuoto</p>
+    <h2 id="s03">Cosa manca davvero?</h2>
+    <p class="lead">Un luogo comune.</p>
+    <p>Non mancano competenze, dati o tecnologie. <strong>Manca uno spazio</strong> dove metterli in relazione e farli lavorare insieme.</p>
+  </section>
 
-  <section><div class="eyebrow">04 · La risposta</div><h2>Per questo nasce CASA.</h2><p class="lead">Il luogo dove ambiente, agricoltura, cibo e salute diventano un unico campo di innovazione.</p><p>Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p><p>CASA nasce come spazio sperimentale condiviso, esteso dalle risorse dei partner e organizzato da una regia comune.</p></section>
+  <section aria-labelledby="s04">
+    <p class="eyebrow">04 · La risposta</p>
+    <h2 id="s04">Per questo nasce CASA</h2>
+    <p class="lead">Il luogo dove le connessioni diventano innovazione.</p>
+    <p>CASA è <strong>un luogo fisico di un ettaro</strong> — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su ambiente, agricoltura, cibo e salute.</p>
+    <p>Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p>
+    <p>Formazione, sperimentazione e ricerca lavorano sulla stessa catena. Le risorse dei partner ne ampliano le capacità. Una regia comune le mette in relazione.</p>
+  </section>
 
-  <section><div class="eyebrow">05 · Il luogo</div><h2>Un ettaro di innovazione condivisa.</h2><p>Una configurazione di riferimento, modulare e adattabile:</p><div class="cards"><article class="card"><h3>Campi e ambienti sensorizzati</h3><p>Clima, acqua, suolo, biodiversità e pratiche agricole.</p></article><article class="card"><h3>Serre e laboratori modulari</h3><p>Colture, tecnologie, alimenti e relazioni con la salute.</p></article><article class="card"><h3>Formazione, dimostrazione ed eventi</h3><p>Spazi per persone, dati, risultati e comunicazione.</p></article></div><p class="lead">La configurazione cambia con il luogo. La funzione resta.</p></section>
+  <section aria-labelledby="s05">
+    <p class="eyebrow">05 · Il luogo</p>
+    <h2 id="s05">Lo spazio CASA</h2>
+    <p class="lead">Un ettaro di innovazione condivisa.</p>
+    <p>Diecimila metri quadri, tre zone: campi sensorizzati, serre e laboratori, spazi per le persone.</p>
+    <h3>Aree di sperimentazione e monitoraggio</h3>
+    <p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.</p>
+    <h3>Ambienti controllati e laboratori</h3>
+    <p>Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.</p>
+    <h3>Spazi per formare e condividere</h3>
+    <p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p>
+    <p class="muted">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</p>
+  </section>
 
-  <section><div class="eyebrow">06 · Dentro CASA</div><h2>Quattro ambiti. Un unico ciclo.</h2><ol><li>Osservare l’ambiente.</li><li>Sperimentare l’agricoltura.</li><li>Studiare il cibo.</li><li>Produrre evidenze sulla salute.</li></ol><p>Dati, sperimentazione ed evidenze attraversano lo stesso spazio e ritornano al sistema.</p></section>
+  <section aria-labelledby="s06">
+    <p class="eyebrow">06 · Dentro CASA</p>
+    <h2 id="s06">Un ciclo di dati, sperimentazione ed evidenze</h2>
+    <ul>
+      <li><strong>Ambiente</strong> — Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</li>
+      <li><strong>Agricoltura</strong> — I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</li>
+      <li><strong>Cibo</strong> — Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.</li>
+      <li><strong>Salute</strong> — Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.</li>
+    </ul>
+    <h3>Le tecnologie lungo il ciclo</h3>
+    <p>L’IoT raccoglie i dati. L’intelligenza artificiale mette in relazione dati ambientali e agricoli, qualità del cibo ed evidenze sulla salute. Le piattaforme dati rendono le informazioni accessibili e combinabili secondo regole condivise. La blockchain, quando utile, rafforza la provenienza e la tracciabilità dei processi e degli alimenti.</p>
+    <h3>Dal luogo alla rete</h3>
+    <p>Ciò che CASA osserva e sperimenta nello spazio comune si collega alle capacità specialistiche dei partner.</p>
+  </section>
 
-  <section><div class="eyebrow">07 · Il principio di CASA</div><h2>Un Internet delle risorse.</h2><p>I partner mantengono competenze, dati, laboratori e tecnologie. CASA ne organizza l’accesso e la combinazione secondo regole comuni.</p><p>Anche imprese piccole possono così utilizzare capacità che non potrebbero costruire autonomamente. IoT, intelligenza artificiale, piattaforme dati e tracciabilità sostengono raccolta, analisi, accessibilità, provenienza e auditabilità.</p></section>
+  <section aria-labelledby="s07">
+    <p class="eyebrow">07 · Il principio di CASA</p>
+    <h2 id="s07">L’Internet delle Risorse</h2>
+    <h3>Le risorse dello spazio CASA</h3>
+    <p>Campi sperimentali, sensori, serre, laboratori e infrastrutture digitali vengono condivisi e resi accessibili secondo regole comuni.</p>
+    <h3>Le risorse dei partner</h3>
+    <p>Laboratori specialistici, dati, tecnologie e competenze che restano presso i partner vengono collegati allo stesso sistema di accesso.</p>
+    <h3>Accesso condiviso a capacità avanzate</h3>
+    <p>Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente. Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l’intera infrastruttura.</p>
+    <p class="lead">Lo spazio è il luogo dell’integrazione. L’Internet delle Risorse (IoR) è il sistema che ne rende accessibili e ne estende le capacità.</p>
+  </section>
 
-  <section><div class="eyebrow">08 · Il metodo</div><h2>Dalle competenze all’impatto, senza spezzare il percorso.</h2><div class="cards"><article class="card"><h3>Formare</h3><p>Leggere insieme dati climatici, suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.</p></article><article class="card"><h3>Sperimentare</h3><p>Testare pratiche, tecnologie e alimenti in campi, serre e laboratori.</p></article><article class="card"><h3>Sviluppare insieme</h3><p>Trasformare bisogni e prove in ricerca applicata e soluzioni sviluppate insieme.</p></article><article class="card"><h3>Trasferire</h3><p>Trasformare i risultati in competenze, strumenti, evidenze e contenuti utilizzabili.</p></article></div><p>Ogni risultato alimenta un nuovo ciclo di formazione, sperimentazione, ricerca, innovazione e comunicazione.</p></section>
+  <section aria-labelledby="s08">
+    <p class="eyebrow">08 · Come opera CASA</p>
+    <h2 id="s08">Dalle competenze all’impatto</h2>
+    <h3>Formare sul sistema</h3>
+    <p>Persone, ricercatori e imprese imparano a leggere insieme dati climatici, condizioni del suolo, pratiche agricole, qualità del cibo ed evidenze sulla salute.</p>
+    <h3>Sperimentare nello spazio CASA</h3>
+    <p>Campi, sensori, serre e laboratori permettono di testare pratiche, tecnologie e alimenti in condizioni reali.</p>
+    <h3>Co-sviluppare e fare ricerca applicata</h3>
+    <p>Grandi imprese, startup, università e centri di ricerca lavorano insieme su bisogni che attraversano ambiente, agricoltura, cibo e salute.</p>
+    <h3>Trasferire e comunicare</h3>
+    <p>I risultati diventano nuove competenze, strumenti per le imprese e indicazioni per istituzioni e territori.</p>
+    <p>Ogni risultato alimenta un nuovo ciclo di formazione, sperimentazione, ricerca e innovazione.</p>
+  </section>
 
-  <section><div class="eyebrow">09 · Gli ingressi</div><h2>Si entra da punti diversi. Si innova insieme.</h2><div class="cards"><article class="card"><h3>Imprese e startup</h3><p>Portano bisogni e tecnologie. Accedono a capacità non sostenibili individualmente; le corporate attivano open innovation e ricerca applicata.</p></article><article class="card"><h3>Università e ricerca</h3><p>Portano conoscenza e metodi. Accedono a contesti reali e partner per applicarli e valutarli.</p></article><article class="card"><h3>Persone e professionisti</h3><p>Portano esperienze e domande. Accedono a competenze, tecnologie e sperimentazione.</p></article><article class="card"><h3>Istituzioni e territori</h3><p>Portano priorità e problemi. Accedono a evidenze integrate per decidere sui quattro ambiti.</p></article></div></section>
+  <section aria-labelledby="s09">
+    <p class="eyebrow">09 · Per chi è CASA</p>
+    <h2 id="s09">Si entra con un bisogno, una competenza o una risorsa</h2>
+    <p>CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
+    <h3>Imprese e startup</h3>
+    <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
+    <h3>Università e ricerca</h3>
+    <p>Ricerca applicata e formazione congiunta sui quattro ambiti.</p>
+    <h3>Persone e professionisti</h3>
+    <p>Sviluppano competenze interdisciplinari lavorando con tecnologie, dati e contesti reali di sperimentazione.</p>
+    <h3>Istituzioni e territori</h3>
+    <p>Evidenze utili per decisioni e politiche.</p>
+    <p>In CASA ogni soggetto può utilizzare risorse, metterne a disposizione e contribuire a sviluppare nuova capacità condivisa.</p>
+  </section>
 
-  <section><div class="eyebrow">10 · L’ecosistema</div><h2>Ruoli distinti. Una capacità comune.</h2><div class="cards"><article class="card"><h3>InnovaliaTech</h3><p>Promuove e sostiene CASA.</p></article><article class="card"><h3>FIB</h3><p>Gestisce e mette in relazione accesso, percorsi e attività.</p></article><article class="card"><h3>UNIUST</h3><p>Costruisce percorsi interdisciplinari.</p></article><article class="card"><h3>CMCC · CREA · Fondazione Santa Lucia</h3><p>Presìdi scientifici per ambiente, agricoltura e cibo, salute.</p></article><article class="card"><h3>Università della Tuscia · Università di Malta</h3><p>Docenza, ricerca, percorsi congiunti e apertura mediterranea.</p></article></div></section>
+  <section aria-labelledby="s10">
+    <p class="eyebrow">10 · L’ecosistema</p>
+    <h2 id="s10">Chi rende possibile CASA</h2>
+    <p class="lead">Sei partner, nessuno basta da solo. Ruoli distinti, una capacità comune.</p>
+    <h3>Promuove e sostiene — InnovaliaTech</h3>
+    <p>Capitale, visione di lungo periodo e connessioni con il sistema accademico e internazionale.</p>
+    <h3>Gestisce e mette in relazione — FIB (Food Innovation Broker)</h3>
+    <p>La regia operativa: organizza l’accesso a spazi e risorse e costruisce i percorsi tra i partner.</p>
+    <h3>Forma — UNIUST (Università non statale)</h3>
+    <p>Forma le competenze interdisciplinari — tecnologie, ambiente, agricoltura, cibo, salute — necessarie per operare in CASA.</p>
+    <h3>Portano le capacità scientifiche</h3>
+    <ul>
+      <li><strong>CMCC</strong> (Ambiente) — Dati, modelli e competenze su clima, acqua e condizioni ambientali.</li>
+      <li><strong>CREA</strong> (Agricoltura e cibo) — Ricerca applicata su suolo, colture, pratiche agricole, filiere e qualità alimentare.</li>
+      <li><strong>Fondazione Santa Lucia</strong> (Salute) — Competenze scientifiche per collegare alimentazione e condizioni ambientali agli effetti sulla salute.</li>
+    </ul>
+    <p>CASA permette a queste capacità di lavorare nello stesso spazio e attraverso lo stesso sistema di accesso.</p>
+  </section>
 
-  <section><div class="eyebrow">11 · Il patrimonio</div><h2>CASA non parte da zero.</h2><div class="cards"><article class="card"><h3>Formazione già attiva</h3></article><article class="card"><h3>Ricerca e sperimentazione applicata</h3></article><article class="card"><h3>Relazioni industriali e istituzionali</h3></article></div><p class="lead">Un patrimonio da trasformare in capacità comune.</p></section>
+  <section aria-labelledby="s11">
+    <p class="eyebrow">11 · Il patrimonio di partenza</p>
+    <h2 id="s11">Capacità già attive, pronte a diventare sistema</h2>
+    <h3>Formazione</h3>
+    <p>Esperienze su carbon farming, agricoltura digitale e competenze ibride collegano clima, suolo, pratiche agricole e tecnologie.</p>
+    <h3>Capacità scientifiche</h3>
+    <p>L’ecosistema riunisce dati e modelli ambientali, ricerca su agricoltura e cibo e competenze scientifiche sulla salute.</p>
+    <h3>Esperienza operativa</h3>
+    <p>Esistono capacità per costruire percorsi formativi, sperimentazioni, ricerca applicata e iniziative di open innovation insieme a imprese e istituzioni.</p>
+    <h3>Relazioni</h3>
+    <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
+    <p>CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’IoR</strong>, trasformandolo in una capacità stabile e accessibile.</p>
+  </section>
 
-  <section><div class="eyebrow">12 · La realizzazione</div><h2>Costruire. Attivare. Estendere.</h2><div class="cards"><article class="card"><h3>2026 · Costruire le fondamenta</h3><p>Modello dello spazio, governance e mappa delle risorse.</p></article><article class="card"><h3>2027 · Attivare CASA</h3><p>Spazio sperimentale, Internet delle risorse e primi cicli integrati.</p></article><article class="card"><h3>2028–2030 · Estendere la capacità</h3><p>Nuovi partner, nuovi territori e replicazione dopo la verifica del modello.</p></article></div></section>
+  <section aria-labelledby="s12">
+    <p class="eyebrow">12 · Roadmap</p>
+    <h2 id="s12">Costruire, attivare, estendere</h2>
+    <h3>2026 — Costruire le fondamenta</h3>
+    <p>Definire la configurazione funzionale dello spazio CASA e i criteri per individuare l’area. Consolidare governance, accordi e regole di accesso. Mappare campi, laboratori, dati, tecnologie e competenze disponibili nei quattro ambiti.</p>
+    <h3>2027 — Attivare CASA</h3>
+    <p>Progettare e predisporre lo spazio con le prime aree sperimentali, infrastrutture digitali e ambienti condivisi. Attivare l’IoR. Avviare i primi cicli integrati di formazione, sperimentazione, ricerca applicata e open innovation su ambiente, agricoltura, cibo e salute.</p>
+    <h3>2028–2030 — Estendere la capacità</h3>
+    <p>Ampliare lo spazio, le risorse accessibili e la rete scientifica e industriale. Collegare nuovi territori e partner europei e mediterranei. Replicare il modello CASA attraverso nuovi spazi connessi dallo stesso sistema di accesso.</p>
+    <p>Ogni fase costruisce le capacità necessarie per quella successiva.</p>
+  </section>
 
-  <section><div class="eyebrow">13 · Direzione scientifica</div><h2>Rigore, qualità, indipendenza.</h2><p class="lead">Prof. Riccardo Valentini</p><p>Premio Nobel per la Pace 2007 con l’IPCC. La sua esperienza internazionale guida l’integrazione scientifica tra ambiente, agricoltura, cibo e salute.</p></section>
+  <section aria-labelledby="s13">
+    <p class="eyebrow">13 · Direzione scientifica</p>
+    <h2 id="s13">Un presidio comune ai quattro ambiti</h2>
+    <p class="lead">Prof. Riccardo Valentini</p>
+    <p>La direzione scientifica di CASA è affidata al Prof. Riccardo Valentini <em>(Premio Nobel per la Pace 2007 con l’IPCC)</em>: la sua esperienza internazionale su clima, ecosistemi e società guida l’integrazione dei quattro ambiti, presidiando qualità, rigore e indipendenza.</p>
+  </section>
 
-  <section><div class="eyebrow">CASA</div><h2>Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2><p class="lead">Uno spazio sperimentale. Una rete di risorse. Una regia comune.</p></section>
-</main></body></html>
+  <section aria-labelledby="s14">
+    <p class="eyebrow">CASA</p>
+    <h2 id="s14">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
+    <p class="lead">CASA — Cibo · Ambiente · Salute · Agricoltura</p>
+    <p>Uno spazio sperimentale. Una rete di risorse. Una regia comune.</p>
+  </section>
+
+  <footer>
+    <p>Questa è la versione testuale accessibile della presentazione CASA. <a href="/wow.html">Apri la versione interattiva</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

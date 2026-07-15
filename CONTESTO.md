@@ -1,83 +1,78 @@
 # CONTESTO — CASA · Il viaggio comincia da qui
 
 > File di handoff per chi (persona o AI agent) deve capire o continuare questo progetto.
-> Ultimo aggiornamento: 10 luglio 2026.
+> Ultimo aggiornamento: 15 luglio 2026. **L'architettura vecchia (bundle 2 MB con template JSON escapato) NON esiste più.**
 
 ## Che cos'è
 
-Pagina web narrativa/immersiva (one-page scroll) che presenta **CASA**, il Polo per **Cibo, Ambiente, Salute e Agricoltura**. CASA è il nome ufficiale del progetto. È una presentazione istituzionale con animazioni scroll-driven, pensata per essere condivisa via link.
+Presentazione web narrativa a 15 scene full-screen di **CASA**, il Polo per **Cibo, Ambiente, Salute e Agricoltura**. Il deliverable attivo è **`wow.html`**: un unico file HTML pulito e leggibile (markup + CSS + JS inline, ~2.500 righe), niente bundle, niente escaping.
 
-- **Sito live**: https://casa-viaggio-nel-polo.vercel.app (deploy automatico da GitHub via Vercel)
-- **Repository**: https://github.com/vmaretto/casa-viaggio-nel-polo
-- **Cartella locale**: `/Users/vmaretto/Documents/Claude/Artifacts/casa-viaggio-nel-polo`
+- **Anteprima live**: https://casa-viaggio-nel-polo.vercel.app/wow.html (deploy automatico Vercel da `main`)
+- **Repository**: https://github.com/vmaretto/casa-viaggio-nel-polo — branch di lavoro **`revisione-strategica-spazio-casa`**; l'anteprima si pubblica copiando `wow.html` su `main`
+- **Cartella locale**: `/Users/vmaretto/Projects/Progetto CASA/casa-viaggio-nel-polo`
+- ATTENZIONE: `index.html` su `main` è ancora la **vecchia** presentazione (bundle). Va sostituita con `wow.html` **solo ad approvazione finale** del committente.
 
-## File del repository
+## File chiave
 
 | File | Scopo |
 |---|---|
-| `index.html` | L'intera presentazione in un unico file "bundled" (~2 MB): markup, JS, font e immagini incorporati |
-| `llms.txt` | Tutto il contenuto testuale in markdown — versione per AI agent (standard llms.txt) |
-| `leggimi.html` | Versione testuale semantica e accessibile (light/dark), linkata via `rel=alternate` |
-| `CASA_MASTER.md` | Fonte canonica per identità, posizionamento, lessico e decisioni aperte |
-| `CONTESTO.md` | Questo file |
+| `wow.html` | Il deliverable attivo: 15 scene `<section class="scene">` con `id="p01"…"p15"` e `data-title` |
+| `PAGINE_APPROVATE_DALLA_CHAT.md` | Testo di riferimento vincolante (15 pagine, **in ordine inverso**) |
+| `CASA_MASTER.md` | Identità, posizionamento, lessico |
+| `index.html` | VECCHIA presentazione (bundle) — da sostituire solo a fine progetto |
+| `assets/originale/` | Font woff2 locali (Cormorant Garamond, Outfit) e immagini |
 
-## Architettura di index.html (IMPORTANTE per chi edita)
+## Testo: fonte e deviazioni approvate
 
-Il file è un **bundle autogenerato** (esportato da uno strumento di design "DC"), NON un HTML normale:
+Il testo segue `PAGINE_APPROVATE_DALLA_CHAT.md`, MA con deviazioni **approvate dal committente in chat**:
+- Titolo p08: "L'Internet delle Risorse (IoR)"
+- Slide 03 riscritta come diagnosi; slide 04 con definizione "un luogo fisico di un ettaro"
+- Slide 05 sottotitolo "Diecimila metri quadri, tre zone…"
+- Slide 10 titolo "Sei partner, nessuno basta da solo." con descrizioni corte
+- Tagli su come-opera / per-chi / Valentini
 
-1. **Righe 1–170 circa**: HTML esterno con spinner di caricamento, script runtime e manifest.
-2. **Riga ~171** (`script type="__bundler/manifest"`): JSON con gli asset (immagini JPEG e font woff2) in **base64**, indicizzati da GUID. I riferimenti nel markup sono `url("<guid>")` risolti a runtime in blob URL.
-3. **Riga ~179** (`script type="__bundler/template"`): il documento vero e proprio come **stringa JSON** — quindi con escaping: `\"` per i doppi apici, `\n` per i newline, `</...>` per i tag di chiusura. Contiene tutto il markup delle sezioni, gli stili e la classe `Component extends DCLogic` con la logica delle animazioni.
+Ogni altra modifica al testo richiede approvazione esplicita del committente.
 
-**Regole d'oro per editare**:
-- Modificare SEMPRE tenendo conto dell'escaping della riga template (usare script Python con `str.replace` su stringhe esatte, verificando `count == 1` prima di sostituire).
-- `data-rv-delay="320"` e simili NON sono unici nel file: fare match posizionali dentro la sezione giusta, non globali.
-- Dopo modifiche al JS interno: estrarre la classe, de-escapare e validare con `node --check`.
-- Il placeholder `{{ nomePolo }}` viene sostituito a runtime con "CASA".
-- Dopo modifiche di contenuto testuale, **rigenerare `llms.txt` e `leggimi.html`** perché restino allineati.
+## Struttura (id · data-title)
 
-## Struttura della presentazione (sezioni, in ordine)
+p01 Copertina · p02 Il problema · p03 Gli effetti attraversano gli ambiti · p04 Cosa manca davvero? · p05 Per questo nasce CASA · p06 Lo spazio CASA · p07 Dentro CASA · p08 Il principio di CASA (IoR) · p09 Come opera CASA · p10 Per chi è CASA · p11 Chi rende possibile CASA · p12 Il patrimonio di partenza · p13 Roadmap · p14 Direzione scientifica · p15 CASA (finale).
 
-Copertina · Apertura in 6 battute (il colpo / la prova-numeri / chi paga il conto / il vuoto e la finestra / perché proprio adesso / serve CASA) · Perché ora e la visione (sezione scroll-driven con particelle) · I quattro ambiti · Il metodo (ciclo: formare-operare-osservare-tradurre) · Il modello · L'ecosistema · Accordo UNIUST-Tuscia · Patrimonio esistente · I servizi · Dimensione europea e mediterranea · Cosa ottiene chi entra · Roadmap · Direzione scientifica · Chiusura.
+Scene chiave:
+- **p01**: copertina **SENZA la parola CASA** — arriva a sorpresa in p05 (regia voluta dal committente, pensata anche per la futura versione palco con voce narrante e musica). Non "correggerla".
+- **p04**: casa tratteggiata con pallini etichettati che corrono sul perimetro
+- **p05**: anello di particelle con "casa" · **p06**: foto con 3 marker numerati ancorati ai luoghi + card in vetro
+- **p07**: orbita dei 4 ambiti · **p08**: diagramma IoR con dimming per passo
+- **p11**: righe aperte con gerarchia tipografica 42/30/26/22
 
-Il testo completo è in `llms.txt`.
+## Meccanica di presentazione
 
-## Sistema di animazioni
+- Desktop: `scroll-snap` per scena; frecce/spazio avanzano per **fragment**; attivare una scena da scroll fa partire la **cascata automatica** dei fragment (620 ms per scene cumulative, 3.4 s per scene a pannelli — costanti `stepMs` nel JS).
+- Mobile: tutto statico impilato (media query, fragment sempre visibili).
+- `F` = fullscreen; nav a pallini laterale.
 
-- **Reveal** (`[data-rv]` + `data-rv-delay`): IntersectionObserver; gli elementi si rivelano entrando nel viewport e **si resettano uscendone**, così le animazioni si ripetono a ogni passaggio (scelta voluta dal committente).
-- **Contatori** (`[data-count]` + `data-prefix`/`data-suffix`): conteggio animato, anch'esso ripetibile.
-- **Copertina**: Ken Burns sullo sfondo (layer separato dalla parallasse JS), alone `heroGlow` pulsante dietro il titolo, titolo dal blur, sottotitolo con le 4 parole colorate in cascata (Cibo #D8A94E, Ambiente #7EBDAE, Salute #D08B80, Agricoltura #AAB322 — le iniziali spellano CASA).
-- **Sezione journey** ("Perché ora e la visione"): canvas con 4 nuvole di particelle che convergono al centro durante lo scroll; etichette posizionate via JS.
-- `prefers-reduced-motion` e prop `effettiRidotti`: tutto appare subito senza animazioni.
+## Modalità statica (screenshot / stampa)
 
-## Palette e tipografia
+- `?static`: tutte le scene attive, ultimo fragment, contatori a valore finale
+- `?static&scene=pXX`: isola una singola scena
+- Pipeline screenshot: Chrome headless con `--window-size` e `--virtual-time-budget` su un `python3 -m http.server` locale — **MAI `file://`**. NB: il mobile in headless ritaglia male → verificare mobile in un browser vero.
 
-- Sfondi: verde scuro `#0F2B30`, crema `#F7F5EE`, sabbia `#EFEBDD`, petrolio `#3E595C`
-- Accento primario: verde oliva `#AAB322`
-- Ambiti: oro `#D8A94E` (cibo), verde acqua `#7EBDAE` (ambiente), rosa `#D08B80` (salute), oliva `#AAB322` (agricoltura)
-- Font: **Cormorant Garamond** (corsivo, titoli) + **Outfit** (testo), entrambi incorporati nel bundle.
+## Design system
 
-## Cronologia delle modifiche fatte in questa sessione
+- Palette: ink `#0f2b30` / `#071d21`, paper `#f7f5ee`, sand `#efebdd`, acid `#aab322`; ambiti cibo `#d8a94e`, ambiente `#7ebdae`, salute `#d08b80`, agricoltura `#aab322`
+- Alternanza sfondi: p03/p09 crema, p12 sabbia, p15 beige finale con lettere C·A·S·A colorate. Sulle scene chiare le variabili `--food/--environment/--health/--acid` sono **ridefinite scurite** per contrasto WCAG.
+- Font: Cormorant Garamond (corsivo, titoli) + Outfit (testo), woff2 locali in `assets/originale/`
+- Regole dalle review: caps solo sui kicker numerati; **una** enfasi per scena; spazio al posto dei contenitori; max ~40 parole per scena.
 
-1. **Setup**: estratto il file bundled dallo zip di handoff, rinominato `index.html`, creato repo GitHub e collegato a Vercel (il primo push richiese `http.postBuffer` più alto; ora il file è piccolo e non serve più).
-2. **Contenuti**: rimossa la riga contatto "FIB / InnovaliaTech" dalla chiusura; riscritta la descrizione UNIUST in due punti ("Università non statale di InnovaliaTech: costruisce programmi ibridi tra discipline e tecnologie. Parte dai sistemi autonomi con applicazioni nell'agroalimentare, per poi estendersi al campo della salute." — NON menzionare più "rilascia i titoli", "L-28", "Medicina"); sezione "Chi paga il conto": soggetti diretti ("Il sistema… Le filiere… La competitività…"); tolta la linea bianca sotto "2 · I numeri".
-3. **Animazioni ripetibili**: reveal e contatori si ri-attivano a ogni ingresso nel viewport.
-4. **Mobile** (media query `max-width: 768px` iniettata nello style del template):
-   - "Il metodo": disattivato `position: sticky` (si sovrapponeva agli step);
-   - journey: canvas confinato nella fascia alta dello schermo, testo in basso, effetti potenziati (aloni radiali, glow, doppio anello) — su richiesta esplicita del committente di qualcosa di "entusiasmante";
-   - etichette dei 4 ambiti come pillole scure con bordo colorato (leggibilità sulle nuvole luminose);
-   - fix "torna su": usare `overflow-x: clip` (MAI `hidden`, che crea uno scroll container su body e rompe scroll e ancore) + `id="top"` sulla copertina.
-5. **Copertina ridisegnata** (mobile + desktop): rimosso l'occhiello duplicato, "benvenuti a" + titolo dal blur + cascata colorata + filo dorato; centratura con `100svh`.
-6. **Accessibilità AI**: immagini ricompresse (6,2 MB → 2 MB; la texture 12067px mostrata a 460px è passata da 2,3 MB a 13 KB), creati `llms.txt` e `leggimi.html`, `<title>` reale, meta description, `link rel=alternate`.
+## Flusso di lavoro col committente (Vittorio)
 
-## Preferenze del committente (Vittorio)
+- Iterazioni rapide: guarda da telefono e PC, condivide screenshot annotati.
+- Vuole effetti **wow** ma slide che **respirano** (aria, poche parole).
+- Il testo approvato è vincolante salvo sua approvazione esplicita.
+- Ogni modifica = **commit + push immediato su entrambi i branch** (lavoro + `main` per l'anteprima).
+- Review periodiche con subagent (communication advisor + UI/UX designer) sui **PIXEL** (screenshot), non sul codice.
 
-- Lavora per iterazioni rapide guardando il sito **dal telefono** (spesso condivide screenshot WhatsApp con annotazioni).
-- Vuole effetti **scenografici e "wow"**, non soluzioni minimali: se qualcosa non funziona su mobile, va **ripensato in bello**, non semplicemente nascosto.
-- Le etichette/testi devono sempre restare **leggibili** (accessibilità prima di tutto).
-- Ogni modifica: **commit + push immediato** (il deploy Vercel è automatico dal branch `main`).
-- Lingua di lavoro: italiano.
+## Prossimi passi noti
 
-## Come verificare le modifiche
-
-Server locale: `python3 -m http.server 8123` nella cartella del progetto, poi testare su viewport 375×812 (mobile) e ~1280×800 (desktop). Attenzione: le animazioni scroll-driven usano `window.scrollY`; il primo caricamento può richiedere un reload se il runtime parte male (caso raro osservato in dev, non riprodotto in produzione).
+1. Approvazione finale → promozione di `wow.html` a `index.html` su `main`
+2. Versione palco: buio, musica americana, voce narrante, avanzamento manuale
+3. Possibile CTA finale quando ci sarà un target definito
