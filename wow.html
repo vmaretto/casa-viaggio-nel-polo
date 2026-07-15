@@ -446,29 +446,31 @@
     }
     .static-mode .missing__runners { display: none; }
     .cinema-mode .progress, .cinema-mode .nav, .cinema-mode .controls { display: none !important; }
-    .cinema-mode .cover__cue { display: none; }
-    .cinema-mode .cover__domains span {
+    .cinema-mode .cover__cue, .cinema-mode .eyebrow { display: none !important; }
+    .cinema-mode .more-link, .cinema-mode .overlay__links,
+    .cinema-mode .action__links, .cinema-mode .operate__more { display: none !important; }
+    /* nel film ogni testo entra solo quando la voce lo annuncia */
+    .cinema-mode .scene .reveal {
       opacity: 0;
       filter: blur(10px);
-      transform: translateY(30px) scale(.96);
-      transition: opacity 1.6s var(--ease), transform 1.6s var(--ease), filter 1.6s var(--ease);
+      transform: translateY(26px);
+      transition: opacity 1.3s var(--ease), transform 1.3s var(--ease), filter 1.3s var(--ease);
       transition-delay: 0s !important;
     }
-    .cinema-mode .cover__domains span.cine-in { opacity: 1; filter: none; transform: none; }
-    .cinema-mode .reveal { transition-duration: 1.9s; }
+    .cinema-mode .scene .reveal.cine-in { opacity: 1; filter: none; transform: none; }
     .cinema-mode .overlay { transition: opacity 1.5s ease, visibility 0s linear 1.5s; }
     .cinema-mode .overlay.is-open { transition: opacity 1.5s ease; }
-    .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); }
-    .cinema-mode .overlay__close { display: none; }
+    .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); width: min(1020px, 90vw); max-height: 86vh; }
+    .cinema-mode .overlay__close, .cinema-mode .overlay__note, .cinema-mode #ov-piano .overlay__list { display: none !important; }
+    .cinema-mode .missing__frame { width: min(78vw, 108vh); transition: none; }
     .cinema-mode .missing__frame path { transition-duration: 6.5s; }
-    .cinema-mode .missing .delay-2 { transition-delay: 5.4s; }
-    .cinema-mode .missing .delay-3 { transition-delay: 8.6s; }
-    .cinema-mode .missing__name.delay-4 { transition-delay: 15.8s; }
-    .cinema-mode .finale .delay-1 { transition-delay: 7.4s; }
-    .cinema-mode .finale .delay-2 { transition-delay: 8.7s; }
-    .cinema-mode .finale .delay-3 { transition-delay: 10s; }
-    .cinema-mode .finale .delay-4 { transition-delay: 11.3s; }
-    .cinema-mode .finale .delay-5 { transition-delay: 13.6s; }
+    .cinema-mode .missing__runners text {
+      font-size: 24px;
+      paint-order: normal;
+      stroke: none;
+      opacity: .82;
+    }
+    .cinema-mode .missing__kicker { display: none !important; }
     @keyframes cineZoomIn { from { transform: scale(1); } to { transform: scale(1.045); } }
     @keyframes cineZoomOut { from { transform: scale(1.045); } to { transform: scale(1); } }
     .cinema-mode .scene.is-active { animation: cineZoomIn 32s linear forwards; }
@@ -476,9 +478,10 @@
     @keyframes cinePortrait { from { transform: scale(1); } to { transform: scale(1.1); } }
     .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s var(--ease) forwards; }
     .cine-stage { position: relative; z-index: 6; }
+    /* uscita finale: prima svaniscono frase e pilastri, le lettere restano */
     .finale--exit .finale__statement,
-    .finale--exit .finale__lockup,
-    .finale--exit .finale__pillars { opacity: 0 !important; transition: opacity 1.1s ease !important; }
+    .finale--exit .finale__pillars { opacity: 0 !important; transition: opacity 1.2s ease !important; }
+    .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
     #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
     .missing__content { display: grid; place-items: center; }
     .missing__kicker {
@@ -2297,7 +2300,6 @@
         <header>
           <p class="eyebrow reveal">06 · Per chi è CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
-          <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
         <div class="who__grid" data-fragment-cumulative>
           <article class="aud aud--1 fragment" data-fragment="0">
@@ -2976,7 +2978,7 @@
         const target = Math.max(0, Math.min(scenes.length - 1, index));
         const count = fragmentCount(scenes[target]);
         setFragment(scenes[target], cinemaMode ? -1 : (openAtEnd && count ? count - 1 : 0));
-        scenes[target].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        scenes[target].scrollIntoView({ behavior: (cinemaMode || matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth' });
         setActive(target, true);
       };
 
@@ -2998,19 +3000,31 @@
       };
 
       /* --- effetti regia cinematografica --- */
-      const cineStage = (scene, n) => {
-        const el = scene.querySelector('[data-fragment="' + n + '"]');
-        if (!el) return;
+      const cineIn = (el, flip = true) => {
+        if (!el || el.dataset.cined) return;
+        el.dataset.cined = '1';
+        el.classList.add('cine-in');
+        if (!flip) return;
         const r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
         const dx = innerWidth / 2 - (r.left + r.width / 2);
         const dy = innerHeight / 2 - (r.top + r.height / 2);
+        const sc = Math.min(1.55, Math.max(1.12, 460 / Math.max(r.width, r.height)));
         el.classList.add('cine-stage');
         el.style.transition = 'none';
-        el.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(1.18)';
+        el.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sc + ')';
+        el.style.opacity = '0';
+        el.style.filter = 'blur(10px)';
         void el.offsetWidth;
-        el.style.transition = 'transform 1.35s cubic-bezier(.22,.9,.24,1)';
-        el.style.transform = '';
-        setTimeout(() => { el.classList.remove('cine-stage'); el.style.transition = ''; el.style.transform = ''; }, 1700);
+        el.style.transition = 'transform 1.35s cubic-bezier(.22,.9,.24,1), opacity .9s ease, filter .9s ease';
+        el.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sc + ')';
+        el.style.opacity = '1';
+        el.style.filter = 'none';
+        setTimeout(() => { el.style.transform = ''; }, 950);
+        setTimeout(() => {
+          el.classList.remove('cine-stage');
+          el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; el.style.filter = '';
+        }, 2500);
       };
 
       let exitCanvas = null;
@@ -3018,12 +3032,9 @@
         const fin = document.querySelector('.finale');
         if (!fin || exitCanvas) return;
         const colors = ['#d8a94e', '#7ebdae', '#d08b80', '#aab322'];
-        const starts = [...fin.querySelectorAll('.finale__letter span')].map(sp => {
-          const r = sp.getBoundingClientRect();
-          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-        });
-        if (starts.length < 4) return;
-        fin.classList.add('finale--exit');
+        const spans = [...fin.querySelectorAll('.finale__letter span')];
+        if (spans.length < 4) return;
+        fin.classList.add('finale--exit');            // via frase e pilastri, restano le lettere
         const cv = document.createElement('canvas');
         cv.id = 'cineExit';
         document.body.appendChild(cv);
@@ -3033,62 +3044,58 @@
         cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
         ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
         const W = innerWidth, H = innerHeight;
-        const lineY = H * .52;
-        const gap = Math.min(54, W * .045);
-        const lineup = starts.map((_, i) => ({ x: W / 2 + (i - 1.5) * gap, y: lineY }));
-        // curva di fuga: dal centro verso l'alto a destra, oltre lo schermo
-        const P0 = { x: W / 2, y: lineY }, P1 = { x: W * .78, y: H * .38 }, P2 = { x: W * 1.2, y: -H * .18 };
-        const bez = t => ({
-          x: (1 - t) * (1 - t) * P0.x + 2 * (1 - t) * t * P1.x + t * t * P2.x,
-          y: (1 - t) * (1 - t) * P0.y + 2 * (1 - t) * t * P1.y + t * t * P2.y,
-        });
+        const starts = spans.map(sp => { const r = sp.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+        const horizon = { x: W / 2, y: H * .40 };      // punto di fuga
         const trails = starts.map(() => []);
-        const t0 = performance.now();
         const ease = k => k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        const t0 = performance.now();
+        let dotsStarted = false;
         const step = now => {
           const t = (now - t0) / 1000;
           ctx2.clearRect(0, 0, W, H);
+          if (t < 1.4) { requestAnimationFrame(step); return; }   // fase A: solo il fade di frase e pilastri
+          if (!dotsStarted) { dotsStarted = true; fin.classList.add('finale--dots'); }
           starts.forEach((s0, i) => {
-            let x, y, sz = Math.max(7, W * .006), glow = 1;
-            if (t < 1.3) {                       // le lettere diventano pallini
-              const k = ease(Math.min(1, t / 1.3));
-              x = s0.x; y = s0.y; sz *= (.4 + .6 * k); glow = k;
-            } else if (t < 2.3) {                // si mettono in scia
-              const k = ease(Math.min(1, (t - 1.3) / 1));
-              x = s0.x + (lineup[i].x - s0.x) * k;
-              y = s0.y + (lineup[i].y - s0.y) * k;
-            } else {                             // il viaggio verso il futuro
-              const k = Math.min(1, (t - 2.3) / 2.6);
+            const base = Math.max(9, W * .008);
+            let x, y, sz = base, alpha = 1;
+            if (t < 2.8) {                             // fase B: le lettere diventano pallini
+              const k = ease(Math.min(1, (t - 1.4) / 1.4));
+              x = s0.x; y = s0.y; sz = base * (.3 + .7 * k); alpha = k;
+            } else {                                   // fase C: in fila, poi via verso l'orizzonte
+              const delay = i * .22;
+              const k = Math.max(0, Math.min(1, (t - 2.8 - delay) / 3.2));
               const kk = k * k * (3 - 2 * k);
-              const tt = Math.max(0, Math.min(1, kk * (1 + i * 0) - i * .085 * (1 - kk)));
-              const p = bez(Math.max(0, tt));
-              x = p.x; y = p.y;
-              sz *= Math.max(.35, 1 - k * .5);
+              x = s0.x + (horizon.x - s0.x) * kk;
+              y = s0.y + (horizon.y - s0.y) * kk;
+              sz = base * (1 - kk * .96);
+              alpha = kk < .9 ? 1 : 1 - (kk - .9) / .1;
             }
             const tr = trails[i];
-            tr.push({ x, y });
-            if (tr.length > 16) tr.shift();
+            tr.push({ x, y, sz });
+            if (tr.length > 18) tr.shift();
             tr.forEach((pt, j) => {
-              ctx2.globalAlpha = (j / tr.length) * .3 * glow;
+              ctx2.globalAlpha = (j / tr.length) * .28 * alpha;
               ctx2.fillStyle = colors[i];
-              ctx2.beginPath(); ctx2.arc(pt.x, pt.y, sz * (j / tr.length), 0, Math.PI * 2); ctx2.fill();
+              ctx2.beginPath(); ctx2.arc(pt.x, pt.y, Math.max(.5, pt.sz * (j / tr.length)), 0, Math.PI * 2); ctx2.fill();
             });
-            ctx2.globalAlpha = .22 * glow;
-            ctx2.beginPath(); ctx2.arc(x, y, sz * 3, 0, Math.PI * 2); ctx2.fillStyle = colors[i]; ctx2.fill();
-            ctx2.globalAlpha = .95 * glow;
-            ctx2.beginPath(); ctx2.arc(x, y, sz, 0, Math.PI * 2); ctx2.fill();
+            ctx2.globalAlpha = .2 * alpha;
+            ctx2.fillStyle = colors[i];
+            ctx2.beginPath(); ctx2.arc(x, y, sz * 3, 0, Math.PI * 2); ctx2.fill();
+            ctx2.globalAlpha = .95 * alpha;
+            ctx2.beginPath(); ctx2.arc(x, y, Math.max(.5, sz), 0, Math.PI * 2); ctx2.fill();
           });
           ctx2.globalAlpha = 1;
-          if (t < 5.4) requestAnimationFrame(step);
+          if (t < 8) requestAnimationFrame(step);
           else cv.remove();
         };
         requestAnimationFrame(step);
       };
 
       const cineReset = () => {
-        document.querySelectorAll('.cover__domains span.cine-in').forEach(w => w.classList.remove('cine-in'));
+        document.querySelectorAll('.reveal.cine-in').forEach(w => { w.classList.remove('cine-in'); delete w.dataset.cined; });
+        document.querySelectorAll('[data-fragment]').forEach(f => { delete f.dataset.cined; });
         const fin = document.querySelector('.finale');
-        if (fin) fin.classList.remove('finale--exit');
+        if (fin) { fin.classList.remove('finale--exit'); fin.classList.remove('finale--dots'); }
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
       };
 
@@ -3158,14 +3165,14 @@
         else if (d.casa === 'retreat') retreat();
         else if (d.casa === 'overlay') { if (d.id) openOverlay(d.id); else closeOverlays(); }
         else if (d.casa === 'fx') {
-          if (d.name === 'cover-word') {
-            const w = document.querySelectorAll('.cover__domains span')[d.n];
-            if (w) w.classList.add('cine-in');
+          if (d.name === 'show') {
+            const el = scenes[active].querySelectorAll('.reveal')[d.n];
+            if (el) cineIn(el, d.flip !== false);
           } else if (d.name === 'step') {
             const sc = scenes[active];
             clearInterval(sc._cascade);
             setFragment(sc, d.n);
-            if (sc.matches('.actors, .actions')) cineStage(sc, d.n);
+            if (!sc.matches('.brand')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
           } else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
