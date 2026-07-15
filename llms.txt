@@ -34,7 +34,7 @@ Non mancano competenze, dati o tecnologie. **Manca uno spazio** dove metterli in
 
 Il luogo dove le connessioni diventano innovazione.
 
-CASA è **un luogo fisico di un ettaro** — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su ambiente, agricoltura, cibo e salute.
+CASA è **un luogo fisico di un ettaro** — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su cibo, ambiente, salute e agricoltura.
 
 Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.
 
@@ -64,10 +64,10 @@ Una prima configurazione è stata sviluppata su questa scala. La configurazione 
 
 Un ciclo di dati, sperimentazione ed evidenze.
 
-- **Ambiente** — Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.
-- **Agricoltura** — I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.
 - **Cibo** — Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.
+- **Ambiente** — Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.
 - **Salute** — Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.
+- **Agricoltura** — I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.
 
 ### Le tecnologie lungo il ciclo
 
