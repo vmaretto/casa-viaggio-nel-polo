@@ -445,6 +445,7 @@
       stroke-width: 3px;
     }
     .static-mode .missing__runners { display: none; }
+    .cinema-mode .progress, .cinema-mode .nav, .cinema-mode .controls { display: none !important; }
     .missing__content { display: grid; place-items: center; }
     .missing__kicker {
       position: absolute;
@@ -2726,6 +2727,7 @@
       const navBox = document.getElementById('sceneNav');
       const isMobile = () => matchMedia('(max-width: 900px)').matches;
       const staticMode = new URLSearchParams(location.search).has('static');
+      if (new URLSearchParams(location.search).has('cinema')) document.body.classList.add('cinema-mode');
       const reducedMotion = staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches;
       let autoCascade = true;
       let active = 0;
