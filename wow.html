@@ -1842,6 +1842,85 @@
       font-size: clamp(12.5px, .95vw, 14.5px);
       line-height: 1.5;
     }
+    .overlay__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 2.4vh, 24px); }
+    .action__links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .action__links .more-link { padding: 5px 14px; font-size: clamp(12px, .95vw, 14px); }
+
+    /* mini-gantt del piano di predisposizione */
+    .ov-gantt { display: grid; gap: 9px; margin: clamp(14px, 2.2vh, 22px) 0 clamp(18px, 2.8vh, 30px); }
+    .ov-gantt .g-row { display: grid; grid-template-columns: clamp(120px, 14vw, 190px) 1fr; align-items: center; gap: 14px; }
+    .ov-gantt .g-row > span {
+      color: rgba(247,245,238,.7);
+      font-size: clamp(11px, .85vw, 13px);
+      letter-spacing: .04em;
+      text-align: right;
+    }
+    .ov-gantt .g-track { position: relative; height: 11px; border-bottom: 1px dashed rgba(247,245,238,.14); }
+    .ov-gantt .g-bar {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--gc, var(--acid));
+      opacity: 0;
+      transform-origin: left center;
+      transform: scaleX(0);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--gc, var(--acid)) 45%, transparent);
+    }
+    .overlay.is-open .ov-gantt .g-bar { opacity: .9; transform: scaleX(1); transition: transform 1s var(--ease) var(--gd, .2s), opacity .4s ease var(--gd, .2s); }
+    .ov-gantt .g-milestones {
+      display: flex;
+      justify-content: space-between;
+      grid-column: 2;
+      margin-top: 2px;
+      color: rgba(247,245,238,.55);
+      font-size: clamp(10.5px, .8vw, 12px);
+      font-style: italic;
+    }
+    .ov-gantt .g-milestones em { color: var(--acid); font-style: normal; }
+
+    /* barre dei costi */
+    .ov-costs { display: grid; gap: clamp(12px, 1.8vh, 18px); margin: clamp(14px, 2.2vh, 22px) 0; }
+    .ov-costs .c-row { display: grid; grid-template-columns: clamp(150px, 17vw, 230px) 1fr; align-items: center; gap: 14px; }
+    .ov-costs .c-row > span { font-size: clamp(12px, .95vw, 14.5px); color: rgba(247,245,238,.8); text-align: right; }
+    .ov-costs .c-row > span small { display: block; color: rgba(247,245,238,.5); font-size: .85em; }
+    .ov-costs .c-track { position: relative; height: 16px; }
+    .ov-costs .c-min, .ov-costs .c-max {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 999px;
+      transform-origin: left center;
+      transform: scaleX(0);
+    }
+    .ov-costs .c-max { background: color-mix(in srgb, var(--cc, var(--acid)) 22%, transparent); border: 1px dashed color-mix(in srgb, var(--cc, var(--acid)) 55%, transparent); }
+    .ov-costs .c-min { background: var(--cc, var(--acid)); opacity: .85; }
+    .overlay.is-open .ov-costs .c-min, .overlay.is-open .ov-costs .c-max { transform: scaleX(1); transition: transform 1.1s var(--ease) var(--cd, .2s); }
+    .ov-cost-total {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px 18px;
+      margin: clamp(18px, 3vh, 30px) 0 0;
+      padding-top: clamp(14px, 2.2vh, 20px);
+      border-top: 1px solid rgba(247,245,238,.14);
+    }
+    .ov-cost-total strong {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(28px, 3vw, 46px);
+      color: var(--acid);
+      letter-spacing: .01em;
+    }
+    .ov-cost-total span { color: rgba(247,245,238,.7); font-size: clamp(12px, 1vw, 15px); }
+    @media (max-width: 900px) {
+      .ov-gantt .g-row, .ov-costs .c-row { grid-template-columns: 1fr; gap: 4px; }
+      .ov-gantt .g-row > span, .ov-costs .c-row > span { text-align: left; }
+      .ov-gantt .g-milestones { grid-column: 1; }
+    }
+
     .overlay__principle {
       margin: clamp(16px, 2.6vh, 26px) 0 0;
       color: var(--paper);
@@ -2377,6 +2456,7 @@
             <div>
               <h3>Convenzione UNIUST × Università della Tuscia</h3>
               <p>Finalizzata ai docenti per l’avvio dei programmi e alle attività di ricerca nei quattro ambiti.</p>
+              <div class="action__links"><button type="button" class="more-link" data-overlay="ov-tuscia">L’accordo ↗</button></div>
             </div>
           </article>
           <article class="action fragment" data-fragment="2">
@@ -2384,6 +2464,10 @@
             <div>
               <h3>Ricerca dello spazio e sua predisposizione</h3>
               <p>Individuare l’area secondo le caratteristiche del modello e predisporla ad accogliere le prime attività.</p>
+              <div class="action__links">
+                <button type="button" class="more-link" data-overlay="ov-piano">Il piano ↗</button>
+                <button type="button" class="more-link" data-overlay="ov-costi">I costi ↗</button>
+              </div>
             </div>
           </article>
         </div>
@@ -2429,6 +2513,66 @@
         <div class="ov-item" style="--c: var(--health)"><h3>03 · Spazi per formare e condividere</h3><p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p></div>
       </div>
       <p class="overlay__note">Una prima configurazione è stata sviluppata su questa scala. La configurazione cambia con il luogo. La funzione resta: innovare insieme nei quattro ambiti.</p>
+      <div class="overlay__links">
+        <button type="button" class="more-link" data-overlay="ov-piano">Il piano di predisposizione ↗</button>
+        <button type="button" class="more-link" data-overlay="ov-costi">I costi di predisposizione ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov-piano" role="dialog" aria-modal="true" aria-label="Approfondimento: il piano di predisposizione dello spazio">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Predisporre lo spazio</p>
+      <h2 class="display overlay__title">Tre mesi dall’avvio al campo attivo.</h2>
+      <p class="overlay__lead">Individuata l’area, sei fasi coordinate — circa undici settimane di lavori — la dotano di tutto ciò che serve per avviare le prime attività.</p>
+      <div class="ov-gantt" aria-hidden="true">
+        <div class="g-row"><span>Avvio e preparazione</span><div class="g-track"><i class="g-bar" style="--gc: rgba(247,245,238,.55); --gd: .15s; left: 0%; width: 26.5%"></i></div></div>
+        <div class="g-row"><span>Analisi e progettazione</span><div class="g-track"><i class="g-bar" style="--gc: var(--food); --gd: .3s; left: 27%; width: 26.5%"></i></div></div>
+        <div class="g-row"><span>Pulizia e sicurezza</span><div class="g-track"><i class="g-bar" style="--gc: var(--environment); --gd: .45s; left: 40%; width: 20%"></i></div></div>
+        <div class="g-row"><span>Riqualificazione strutture</span><div class="g-track"><i class="g-bar" style="--gc: var(--health); --gd: .6s; left: 53.5%; width: 40%"></i></div></div>
+        <div class="g-row"><span>Verde e suolo</span><div class="g-track"><i class="g-bar" style="--gc: var(--agriculture); --gd: .75s; left: 47%; width: 33%"></i></div></div>
+        <div class="g-row"><span>Infrastrutture</span><div class="g-track"><i class="g-bar" style="--gc: var(--acid); --gd: .9s; left: 73.5%; width: 26.5%"></i></div></div>
+        <div class="g-row"><span></span><div class="g-milestones"><em>◆ go operativo</em><span>serre operative · sett. 9</span><em>campo attivo · sett. 11 ◆</em></div></div>
+      </div>
+      <div class="overlay__list overlay__list--two">
+        <div class="ov-item"><h3>Fase 0 · Avvio e preparazione — 4 settimane</h3><p>Obiettivi, governance e cronoprogramma; verifica di fattibilità, capitolato tecnico e selezione dei fornitori. Al termine, il “go” operativo.</p></div>
+        <div class="ov-item"><h3>Fase 1 · Analisi e progettazione esecutiva — 4 settimane</h3><p>Rilievi e verifiche tecniche dell’area, procedure autorizzative, elaborati e computi metrici: il quadro completo per l’avvio delle opere.</p></div>
+        <div class="ov-item"><h3>Fase 2 · Pulizia e messa in sicurezza — 3 settimane</h3><p>Rimozione dei materiali, potature, drenaggi, recinzioni e segnaletica: un’area pulita, stabile e sicura.</p></div>
+        <div class="ov-item"><h3>Fase 3 · Riqualificazione delle strutture — 6 settimane</h3><p>Recupero di serre e manufatti esistenti — impianti, coperture, infissi — per ospitare ricerca, didattica, laboratori e uffici.</p></div>
+        <div class="ov-item"><h3>Fase 4 · Verde e suolo — 5 settimane</h3><p>Percorsi naturali, illuminazione discreta, radure per eventi all’aperto e nuove piantumazioni autoctone e mellifere.</p></div>
+        <div class="ov-item"><h3>Fase 5 · Predisposizione infrastrutturale — 4 settimane</h3><p>Reti elettriche, idriche e dati, wi-fi, passerelle accessibili e aree modulari, insieme al modello gestionale e di partnership.</p></div>
+      </div>
+      <p class="overlay__principle">Già durante i lavori lo spazio comincia a vivere: <strong>open day, percorsi didattici e mostre dimostrative</strong> prima ancora del completamento.</p>
+      <p class="overlay__note">Un project management trasversale accompagna l’intero percorso. Piano elaborato sulla configurazione di riferimento di circa un ettaro; tempi e sequenze si adattano al luogo individuato.</p>
+      <div class="overlay__links">
+        <button type="button" class="more-link" data-overlay="ov-costi">I costi di predisposizione ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov-costi" role="dialog" aria-modal="true" aria-label="Approfondimento: i costi di predisposizione dello spazio">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Predisporre lo spazio</p>
+      <h2 class="display overlay__title">Un investimento contenuto e già stimato.</h2>
+      <p class="overlay__lead">Una stima preliminare per fasi, con una forchetta minima e massima legata alle variabili tecniche, progettuali e autorizzative.</p>
+      <div class="ov-costs">
+        <div class="c-row"><span>Analisi e progettazione<small>€ 40.000 – 55.000</small></span><div class="c-track"><i class="c-max" style="--cc: var(--food); --cd: .2s; width: 32.4%"></i><i class="c-min" style="--cc: var(--food); --cd: .2s; width: 23.5%"></i></div></div>
+        <div class="c-row"><span>Pulizia e messa in sicurezza<small>€ 15.000 – 30.000</small></span><div class="c-track"><i class="c-max" style="--cc: var(--environment); --cd: .35s; width: 17.6%"></i><i class="c-min" style="--cc: var(--environment); --cd: .35s; width: 8.8%"></i></div></div>
+        <div class="c-row"><span>Riqualificazione strutture<small>€ 110.000 – 170.000</small></span><div class="c-track"><i class="c-max" style="--cc: var(--health); --cd: .5s; width: 100%"></i><i class="c-min" style="--cc: var(--health); --cd: .5s; width: 64.7%"></i></div></div>
+        <div class="c-row"><span>Verde e suolo<small>€ 30.000 – 50.000</small></span><div class="c-track"><i class="c-max" style="--cc: var(--agriculture); --cd: .65s; width: 29.4%"></i><i class="c-min" style="--cc: var(--agriculture); --cd: .65s; width: 17.6%"></i></div></div>
+        <div class="c-row"><span>Infrastrutture<small>€ 25.000 – 35.000</small></span><div class="c-track"><i class="c-max" style="--cc: var(--acid); --cd: .8s; width: 20.6%"></i><i class="c-min" style="--cc: var(--acid); --cd: .8s; width: 14.7%"></i></div></div>
+      </div>
+      <div class="ov-cost-total">
+        <span>Investimento complessivo</span>
+        <strong>€ 220.000 – 340.000</strong>
+        <span>per l’intera fase di predisposizione</span>
+      </div>
+      <p class="overlay__note">Range prudenziale: il margine superiore copre imprevisti e varianti esecutive. A valle della progettazione esecutiva sarà redatto il quadro economico consolidato. Le stime riguardano la sola predisposizione dello spazio, sulla configurazione di riferimento di circa un ettaro.</p>
+      <div class="overlay__links">
+        <button type="button" class="more-link" data-overlay="ov-piano">Il piano di predisposizione ↗</button>
+      </div>
     </div>
   </div>
 
@@ -2842,7 +2986,9 @@
       // approfondimenti
       const openOverlay = id => {
         const ov = document.getElementById(id);
-        if (ov) ov.classList.add('is-open');
+        if (!ov) return;
+        closeOverlays();
+        ov.classList.add('is-open');
       };
       const closeOverlays = () => document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open'));
       document.querySelectorAll('[data-overlay]').forEach(btn => {
