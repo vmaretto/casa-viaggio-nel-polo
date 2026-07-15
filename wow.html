@@ -723,7 +723,7 @@
       position: absolute;
       inset: 11%;
       border-radius: 50%;
-      background: conic-gradient(from -90deg, var(--environment), var(--agriculture), var(--food), var(--health), var(--environment));
+      background: conic-gradient(from -90deg, var(--food), var(--environment), var(--health), var(--agriculture), var(--food));
       -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
       mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
       opacity: .88;
@@ -794,10 +794,10 @@
       font-style: italic;
       font-weight: 400;
     }
-    .node-environment { --x: 50%; --y: 8%; --node-color: var(--environment); }
-    .node-agriculture { --x: 88%; --y: 50%; --node-color: var(--agriculture); animation-delay: .7s; }
-    .node-food { --x: 50%; --y: 92%; --node-color: var(--food); animation-delay: 1.4s; }
-    .node-health { --x: 12%; --y: 50%; --node-color: var(--health); animation-delay: 2.1s; }
+    .node-food { --x: 50%; --y: 8%; --node-color: var(--food); }
+    .node-environment { --x: 88%; --y: 50%; --node-color: var(--environment); animation-delay: .7s; }
+    .node-health { --x: 50%; --y: 92%; --node-color: var(--health); animation-delay: 1.4s; }
+    .node-agriculture { --x: 12%; --y: 50%; --node-color: var(--agriculture); animation-delay: 2.1s; }
     .cycle__story {
       position: relative;
       min-height: 238px;
@@ -829,10 +829,10 @@
     .cycle__tech-list { display: grid; gap: 8px; }
     .cycle__tech-list p { font-size: clamp(14px, 1.03vw, 17px); }
     .cycle__tech-list strong { color: var(--acid); font-weight: 500; }
-    .cycle[data-fragment-step="0"] .node-environment,
-    .cycle[data-fragment-step="1"] .node-agriculture,
-    .cycle[data-fragment-step="2"] .node-food,
-    .cycle[data-fragment-step="3"] .node-health {
+    .cycle[data-fragment-step="0"] .node-food,
+    .cycle[data-fragment-step="1"] .node-environment,
+    .cycle[data-fragment-step="2"] .node-health,
+    .cycle[data-fragment-step="3"] .node-agriculture {
       transform: translate(-50%, -50%) scale(1.12);
       text-shadow: 0 0 34px color-mix(in srgb, var(--node-color), transparent 40%);
     }
@@ -999,7 +999,7 @@
       left: 3%;
       right: 3%;
       height: 1px;
-      background: linear-gradient(90deg, var(--environment), var(--agriculture), var(--food), var(--health));
+      background: linear-gradient(90deg, var(--food), var(--environment), var(--health), var(--agriculture));
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 2.2s var(--ease) .2s;
@@ -1044,10 +1044,10 @@
       line-height: 1.45;
     }
     .op p + p { margin-top: 9px; }
-    .op--1 { --op-color: var(--environment); }
-    .op--2 { --op-color: var(--agriculture); }
-    .op--3 { --op-color: var(--food); }
-    .op--4 { --op-color: var(--health); }
+    .op--1 { --op-color: var(--food); }
+    .op--2 { --op-color: var(--environment); }
+    .op--3 { --op-color: var(--health); }
+    .op--4 { --op-color: var(--agriculture); }
     .operate[data-fragment-step="0"] .op--1,
     .operate[data-fragment-step="1"] .op--2,
     .operate[data-fragment-step="2"] .op--3,
@@ -1332,10 +1332,10 @@
       font-weight: 300;
       line-height: 1.48;
     }
-    .cap--1 { --cap-color: var(--environment); }
-    .cap--2 { --cap-color: var(--food); }
-    .cap--3 { --cap-color: var(--agriculture); }
-    .cap--4 { --cap-color: var(--health); }
+    .cap--1 { --cap-color: var(--food); }
+    .cap--2 { --cap-color: var(--environment); }
+    .cap--3 { --cap-color: var(--health); }
+    .cap--4 { --cap-color: var(--agriculture); }
     .heritage__closing {
       width: min(1240px, 100%);
       margin: clamp(12px, 2vh, 20px) auto 0;
@@ -1861,7 +1861,7 @@
           <p class="eyebrow reveal">04 · Per questo nasce CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Il luogo dove le connessioni diventano innovazione.</h2>
           <div class="birth__lines">
-            <p class="reveal delay-2">CASA è <strong>un luogo fisico di un ettaro</strong> — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su ambiente, agricoltura, cibo e salute.</p>
+            <p class="reveal delay-2">CASA è <strong>un luogo fisico di un ettaro</strong> — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme su cibo, ambiente, salute e agricoltura.</p>
             <p class="reveal delay-3">Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.</p>
             <p class="reveal delay-4">Formazione, sperimentazione e ricerca lavorano sulla stessa catena.</p>
             <p class="reveal delay-5">Le risorse dei partner ne ampliano le capacità. Una regia comune le mette in relazione.</p>
@@ -1920,21 +1920,21 @@
           <p class="eyebrow reveal">06 · Dentro CASA</p>
           <h2 class="display reveal delay-1">Un ciclo di dati, sperimentazione ed evidenze.</h2>
           <div class="cycle__story reveal delay-2">
-            <article class="cycle__detail fragment is-current" data-fragment="0" style="--detail-color: var(--environment)">
-              <span class="detail-label">Ambiente</span>
-              <p>Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="1" style="--detail-color: var(--agriculture)">
-              <span class="detail-label">Agricoltura</span>
-              <p>I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="2" style="--detail-color: var(--food)">
+            <article class="cycle__detail fragment is-current" data-fragment="0" style="--detail-color: var(--food)">
               <span class="detail-label">Cibo</span>
               <p>Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.</p>
             </article>
-            <article class="cycle__detail fragment" data-fragment="3" style="--detail-color: var(--health)">
+            <article class="cycle__detail fragment" data-fragment="1" style="--detail-color: var(--environment)">
+              <span class="detail-label">Ambiente</span>
+              <p>Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="2" style="--detail-color: var(--health)">
               <span class="detail-label">Salute</span>
               <p>Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.</p>
+            </article>
+            <article class="cycle__detail fragment" data-fragment="3" style="--detail-color: var(--agriculture)">
+              <span class="detail-label">Agricoltura</span>
+              <p>I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</p>
             </article>
             <article class="cycle__detail fragment" data-fragment="4">
               <span class="detail-label">Le tecnologie lungo il ciclo</span>
@@ -1957,10 +1957,10 @@
           <div class="flow-ring" aria-hidden="true"></div>
           <div class="flow-dot" aria-hidden="true"></div>
           <div class="cycle__core"><div><strong>evidenze</strong><small>dati · sperimentazione</small></div></div>
-          <div class="domain-node node-environment"><strong>Ambiente</strong></div>
-          <div class="domain-node node-agriculture"><strong>Agricoltura</strong></div>
           <div class="domain-node node-food"><strong>Cibo</strong></div>
+          <div class="domain-node node-environment"><strong>Ambiente</strong></div>
           <div class="domain-node node-health"><strong>Salute</strong></div>
+          <div class="domain-node node-agriculture"><strong>Agricoltura</strong></div>
         </div>
       </div>
     </section>
