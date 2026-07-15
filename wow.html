@@ -170,8 +170,11 @@
       display: grid;
       gap: 9px;
       transform: translateY(-50%);
-      mix-blend-mode: difference;
+      filter: drop-shadow(0 1px 3px rgba(7,29,33,.55));
     }
+    body.on-light .nav { filter: none; }
+    body.on-light .nav button { border-color: rgba(15,43,48,.5); }
+    body.on-light .nav button[aria-current="true"] { background: #5d6614; border-color: #5d6614; }
     .nav button {
       position: relative;
       width: 9px;
@@ -197,8 +200,8 @@
       border: 1px solid rgba(247,245,238,.28);
       border-radius: 999px;
       padding: 9px 13px;
-      color: rgba(247,245,238,.78);
-      background: rgba(7,29,33,.42);
+      color: rgba(247,245,238,.92);
+      background: rgba(7,29,33,.72);
       backdrop-filter: blur(12px);
       cursor: pointer;
       font-size: 10px;
@@ -601,62 +604,6 @@
       text-align: right;
     }
     .space .step-hint { display: none; }
-    .info-dot {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: 8px;
-      padding: 5px 12px;
-      border: 1px solid rgba(170,179,34,.55);
-      border-radius: 999px;
-      background: rgba(7,29,33,.5);
-      color: var(--acid);
-      vertical-align: middle;
-      cursor: help;
-    }
-    .info-dot__label {
-      font-family: var(--sans);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .05em;
-    }
-    .info-dot__icon {
-      display: inline-grid;
-      place-items: center;
-      width: 17px;
-      height: 17px;
-      border: 1px solid rgba(170,179,34,.6);
-      border-radius: 50%;
-      font-family: var(--serif);
-      font-size: 12px;
-      font-style: italic;
-    }
-    .info-dot__tip {
-      position: absolute;
-      bottom: calc(100% + 12px);
-      left: 0;
-      z-index: 6;
-      width: min(340px, 72vw);
-      padding: 13px 16px;
-      border: 1px solid rgba(170,179,34,.4);
-      border-radius: 4px;
-      background: rgba(7,29,33,.96);
-      color: rgba(247,245,238,.9);
-      font-family: var(--sans);
-      font-size: 13.5px;
-      font-style: normal;
-      font-weight: 300;
-      line-height: 1.5;
-      text-align: left;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity .35s var(--ease), transform .35s var(--ease);
-      pointer-events: none;
-    }
-    .info-dot:hover .info-dot__tip,
-    .info-dot:focus .info-dot__tip,
-    .info-dot.is-open .info-dot__tip { opacity: 1; transform: none; }
     .space__detail {
       position: absolute;
       inset: 0;
@@ -972,6 +919,8 @@
     .ior[data-fragment-step="1"] .resource--casa,
     .ior[data-fragment-step="1"] .resource-zone--casa { opacity: .18; }
     .ior[data-fragment-step="0"] .resource-zone--casa { border-color: rgba(170,179,34,.8); background: rgba(170,179,34,.09); }
+    .ior[data-fragment-step="0"] .resource-zone--partners .zone-label,
+    .ior[data-fragment-step="1"] .resource-zone--casa .zone-label { visibility: hidden; }
     .ior[data-fragment-step="1"] .resource-zone--partners { border-color: rgba(126,189,174,.65); background: rgba(126,189,174,.04); }
     .ior[data-fragment-step="2"] .ior-core,
     .ior[data-fragment-step="3"] .ior-core { box-shadow: 0 0 0 18px rgba(170,179,34,.09), 0 0 110px rgba(170,179,34,.45); }
@@ -1056,7 +1005,7 @@
     .operate[data-fragment-step="2"] .op--3::before,
     .operate[data-fragment-step="3"] .op--4::before {
       background: var(--op-color);
-      color: var(--ink-deep);
+      color: var(--paper);
       box-shadow: 0 0 34px color-mix(in srgb, var(--op-color), transparent 55%);
     }
     .operate__loop {
@@ -2385,11 +2334,12 @@
         if (active === lastActive) return;
         lastActive = active;
         scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
+        document.body.classList.toggle('on-light', scenes[active].matches('.scene--light, .finale'));
         dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
         progress.style.transform = `scaleX(${active + 1})`;
         animateCounters(scenes[active]);
         // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
-        if (!fromNav && !isMobile()) {
+        if (!staticMode && !fromNav && !isMobile()) {
           const sc = scenes[active];
           const count = fragmentCount(sc);
           if (count > 1) {
@@ -2452,22 +2402,6 @@
         } catch (_) {}
       };
       document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
-
-      document.querySelectorAll('.info-dot').forEach(dot => {
-        dot.addEventListener('click', e => {
-          e.stopPropagation();
-          const open = dot.classList.toggle('is-open');
-          dot.setAttribute('aria-expanded', String(open));
-        });
-      });
-      const closeDots = () => document.querySelectorAll('.info-dot.is-open').forEach(d => {
-        d.classList.remove('is-open');
-        d.setAttribute('aria-expanded', 'false');
-      });
-      addEventListener('click', e => {
-        document.querySelectorAll('.info-dot.is-open').forEach(d => { if (!d.contains(e.target)) { d.classList.remove('is-open'); d.setAttribute('aria-expanded', 'false'); } });
-      });
-      addEventListener('keydown', e => { if (e.key === 'Escape') closeDots(); });
 
       const fsBtn = document.getElementById('fullscreen');
       fsBtn.setAttribute('aria-pressed', 'false');
