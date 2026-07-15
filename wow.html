@@ -1165,6 +1165,15 @@
       border-top: 1px solid rgba(247,245,238,.12);
       transition: background .5s ease, transform .6s var(--ease);
     }
+    .actors__grid .role--promote {
+      border: 1px solid rgba(170,179,34,.5);
+      border-left: 4px solid var(--acid);
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(170,179,34,.17), rgba(170,179,34,.03));
+      box-shadow: 0 12px 36px rgba(0,0,0,.18);
+      padding: clamp(16px, 2.4vh, 26px) clamp(16px, 1.8vw, 26px);
+      margin-bottom: clamp(6px, 1vh, 12px);
+    }
     .role h3 {
       margin: 0;
       color: color-mix(in srgb, var(--role-color, var(--acid)), rgba(247,245,238,.55) 35%);
@@ -1240,22 +1249,25 @@
     .sci:first-child { padding-left: 0; }
     .sci + .sci { border-left: 1px solid rgba(247,245,238,.1); }
     .sci i {
-      display: block;
+      display: inline-block;
       width: 8px;
       height: 8px;
-      margin-bottom: 8px;
+      margin: 0 9px 3px 0;
       border-radius: 50%;
       background: var(--c);
+      vertical-align: middle;
     }
     .sci h4 {
-      margin: 0 0 2px;
+      display: inline;
+      margin: 0;
       color: var(--paper);
       font-family: var(--serif);
-      font-size: clamp(17px, 1.5vw, 22px);
+      font-size: clamp(18px, 1.6vw, 23px);
       font-style: italic;
       font-weight: 400;
       line-height: 1.05;
     }
+    .sci small { margin-top: 4px; }
     .sci small {
       display: block;
       margin-bottom: 7px;
@@ -1271,13 +1283,12 @@
       font-weight: 300;
       line-height: 1.45;
     }
-    .actors[data-fragment-step="0"] .role--promote,
     .actors[data-fragment-step="1"] .role--manage,
-    .actors[data-fragment-step="2"] .role--train,
-    .actors[data-fragment-step="3"] .role--sci {
+    .actors[data-fragment-step="2"] .role--train {
       background: linear-gradient(90deg, rgba(247,245,238,.05), transparent 70%);
       transform: translateX(10px);
     }
+    .actors[data-fragment-step="3"] .role--sci { transform: translateX(10px); }
     .actors__closing {
       width: min(1240px, 100%);
       margin: clamp(12px, 2.2vh, 20px) auto 0;
@@ -1368,19 +1379,6 @@
     }
     .roadmap__track { align-items: start; }
     .phase { position: relative; transition: transform .6s var(--ease); }
-    .phase::before {
-      content: "";
-      position: absolute;
-      top: -32px;
-      left: 2px;
-      width: 11px;
-      height: 11px;
-      border: 1px solid var(--phase-color, var(--acid));
-      border-radius: 50%;
-      background: var(--ink-deep);
-      box-shadow: 0 0 18px color-mix(in srgb, var(--phase-color, var(--acid)), transparent 45%);
-      transition: background .5s ease;
-    }
     .phase__year {
       margin: 0 0 4px;
       color: var(--phase-color, var(--acid));
@@ -1407,17 +1405,15 @@
     }
     .phase {
       padding: 0 6px clamp(14px, 2vh, 20px);
-      border-bottom: 3px solid color-mix(in srgb, var(--phase-color, var(--acid)), transparent 45%);
+      border-bottom: 2px solid rgba(247,245,238,.22);
     }
-    .phase--1 { --phase-color: var(--acid); margin-top: clamp(70px, 14vh, 150px); }
-    .phase--2 { --phase-color: var(--environment); margin-top: clamp(35px, 7vh, 75px); }
-    .phase--3 { --phase-color: var(--food); margin-top: 0; }
+    .phase__year { color: var(--acid); }
+    .phase--1 { margin-top: clamp(70px, 14vh, 150px); }
+    .phase--2 { margin-top: clamp(35px, 7vh, 75px); }
+    .phase--3 { margin-top: 0; }
     .roadmap[data-fragment-step="0"] .phase--1,
     .roadmap[data-fragment-step="1"] .phase--2,
     .roadmap[data-fragment-step="2"] .phase--3 { transform: translateY(-6px); }
-    .roadmap[data-fragment-step="0"] .phase--1::before,
-    .roadmap[data-fragment-step="1"] .phase--2::before,
-    .roadmap[data-fragment-step="2"] .phase--3::before { background: var(--phase-color); }
     .roadmap__closing {
       width: min(1240px, 100%);
       margin: clamp(22px, 4vh, 38px) auto 0;
@@ -1688,6 +1684,25 @@
     .overlay__diagram .r5 { --y: 16%; }
     .overlay__diagram .r6 { --y: 87%; }
     .overlay__list--cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+    .overlay__lead {
+      margin: 0 0 clamp(14px, 2.2vh, 22px);
+      color: rgba(247,245,238,.85);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.5vw, 23px);
+      font-style: italic;
+    }
+    .overlay__list--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.6vh, 28px) clamp(20px, 3vw, 44px); }
+    .ov-item ul { margin: 0; padding-left: 18px; }
+    .ov-item li { color: rgba(247,245,238,.82); font-size: clamp(13px, 1.02vw, 15.5px); font-weight: 300; line-height: 1.55; }
+    .overlay__note {
+      margin: clamp(14px, 2.2vh, 22px) 0 0;
+      padding: 12px 16px;
+      border-left: 2px solid rgba(170,179,34,.55);
+      background: rgba(170,179,34,.07);
+      color: rgba(247,245,238,.75);
+      font-size: clamp(12.5px, .95vw, 14.5px);
+      line-height: 1.5;
+    }
     .overlay__principle {
       margin: clamp(16px, 2.6vh, 26px) 0 0;
       color: var(--paper);
@@ -1699,7 +1714,7 @@
     }
     @media (max-width: 900px) {
       .overlay__grid { grid-template-columns: 1fr; }
-      .overlay__list--cols { grid-template-columns: 1fr; }
+      .overlay__list--cols, .overlay__list--two { grid-template-columns: 1fr; }
       .overlay .cycle__map { max-width: min(78vw, 360px); }
       .overlay__diagram { display: none; }
     }
@@ -2128,6 +2143,9 @@
           </div>
         </div>
         <p class="actors__closing reveal delay-3">CASA permette a queste capacità di lavorare nello stesso spazio e attraverso lo stesso sistema di accesso.</p>
+        <div class="operate__more reveal delay-4">
+          <button type="button" class="more-link" data-overlay="ov-tuscia">L’accordo UNIUST × Tuscia ↗</button>
+        </div>
       </div>
     </section>
 
@@ -2191,6 +2209,9 @@
           </article>
         </div>
         <p class="roadmap__closing reveal delay-3">Ogni fase costruisce le capacità necessarie per quella successiva.</p>
+        <div class="operate__more reveal delay-4">
+          <button type="button" class="more-link" data-overlay="ov-europa">Dimensione europea e mediterranea ↗</button>
+        </div>
       </div>
     </section>
 
@@ -2230,6 +2251,52 @@
       </div>
     </section>
   </main>
+
+  <!-- APPROFONDIMENTI -->
+  <div class="overlay" id="ov-tuscia" role="dialog" aria-modal="true" aria-label="Approfondimento: accordo UNIUST e Tuscia">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Accordo accademico</p>
+      <h2 class="display overlay__title">UNIUST × Università della Tuscia.</h2>
+      <p class="overlay__lead">Formazione, docenza e ricerca: valore per entrambe le parti.</p>
+      <div class="overlay__list overlay__list--two">
+        <div class="ov-item"><h3>La convenzione prevede</h3><ul>
+          <li>docenti dell’Università della Tuscia per l’avvio dei programmi UNIUST;</li>
+          <li>iscrizione congiunta degli studenti ai percorsi previsti;</li>
+          <li>finanziamento di attività di ricerca;</li>
+          <li>collaborazione su agricoltura, filiere agroalimentari e carbon farming.</li>
+        </ul></div>
+        <div class="ov-item"><h3>Valore per CASA</h3><ul>
+          <li>partire con docenti e competenze già disponibili;</li>
+          <li>collegare fin dall’inizio formazione e ricerca;</li>
+          <li>integrare competenze sull’agricoltura e sul carbon farming;</li>
+          <li>attrarre studenti, imprese e nuovi partner.</li>
+        </ul></div>
+        <div class="ov-item"><h3>Valore per Unitus</h3><ul>
+          <li>raggiungere nuovi studenti attraverso i programmi con UNIUST;</li>
+          <li>ampliare la presenza su Roma e nelle reti internazionali;</li>
+          <li>applicare competenze scientifiche a bisogni di imprese e territori;</li>
+          <li>sviluppare nuove attività di ricerca nei quattro ambiti.</li>
+        </ul></div>
+        <div class="ov-item"><h3>Ruolo nel modello CASA</h3><p>Docenza, ricerca e percorsi congiunti rafforzano il legame tra creazione delle competenze, sperimentazione agricola e innovazione applicata.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov-europa" role="dialog" aria-modal="true" aria-label="Approfondimento: dimensione europea e mediterranea">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Dimensione internazionale</p>
+      <h2 class="display overlay__title">Dal territorio a una rete europea e mediterranea.</h2>
+      <div class="overlay__list overlay__list--two">
+        <div class="ov-item"><h3>Programmi europei</h3><p>CASA costruisce competenze e partenariati per partecipare ai programmi europei, a partire dalle opportunità coerenti con Horizon Europe e Cluster 6.</p></div>
+        <div class="ov-item"><h3>Piano Mattei</h3><p>Il modello può sostenere iniziative rivolte ai Paesi africani, in coerenza con le priorità e gli strumenti della strategia nazionale.</p></div>
+        <div class="ov-item"><h3>Università di Malta</h3><p>Un ponte accademico verso il Mediterraneo e l’Africa: percorsi in lingua inglese e una rete internazionale di studenti e docenti, collegati ai corsi sviluppati con le università dell’ecosistema.</p></div>
+        <div class="ov-item"><h3>Attrazione e replicazione</h3><p>La rete internazionale amplia la capacità di CASA di attrarre studenti, docenti, imprese e tecnologie. Dopo la verifica del primo spazio, il modello potrà essere adattato e collegato a nuovi territori.</p></div>
+      </div>
+      <p class="overlay__note">La configurazione dei percorsi e gli accordi attuativi saranno definiti nelle rispettive sedi accademiche.</p>
+    </div>
+  </div>
 
   <!-- APPROFONDIMENTI (popup dalla scena Come opera) -->
   <div class="overlay" id="ov-ciclo" role="dialog" aria-modal="true" aria-label="Approfondimento: dentro CASA">
