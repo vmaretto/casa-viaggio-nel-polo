@@ -45,7 +45,7 @@
       --safe-x: clamp(32px, 5.2vw, 86px);
       --safe-y: clamp(28px, 4.2vh, 54px);
       --ease: cubic-bezier(.22, 1, .36, 1);
-      --n-scenes: 16;
+      --n-scenes: 14;
     }
 
     * { box-sizing: border-box; }
@@ -1605,6 +1605,105 @@
     .scene:not(.is-active) .ior-core,
     .scene:not(.is-active) .science__photo::after { animation-play-state: paused; }
 
+    /* ---- approfondimenti (overlay) ---- */
+    .operate__more { display: flex; flex-wrap: wrap; gap: 14px; width: min(1240px, 100%); margin: clamp(16px, 2.6vh, 26px) auto 0; }
+    .more-link {
+      border: 1px solid rgba(170,179,34,.5);
+      border-radius: 999px;
+      padding: 10px 22px;
+      background: rgba(170,179,34,.08);
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(15px, 1.2vw, 18px);
+      font-style: italic;
+      cursor: pointer;
+      transition: background .3s ease, transform .3s var(--ease);
+    }
+    .more-link:hover { background: rgba(170,179,34,.16); transform: translateY(-2px); }
+    .scene--light .more-link { border-color: rgba(93,102,20,.55); background: rgba(93,102,20,.08); color: #5d6614; }
+    .scene--light .more-link:hover { background: rgba(93,102,20,.15); }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 3vh, 40px);
+      background: rgba(7,29,33,.9);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .4s ease, visibility 0s linear .4s;
+    }
+    .overlay.is-open { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+    .overlay__panel {
+      position: relative;
+      width: min(1200px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: clamp(24px, 4vh, 44px) clamp(24px, 3.4vw, 52px);
+      border: 1px solid rgba(247,245,238,.14);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 76% 30%, rgba(170,179,34,.1), transparent 40%),
+        var(--ink-deep);
+      transform: translateY(18px) scale(.985);
+      transition: transform .45s var(--ease);
+    }
+    .overlay.is-open .overlay__panel { transform: none; }
+    .overlay__close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(247,245,238,.3);
+      border-radius: 50%;
+      background: rgba(7,29,33,.6);
+      color: var(--paper);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .overlay__title { font-size: clamp(28px, 3vw, 46px); margin-bottom: clamp(16px, 2.6vh, 28px); }
+    .overlay__grid {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: clamp(24px, 3.4vw, 56px);
+      align-items: center;
+    }
+    .overlay .cycle__map { width: 100%; max-width: 480px; justify-self: center; }
+    .overlay__list { display: grid; gap: clamp(12px, 2vh, 18px); }
+    .ov-item h3 {
+      margin: 0 0 4px;
+      color: var(--c, var(--acid));
+      font-family: var(--serif);
+      font-size: clamp(19px, 1.6vw, 24px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .ov-item p { margin: 0; color: rgba(247,245,238,.82); font-size: clamp(13px, 1.02vw, 15.5px); font-weight: 300; line-height: 1.5; }
+    .ov-item p strong { color: var(--acid); font-weight: 500; }
+    .overlay__diagram { min-height: clamp(280px, 38vh, 380px); margin-bottom: clamp(16px, 2.6vh, 26px); }
+    .overlay__diagram .r5 { --y: 16%; }
+    .overlay__diagram .r6 { --y: 87%; }
+    .overlay__list--cols { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+    .overlay__principle {
+      margin: clamp(16px, 2.6vh, 26px) 0 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(16px, 1.4vw, 22px);
+      font-style: italic;
+      line-height: 1.4;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .overlay__grid { grid-template-columns: 1fr; }
+      .overlay__list--cols { grid-template-columns: 1fr; }
+      .overlay .cycle__map { max-width: min(78vw, 360px); }
+      .overlay__diagram { display: none; }
+    }
+
     @keyframes coverZoom { from { transform: scale(1); } to { transform: scale(1.10); } }
     @keyframes cue { 0%,100% { transform: scaleY(.15); opacity: .3; } 50% { transform: scaleY(1); opacity: 1; } }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -1913,106 +2012,15 @@
       </div>
     </section>
 
-    <!-- 07 · DENTRO CASA -->
-    <section class="scene cycle" id="p07" data-index="7" data-title="Dentro CASA" aria-label="Dentro CASA">
-      <div class="scene__safe cycle__content">
-        <div class="cycle__copy">
-          <p class="eyebrow reveal">06 · Dentro CASA</p>
-          <h2 class="display reveal delay-1">Un ciclo di dati, sperimentazione ed evidenze.</h2>
-          <div class="cycle__story reveal delay-2">
-            <article class="cycle__detail fragment is-current" data-fragment="0" style="--detail-color: var(--food)">
-              <span class="detail-label">Cibo</span>
-              <p>Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="1" style="--detail-color: var(--environment)">
-              <span class="detail-label">Ambiente</span>
-              <p>Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="2" style="--detail-color: var(--health)">
-              <span class="detail-label">Salute</span>
-              <p>Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="3" style="--detail-color: var(--agriculture)">
-              <span class="detail-label">Agricoltura</span>
-              <p>I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</p>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="4">
-              <span class="detail-label">Le tecnologie lungo il ciclo</span>
-              <div class="cycle__tech-list">
-                <p><strong>L’IoT</strong> raccoglie i dati.</p>
-                <p><strong>L’intelligenza artificiale</strong> mette in relazione dati ambientali e agricoli, qualità del cibo ed evidenze sulla salute.</p>
-                <p><strong>Le piattaforme dati</strong> rendono le informazioni accessibili e combinabili secondo regole condivise.</p>
-                <p><strong>La blockchain</strong>, quando utile, rafforza la provenienza e la tracciabilità dei processi e degli alimenti.</p>
-              </div>
-            </article>
-            <article class="cycle__detail fragment" data-fragment="5">
-              <span class="detail-label">Dal luogo alla rete</span>
-              <p>Ciò che CASA osserva e sperimenta nello spazio comune si collega alle capacità specialistiche dei partner.</p>
-            </article>
-          </div>
-        </div>
+    
 
-        <div class="cycle__map reveal delay-2" aria-label="Ciclo ambiente, agricoltura, cibo e salute">
-          <div class="orbit" aria-hidden="true"></div>
-          <div class="flow-ring" aria-hidden="true"></div>
-          <div class="flow-dot" aria-hidden="true"></div>
-          <div class="cycle__core"><div><strong>evidenze</strong><small>dati · sperimentazione</small></div></div>
-          <div class="domain-node node-food"><strong>Cibo</strong></div>
-          <div class="domain-node node-environment"><strong>Ambiente</strong></div>
-          <div class="domain-node node-health"><strong>Salute</strong></div>
-          <div class="domain-node node-agriculture"><strong>Agricoltura</strong></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 08 · IL PRINCIPIO DI CASA -->
-    <section class="scene ior" id="p08" data-index="8" data-title="Il principio di CASA" aria-label="Il principio di CASA">
-      <div class="scene__safe ior__content">
-        <header class="ior__header">
-          <p class="eyebrow reveal">07 · Il principio di CASA</p>
-          <h2 class="display ior__title reveal delay-1">L’Internet delle Risorse.</h2>
-        </header>
-
-        <div class="ior__stage-progressive reveal delay-2">
-          <div class="ior__diagram">
-            <div class="resource-zone resource-zone--partners"><span class="zone-label">Risorse presso i partner</span></div>
-            <div class="resource-zone resource-zone--casa"><span class="zone-label">Risorse dello spazio CASA</span></div>
-            <div class="ior-core"><strong>CASA</strong></div>
-            <div class="resource resource--partner r1">Dati e modelli<small>clima · suolo · salute</small></div>
-            <div class="resource resource--partner r2">Laboratori specialistici<small>capacità che restano ai partner</small></div>
-            <div class="resource resource--partner r3">Competenze<small>ricerca · docenza · conoscenza</small></div>
-            <div class="resource resource--partner r4">Tecnologie<small>IoT · AI · tracciabilità</small></div>
-            <div class="resource resource--casa r5">Campi e serre<small>sperimentazione condivisa</small></div>
-            <div class="resource resource--casa r6">Laboratori e infrastrutture digitali<small>accesso secondo regole comuni</small></div>
-          </div>
-          <aside class="ior__explain">
-            <article class="ior__detail fragment is-current" data-fragment="0" style="--detail-color: var(--agriculture)">
-              <h3>Le risorse dello spazio CASA</h3>
-              <p>Campi sperimentali, sensori, serre, laboratori e infrastrutture digitali vengono condivisi e resi accessibili secondo regole comuni.</p>
-            </article>
-            <article class="ior__detail fragment" data-fragment="1" style="--detail-color: var(--environment)">
-              <h3>Le risorse dei partner</h3>
-              <p>Laboratori specialistici, dati, tecnologie e competenze che restano presso i partner vengono collegati allo stesso sistema di accesso.</p>
-            </article>
-            <article class="ior__detail fragment" data-fragment="2" style="--detail-color: var(--food)">
-              <h3>Accesso condiviso a capacità avanzate</h3>
-              <p>Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente.</p>
-              <p>Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l’intera infrastruttura.</p>
-            </article>
-            <article class="ior__detail ior__detail--principle fragment" data-fragment="3">
-              <p>Lo spazio è il luogo dell’integrazione.</p>
-              <p>L’Internet delle Risorse (IoR) è il sistema che ne rende accessibili e ne estende le capacità.</p>
-            </article>
-          </aside>
-        </div>
-      </div>
-    </section>
+    
 
     <!-- 09 · COME OPERA CASA -->
-    <section class="scene operate scene--light" id="p09" data-index="9" data-title="Come opera CASA" aria-label="Come opera CASA">
+    <section class="scene operate scene--light" id="p09" data-index="7" data-title="Come opera CASA" aria-label="Come opera CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">08 · Come opera CASA</p>
+          <p class="eyebrow reveal">06 · Come opera CASA</p>
           <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
         </header>
         <div class="operate__rail" data-fragment-cumulative>
@@ -2034,14 +2042,18 @@
           </article>
         </div>
         <p class="operate__loop reveal delay-3">Ogni risultato alimenta un nuovo ciclo di formazione, sperimentazione, ricerca e innovazione.</p>
+        <div class="operate__more reveal delay-4">
+          <button type="button" class="more-link" data-overlay="ov-ciclo">Il ciclo dei quattro ambiti ↗</button>
+          <button type="button" class="more-link" data-overlay="ov-ior">L’Internet delle Risorse (IoR) ↗</button>
+        </div>
       </div>
     </section>
 
     <!-- 10 · PER CHI È CASA -->
-    <section class="scene who" id="p10" data-index="10" data-title="Per chi è CASA" aria-label="Per chi è CASA">
+    <section class="scene who" id="p10" data-index="8" data-title="Per chi è CASA" aria-label="Per chi è CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">09 · Per chi è CASA</p>
+          <p class="eyebrow reveal">07 · Per chi è CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
           <p class="lead reveal delay-2">CASA costruisce il percorso e rende accessibili capacità che da soli sarebbe difficile realizzare.</p>
         </header>
@@ -2068,10 +2080,10 @@
     </section>
 
     <!-- 11 · CHI RENDE POSSIBILE CASA -->
-    <section class="scene actors" id="p11" data-index="11" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
+    <section class="scene actors" id="p11" data-index="9" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">10 · Chi rende possibile CASA</p>
+          <p class="eyebrow reveal">08 · Chi rende possibile CASA</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Sei partner, nessuno basta da solo.</h2>
           <p class="lead reveal delay-2">Ruoli distinti, una capacità comune.</p>
         </header>
@@ -2120,10 +2132,10 @@
     </section>
 
     <!-- 12 · IL PATRIMONIO DI PARTENZA -->
-    <section class="scene heritage scene--light" id="p12" data-index="12" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
+    <section class="scene heritage scene--light" id="p12" data-index="10" data-title="Il patrimonio di partenza" aria-label="Il patrimonio di partenza">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">11 · Il patrimonio di partenza</p>
+          <p class="eyebrow reveal">09 · Il patrimonio di partenza</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
         </header>
         <div class="heritage__grid" data-fragment-cumulative>
@@ -2149,10 +2161,10 @@
     </section>
 
     <!-- 13 · ROADMAP -->
-    <section class="scene roadmap" id="p13" data-index="13" data-title="Roadmap" aria-label="Roadmap">
+    <section class="scene roadmap" id="p13" data-index="11" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">12 · Roadmap</p>
+          <p class="eyebrow reveal">10 · Roadmap</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
@@ -2183,10 +2195,10 @@
     </section>
 
     <!-- 14 · DIREZIONE SCIENTIFICA -->
-    <section class="scene science" id="p14" data-index="14" data-title="Direzione scientifica" aria-label="Direzione scientifica">
+    <section class="scene science" id="p14" data-index="12" data-title="Direzione scientifica" aria-label="Direzione scientifica">
       <div class="scene__safe science__content">
         <div class="science__inner">
-          <p class="eyebrow reveal">13 · Direzione scientifica</p>
+          <p class="eyebrow reveal">11 · Direzione scientifica</p>
           <h2 class="display reveal delay-1" style="font-size: clamp(40px, 5vw, 80px)">Un presidio comune ai quattro ambiti.</h2>
           <div class="science__figure reveal delay-2">
             <div class="science__photo" role="img" aria-label="Ritratto del Prof. Riccardo Valentini"></div>
@@ -2198,7 +2210,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" id="p15" data-index="15" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -2218,6 +2230,60 @@
       </div>
     </section>
   </main>
+
+  <!-- APPROFONDIMENTI (popup dalla scena Come opera) -->
+  <div class="overlay" id="ov-ciclo" role="dialog" aria-modal="true" aria-label="Approfondimento: dentro CASA">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Dentro CASA</p>
+      <h2 class="display overlay__title">Un ciclo di dati, sperimentazione ed evidenze.</h2>
+      <div class="overlay__grid">
+        <div class="cycle__map" aria-label="Ciclo cibo, ambiente, salute e agricoltura">
+          <div class="orbit" aria-hidden="true"></div>
+          <div class="flow-ring" aria-hidden="true"></div>
+          <div class="flow-dot" aria-hidden="true"></div>
+          <div class="cycle__core"><div><strong>evidenze</strong><small>dati · sperimentazione</small></div></div>
+          <div class="domain-node node-food"><strong>Cibo</strong></div>
+          <div class="domain-node node-environment"><strong>Ambiente</strong></div>
+          <div class="domain-node node-health"><strong>Salute</strong></div>
+          <div class="domain-node node-agriculture"><strong>Agricoltura</strong></div>
+        </div>
+        <div class="overlay__list">
+          <div class="ov-item" style="--c: var(--food)"><h3>Cibo</h3><p>Origine, qualità e trasformazione degli alimenti vengono analizzate e tracciate.</p></div>
+          <div class="ov-item" style="--c: var(--environment)"><h3>Ambiente</h3><p>Sensori e sistemi di osservazione raccolgono dati su clima, acqua, suolo e biodiversità.</p></div>
+          <div class="ov-item" style="--c: var(--health)"><h3>Salute</h3><p>Le evidenze collegano alimentazione e condizioni ambientali agli effetti sulle persone e orientano nuove scelte.</p></div>
+          <div class="ov-item" style="--c: var(--agriculture)"><h3>Agricoltura</h3><p>I dati guidano colture, pratiche agricole e sperimentazioni sul campo e nelle serre.</p></div>
+          <div class="ov-item"><h3>Le tecnologie lungo il ciclo</h3><p><strong>L’IoT</strong> raccoglie i dati. <strong>L’intelligenza artificiale</strong> mette in relazione dati ambientali e agricoli, qualità del cibo ed evidenze sulla salute. <strong>Le piattaforme dati</strong> rendono le informazioni accessibili e combinabili secondo regole condivise. <strong>La blockchain</strong>, quando utile, rafforza la provenienza e la tracciabilità dei processi e degli alimenti.</p></div>
+          <div class="ov-item"><h3>Dal luogo alla rete</h3><p>Ciò che CASA osserva e sperimenta nello spazio comune si collega alle capacità specialistiche dei partner.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ov-ior" role="dialog" aria-modal="true" aria-label="Approfondimento: l’Internet delle Risorse">
+    <div class="overlay__panel">
+      <button type="button" class="overlay__close" aria-label="Chiudi">×</button>
+      <p class="eyebrow">Approfondimento · Il principio di CASA</p>
+      <h2 class="display overlay__title">L’Internet delle Risorse.</h2>
+      <div class="ior__diagram overlay__diagram">
+        <div class="resource-zone resource-zone--partners"><span class="zone-label">Risorse presso i partner</span></div>
+        <div class="resource-zone resource-zone--casa"><span class="zone-label">Risorse dello spazio CASA</span></div>
+        <div class="ior-core"><strong>CASA</strong></div>
+        <div class="resource resource--partner r1">Dati e modelli<small>clima · suolo · salute</small></div>
+        <div class="resource resource--partner r2">Laboratori specialistici<small>capacità che restano ai partner</small></div>
+        <div class="resource resource--partner r3">Competenze<small>ricerca · docenza · conoscenza</small></div>
+        <div class="resource resource--partner r4">Tecnologie<small>IoT · AI · tracciabilità</small></div>
+        <div class="resource resource--casa r5">Campi e serre<small>sperimentazione condivisa</small></div>
+        <div class="resource resource--casa r6">Laboratori e infrastrutture digitali<small>accesso secondo regole comuni</small></div>
+      </div>
+      <div class="overlay__list overlay__list--cols">
+        <div class="ov-item" style="--c: var(--agriculture)"><h3>Le risorse dello spazio CASA</h3><p>Campi sperimentali, sensori, serre, laboratori e infrastrutture digitali vengono condivisi e resi accessibili secondo regole comuni.</p></div>
+        <div class="ov-item" style="--c: var(--environment)"><h3>Le risorse dei partner</h3><p>Laboratori specialistici, dati, tecnologie e competenze che restano presso i partner vengono collegati allo stesso sistema di accesso.</p></div>
+        <div class="ov-item" style="--c: var(--food)"><h3>Accesso condiviso a capacità avanzate</h3><p>Imprese, ricercatori, professionisti e istituzioni possono utilizzare risorse che sarebbe difficile costruire o acquisire autonomamente. Anche una piccola impresa può così combinare dati ambientali, sperimentazione agricola, analisi sul cibo e competenze sulla salute senza dover costruire da sola l’intera infrastruttura.</p></div>
+      </div>
+      <p class="overlay__principle">Lo spazio è il luogo dell’integrazione.<br>L’Internet delle Risorse (IoR) è il sistema che ne rende accessibili e ne estende le capacità.</p>
+    </div>
+  </div>
 
   <script>
     (() => {
@@ -2475,7 +2541,25 @@
         fsBtn.setAttribute('aria-pressed', String(!!document.fullscreenElement));
       });
 
+      // approfondimenti
+      const openOverlay = id => {
+        const ov = document.getElementById(id);
+        if (ov) ov.classList.add('is-open');
+      };
+      const closeOverlays = () => document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open'));
+      document.querySelectorAll('[data-overlay]').forEach(btn => {
+        btn.addEventListener('click', () => openOverlay(btn.dataset.overlay));
+      });
+      document.querySelectorAll('.overlay').forEach(ov => {
+        ov.addEventListener('click', e => { if (e.target === ov) closeOverlays(); });
+        ov.querySelector('.overlay__close').addEventListener('click', closeOverlays);
+      });
+
       addEventListener('keydown', event => {
+        if (document.querySelector('.overlay.is-open')) {
+          if (event.key === 'Escape') closeOverlays();
+          return;
+        }
         if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); advance(); }
         if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); retreat(); }
         if (event.key.toLowerCase() === 'f' && !event.metaKey && !event.ctrlKey && !event.altKey) toggleFullscreen();
@@ -2484,6 +2568,9 @@
       });
 
       setActive(0);
+
+      const ovParam = new URLSearchParams(location.search).get('overlay');
+      if (ovParam) openOverlay(ovParam);
 
       if (staticMode) {
         document.documentElement.classList.add('static-mode');
