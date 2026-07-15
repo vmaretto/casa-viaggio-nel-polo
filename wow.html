@@ -619,17 +619,22 @@
     }
     .space__card {
       position: absolute;
-      left: var(--safe-x);
-      bottom: 92px;
+      left: 49%;
+      top: 74%;
       z-index: 5;
-      width: min(430px, 40vw);
-      min-height: 178px;
+      width: min(400px, 34vw);
+      min-height: 168px;
       border: 1px solid rgba(247,245,238,.14);
       border-left: 3px solid var(--acid);
       border-radius: 14px;
-      background: rgba(7,29,33,.72);
+      background: rgba(7,29,33,.78);
       backdrop-filter: blur(12px);
+      transform: translateY(-50%);
+      transition: left .7s var(--ease), top .7s var(--ease);
     }
+    .space[data-fragment-step="0"] .space__card { left: calc(46% + 34px); top: 72%; }
+    .space[data-fragment-step="1"] .space__card { left: calc(64% - min(400px, 34vw) - 34px); top: 50%; }
+    .space[data-fragment-step="2"] .space__card { left: calc(17% + 34px); top: 60%; }
     .space__num {
       color: var(--acid);
       font-size: 11px;
@@ -1885,7 +1890,6 @@
         <header class="space__intro">
           <p class="eyebrow reveal">05 · Lo spazio CASA</p>
           <h2 class="display space__title reveal delay-1">Un ettaro di innovazione condivisa.</h2>
-          <p class="lead reveal delay-2">Diecimila metri quadri, tre zone: campi sensorizzati, serre e laboratori, spazi per le persone.</p>
         </header>
 
         <div class="space__card reveal delay-2">
@@ -2401,7 +2405,7 @@
         progress.style.transform = `scaleX(${active + 1})`;
         animateCounters(scenes[active]);
         // chi scrolla non perde i contenuti: cascata progressiva dei passaggi
-        if (!staticMode && !fromNav && !isMobile()) {
+        if (!staticMode && !isMobile()) {
           const sc = scenes[active];
           const count = fragmentCount(sc);
           if (count > 1) {
