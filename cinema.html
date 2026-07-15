@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASA — Versione cinematografica</title>
+  <style>
+    @font-face {
+      font-family: "Cormorant CASA";
+      src: url("assets/originale/CormorantGaramond-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Cormorant CASA";
+      src: url("assets/originale/CormorantGaramond-Italic.woff2") format("woff2");
+      font-style: italic;
+      font-weight: 300 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Outfit CASA";
+      src: url("assets/originale/Outfit.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 200 700;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #071d21;
+      --paper: #f7f5ee;
+      --acid: #aab322;
+      --serif: "Cormorant CASA", "Cormorant Garamond", Georgia, serif;
+      --sans: "Outfit CASA", "Outfit", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* ---- palcoscenico ---- */
+    #stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+      display: block;
+    }
+
+    /* ---- barra di avanzamento ---- */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--acid);
+      z-index: 60;
+      transition: width 0.8s ease;
+      pointer-events: none;
+    }
+
+    /* ---- sottotitoli ---- */
+    #subtitleZone {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 9vh 8vw 4.5vh;
+      background: linear-gradient(to top, rgba(4, 14, 16, 0.82) 0%, rgba(4, 14, 16, 0.55) 55%, rgba(4, 14, 16, 0) 100%);
+      z-index: 40;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      text-align: center;
+    }
+    #subtitleZone.visible { opacity: 1; }
+    #subtitle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(20px, 2.4vw, 32px);
+      line-height: 1.4;
+      color: var(--paper);
+      max-width: 62ch;
+      margin: 0 auto;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+    }
+
+    /* ---- schermo di apertura ---- */
+    #startScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 42%, #0a2429 0%, #000 72%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 34px;
+      transition: opacity 1.6s ease;
+    }
+    #startScreen.fading { opacity: 0; pointer-events: none; }
+    #startScreen .wordmark {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(15px, 1.4vw, 20px);
+      letter-spacing: 0.9em;
+      text-indent: 0.9em;
+      color: rgba(247, 245, 238, 0.5);
+      user-select: none;
+    }
+    #startBtn {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(24px, 2.6vw, 38px);
+      color: var(--paper);
+      background: transparent;
+      border: 1px solid rgba(170, 179, 34, 0.55);
+      border-radius: 999px;
+      padding: 0.75em 2.1em;
+      cursor: pointer;
+      transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+    }
+    #startBtn:hover, #startBtn:focus-visible {
+      background: rgba(170, 179, 34, 0.14);
+      border-color: var(--acid);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    #startScreen .hint {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      color: rgba(247, 245, 238, 0.35);
+      text-transform: uppercase;
+    }
+
+    /* ---- controlli ---- */
+    #controls {
+      position: fixed;
+      right: 26px;
+      bottom: 24px;
+      z-index: 70;
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+    #controls.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #controls button {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(247, 245, 238, 0.28);
+      background: rgba(7, 29, 33, 0.72);
+      color: var(--paper);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    #controls button:hover, #controls button:focus-visible {
+      border-color: var(--acid);
+      background: rgba(7, 29, 33, 0.92);
+      outline: none;
+    }
+
+    /* ---- indicatore pausa ---- */
+    #pauseTag {
+      position: fixed;
+      top: 22px;
+      right: 26px;
+      z-index: 70;
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: rgba(7, 29, 33, 0.78);
+      border: 1px solid rgba(170, 179, 34, 0.5);
+      border-radius: 999px;
+      padding: 8px 18px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    #pauseTag.visible { opacity: 1; }
+
+    /* ---- cartello finale ---- */
+    #endCard {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 12vh;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+    }
+    #endCard.visible { opacity: 1; pointer-events: auto; }
+    #endCard button {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(19px, 1.9vw, 27px);
+      color: var(--paper);
+      background: rgba(7, 29, 33, 0.8);
+      border: 1px solid rgba(170, 179, 34, 0.55);
+      border-radius: 999px;
+      padding: 0.65em 1.9em;
+      cursor: pointer;
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+    #endCard button:hover, #endCard button:focus-visible {
+      background: rgba(170, 179, 34, 0.18);
+      border-color: var(--acid);
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe id="stage" src="wow.html" title="Presentazione CASA" allowfullscreen></iframe>
+
+  <div id="progress" aria-hidden="true"></div>
+
+  <div id="subtitleZone" aria-hidden="true">
+    <p id="subtitle" aria-live="polite"></p>
+  </div>
+
+  <div id="pauseTag">‖ &nbsp;In pausa</div>
+
+  <div id="controls" aria-label="Controlli della regia">
+    <button id="btnPause" type="button" title="Pausa / Riprendi (ESC)" aria-label="Pausa o riprendi">⏸</button>
+    <button id="btnRestart" type="button" title="Ricomincia dall’inizio" aria-label="Ricomincia">↺</button>
+    <button id="btnSkip" type="button" title="Salta avanti" aria-label="Salta avanti">⏭</button>
+  </div>
+
+  <div id="endCard">
+    <button id="btnAgain" type="button">↺ &nbsp;Rivedi il viaggio</button>
+  </div>
+
+  <div id="startScreen">
+    <p class="wordmark">C · A · S · A</p>
+    <button id="startBtn" type="button">▶ &nbsp;Inizia il viaggio</button>
+    <p class="hint">audio consigliato</p>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* ============================================================
+         SCENEGGIATURA — timeline temporizzata
+         { wait: secondi di tenuta minima,
+           say:  battuta narrata (voce + sottotitolo),
+           show: didascalia solo visiva (NON pronunciata),
+           action: messaggio postMessage verso wow.html }
+         Scene (0-based): 0 copertina · 1 problema · 2 conseguenze ·
+         3 cosa manca · 4 reveal C·A·S·A · 5 nascita · 6 come opera ·
+         7 per chi · 8 chi rende possibile · 9 patrimonio · 10 roadmap ·
+         11 direzione scientifica · 12 prossime azioni · 13 finale
+         ============================================================ */
+      const TIMELINE = [
+        // — Apertura: copertina —
+        { wait: 2.0, action: { casa: 'go', index: 0 } },
+        { wait: 1.2, say: 'Cibo. Ambiente. Salute. Agricoltura.' },
+        { wait: 1.2, say: 'Quattro ambiti che siamo abituati a trattare separatamente. Ma che nella vita reale non lo sono mai.' },
+
+        // — Il problema —
+        { wait: 1.0, action: { casa: 'go', index: 1 },
+          say: 'L’ambiente condiziona l’agricoltura. L’agricoltura dà forma al cibo che produciamo. E il cibo incide sulla nostra salute.' },
+        { wait: 1.2, say: 'Eppure continuiamo a organizzare competenze, decisioni e interventi… separatamente.' },
+
+        // — Le conseguenze (tre dati, un fragment ciascuno) —
+        { wait: 1.0, action: { casa: 'go', index: 2 },
+          say: 'Le conseguenze sono davanti ai nostri occhi. Circa un terzo delle emissioni generate dalle attività umane proviene dai sistemi agroalimentari.' },
+        { wait: 1.0, action: { casa: 'advance' },
+          say: 'Meno ventuno per cento: è l’impatto del cambiamento climatico sulla produttività agricola globale, dal millenovecentosessantuno a oggi.' },
+        { wait: 1.0, action: { casa: 'advance' },
+          say: 'E oltre diecimila miliardi di dollari l’anno di costi nascosti, sulla salute, sull’ambiente e sulla società.' },
+        { wait: 1.2, say: 'Emissioni, produttività e costi non appartengono a crisi diverse. Sono conseguenze dello stesso sistema.' },
+
+        // — Cosa manca (casa tratteggiata) —
+        { wait: 1.0, action: { casa: 'go', index: 3 },
+          say: 'Non mancano competenze, dati o tecnologie. Manca uno spazio dove metterli in relazione e farli lavorare insieme.' },
+        { wait: 1.6, say: 'Manca un luogo comune. E questo spazio… ha un nome.' },
+
+        // — Reveal C·A·S·A —
+        { wait: 1.3, action: { casa: 'go', index: 4 }, say: 'Cibo.' },
+        { wait: 1.3, action: { casa: 'advance' }, say: 'Ambiente.' },
+        { wait: 1.3, action: { casa: 'advance' }, say: 'Salute.' },
+        { wait: 1.3, action: { casa: 'advance' }, say: 'Agricoltura.' },
+        { wait: 2.2, say: 'Benvenuti a CASA.' },
+
+        // — La nascita —
+        { wait: 1.0, action: { casa: 'go', index: 5 },
+          say: 'Per questo nasce CASA: un luogo fisico di un ettaro — campi, serre, laboratori e dati condivisi — promosso da una rete di partner scientifici e imprese per innovare insieme.' },
+        { wait: 1.0, say: 'Qui i dati su clima, acqua e suolo si collegano alle pratiche agricole, alla qualità del cibo e ai suoi effetti sulla salute.' },
+        { wait: 1.6, action: { casa: 'overlay', id: 'ov-spazio' },
+          say: 'Guardiamolo più da vicino: un ettaro di innovazione condivisa. Aree di sperimentazione e monitoraggio, ambienti controllati e laboratori, spazi per formare e condividere. La configurazione cambierà con il luogo; la funzione resta.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+
+        // — Come opera —
+        { wait: 0.8, action: { casa: 'go', index: 6 },
+          say: 'Come opera CASA? Dalle competenze all’impatto. Prima si forma sul sistema: persone, ricercatori e imprese imparano a leggere insieme clima, suolo, pratiche agricole, cibo e salute.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'Poi si sperimenta nello spazio CASA: campi, sensori, serre e laboratori, in condizioni reali.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'Si co-sviluppa e si fa ricerca applicata: grandi imprese, startup, università e centri di ricerca, insieme.' },
+        { wait: 1.0, action: { casa: 'advance' },
+          say: 'E i risultati si trasferiscono: nuove competenze, strumenti per le imprese, indicazioni per istituzioni e territori.' },
+        { wait: 1.6, action: { casa: 'overlay', id: 'ov-ciclo' },
+          say: 'Dentro CASA i quattro ambiti non sono aree separate: sono fasi dello stesso ciclo di osservazione, sperimentazione e apprendimento. E ogni evidenza ritorna al campo, come un nuovo inizio.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+        { wait: 1.6, action: { casa: 'overlay', id: 'ov-ior' },
+          say: 'Un principio rende tutto accessibile: l’Internet delle Risorse. CASA combina dotazioni proprie e risorse distribuite dei partner, che mantengono la loro autonomia. CASA organizza accesso, regole e combinazione.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+
+        // — Per chi è CASA —
+        { wait: 0.8, action: { casa: 'go', index: 7 },
+          say: 'Per chi è CASA? Si entra con un bisogno, una competenza o una risorsa. Le imprese e le startup si incontrano qui, per sviluppare ricerca applicata e testare tecnologie e soluzioni.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'Le università e i centri di ricerca trovano ricerca applicata e formazione congiunta sui quattro ambiti.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'Le persone e i professionisti sviluppano competenze interdisciplinari, lavorando con tecnologie, dati e contesti reali.' },
+        { wait: 1.2, action: { casa: 'advance' },
+          say: 'E le istituzioni e i territori ottengono evidenze utili per decisioni e politiche.' },
+
+        // — Chi rende possibile CASA —
+        { wait: 0.8, action: { casa: 'go', index: 8 },
+          say: 'Chi rende possibile CASA? Sei partner: nessuno basta da solo. InnovaliaTech promuove e sostiene, con capitale e visione di lungo periodo.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'FIB, il Food Innovation Broker, gestisce e mette in relazione: è la regia operativa.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'UNIUST forma le competenze interdisciplinari necessarie per operare in CASA.' },
+        { wait: 1.0, action: { casa: 'advance' },
+          say: 'CMCC, CREA e Fondazione Santa Lucia portano le capacità scientifiche: ambiente, agricoltura e cibo, salute.' },
+        { wait: 1.4, action: { casa: 'overlay', id: 'ov-tuscia' },
+          say: 'E un accordo con l’Università della Tuscia amplia fin dall’inizio docenza, ricerca e capacità di attrarre studenti, imprese e nuovi partner.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+
+        // — Il patrimonio di partenza —
+        { wait: 1.0, action: { casa: 'go', index: 9 },
+          say: 'CASA non parte da zero. Come una casa che nasce già arredata: formazione, capacità scientifiche, esperienza operativa e relazioni sono già attive, pronte a diventare sistema.' },
+        { wait: 1.4, action: { casa: 'overlay', id: 'ov-arredo' },
+          say: 'Questo è l’arredo di partenza: un patrimonio oggi distribuito, che CASA trasforma in una capacità stabile e accessibile.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+
+        // — Roadmap —
+        { wait: 0.8, action: { casa: 'go', index: 10 },
+          say: 'La realizzazione procede per fasi. Duemilaventisei: costruire le fondamenta — configurazione dello spazio, governance, regole di accesso.' },
+        { wait: 0.8, action: { casa: 'advance' },
+          say: 'Duemilaventisette: attivare CASA e l’Internet delle Risorse, con i primi cicli integrati di formazione, sperimentazione e open innovation.' },
+        { wait: 1.0, action: { casa: 'advance' },
+          say: 'Dal duemilaventotto: estendere la capacità. Verificare… e solo dopo, replicare il modello.' },
+        { wait: 1.4, action: { casa: 'overlay', id: 'ov-europa' },
+          say: 'Con una direzione chiara: dal territorio a una rete europea e mediterranea. Horizon Europe, il Piano Mattei, e l’Università di Malta come ponte accademico verso il Mediterraneo e l’Africa.' },
+        { wait: 0.8, action: { casa: 'overlay' } },
+
+        // — Direzione scientifica —
+        { wait: 1.8, action: { casa: 'go', index: 11 },
+          say: 'La direzione scientifica è affidata al professor Riccardo Valentini, Premio Nobel per la Pace duemilasette con l’IPCC. La sua esperienza internazionale su clima, ecosistemi e società garantisce qualità, rigore e indipendenza.' },
+
+        // — Prossime azioni —
+        { wait: 1.4, action: { casa: 'go', index: 12 },
+          say: 'I prossimi passi sono già definiti: consolidare gli accordi tra i partner, individuare lo spazio, e attivare le prime collaborazioni.' },
+
+        // — Finale —
+        { wait: 1.6, action: { casa: 'go', index: 13 },
+          say: 'CASA è uno spazio sperimentale. Una rete di risorse. Una regia comune.' },
+        { wait: 2.0, say: 'Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.' },
+        { wait: 5.0, show: '[payoff in definizione]' }
+      ];
+
+      /* ============================================================
+         RIFERIMENTI DOM
+         ============================================================ */
+      const frame = document.getElementById('stage');
+      const progressBar = document.getElementById('progress');
+      const subtitleZone = document.getElementById('subtitleZone');
+      const subtitleEl = document.getElementById('subtitle');
+      const startScreen = document.getElementById('startScreen');
+      const startBtn = document.getElementById('startBtn');
+      const controls = document.getElementById('controls');
+      const btnPause = document.getElementById('btnPause');
+      const btnRestart = document.getElementById('btnRestart');
+      const btnSkip = document.getElementById('btnSkip');
+      const pauseTag = document.getElementById('pauseTag');
+      const endCard = document.getElementById('endCard');
+      const btnAgain = document.getElementById('btnAgain');
+
+      /* ============================================================
+         STATO DELLA REGIA
+         ============================================================ */
+      const state = {
+        started: false,
+        paused: false,
+        skip: false,
+        restart: false,
+        finished: false,
+        stepIndex: 0,
+        onRestartFromEnd: null
+      };
+
+      /* ---- pilota postMessage: mai bloccante ---- */
+      const post = (msg) => {
+        try {
+          if (frame && frame.contentWindow) {
+            frame.contentWindow.postMessage(msg, '*');
+          }
+        } catch (err) { /* l'iframe può non rispondere: nessun errore bloccante */ }
+      };
+
+      // Spegne l'avanzamento automatico interno appena il deck è pronto.
+      frame.addEventListener('load', () => post({ casa: 'auto', on: false }));
+
+      /* ============================================================
+         MUSICA — il file può non esistere: degradazione silenziosa
+         ============================================================ */
+      let music = null;
+      const MUSIC_VOL = 0.25;
+      const DUCK_VOL = 0.11;
+      const initMusic = () => {
+        try {
+          music = new Audio('assets/audio/musica.mp3');
+          music.loop = true;
+          music.volume = MUSIC_VOL;
+          music.addEventListener('error', () => { music = null; });
+          const p = music.play();
+          if (p && typeof p.catch === 'function') {
+            p.catch(() => { /* nessuna musica: si prosegue senza */ });
+          }
+        } catch (err) {
+          music = null;
+        }
+      };
+      const duckMusic = (on) => {
+        if (!music) return;
+        try { music.volume = on ? DUCK_VOL : MUSIC_VOL; } catch (err) { /* ignora */ }
+      };
+
+      /* ============================================================
+         VOCE NARRANTE — speechSynthesis it-IT (segnaposto)
+         ============================================================ */
+      let voiceIt = null;
+      const synthOk = typeof window.speechSynthesis !== 'undefined'
+        && typeof window.SpeechSynthesisUtterance !== 'undefined';
+      const pickVoice = () => {
+        if (!synthOk) return;
+        try {
+          const voices = window.speechSynthesis.getVoices() || [];
+          voiceIt = voices.find(v => /^it([-_]|$)/i.test(v.lang || '')) || null;
+        } catch (err) { voiceIt = null; }
+      };
+      if (synthOk) {
+        pickVoice();
+        try {
+          window.speechSynthesis.addEventListener('voiceschanged', pickVoice);
+        } catch (err) { /* alcuni browser non emettono l'evento */ }
+      }
+
+      const estimateSeconds = (text) => 1.0 + text.length / 12.5;
+
+      const speak = (text, estSec) => new Promise((resolve) => {
+        if (!synthOk || !voiceIt) { resolve(); return; } // solo sottotitoli
+        let done = false;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          duckMusic(false);
+          resolve();
+        };
+        try {
+          const u = new SpeechSynthesisUtterance(text);
+          u.voice = voiceIt;
+          u.lang = 'it-IT';
+          u.rate = 0.95;
+          u.pitch = 1;
+          u.onend = finish;
+          u.onerror = finish;
+          duckMusic(true);
+          window.speechSynthesis.speak(u);
+          // rete di sicurezza: mai restare appesi su una battuta
+          setTimeout(finish, estSec * 2000 + 5000);
+        } catch (err) {
+          finish();
+        }
+      });
+
+      const stopSpeech = () => {
+        if (!synthOk) return;
+        try { window.speechSynthesis.cancel(); } catch (err) { /* ignora */ }
+        duckMusic(false);
+      };
+
+      /* ============================================================
+         SOTTOTITOLI
+         ============================================================ */
+      const showSubtitle = (text) => {
+        if (text) {
+          subtitleEl.textContent = text;
+          subtitleZone.classList.add('visible');
+        } else {
+          subtitleZone.classList.remove('visible');
+        }
+      };
+
+      /* ============================================================
+         ATTESA PAUSABILE E SALTABILE
+         ============================================================ */
+      const pausableWait = (sec) => new Promise((resolve) => {
+        let elapsed = 0;
+        let last = performance.now();
+        const iv = setInterval(() => {
+          const now = performance.now();
+          if (state.skip || state.restart) {
+            clearInterval(iv);
+            resolve();
+            return;
+          }
+          if (!state.paused) elapsed += (now - last) / 1000;
+          last = now;
+          if (!state.paused && elapsed >= sec) {
+            clearInterval(iv);
+            resolve();
+          }
+        }, 100);
+      });
+
+      /* ============================================================
+         ESECUZIONE DI UN PASSO
+         ============================================================ */
+      const runStep = async (step) => {
+        state.skip = false;
+        if (step.action) post(step.action);
+
+        const spoken = step.say || '';
+        const caption = spoken || step.show || '';
+        const est = spoken ? estimateSeconds(spoken) : 0;
+        const hold = Math.max(step.wait || 0, est);
+
+        if (caption) showSubtitle(caption);
+        const speechDone = spoken ? speak(spoken, est) : Promise.resolve();
+        await Promise.all([pausableWait(hold), speechDone]);
+        if (caption) showSubtitle('');
+      };
+
+      /* ============================================================
+         MOTORE DELLA REGIA
+         ============================================================ */
+      const setProgress = (ratio) => {
+        progressBar.style.width = (Math.min(1, Math.max(0, ratio)) * 100).toFixed(2) + '%';
+      };
+
+      const engine = async () => {
+        while (true) {
+          state.restart = false;
+          state.finished = false;
+          endCard.classList.remove('visible');
+          setProgress(0);
+          post({ casa: 'auto', on: false });
+
+          for (state.stepIndex = 0; state.stepIndex < TIMELINE.length; state.stepIndex++) {
+            if (state.restart) break;
+            setProgress((state.stepIndex + 1) / TIMELINE.length);
+            await runStep(TIMELINE[state.stepIndex]);
+          }
+
+          if (state.restart) continue; // riparte dall'inizio
+
+          // fine del viaggio
+          state.finished = true;
+          showSubtitle('');
+          endCard.classList.add('visible');
+          await new Promise((resolve) => { state.onRestartFromEnd = resolve; });
+          state.onRestartFromEnd = null;
+        }
+      };
+
+      /* ============================================================
+         CONTROLLI
+         ============================================================ */
+      const setPaused = (p) => {
+        if (!state.started || state.finished) return;
+        state.paused = p;
+        pauseTag.classList.toggle('visible', p);
+        btnPause.textContent = p ? '▶' : '⏸';
+        btnPause.title = p ? 'Riprendi (ESC)' : 'Pausa (ESC)';
+        if (synthOk) {
+          try { p ? window.speechSynthesis.pause() : window.speechSynthesis.resume(); }
+          catch (err) { /* ignora */ }
+        }
+        if (music) {
+          try { p ? music.pause() : music.play().catch(() => {}); }
+          catch (err) { /* ignora */ }
+        }
+        if (p) revealControls(true);
+      };
+
+      const doSkip = () => {
+        if (!state.started || state.finished) return;
+        if (state.paused) setPaused(false);
+        state.skip = true;
+        stopSpeech();
+      };
+
+      const doRestart = () => {
+        if (!state.started) return;
+        state.restart = true;
+        state.skip = true;
+        stopSpeech();
+        showSubtitle('');
+        if (state.paused) setPaused(false);
+        if (state.onRestartFromEnd) state.onRestartFromEnd();
+      };
+
+      btnPause.addEventListener('click', () => setPaused(!state.paused));
+      btnSkip.addEventListener('click', doSkip);
+      btnRestart.addEventListener('click', doRestart);
+      btnAgain.addEventListener('click', doRestart);
+
+      window.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Escape') {
+          ev.preventDefault();
+          setPaused(!state.paused);
+        }
+      });
+
+      /* ---- i controlli compaiono al mouse-move e svaniscono dopo 3s ---- */
+      let hideTimer = null;
+      const revealControls = (sticky) => {
+        if (!state.started) return;
+        controls.classList.add('visible');
+        if (hideTimer) clearTimeout(hideTimer);
+        if (!sticky && !state.paused) {
+          hideTimer = setTimeout(() => controls.classList.remove('visible'), 3000);
+        }
+      };
+      window.addEventListener('mousemove', () => revealControls(false));
+      window.addEventListener('touchstart', () => revealControls(false), { passive: true });
+
+      /* ============================================================
+         AVVIO — serve il gesto dell'utente per l'audio
+         ============================================================ */
+      startBtn.addEventListener('click', () => {
+        if (state.started) return;
+        state.started = true;
+        pickVoice();
+        initMusic();
+        startScreen.classList.add('fading');
+        setTimeout(() => { startScreen.style.display = 'none'; }, 1700);
+        revealControls(false);
+        engine();
+      }, { once: true });
+    })();
+  </script>
+</body>
+</html>
