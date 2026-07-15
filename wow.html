@@ -1297,6 +1297,19 @@
       font-weight: 500;
       letter-spacing: .04em;
     }
+    .sci__mark {
+      font-size: .62em;
+      color: rgba(247,245,238,.65);
+      margin-left: 2px;
+    }
+    .sci__note {
+      grid-column: 1 / -1;
+      margin: 10px 0 0;
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(247,245,238,.5);
+      text-align: left;
+    }
     .sci p {
       margin: 0;
       color: rgba(247,245,238,.72);
@@ -2233,13 +2246,13 @@
             <div class="sci__grid">
               <div class="sci" style="--c: var(--environment)">
                 <i aria-hidden="true"></i>
-                <h4>CMCC</h4>
+                <h4>CMCC<sup class="sci__mark">*</sup></h4>
                 <small>Ambiente</small>
                 <p>Dati, modelli e competenze su clima, acqua e condizioni ambientali.</p>
               </div>
               <div class="sci" style="--c: var(--agriculture)">
                 <i aria-hidden="true"></i>
-                <h4>CREA</h4>
+                <h4>CREA<sup class="sci__mark">*</sup></h4>
                 <small>Agricoltura e cibo</small>
                 <p>Ricerca applicata su suolo, colture, pratiche agricole, filiere e qualità alimentare.</p>
               </div>
@@ -2250,6 +2263,7 @@
                 <p>Competenze scientifiche per collegare alimentazione e condizioni ambientali agli effetti sulla salute.</p>
               </div>
             </div>
+            <p class="sci__note">* collaborazioni in corso di definizione, non ancora formalizzate.</p>
           </div>
         </div>
         <p class="actors__closing reveal delay-3">CASA permette a queste capacità di lavorare nello stesso spazio e attraverso lo stesso sistema di accesso.</p>
