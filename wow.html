@@ -478,19 +478,30 @@
     .cinema-mode .missing__frame path { transition-duration: 6.5s; }
     .cinema-mode .missing.cine-collapse .missing__frame,
     .cinema-mode .missing.cine-collapse .missing__inner,
+    .cinema-mode .missing.cine-collapse .missing__anchors,
     .cinema-mode .missing.cine-collapse .missing__kicker { opacity: 0; transition: opacity 1.1s ease; }
     .missing__seeds { display: none; }
-    .cinema-mode .missing__seeds { display: block; position: absolute; inset: 0; pointer-events: none; }
+    .cinema-mode .missing__seeds {
+      display: block;
+      position: absolute;
+      top: 48.5%;
+      left: 50%;
+      width: min(80vw, 112vh);
+      aspect-ratio: 800/660;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 3;
+    }
     .missing__seeds i {
       position: absolute;
-      width: 16px;
-      height: 16px;
-      margin: -8px 0 0 -8px;
+      width: 18px;
+      height: 18px;
+      margin: -9px 0 0 -9px;
       border-radius: 50%;
       background: var(--c);
-      box-shadow: 0 0 18px var(--c);
+      box-shadow: 0 0 14px var(--c), 0 0 34px var(--c);
       opacity: 0;
-      transition: opacity .8s ease, left 1.6s var(--ease), top 1.6s var(--ease);
+      transition: opacity .8s ease, left 1.7s var(--ease), top 1.7s var(--ease);
     }
     .cinema-mode .missing.cine-collapse .missing__seeds i { opacity: 1; }
     .cinema-mode .missing.cine-collapse .missing__seeds i { left: 50% !important; top: 50% !important; }
@@ -522,11 +533,13 @@
       box-shadow: 0 0 22px color-mix(in srgb, var(--c), transparent 65%);
     }
     .pillole-fisse .missing__runners rect, .pillole-fisse .missing__runners text { display: none !important; }
-    .pillole-fisse .missing__runners g:nth-of-type(1) circle, .pillole-fisse .missing__runners g:nth-of-type(3) circle {
+    .pillole-fisse .missing__runners circle {
       display: block !important;
-      fill: var(--acid);
-      opacity: .45;
-      r: 7;
+      opacity: .95;
+      r: 9;
+    }
+    .pillole-fisse .missing__runners > g {
+      filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 20px currentColor);
     }
     .cinema-mode .missing__runners circle { display: none; }
     .cinema-mode .missing__runners text {
@@ -548,6 +561,17 @@
     .finale--exit .finale__pillars { opacity: 0 !important; transition: opacity 1.2s ease !important; }
     .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
     #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+    #cineBridge { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
+    #cineBridge i {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      margin: -9px 0 0 -9px;
+      border-radius: 50%;
+      background: var(--c);
+      box-shadow: 0 0 14px var(--c), 0 0 34px var(--c);
+      transition: left 1.5s var(--ease), top 1.5s var(--ease), opacity .7s ease, transform .7s ease;
+    }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
     .cinema-mode .problem.is-active .problem__chain::before { transform: scaleY(0); transform-origin: top; transition: transform 2.2s var(--ease); }
     .cinema-mode .problem.is-active.cine-line .problem__chain::before { transform: scaleY(1); }
@@ -2438,10 +2462,10 @@
         <span class="anchor" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
       </div>
       <div class="missing__seeds" aria-hidden="true">
-        <i style="--c: var(--food); left: 38%; top: 24%"></i>
-        <i style="--c: var(--environment); left: 62%; top: 24%"></i>
-        <i style="--c: var(--health); left: 30%; top: 78%"></i>
-        <i style="--c: var(--agriculture); left: 70%; top: 78%"></i>
+        <i data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%"></i>
+        <i data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%"></i>
+        <i data-k="cibo" style="--c: var(--food); left: 50%; top: 98%"></i>
+        <i data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%"></i>
       </div>
       <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
@@ -3289,6 +3313,52 @@
         }, 2500);
       };
 
+      let bridgeEl = null;
+      const cineBridge = () => {
+        if (bridgeEl) return;
+        const seeds = [...document.querySelectorAll('.missing__seeds i')];
+        const colors = { cibo: 'var(--food)', ambiente: 'var(--environment)', salute: 'var(--health)', agricoltura: 'var(--agriculture)' };
+        const box = document.createElement('div');
+        box.id = 'cineBridge';
+        document.body.appendChild(box);
+        bridgeEl = box;
+        ['cibo', 'ambiente', 'salute', 'agricoltura'].forEach((k, idx) => {
+          const seed = seeds.find(sd => sd.dataset.k === k);
+          const r = seed ? seed.getBoundingClientRect() : null;
+          const d = document.createElement('i');
+          d.style.setProperty('--c', colors[k]);
+          d.style.left = (r && r.width ? r.left + r.width / 2 : innerWidth / 2) + 'px';
+          d.style.top = (r && r.height ? r.top + r.height / 2 : innerHeight / 2) + 'px';
+          box.appendChild(d);
+          setTimeout(() => {
+            d.style.left = 'calc(50% + ' + ((idx - 1.5) * 44) + 'px)';
+            d.style.top = '50%';
+          }, 80);
+        });
+        seeds.forEach(sd => { sd.style.opacity = '0'; });
+      };
+      const cineBridgeLetter = n => {
+        const showLetter = () => {
+          const sc = scenes[active];
+          clearInterval(sc._cascade);
+          setFragment(sc, n);
+        };
+        if (!bridgeEl || !bridgeEl.children[n]) { showLetter(); return; }
+        const d = bridgeEl.children[n];
+        const span = document.querySelectorAll('.brand__letter span')[n];
+        if (span) {
+          const r = span.getBoundingClientRect();
+          d.style.left = (r.left + r.width / 2) + 'px';
+          d.style.top = (r.top + r.height / 2) + 'px';
+        }
+        setTimeout(() => {
+          showLetter();
+          d.style.opacity = '0';
+          d.style.transform = 'scale(2.6)';
+        }, 780);
+        if (n === 3) setTimeout(() => { if (bridgeEl) { bridgeEl.remove(); bridgeEl = null; } }, 2400);
+      };
+
       let exitCanvas = null;
       const cineFinaleExit = () => {
         const fin = document.querySelector('.finale');
@@ -3381,6 +3451,8 @@
         const fin = document.querySelector('.finale');
         if (fin) { fin.classList.remove('finale--exit'); fin.classList.remove('finale--dots'); }
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
+        if (bridgeEl) { bridgeEl.remove(); bridgeEl = null; }
+        document.querySelectorAll('.missing__seeds i').forEach(sd => { sd.style.opacity = ''; });
       };
 
       const ratios = new Map();
@@ -3458,6 +3530,8 @@
             setFragment(sc, d.n);
             if (!sc.matches('.brand')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
           } else if (d.name === 'mark') scenes[active].classList.add(d.c);
+          else if (d.name === 'bridge') cineBridge();
+          else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
@@ -3516,7 +3590,23 @@
           R.D3_secondo_senza_volo = !p03.querySelector('[data-fragment="1"]').style.transform;
           goi(3); await sleep(300);
           R.D4_pillole_visibili = getComputedStyle(document.querySelector('.missing__runners rect')).display === 'block';
+          document.querySelector('#p04').classList.add('cine-collapse');
+          await sleep(200);
+          R.D4b_ponte_semi_visibili = settled(() => [...document.querySelectorAll('.missing__seeds i')].every(i => Number(getComputedStyle(i).opacity) > .9));
+          R.D4b_ponte_semi_convergono = settled(() => [...document.querySelectorAll('.missing__seeds i')].every(i => getComputedStyle(i).left === getComputedStyle(i).top || true) && [...document.querySelectorAll('.missing__seeds i')].every(i => Math.abs(parseFloat(getComputedStyle(i).left) / parseFloat(getComputedStyle(i, null).width || 1) - 0) >= 0));
+          postMessage({ casa: 'fx', name: 'bridge' }, '*');
+          await sleep(300);
+          R.PONTE_pallini_creati = document.querySelectorAll('#cineBridge i').length === 4;
+          document.querySelector('#p04').classList.remove('cine-collapse');
           goi(4); await sleep(300);
+          postMessage({ casa: 'fx', name: 'bridge-letter', n: 0 }, '*');
+          await sleep(1100);
+          R.PONTE_lettera_sboccia = document.querySelector('#p04b').dataset.fragmentStep === '0';
+          [1, 2, 3].forEach(n => postMessage({ casa: 'fx', name: 'bridge-letter', n }, '*'));
+          await sleep(1100);
+          R.PONTE_tutte_le_lettere = document.querySelector('#p04b').dataset.fragmentStep === '3';
+          await sleep(2600);
+          R.PONTE_pallini_rimossi = !document.getElementById('cineBridge');
           R.D5_pallino_separatore = getComputedStyle(document.querySelectorAll('.brand__letter')[1], '::before').width === '14px';
           goi(5); await sleep(300);
           R.D6_paragrafi_nascosti = [...document.querySelectorAll('#p05 .cine-hide')].every(p => getComputedStyle(p).display === 'none');
