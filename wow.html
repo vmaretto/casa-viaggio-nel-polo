@@ -3446,7 +3446,9 @@
           await sleep(2400);
           R.D7_linea_disegnata_dopo = settled(() => mtx(rail, '::before') === 'matrix(1, 0, 0, 1, 0, 0)');
           goi(7); await sleep(300);
-          R.D9_descrizioni_nascoste = [...document.querySelectorAll('#p10 .aud p')].every(p => getComputedStyle(p).display === 'none');
+          R.D9_descrizioni_nascoste = [...document.querySelectorAll('#p10 .aud p:not(.cine-tag)')].every(p => getComputedStyle(p).display === 'none');
+          R.D9_tagline_visibili = [...document.querySelectorAll('#p10 .cine-tag')].every(p => getComputedStyle(p).display === 'block');
+          R.D9_glifi_visibili = [...document.querySelectorAll('#p10 .cine-glyph')].every(g => getComputedStyle(g).display === 'block');
           goi(8); await sleep(300);
           R.D10_paragrafi_nascosti = [...document.querySelectorAll('#p11 .role p, #p11 .sci p')].every(p => getComputedStyle(p).display === 'none');
           R.D10_nota_nascosta = getComputedStyle(document.querySelector('.actors__note')).display === 'none';
