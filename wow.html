@@ -463,7 +463,7 @@
     .cinema-mode .overlay.is-open { transition: opacity 1.5s ease; }
     .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); width: min(1020px, 90vw); max-height: 86vh; }
     .cinema-mode .overlay__close, .cinema-mode .overlay__note, .cinema-mode #ov-piano .overlay__list { display: none !important; }
-    .cinema-mode .missing__frame { width: min(78vw, 106vh); transition: none; filter: drop-shadow(0 0 12px rgba(170,179,34,.32)); }
+    .cinema-mode .missing__frame { width: min(80vw, 112vh); top: 48.5%; transition: none; filter: drop-shadow(0 0 12px rgba(170,179,34,.32)); }
     .cinema-mode .missing__frame path { stroke-width: 4; stroke-dasharray: 22 14; }
     .cinema-mode .missing .display { font-size: clamp(46px, 4.2vw, 78px); margin-bottom: clamp(20px, 3.6vh, 40px); }
     .cinema-mode .missing__inner { transform: translateY(clamp(36px, 8vh, 84px)); }
@@ -500,7 +500,8 @@
       position: absolute;
       top: 52%;
       left: 50%;
-      width: min(78vw, 106vh);
+      top: 48.5%;
+      width: min(80vw, 112vh);
       aspect-ratio: 800/660;
       transform: translate(-50%, -50%);
       pointer-events: none;
