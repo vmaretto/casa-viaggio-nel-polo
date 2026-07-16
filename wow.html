@@ -484,8 +484,8 @@
     .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
     #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
-    .cinema-mode .problem__chain::before { transform: scaleY(0); transform-origin: top; transition: transform 2.2s var(--ease); }
-    .cinema-mode .problem.cine-line .problem__chain::before { transform: scaleY(1); }
+    .cinema-mode .problem.is-active .problem__chain::before { transform: scaleY(0); transform-origin: top; transition: transform 2.2s var(--ease); }
+    .cinema-mode .problem.is-active.cine-line .problem__chain::before { transform: scaleY(1); }
     /* interdipendenza: la rete dei quattro ambiti */
     .problem__web { display: none; }
     .cinema-mode .problem__web {
@@ -577,7 +577,8 @@
     }
     .cinema-mode .phase.is-current::after, .cinema-mode .phase.is-done::after { transform: scaleX(1); }
     /* D15: camera ferma sul finale + vortice delle lettere */
-    .cinema-mode .finale.is-active { animation: none; }
+    .cinema-mode .finale.is-active { animation: none !important; }
+    .cine-notrans, .cine-notrans *, .cine-notrans *::before, .cine-notrans *::after { transition: none !important; }
     @keyframes cineVortex { to { transform: rotate(660deg) scale(0); opacity: 0; } }
     .finale__letter.cine-vortex span { display: inline-block; animation: cineVortex 1.15s var(--ease) forwards; }
     .finale__letter.cine-vortex small { opacity: 0; transition: opacity .5s ease; }
@@ -3177,15 +3178,13 @@
         const smooth = k => k * k * (3 - 2 * k);
         const t0 = performance.now();
         const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.2, END_AT = 8.4;
-        let vortexStarted = false;
+        setTimeout(() => {
+          starts = spans.map(sp => { const r = sp.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+          letters.forEach((l, i) => setTimeout(() => l.classList.add('cine-vortex'), i * 180));
+        }, VORTEX_AT * 1000);
         const step = now => {
           const t = (now - t0) / 1000;
           ctx2.clearRect(0, 0, W, H);
-          if (t >= VORTEX_AT && !vortexStarted) {
-            vortexStarted = true;
-            starts = spans.map(sp => { const r = sp.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
-            letters.forEach((l, i) => setTimeout(() => l.classList.add('cine-vortex'), i * 180));
-          }
           if (starts) {
             // fila indiana lungo la direzione dell'orizzonte, dietro il capofila (il centro dei 4)
             const cxm = (starts[0].x + starts[3].x) / 2, cym = starts[0].y;
@@ -3236,6 +3235,7 @@
           else cv.remove();
         };
         requestAnimationFrame(step);
+        setTimeout(() => { if (exitCanvas === cv) { cv.remove(); exitCanvas = null; } }, END_AT * 1000 + 500);
       };
 
       const cineReset = () => {
@@ -3330,6 +3330,123 @@
 
       const ovParam = new URLSearchParams(location.search).get('overlay');
       if (ovParam) openOverlay(ovParam);
+
+      // collaudo automatico della regia cinema: ?cinema&cinetest -> report in #testreport
+      if (cinemaMode && new URLSearchParams(location.search).has('cinetest')) {
+        (async () => {
+          const R = {};
+          const sleep = ms => new Promise(r => setTimeout(r, ms));
+          const fx = (name, extra = {}) => postMessage(Object.assign({ casa: 'fx', name }, extra), '*');
+          const goi = i => postMessage({ casa: 'go', index: i }, '*');
+          const op = el => el ? Number(getComputedStyle(el).opacity) : null;
+          const mtx = (el, ps) => getComputedStyle(el, ps).transform;
+          const settled = fn => {
+            document.body.classList.add('cine-notrans');
+            const v = fn();
+            document.body.classList.remove('cine-notrans');
+            return v;
+          };
+          postMessage({ casa: 'auto', on: false }, '*');
+          await sleep(300);
+          goi(0); await sleep(400);
+          const spans = [...document.querySelectorAll('.cover__domains span')];
+          R.D1_iniziale_vuota = spans.slice(0, 4).every(w => op(w) === 0);
+          [0, 1, 2, 3].forEach(n => fx('show', { n, flip: false }));
+          await sleep(1800);
+          R.D1_parole_visibili = settled(() => spans.slice(0, 4).every(w => op(w) > .9));
+          R.D1_nessun_volo = spans.every(w => !w.style.transform);
+          goi(1); await sleep(400);
+          const chain = document.querySelector('.problem__chain');
+          R.D2_linea_nascosta_iniziale = mtx(chain, '::before').includes('matrix(1, 0, 0, 0');
+          const web = document.querySelector('.problem__web');
+          R.D2b_rete_nascosta_iniziale = op(web) === 0;
+          fx('mark', { c: 'cine-line' }); fx('mark', { c: 'cine-web' });
+          await sleep(2600);
+          R.D2_linea_disegnata_dopo = settled(() => mtx(chain, '::before').includes('matrix(1, 0, 0, 1'));
+          R.D2b_rete_visibile_dopo = settled(() => op(web) > .9);
+          R.D2b_archi_disegnati = settled(() => [...web.querySelectorAll('line')].every(l => getComputedStyle(l).strokeDashoffset === '0px'));
+          goi(2); await sleep(400);
+          const p03 = document.querySelector('#p03');
+          R.D3_iniziale_vuota = p03.dataset.fragmentStep === '-1' && !p03.querySelector('.is-current');
+          fx('step', { n: 0 }); await sleep(150);
+          const f0 = p03.querySelector('[data-fragment="0"]');
+          R.D3_primo_pannello_vola = !!f0.style.transform;
+          await sleep(1500);
+          R.D3_primo_pannello_visibile = settled(() => op(f0) > .9);
+          fx('step', { n: 1 }); await sleep(150);
+          R.D3_secondo_senza_volo = !p03.querySelector('[data-fragment="1"]').style.transform;
+          goi(3); await sleep(300);
+          R.D4_pillole_visibili = getComputedStyle(document.querySelector('.missing__runners rect')).display === 'block';
+          goi(4); await sleep(300);
+          R.D5_pallino_separatore = getComputedStyle(document.querySelectorAll('.brand__letter')[1], '::before').width === '14px';
+          goi(5); await sleep(300);
+          R.D6_paragrafi_nascosti = [...document.querySelectorAll('#p05 .cine-hide')].every(p => getComputedStyle(p).display === 'none');
+          const keys = [...document.querySelectorAll('#p05 .cine-keys p')];
+          R.D6_keys_iniziali_vuote = keys.every(k => op(k) === 0);
+          [6, 7, 8, 9].forEach(n => fx('show', { n }));
+          await sleep(1800);
+          R.D6_keys_visibili_dopo = settled(() => keys.every(k => op(k) > .9));
+          goi(6); await sleep(400);
+          const rail = document.querySelector('.operate__rail');
+          R.D7_linea_nascosta_iniziale = mtx(rail, '::before').includes('matrix(0');
+          fx('mark', { c: 'cine-line' });
+          await sleep(2400);
+          R.D7_linea_disegnata_dopo = settled(() => mtx(rail, '::before') === 'matrix(1, 0, 0, 1, 0, 0)');
+          goi(7); await sleep(300);
+          R.D9_descrizioni_nascoste = [...document.querySelectorAll('#p10 .aud p')].every(p => getComputedStyle(p).display === 'none');
+          goi(8); await sleep(300);
+          R.D10_paragrafi_nascosti = [...document.querySelectorAll('#p11 .role p, #p11 .sci p')].every(p => getComputedStyle(p).display === 'none');
+          R.D10_nota_nascosta = getComputedStyle(document.querySelector('.actors__note')).display === 'none';
+          goi(9); await sleep(300);
+          R.D11_chiusura_nascosta = getComputedStyle(document.querySelector('.heritage__closing')).display === 'none';
+          fx('show', { n: 1 }); await sleep(150);
+          R.D11_titolo_protagonista_vola = !!document.querySelector('#p12 .display').style.transform;
+          fx('step', { n: 0 }); await sleep(120);
+          R.D11_card_senza_volo = !document.querySelector('#p12 [data-fragment="0"]').style.transform;
+          fx('step', { n: 1 }); await sleep(120);
+          R.D11_seconda_card_senza_volo = !document.querySelector('#p12 [data-fragment="1"]').style.transform;
+          goi(10); await sleep(400);
+          const ph = [...document.querySelectorAll('#p13 .phase')];
+          R.D12_fasi_fuori_a_sinistra = getComputedStyle(ph[0]).transform.includes('-46');
+          R.D12_connettore2_nascosto = mtx(ph[1], '::after').includes('matrix(0');
+          R.D12_fase1_senza_connettore = getComputedStyle(ph[0], '::after').content === 'none';
+          fx('show', { n: 1 }); await sleep(150);
+          fx('step', { n: 0 }); await sleep(900);
+          R.D12_fase1_in_posizione = settled(() => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(ph[0]).transform));
+          fx('step', { n: 1 }); await sleep(1800);
+          R.D12_connettore2_disegnato = settled(() => mtx(ph[1], '::after') === 'matrix(1, 0, 0, 1, 0, 0)');
+          goi(11); await sleep(300);
+          R.D13_paragrafo_nascosto = getComputedStyle(document.querySelector('.science__body')).display === 'none';
+          const cine = document.querySelector('.science__cine');
+          R.D13_riga_nobel_iniziale_vuota = op(cine) === 0;
+          fx('show', { n: 3 }); await sleep(1600);
+          R.D13_riga_nobel_visibile_dopo = settled(() => op(cine) > .9);
+          postMessage({ casa: 'overlay', id: 'ov-ciclo' }, '*');
+          await sleep(600);
+          const grid = document.querySelector('#ov-ciclo .overlay__grid');
+          R.D8_solo_cerchio = [...grid.children].filter(c => !c.matches('.cycle__map')).every(c => getComputedStyle(c).display === 'none');
+          R.D8_cerchio_grande = parseFloat(getComputedStyle(grid.querySelector('.cycle__map')).maxWidth) >= 400;
+          postMessage({ casa: 'overlay' }, '*');
+          await sleep(300);
+          goi(13); await sleep(400);
+          R.D15_camera_ferma = getComputedStyle(document.querySelector('#p15')).animationName === 'none';
+          [0, 1, 2, 3, 4, 5].forEach(n => fx('show', { n }));
+          await sleep(1800);
+          fx('finale-exit');
+          await sleep(600);
+          R.D15_frase_svanisce = document.querySelector('#p15').classList.contains('finale--exit');
+          await sleep(1400);
+          R.D15_vortice_partito = document.querySelectorAll('.finale__letter.cine-vortex').length === 4;
+          R.D15_canvas_presente = !!document.getElementById('cineExit');
+          await sleep(7600);
+          R.D15_canvas_rimosso_alla_fine = !document.getElementById('cineExit');
+          R.FINITO = true;
+          const pre = document.createElement('pre');
+          pre.id = 'testreport';
+          pre.textContent = JSON.stringify(R);
+          document.body.appendChild(pre);
+        })();
+      }
 
       if (staticMode) {
         document.documentElement.classList.add('static-mode');
