@@ -494,6 +494,39 @@
     }
     .cinema-mode .missing.cine-collapse .missing__seeds i { opacity: 1; }
     .cinema-mode .missing.cine-collapse .missing__seeds i { left: 50% !important; top: 50% !important; }
+    .missing__anchors { display: none; }
+    .pillole-fisse .missing__anchors {
+      display: block;
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      width: min(72vw, 96vh);
+      aspect-ratio: 800/660;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .missing__anchors .anchor {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      padding: 9px 26px;
+      border: 1.5px solid var(--c);
+      border-radius: 999px;
+      background: rgba(7,29,33,.85);
+      color: var(--paper);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(18px, 1.4vw, 27px);
+      letter-spacing: .04em;
+      box-shadow: 0 0 22px color-mix(in srgb, var(--c), transparent 65%);
+    }
+    .pillole-fisse .missing__runners rect, .pillole-fisse .missing__runners text { display: none !important; }
+    .pillole-fisse .missing__runners g:nth-of-type(1) circle, .pillole-fisse .missing__runners g:nth-of-type(3) circle {
+      display: block !important;
+      fill: var(--acid);
+      opacity: .45;
+      r: 7;
+    }
     .cinema-mode .missing__runners circle { display: none; }
     .cinema-mode .missing__runners text {
       font-size: 20px;
@@ -2394,7 +2427,13 @@
         </g>
       </svg>
       <div class="scene__safe missing__content">
-        <div class="missing__seeds" aria-hidden="true">
+        <div class="missing__anchors" aria-hidden="true">
+        <span class="anchor" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>
+        <span class="anchor" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>
+        <span class="anchor" style="--c: var(--food); left: 50%; top: 98%">cibo</span>
+        <span class="anchor" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
+      </div>
+      <div class="missing__seeds" aria-hidden="true">
         <i style="--c: var(--food); left: 38%; top: 24%"></i>
         <i style="--c: var(--environment); left: 62%; top: 24%"></i>
         <i style="--c: var(--health); left: 30%; top: 78%"></i>
@@ -2972,6 +3011,7 @@
       const staticMode = new URLSearchParams(location.search).has('static');
       if (new URLSearchParams(location.search).has('cinema')) {
         document.body.classList.add('cinema-mode');
+        if (new URLSearchParams(location.search).get('pillole') === 'fisse') document.body.classList.add('pillole-fisse');
         document.documentElement.style.overflow = 'hidden';
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
