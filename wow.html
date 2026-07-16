@@ -445,6 +445,7 @@
       stroke-width: 3px;
     }
     .static-mode .missing__runners { display: none; }
+    .static-mode .cinema-mode .missing__runners { display: block; }
     .cinema-mode .progress, .cinema-mode .nav, .cinema-mode .controls { display: none !important; }
     .cinema-mode .cover__cue, .cinema-mode .eyebrow { display: none !important; }
     .cinema-mode .more-link, .cinema-mode .overlay__links,
@@ -462,13 +463,14 @@
     .cinema-mode .overlay.is-open { transition: opacity 1.5s ease; }
     .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); width: min(1020px, 90vw); max-height: 86vh; }
     .cinema-mode .overlay__close, .cinema-mode .overlay__note, .cinema-mode #ov-piano .overlay__list { display: none !important; }
-    .cinema-mode .missing__frame { width: min(78vw, 108vh); transition: none; }
+    .cinema-mode .missing__frame { width: min(66vw, 86vh); transition: none; }
     .cinema-mode .missing__frame path { transition-duration: 6.5s; }
+    .cinema-mode .missing__runners circle { display: none; }
     .cinema-mode .missing__runners text {
-      font-size: 24px;
+      font-size: 20px;
       paint-order: normal;
       stroke: none;
-      opacity: .82;
+      opacity: 1;
     }
     .cinema-mode .missing__kicker { display: none !important; }
     @keyframes cineZoomIn { from { transform: scale(1); } to { transform: scale(1.045); } }
@@ -537,7 +539,52 @@
     }
     .cine-keys p strong { color: var(--acid); font-weight: 500; }
     .cinema-mode .aud p { display: none; }
-    .cinema-mode .aud h3 { font-size: clamp(26px, 2.8vw, 44px); }
+    .cine-glyph, .cine-tag { display: none; }
+    .cinema-mode .who__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(18px, 2.6vh, 30px) clamp(24px, 3vw, 44px);
+      width: min(1180px, 100%);
+      margin: clamp(20px, 3.6vh, 38px) auto 0;
+    }
+    .cinema-mode .aud {
+      --aud-c: var(--acid);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding: clamp(24px, 3.6vh, 40px) 22px;
+      border: 1px solid rgba(247,245,238,.13);
+      border-top: 3px solid var(--aud-c);
+      border-radius: 6px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--aud-c), transparent 92%), rgba(247,245,238,.02)) !important;
+      transform: none !important;
+    }
+    .cinema-mode .aud--1 { --aud-c: var(--food); }
+    .cinema-mode .aud--2 { --aud-c: var(--environment); }
+    .cinema-mode .aud--3 { --aud-c: var(--health); }
+    .cinema-mode .aud--4 { --aud-c: var(--agriculture); }
+    .cinema-mode .aud h3 { font-size: clamp(24px, 2.2vw, 36px); color: var(--paper); }
+    .cinema-mode .cine-glyph {
+      display: block;
+      width: clamp(46px, 4.4vw, 62px);
+      fill: none;
+      stroke: var(--aud-c);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 10px color-mix(in srgb, var(--aud-c), transparent 60%));
+    }
+    .cinema-mode .aud p.cine-tag, .cinema-mode .cine-tag {
+      display: block;
+      margin: 0;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(16px, 1.3vw, 21px);
+      color: rgba(247,245,238,.82);
+    }
+    .cinema-mode .who__closing { text-align: center; margin-top: clamp(18px, 3vh, 30px); }
     .cinema-mode .role p, .cinema-mode .sci p, .cinema-mode .role__body p { display: none; }
     .cinema-mode .role h4, .cinema-mode .sci h4 { font-size: clamp(24px, 2.2vw, 34px); }
     .cinema-mode .actors__note { display: none; }
@@ -2299,19 +2346,19 @@
       <svg class="missing__frame" viewBox="0 0 800 660" preserveAspectRatio="none" aria-hidden="true">
         <path id="housePath" d="M84 648 L84 258 L400 44 L716 258 L716 648 Z" pathLength="1200"/>
         <g class="missing__runners">
-          <g fill="#d8a94e"><circle r="6"/><rect x="11" y="-15" rx="14" width="70" height="30" stroke="#d8a94e"/><text x="13" y="5">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#7ebdae"><circle r="6"/><rect x="11" y="-15" rx="14" width="118" height="30" stroke="#7ebdae"/><text x="13" y="5">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#d08b80"><circle r="6"/><rect x="11" y="-15" rx="14" width="92" height="30" stroke="#d08b80"/><text x="13" y="5">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#aab322"><circle r="6"/><rect x="11" y="-15" rx="14" width="146" height="30" stroke="#aab322"/><text x="13" y="5">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#d8a94e"><circle r="6"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="5" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#7ebdae"><circle r="6"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="5" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#d08b80"><circle r="6"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="5" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#aab322"><circle r="6"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="5" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
         </g>
       </svg>
       <svg class="missing__frame missing__frame--mobile" viewBox="0 0 800 1150" preserveAspectRatio="none" aria-hidden="true">
         <path id="housePathM" d="M84 1138 L84 258 L400 44 L716 258 L716 1138 Z" pathLength="1200"/>
         <g class="missing__runners">
-          <g fill="#d8a94e"><circle r="9"/><rect x="16" y="-15" rx="14" width="70" height="30" stroke="#d8a94e"/><text x="18" y="7">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#7ebdae"><circle r="9"/><rect x="16" y="-15" rx="14" width="118" height="30" stroke="#7ebdae"/><text x="18" y="7">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#d08b80"><circle r="9"/><rect x="16" y="-15" rx="14" width="92" height="30" stroke="#d08b80"/><text x="18" y="7">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#aab322"><circle r="9"/><rect x="16" y="-15" rx="14" width="146" height="30" stroke="#aab322"/><text x="18" y="7">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#d8a94e"><circle r="9"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="7" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#7ebdae"><circle r="9"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="7" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#d08b80"><circle r="9"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="7" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#aab322"><circle r="9"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="7" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
         </g>
       </svg>
       <div class="scene__safe missing__content">
@@ -2424,19 +2471,19 @@
         </header>
         <div class="who__grid" data-fragment-cumulative>
           <article class="aud aud--1 fragment" data-fragment="0">
-            <h3>Imprese e startup</h3>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52 V24 H30 V52 M38 52 V14 H54 V52 M10 52 H58 M19 30 h6 M19 38 h6 M43 22 h6 M43 30 h6 M43 38 h6"/></svg><h3>Imprese e startup</h3><p class="cine-tag">Ricerca applicata e open innovation.</p>
             <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
           </article>
           <article class="aud aud--2 fragment" data-fragment="1">
-            <h3>Università e ricerca</h3>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 26 L32 14 L56 26 L32 38 Z M20 33 V44 C20 49 44 49 44 44 V33 M56 26 V40"/></svg><h3>Università e ricerca</h3><p class="cine-tag">Formazione e ricerca sui quattro ambiti.</p>
             <p>Ricerca applicata e formazione congiunta sui quattro ambiti.</p>
           </article>
           <article class="aud aud--3 fragment" data-fragment="2">
-            <h3>Persone e professionisti</h3>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="22" r="7"/><circle cx="43" cy="24" r="6"/><path d="M10 50 C10 38 34 38 34 50 M32 50 C32 40 54 40 54 50"/></svg><h3>Persone e professionisti</h3><p class="cine-tag">Competenze interdisciplinari, sul campo.</p>
             <p>Sviluppano competenze interdisciplinari lavorando con tecnologie, dati e contesti reali di sperimentazione.</p>
           </article>
           <article class="aud aud--4 fragment" data-fragment="3">
-            <h3>Istituzioni e territori</h3>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 26 L32 13 L52 26 M16 26 V46 M27 26 V46 M37 26 V46 M48 26 V46 M12 50 H52 M9 26 H55"/></svg><h3>Istituzioni e territori</h3><p class="cine-tag">Evidenze per decisioni e politiche.</p>
             <p>Evidenze utili per decisioni e politiche.</p>
           </article>
         </div>
@@ -2885,7 +2932,13 @@
       const navBox = document.getElementById('sceneNav');
       const isMobile = () => matchMedia('(max-width: 900px)').matches;
       const staticMode = new URLSearchParams(location.search).has('static');
-      if (new URLSearchParams(location.search).has('cinema')) document.body.classList.add('cinema-mode');
+      if (new URLSearchParams(location.search).has('cinema')) {
+        document.body.classList.add('cinema-mode');
+        document.documentElement.style.overflow = 'hidden';
+        const block = e => e.preventDefault();
+        addEventListener('wheel', block, { passive: false });
+        addEventListener('touchmove', block, { passive: false });
+      }
       const reducedMotion = staticMode || matchMedia('(prefers-reduced-motion: reduce)').matches;
       let autoCascade = true;
       let active = 0;
