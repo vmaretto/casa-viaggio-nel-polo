@@ -463,8 +463,37 @@
     .cinema-mode .overlay.is-open { transition: opacity 1.5s ease; }
     .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); width: min(1020px, 90vw); max-height: 86vh; }
     .cinema-mode .overlay__close, .cinema-mode .overlay__note, .cinema-mode #ov-piano .overlay__list { display: none !important; }
-    .cinema-mode .missing__frame { width: min(66vw, 86vh); transition: none; }
+    .cinema-mode .missing__frame { width: min(72vw, 96vh); transition: none; filter: drop-shadow(0 0 12px rgba(170,179,34,.32)); }
+    .cinema-mode .missing__frame path { stroke-width: 4; stroke-dasharray: 22 14; }
+    .cinema-mode .missing .display { font-size: clamp(46px, 4.2vw, 78px); margin-bottom: clamp(20px, 3.6vh, 40px); }
+    .cinema-mode .missing__inner { transform: translateY(clamp(36px, 8vh, 84px)); }
+    .cinema-mode .missing .missing__steps p.missing__name {
+      color: var(--acid);
+      font-size: clamp(26px, 2.1vw, 40px);
+      letter-spacing: .02em;
+      margin-top: clamp(40px, 7vh, 80px);
+    }
+    .cinema-mode .missing__runners rect { stroke-width: 1.2; }
+    .cinema-mode .missing__runners > g { filter: drop-shadow(0 0 6px currentColor); }
     .cinema-mode .missing__frame path { transition-duration: 6.5s; }
+    .cinema-mode .missing.cine-collapse .missing__frame,
+    .cinema-mode .missing.cine-collapse .missing__inner,
+    .cinema-mode .missing.cine-collapse .missing__kicker { opacity: 0; transition: opacity 1.1s ease; }
+    .missing__seeds { display: none; }
+    .cinema-mode .missing__seeds { display: block; position: absolute; inset: 0; pointer-events: none; }
+    .missing__seeds i {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border-radius: 50%;
+      background: var(--c);
+      box-shadow: 0 0 18px var(--c);
+      opacity: 0;
+      transition: opacity .8s ease, left 1.6s var(--ease), top 1.6s var(--ease);
+    }
+    .cinema-mode .missing.cine-collapse .missing__seeds i { opacity: 1; }
+    .cinema-mode .missing.cine-collapse .missing__seeds i { left: 50% !important; top: 50% !important; }
     .cinema-mode .missing__runners circle { display: none; }
     .cinema-mode .missing__runners text {
       font-size: 20px;
@@ -642,6 +671,9 @@
     }
     .missing__inner { max-width: min(46vw, 540px); transform: translateY(clamp(80px, 15.5vh, 135px)); }
     .missing__inner .display { margin-bottom: clamp(10px, 2vh, 22px); }
+    .k-acid { color: var(--acid); font-style: inherit; }
+    .missing__steps strong { color: var(--acid); font-weight: 600; }
+    .missing .missing__steps p.missing__name { color: var(--acid); }
     .missing__name {
       margin: clamp(18px, 3.2vh, 30px) 0 0;
       color: var(--acid);
@@ -2344,27 +2376,33 @@
     <!-- 04 · COSA MANCA DAVVERO? -->
     <section class="scene missing" id="p04" data-index="3" data-title="Cosa manca davvero?" aria-label="Cosa manca davvero?">
       <svg class="missing__frame" viewBox="0 0 800 660" preserveAspectRatio="none" aria-hidden="true">
-        <path id="housePath" d="M84 648 L84 258 L400 44 L716 258 L716 648 Z" pathLength="1200"/>
+        <path id="housePath" d="M400 44 L716 258 L716 648 L84 648 L84 258 Z" pathLength="1200"/>
         <g class="missing__runners">
-          <g fill="#d8a94e"><circle r="6"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="5" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#7ebdae"><circle r="6"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="5" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#d08b80"><circle r="6"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="5" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
-          <g fill="#aab322"><circle r="6"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="5" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#d8a94e" color="#d8a94e"><circle r="6"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="5" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#7ebdae" color="#7ebdae"><circle r="6"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="5" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#d08b80" color="#d08b80"><circle r="6"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="5" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
+          <g fill="#aab322" color="#aab322"><circle r="6"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="5" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePath"/></animateMotion></g>
         </g>
       </svg>
       <svg class="missing__frame missing__frame--mobile" viewBox="0 0 800 1150" preserveAspectRatio="none" aria-hidden="true">
-        <path id="housePathM" d="M84 1138 L84 258 L400 44 L716 258 L716 1138 Z" pathLength="1200"/>
+        <path id="housePathM" d="M400 44 L716 258 L716 1138 L84 1138 L84 258 Z" pathLength="1200"/>
         <g class="missing__runners">
-          <g fill="#d8a94e"><circle r="9"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="7" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#7ebdae"><circle r="9"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="7" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#d08b80"><circle r="9"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="7" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
-          <g fill="#aab322"><circle r="9"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="7" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#d8a94e" color="#d8a94e"><circle r="9"/><rect x="2" y="-17" rx="17" width="80" height="34" stroke="#d8a94e"/><text x="42" y="7" text-anchor="middle">cibo</text><animateMotion dur="18s" begin="0s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#7ebdae" color="#7ebdae"><circle r="9"/><rect x="2" y="-17" rx="17" width="136" height="34" stroke="#7ebdae"/><text x="70" y="7" text-anchor="middle">ambiente</text><animateMotion dur="18s" begin="-4.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#d08b80" color="#d08b80"><circle r="9"/><rect x="2" y="-17" rx="17" width="106" height="34" stroke="#d08b80"/><text x="55" y="7" text-anchor="middle">salute</text><animateMotion dur="18s" begin="-9s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
+          <g fill="#aab322" color="#aab322"><circle r="9"/><rect x="2" y="-17" rx="17" width="168" height="34" stroke="#aab322"/><text x="86" y="7" text-anchor="middle">agricoltura</text><animateMotion dur="18s" begin="-13.5s" repeatCount="indefinite"><mpath href="#housePathM"/></animateMotion></g>
         </g>
       </svg>
       <div class="scene__safe missing__content">
-        <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
+        <div class="missing__seeds" aria-hidden="true">
+        <i style="--c: var(--food); left: 38%; top: 24%"></i>
+        <i style="--c: var(--environment); left: 62%; top: 24%"></i>
+        <i style="--c: var(--health); left: 30%; top: 78%"></i>
+        <i style="--c: var(--agriculture); left: 70%; top: 78%"></i>
+      </div>
+      <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
-          <h2 class="display reveal delay-1">Un luogo comune.</h2>
+          <h2 class="display reveal delay-1">Manca una <em class="k-acid">casa</em> comune.</h2>
           <div class="missing__steps">
             <p class="reveal delay-2">Non mancano competenze, dati o tecnologie.</p>
             <p class="reveal delay-3"><strong>Manca uno spazio</strong> dove metterli in relazione e farli lavorare insieme.</p>
