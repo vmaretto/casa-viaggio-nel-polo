@@ -3479,6 +3479,10 @@
           };
           postMessage({ casa: 'auto', on: false }, '*');
           await sleep(300);
+          R.REGOLA_SORPRESA_niente_casa_prima_del_reveal = (() => {
+            const pre = ['p01','p02','p03','p04'];
+            return pre.every(id => !/casa/i.test(document.getElementById(id).innerText));
+          })();
           goi(0); await sleep(400);
           const spans = [...document.querySelectorAll('.cover__domains span')];
           R.D1_iniziale_vuota = spans.slice(0, 4).every(w => op(w) === 0);
