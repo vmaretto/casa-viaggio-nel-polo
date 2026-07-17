@@ -3549,38 +3549,17 @@
         } else if (name === 'sign') {
           DOT_KEYS.forEach((k, i) => dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 }));
         } else if (name === 'chain') {
-          const findWord = k => document.querySelector('.problem .k-' + k);
-          const map = {
-            ambiente: findWord('env'),
-            agricoltura: findWord('agr'),
-            cibo: findWord('food'),
-            salute: findWord('health')
-          };
-          DOT_KEYS.forEach(k => {
-            const el = map[k];
-            if (el) {
-              const m = rectMid(el);
-              dotGo(k, m.x, m.y - 24, { opacity: .85, scale: .72 });
-            }
-          });
+          const chain = document.querySelector('.problem__chain');
+          const r = chain ? chain.getBoundingClientRect() : { left: innerWidth * .22, width: innerWidth * .56, top: innerHeight * .24 };
+          const order = ['ambiente', 'agricoltura', 'cibo', 'salute'];
+          const y = Math.max(82, r.top - 54);
+          const x0 = r.left + r.width * .14;
+          const step = r.width * .24;
+          order.forEach((k, i) => dotGo(k, x0 + step * i, y, { opacity: .72, scale: .62 }));
         } else if (name === 'hold-chain') {
           const br = document.querySelector('.problem__break');
           const m = br ? rectMid(br) : { x: innerWidth / 2, y: innerHeight * .66 };
-          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 46, m.y - 46, { opacity: .7, scale: .7 }));
-        } else if (name === 'conseq-ready' || name === 'conseq-signature') {
-          DOT_KEYS.forEach((k, i) => dotSignature(k, i, { opacity: .62, scale: .62, gap: 46, bottom: 58 }));
-        } else if (name === 'same-crisis' || name === 'conseq-release') {
-          const claim = document.querySelector('.cq-5 .cq__claim');
-          const m = claim ? rectMid(claim) : { x: innerWidth / 2, y: innerHeight * .48 };
-          const gap = Math.min(82, innerWidth * .055);
-          dotGo('cibo', m.x - gap * 1.5, m.y - 72, { scale: .86 });
-          dotGo('ambiente', m.x - gap * .5, m.y - 72, { scale: .86 });
-          dotGo('salute', m.x + gap * .5, m.y - 72, { scale: .86 });
-          dotGo('agricoltura', m.x + gap * 1.5, m.y - 72, { scale: .86 });
-        } else if (name === 'conseq-collapse') {
-          const claim = document.querySelector('.cq-5 .cq__claim');
-          const m = claim ? rectMid(claim) : { x: innerWidth / 2, y: innerHeight * .48 };
-          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 12, m.y - 78, { opacity: .9, scale: .72 }));
+          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 38, m.y + 58, { opacity: .42, scale: .46 }));
         } else if (name === 'intohouse') {
           document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
             const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y, { opacity: 0, scale: .6 });
@@ -3655,50 +3634,20 @@
           });
         }
       };
-      const cineConseqHit = d => {
-        const scene = document.querySelector('#p03');
-        if (!scene) return;
-        const n = Number(d.n) || 1;
-        const k = d.k || ['ambiente', 'agricoltura', 'salute', 'cibo'][n - 1];
-        scene.querySelectorAll('.cq').forEach((q, i) => {
-          if (i === n - 1) {
-            q.classList.add('on');
-            setTimeout(() => q.classList.add('in'), 40);
-          } else if (q.classList.contains('on')) {
-            q.classList.remove('in');
-            setTimeout(() => q.classList.remove('on'), 550);
-          }
-        });
-        DOT_KEYS.forEach((dk, i) => dotSignature(dk, i, { opacity: dk === k ? .78 : .5, scale: dk === k ? .66 : .5, gap: 44, bottom: 58 }));
-        const q = scene.querySelector('.cq-' + n);
-        const target = q && (q.querySelector('.cq__num') || q);
-        if (target && k) {
-          const m = rectMid(target);
-          const y = m.r.top - 34;
-          dotPulseTo(k, m.x, y, 1250);
-          setTimeout(() => dotGo(k, m.x, y, { opacity: 1, scale: .92 }), 180);
-          (d.echo || []).forEach((ek, i) => {
-            setTimeout(() => {
-              const e = dot(ek);
-              if (!e) return;
-              const r = e.getBoundingClientRect();
-              dotPulseTo(k, r.left + r.width / 2, r.top + r.height / 2, 900);
-              dotGo(ek, e.style.left, e.style.top, { opacity: .72, scale: .62 });
-              setTimeout(() => {
-                const idx = DOT_KEYS.indexOf(ek);
-                if (idx >= 0) dotSignature(ek, idx, { opacity: .5, scale: .5, gap: 44, bottom: 58 });
-              }, 800);
-            }, 540 + i * 220);
-          });
-        }
-      };
       const cineBridgeLetter = n => {
         const sc = scenes[active];
         clearInterval(sc._cascade);
         setFragment(sc, n);
+        if (n === 0) {
+          document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
+            const m = rectMid(sp);
+            dotGo(DOT_KEYS[i], m.x, m.r.top - 26, { opacity: .28, scale: .42 });
+          });
+        }
+        setTimeout(() => cineDotsPreset('accent', n), 350);
       };
 
-            let exitCanvas = null;
+      let exitCanvas = null;
       const cineFinaleExit = () => {
         const fin = document.querySelector('.finale');
         if (!fin || exitCanvas) return;
@@ -3879,7 +3828,6 @@
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
           else if (d.name === 'conseq') cineConseq(d.n);
-          else if (d.name === 'conseq-hit') cineConseqHit(d);
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
