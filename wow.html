@@ -565,6 +565,33 @@
     .cinema-mode .scene:nth-of-type(even).is-active { animation-name: cineZoomOut; }
     @keyframes cinePortrait { from { transform: scale(1); } to { transform: scale(1.1); } }
     .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s var(--ease) forwards; }
+    body.cinema-mode .scene--light,
+    body.cinema-mode .effects.scene--light,
+    body.cinema-mode .operate.scene--light,
+    body.cinema-mode .heritage.scene--light {
+      background: radial-gradient(circle at 74% 22%, rgba(170,179,34,.06), transparent 42%), var(--ink-deep, #071d21);
+      color: var(--paper);
+      --food: #d8a94e;
+      --environment: #7ebdae;
+      --health: #d08b80;
+      --agriculture: #aab322;
+      --acid: #aab322;
+    }
+    body.cinema-mode .scene--light .stat {
+      --food: #8f6112;
+      --environment: #2f6d5e;
+      --health: #a04a3c;
+      --agriculture: #5d6614;
+      --acid: #5d6614;
+    }
+    .cinema-mode .scene--light .display { color: var(--paper); }
+    body.cinema-mode .scene--light .effects__sources { color: rgba(247,245,238,.6); }
+    .cinema-mode .operate .op h3 { color: var(--paper); }
+    .cinema-mode .operate .op p { color: rgba(247,245,238,.75); }
+    body.cinema-mode .scene--light .operate__loop { color: rgba(247,245,238,.88); }
+    .cinema-mode .scene--light .op::before { background: var(--paper); }
+    .cinema-mode .heritage .cap h3 { color: var(--paper); }
+    .cinema-mode .heritage .cap p { color: rgba(247,245,238,.78); }
     .cine-stage { position: relative; z-index: 6; }
     /* uscita finale: prima svaniscono frase e pilastri, le lettere restano */
     .finale--exit .finale__statement,
@@ -590,8 +617,9 @@
       transition: left 1.1s var(--ease), top 1.1s var(--ease), opacity 1.1s ease;
     }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
-    .cinema-mode .problem.is-active .problem__chain::before { transform: scaleY(0); transform-origin: top; transition: transform 2.2s var(--ease); }
-    .cinema-mode .problem.is-active.cine-line .problem__chain::before { transform: scaleY(1); }
+    .cinema-mode .problem__chain::before { display: none; }
+    .cinema-mode .problem__chain { padding-left: 0; text-align: center; }
+    .cinema-mode .problem__break { padding-left: 0; text-align: center; margin-left: auto; margin-right: auto; }
     /* interdipendenza: la rete dei quattro ambiti */
     .problem__web { display: none; }
     .cinema-mode .problem__web {
@@ -3356,7 +3384,13 @@
         dotsInit();
         if (name === 'word') {
           const el = coverWordEl(arg);
-          if (el) { const m = rectMid(el); dotGo(arg, m.r.left - 34, m.y); }
+          if (el) {
+            const m = rectMid(el);
+            const dy = el.classList.contains('cine-in') ? 0 : 26;
+            const side = { cibo: -1, ambiente: 1, salute: -1, agricoltura: 1 }[arg];
+            const x = side < 0 ? m.r.left - 38 : m.r.right + 38;
+            dotGo(arg, x, m.y - dy);
+          }
         } else if (name === 'scatter') {
           dotGo('cibo', '14%', '18%'); dotGo('ambiente', '86%', '18%');
           dotGo('salute', '14%', '82%'); dotGo('agricoltura', '86%', '82%');
@@ -3637,12 +3671,11 @@
           R.D1_nessun_volo = spans.every(w => !w.style.transform);
           goi(1); await sleep(400);
           const chain = document.querySelector('.problem__chain');
-          R.D2_linea_nascosta_iniziale = mtx(chain, '::before').includes('matrix(1, 0, 0, 0');
+          R.D2_linea_assente_nel_film = getComputedStyle(chain, '::before').display === 'none';
           const web = document.querySelector('.problem__web');
           R.D2b_rete_nascosta_iniziale = op(web) === 0;
-          fx('mark', { c: 'cine-line' }); fx('mark', { c: 'cine-web' });
+          fx('mark', { c: 'cine-web' });
           await sleep(2600);
-          R.D2_linea_disegnata_dopo = settled(() => mtx(chain, '::before').includes('matrix(1, 0, 0, 1'));
           R.D2b_rete_visibile_dopo = settled(() => op(web) > .9);
           R.D2b_archi_disegnati = settled(() => [...web.querySelectorAll('line')].every(l => getComputedStyle(l).strokeDashoffset === '0px'));
           goi(2); await sleep(400);
