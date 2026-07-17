@@ -601,8 +601,8 @@
     .static-mode .conseq-v2[data-quadro="1"] .cq-1, .static-mode .conseq-v2[data-quadro="2"] .cq-2,
     .static-mode .conseq-v2[data-quadro="3"] .cq-3, .static-mode .conseq-v2[data-quadro="4"] .cq-4,
     .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
-    .conseq-v2 .cq.on { display: block; opacity: 0; transform: translateY(26px) scale(.82); transition: opacity .7s ease, transform 1s var(--ease); }
-    .conseq-v2 .cq.on.in { opacity: 1; transform: none; }
+    .conseq-v2 .cq.on { display: block; opacity: 0; transition: opacity .9s ease; }
+    .conseq-v2 .cq.on.in { opacity: 1; }
     body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none; }
     .static-mode .cine-conseq .cq > i { display: inline-block; }
     body.cinema-mode .cine-conseq .cq__dots i { visibility: hidden; }
@@ -2527,17 +2527,17 @@
           </div>
           <div class="cq cq-2">
             <i style="--c: var(--agriculture)"></i>
-            <p class="cq__num" style="--c: var(--agriculture)">−21%</p>
+            <p class="cq__num" style="--c: var(--agriculture)" data-count="21" data-prefix="−" data-suffix="%">−21%</p>
             <p class="cq__ctx">produttività agricola persa · per il clima</p>
           </div>
           <div class="cq cq-3">
             <i style="--c: var(--health)"></i>
-            <p class="cq__num" style="--c: var(--health)">10.000<small>mld $ / anno</small></p>
+            <p class="cq__num" style="--c: var(--health)" data-count="10000" data-sep="1">10.000<small>mld $ / anno</small></p>
             <p class="cq__ctx">i costi nascosti del cibo · salute, ambiente, società</p>
           </div>
           <div class="cq cq-4">
             <i style="--c: var(--food)"></i>
-            <p class="cq__num" style="--c: var(--food)">733<small>milioni di persone</small></p>
+            <p class="cq__num" style="--c: var(--food)" data-count="733">733<small>milioni di persone</small></p>
             <p class="cq__ctx">senza cibo adeguato · mentre un terzo del cibo prodotto si spreca</p>
           </div>
           <div class="cq cq-5">
@@ -3478,6 +3478,29 @@
         d.style.opacity = opts.opacity != null ? String(opts.opacity) : '1';
         d.style.transform = 'scale(' + (opts.scale != null ? opts.scale : 1) + ')';
       };
+      const dotSignature = (k, i, opts = {}) => {
+        dotGo(k, 'calc(50% + ' + ((i - 1.5) * (opts.gap || 44)) + 'px)', 'calc(100% - ' + (opts.bottom || 58) + 'px)', {
+          opacity: opts.opacity != null ? opts.opacity : .58,
+          scale: opts.scale != null ? opts.scale : .58
+        });
+      };
+      const dotPulseTo = (k, x, y, ms = 1300) => {
+        const d = dot(k);
+        if (!d || !dotsEl) return;
+        const r = d.getBoundingClientRect();
+        const c = document.createElement('i');
+        c.className = 'pulse-clone';
+        c.style.setProperty('--c', DOT_CSS[k]);
+        c.style.left = (r.left + r.width / 2) + 'px';
+        c.style.top = (r.top + r.height / 2) + 'px';
+        c.style.opacity = '1';
+        c.style.transitionDuration = (ms / 1000) + 's';
+        dotsEl.appendChild(c);
+        requestAnimationFrame(() => setTimeout(() => {
+          c.style.left = x + 'px'; c.style.top = y + 'px'; c.style.opacity = '0';
+        }, 40));
+        setTimeout(() => c.remove(), ms + 220);
+      };
       const rectMid = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, r }; };
       const coverWordEl = k => {
         const map = { cibo: 0, ambiente: 1, salute: 2, agricoltura: 3 };
@@ -3497,6 +3520,11 @@
         } else if (name === 'scatter') {
           dotGo('cibo', '12%', '14%'); dotGo('ambiente', '88%', '14%');
           dotGo('salute', '12%', '86%'); dotGo('agricoltura', '88%', '86%');
+        } else if (name === 'constellation') {
+          dotGo('cibo', '50%', 'calc(50% - min(13vw, 150px))', { scale: .82 });
+          dotGo('ambiente', 'calc(50% + min(13vw, 150px))', '50%', { scale: .82 });
+          dotGo('salute', '50%', 'calc(50% + min(13vw, 150px))', { scale: .82 });
+          dotGo('agricoltura', 'calc(50% - min(13vw, 150px))', '50%', { scale: .82 });
         } else if (name === 'pulse') {
           const a = dot(arg.from), b = dot(arg.to);
           if (!a || !b) return;
@@ -3520,6 +3548,39 @@
           });
         } else if (name === 'sign') {
           DOT_KEYS.forEach((k, i) => dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 }));
+        } else if (name === 'chain') {
+          const findWord = k => document.querySelector('.problem .k-' + k);
+          const map = {
+            ambiente: findWord('env'),
+            agricoltura: findWord('agr'),
+            cibo: findWord('food'),
+            salute: findWord('health')
+          };
+          DOT_KEYS.forEach(k => {
+            const el = map[k];
+            if (el) {
+              const m = rectMid(el);
+              dotGo(k, m.x, m.y - 24, { opacity: .85, scale: .72 });
+            }
+          });
+        } else if (name === 'hold-chain') {
+          const br = document.querySelector('.problem__break');
+          const m = br ? rectMid(br) : { x: innerWidth / 2, y: innerHeight * .66 };
+          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 46, m.y - 46, { opacity: .7, scale: .7 }));
+        } else if (name === 'conseq-ready' || name === 'conseq-signature') {
+          DOT_KEYS.forEach((k, i) => dotSignature(k, i, { opacity: .62, scale: .62, gap: 46, bottom: 58 }));
+        } else if (name === 'same-crisis' || name === 'conseq-release') {
+          const claim = document.querySelector('.cq-5 .cq__claim');
+          const m = claim ? rectMid(claim) : { x: innerWidth / 2, y: innerHeight * .48 };
+          const gap = Math.min(82, innerWidth * .055);
+          dotGo('cibo', m.x - gap * 1.5, m.y - 72, { scale: .86 });
+          dotGo('ambiente', m.x - gap * .5, m.y - 72, { scale: .86 });
+          dotGo('salute', m.x + gap * .5, m.y - 72, { scale: .86 });
+          dotGo('agricoltura', m.x + gap * 1.5, m.y - 72, { scale: .86 });
+        } else if (name === 'conseq-collapse') {
+          const claim = document.querySelector('.cq-5 .cq__claim');
+          const m = claim ? rectMid(claim) : { x: innerWidth / 2, y: innerHeight * .48 };
+          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 12, m.y - 78, { opacity: .9, scale: .72 }));
         } else if (name === 'intohouse') {
           document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
             const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y, { opacity: 0, scale: .6 });
@@ -3530,7 +3591,7 @@
           });
         } else if (name === 'letters') {
           document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
-            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.y);
+            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.r.top - 26, { scale: .85 });
           });
         } else if (name === 'accent') {
           const sp = document.querySelectorAll('.brand__letter span')[arg];
@@ -3563,17 +3624,71 @@
             setTimeout(() => q.classList.remove('on'), 550);
           }
         });
+        const numEl = scene.querySelector('.cq-' + n + ' .cq__num');
+        if (numEl && numEl.dataset.count) {
+          const target = Number(numEl.dataset.count);
+          const pre = numEl.dataset.prefix || '';
+          const suf = numEl.dataset.suffix || '';
+          const fmt = v => pre + (numEl.dataset.sep ? v.toLocaleString('it-IT') : String(v)) + suf;
+          const node = numEl.childNodes[0];
+          const t0 = performance.now();
+          const tick = now => {
+            const k = Math.min(1, (now - t0) / 1400);
+            const e = 1 - Math.pow(1 - k, 3);
+            node.textContent = fmt(Math.round(target * e));
+            if (k < 1) requestAnimationFrame(tick);
+            else node.textContent = fmt(target);
+          };
+          requestAnimationFrame(tick);
+        }
         if (n <= 4) {
           DOT_KEYS.forEach((k, i) => {
             if (k === MAP[n - 1]) {
-              dotGo(k, '50%', 'calc(50% - min(13vw, 250px))');
+              dotGo(k, '50%', 'calc(50% - min(13vw, 250px))', { scale: 1.08 });
             } else {
-              dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 });
+              dotGo(k, 'calc(50% + ' + ((i - 1.5) * 34) + 'px)', 'calc(100% - 58px)', { opacity: .45, scale: .5 });
             }
           });
         } else {
           DOT_KEYS.forEach((k, i) => {
-            dotGo(k, 'calc(50% + ' + ((i - 1.5) * 52) + 'px)', 'calc(50% - min(7vw, 140px))');
+            dotGo(k, 'calc(50% + ' + ((i - 1.5) * 58) + 'px)', 'calc(50% - min(7vw, 140px))', { scale: .78 });
+          });
+        }
+      };
+      const cineConseqHit = d => {
+        const scene = document.querySelector('#p03');
+        if (!scene) return;
+        const n = Number(d.n) || 1;
+        const k = d.k || ['ambiente', 'agricoltura', 'salute', 'cibo'][n - 1];
+        scene.querySelectorAll('.cq').forEach((q, i) => {
+          if (i === n - 1) {
+            q.classList.add('on');
+            setTimeout(() => q.classList.add('in'), 40);
+          } else if (q.classList.contains('on')) {
+            q.classList.remove('in');
+            setTimeout(() => q.classList.remove('on'), 550);
+          }
+        });
+        DOT_KEYS.forEach((dk, i) => dotSignature(dk, i, { opacity: dk === k ? .78 : .5, scale: dk === k ? .66 : .5, gap: 44, bottom: 58 }));
+        const q = scene.querySelector('.cq-' + n);
+        const target = q && (q.querySelector('.cq__num') || q);
+        if (target && k) {
+          const m = rectMid(target);
+          const y = m.r.top - 34;
+          dotPulseTo(k, m.x, y, 1250);
+          setTimeout(() => dotGo(k, m.x, y, { opacity: 1, scale: .92 }), 180);
+          (d.echo || []).forEach((ek, i) => {
+            setTimeout(() => {
+              const e = dot(ek);
+              if (!e) return;
+              const r = e.getBoundingClientRect();
+              dotPulseTo(k, r.left + r.width / 2, r.top + r.height / 2, 900);
+              dotGo(ek, e.style.left, e.style.top, { opacity: .72, scale: .62 });
+              setTimeout(() => {
+                const idx = DOT_KEYS.indexOf(ek);
+                if (idx >= 0) dotSignature(ek, idx, { opacity: .5, scale: .5, gap: 44, bottom: 58 });
+              }, 800);
+            }, 540 + i * 220);
           });
         }
       };
@@ -3581,7 +3696,6 @@
         const sc = scenes[active];
         clearInterval(sc._cascade);
         setFragment(sc, n);
-        setTimeout(() => cineDotsPreset('accent', n), 350);
       };
 
             let exitCanvas = null;
@@ -3765,6 +3879,7 @@
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
           else if (d.name === 'conseq') cineConseq(d.n);
+          else if (d.name === 'conseq-hit') cineConseqHit(d);
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
@@ -3788,6 +3903,8 @@
             const [name, a] = st.split(',');
             setTimeout(() => {
               if (name === 'conseq') cineConseq(Number(a));
+              else if (name === 'bridge') cineDotsPreset('letters');
+              else if (name === 'bridge-letter') cineBridgeLetter(Number(a));
               else if (name === 'dots') cineDotsPreset(a);
               else if (name === 'step') { setFragment(target, Number(a)); }
               else if (name === 'show') { const el = target.querySelectorAll('.reveal')[Number(a)]; if (el) cineIn(el, false); }

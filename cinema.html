@@ -195,8 +195,21 @@
         [11.8,{casa:'fx',name:'show',n:4}]
       ],
       sub: "L'ambiente condiziona l'agricoltura. L'agricoltura dà forma al cibo. Il cibo decide la nostra salute. | È una catena senza interruzioni. | Ma noi continuiamo a organizzare competenze, decisioni e attività… separatamente." },
-    { scene: 2,  clip: 'assets/audio/voce/03.mp3', pre: 800,  post: 1600, duck: .13,
-      cues: [[.4,{casa:'fx',name:'dots',p:'sign'}],[3.1,{casa:'fx',name:'conseq',n:1}],[10.0,{casa:'fx',name:'conseq',n:2}],[16.4,{casa:'fx',name:'conseq',n:3}],[21.0,{casa:'fx',name:'conseq',n:4}],[24.8,{casa:'fx',name:'conseq',n:5}],[21.8,{casa:'fx',name:'show',n:1}]],
+    { scene: 2,  clip: 'assets/audio/voce/03.mp3', pre: 900,  post: 1900, duck: .13,
+      cues: [
+        // Pagina 3 — firma viva: i quattro ambiti restano presenti mentre i dati li attraversano.
+        [.35,{casa:'fx',name:'dots',p:'conseq-signature'}],
+        [3.05,{casa:'fx',name:'conseq-hit',n:1,k:'ambiente',echo:['agricoltura','cibo']}],
+        [9.75,{casa:'fx',name:'conseq-hit',n:2,k:'agricoltura',echo:['ambiente','cibo']}],
+        [15.95,{casa:'fx',name:'conseq-hit',n:3,k:'salute',echo:['cibo','ambiente']}],
+        [20.75,{casa:'fx',name:'conseq-hit',n:4,k:'cibo',echo:['salute','agricoltura']}],
+
+        // Chiusura: i quattro segnali convergono e poi si riaprono come una sola crisi di sistema.
+        [24.55,{casa:'fx',name:'conseq',n:5}],
+        [24.95,{casa:'fx',name:'dots',p:'conseq-collapse'}],
+        [26.15,{casa:'fx',name:'dots',p:'conseq-release'}],
+        [26.45,{casa:'fx',name:'show',n:1}]
+      ],
       sub: "E il conto arriva. Un terzo delle emissioni globali nasce dai sistemi agroalimentari. | La produttività agricola ha già perso il 21% a causa del clima. | E i costi nascosti del cibo superano i diecimila miliardi di dollari. Ogni anno. | Non sono tre crisi diverse. È la stessa crisi… guardata da tre finestre." },
     { scene: 3,  clip: 'assets/audio/voce/04.mp3', pre: 900,  post: 2600, duck: .13,
       cues: [[.5,{casa:'fx',name:'dots',p:'intohouse'}],[.6,{casa:'fx',name:'show',n:1}],[2.4,{casa:'fx',name:'show',n:2,flip:false}],[6.0,{casa:'fx',name:'show',n:3,flip:false}],[9.6,{casa:'fx',name:'anchor',k:'ambiente'}],[11.0,{casa:'fx',name:'anchor',k:'agricoltura'}],[12.3,{casa:'fx',name:'anchor',k:'cibo'}],[13.5,{casa:'fx',name:'anchor',k:'salute'}],[16.6,{casa:'fx',name:'show',n:4,flip:false}],[18.3,{casa:'fx',name:'mark',c:'cine-collapse'}],[18.5,{casa:'fx',name:'dots',p:'anchors'}]],
