@@ -177,8 +177,23 @@
         [15.8,{casa:'fx',name:'dots',p:'scatter'}]
       ],
       sub: "C'è il cibo che mangiamo. L'ambiente che ci circonda. La salute che ci sta a cuore. E l'agricoltura, che li tiene insieme da diecimila anni. | Quattro mondi. Un'unica storia. | Eppure… noi li abbiamo divisi." },
-    { scene: 1,  clip: 'assets/audio/voce/02.mp3', pre: 700,  post: 1400, duck: .13,
-      cues: [[.4,{casa:'fx',name:'show',n:1}],[.9,{casa:'fx',name:'dots',p:'pulse',a:{from:'ambiente',to:'agricoltura'}}],[2.8,{casa:'fx',name:'show',n:2}],[3.3,{casa:'fx',name:'dots',p:'pulse',a:{from:'agricoltura',to:'cibo'}}],[5.6,{casa:'fx',name:'show',n:3}],[6.1,{casa:'fx',name:'dots',p:'pulse',a:{from:'cibo',to:'salute'}}],[11.8,{casa:'fx',name:'show',n:4}]],
+    { scene: 1,  clip: 'assets/audio/voce/02.mp3', pre: 750,  post: 1450, duck: .13,
+      cues: [
+        // Pagina 2 — dalla dispersione alla catena: i pallini si preparano a leggere una relazione.
+        [.25,{casa:'fx',name:'dots',p:'chain'}],
+        [.45,{casa:'fx',name:'show',n:1}],
+        [.95,{casa:'fx',name:'dots',p:'pulse',a:{from:'ambiente',to:'agricoltura'}}],
+
+        [2.8,{casa:'fx',name:'show',n:2}],
+        [3.35,{casa:'fx',name:'dots',p:'pulse',a:{from:'agricoltura',to:'cibo'}}],
+
+        [5.65,{casa:'fx',name:'show',n:3}],
+        [6.15,{casa:'fx',name:'dots',p:'pulse',a:{from:'cibo',to:'salute'}}],
+
+        // La catena esiste, ma resta non governata: sospensione prima delle conseguenze.
+        [10.7,{casa:'fx',name:'dots',p:'hold-chain'}],
+        [11.8,{casa:'fx',name:'show',n:4}]
+      ],
       sub: "L'ambiente condiziona l'agricoltura. L'agricoltura dà forma al cibo. Il cibo decide la nostra salute. | È una catena senza interruzioni. | Ma noi continuiamo a organizzare competenze, decisioni e attività… separatamente." },
     { scene: 2,  clip: 'assets/audio/voce/03.mp3', pre: 800,  post: 1600, duck: .13,
       cues: [[.4,{casa:'fx',name:'dots',p:'sign'}],[3.1,{casa:'fx',name:'conseq',n:1}],[10.0,{casa:'fx',name:'conseq',n:2}],[16.4,{casa:'fx',name:'conseq',n:3}],[21.0,{casa:'fx',name:'conseq',n:4}],[24.8,{casa:'fx',name:'conseq',n:5}],[21.8,{casa:'fx',name:'show',n:1}]],
