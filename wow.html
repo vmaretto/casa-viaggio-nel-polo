@@ -505,8 +505,6 @@
       opacity: 0;
       transition: opacity .8s ease, left 1.7s var(--ease), top 1.7s var(--ease);
     }
-    .cinema-mode .missing.cine-collapse .missing__seeds i { opacity: 1; }
-    .cinema-mode .missing.cine-collapse .missing__seeds i { left: 50% !important; top: 50% !important; }
     .missing__anchors { display: none; }
     .pillole-fisse .missing__anchors {
       display: block;
@@ -573,8 +571,8 @@
     .finale--exit .finale__pillars { opacity: 0 !important; transition: opacity 1.2s ease !important; }
     .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
     #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
-    #cineBridge { position: fixed; inset: 0; z-index: 55; pointer-events: none; }
-    #cineBridge i {
+    #cineDots { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+    #cineDots i {
       position: absolute;
       width: 18px;
       height: 18px;
@@ -582,7 +580,14 @@
       border-radius: 50%;
       background: var(--c);
       box-shadow: 0 0 14px var(--c), 0 0 34px var(--c);
-      transition: left 1.5s var(--ease), top 1.5s var(--ease), opacity .7s ease, transform .7s ease;
+      opacity: 0;
+      transition: left 1.5s var(--ease), top 1.5s var(--ease), opacity .7s ease, transform .9s var(--ease);
+    }
+    #cineDots i.pulse-clone {
+      width: 10px;
+      height: 10px;
+      margin: -5px 0 0 -5px;
+      transition: left 1.1s var(--ease), top 1.1s var(--ease), opacity 1.1s ease;
     }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
     .cinema-mode .problem.is-active .problem__chain::before { transform: scaleY(0); transform-origin: top; transition: transform 2.2s var(--ease); }
@@ -597,6 +602,7 @@
       transition: opacity 1s ease;
     }
     .cinema-mode .problem.cine-web .problem__web { opacity: 1; }
+    .problem__web { overflow: visible; }
     .problem__web line { stroke: rgba(247,245,238,.34); stroke-width: 1; stroke-dasharray: 240; stroke-dashoffset: 240; }
     .cinema-mode .problem.cine-web .problem__web line { stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s var(--ease); }
     .cinema-mode .problem.cine-web .problem__web line:nth-of-type(2) { transition-delay: .2s; }
@@ -610,19 +616,7 @@
     .missing__runners rect { display: none; }
     .cinema-mode .missing__runners rect { display: block; fill: rgba(7,29,33,.68); stroke-width: 1.2; }
     .cinema-mode .missing__runners text { fill: var(--paper); opacity: 1; font-size: 21px; font-style: normal; letter-spacing: .04em; }
-    /* D5: pallini separatori tra le lettere C·A·S·A */
     .cinema-mode .brand__letter { position: relative; }
-    .cinema-mode .brand__letter + .brand__letter::before {
-      content: "";
-      position: absolute;
-      left: calc(-.5 * clamp(22px, 6vw, 96px) - 7px);
-      top: 38%;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--c);
-      box-shadow: 0 0 14px var(--c);
-    }
     /* D6/D9/D10/D11/D13: dieta del testo nel film */
     .cinema-mode .cine-hide { display: none !important; }
     .cine-keys { display: none; }
@@ -3325,53 +3319,108 @@
         }, 2500);
       };
 
-      let bridgeEl = null;
-      const cineBridge = () => {
-        if (bridgeEl) return;
-        const seeds = [...document.querySelectorAll('.missing__seeds i')];
-        const colors = { cibo: 'var(--food)', ambiente: 'var(--environment)', salute: 'var(--health)', agricoltura: 'var(--agriculture)' };
-        const box = document.createElement('div');
-        box.id = 'cineBridge';
-        document.body.appendChild(box);
-        bridgeEl = box;
-        ['cibo', 'ambiente', 'salute', 'agricoltura'].forEach((k, idx) => {
-          const seed = seeds.find(sd => sd.dataset.k === k);
-          const r = seed ? seed.getBoundingClientRect() : null;
+      /* --- il filo dei quattro pallini: vivono per tutto il film --- */
+      const DOT_KEYS = ['cibo', 'ambiente', 'salute', 'agricoltura'];
+      const DOT_CSS = { cibo: 'var(--food)', ambiente: 'var(--environment)', salute: 'var(--health)', agricoltura: 'var(--agriculture)' };
+      let dotsEl = null;
+      const dotsInit = () => {
+        if (dotsEl) return dotsEl;
+        dotsEl = document.createElement('div');
+        dotsEl.id = 'cineDots';
+        DOT_KEYS.forEach(k => {
           const d = document.createElement('i');
-          d.style.setProperty('--c', colors[k]);
-          d.style.left = (r && r.width ? r.left + r.width / 2 : innerWidth / 2) + 'px';
-          d.style.top = (r && r.height ? r.top + r.height / 2 : innerHeight / 2) + 'px';
-          box.appendChild(d);
-          setTimeout(() => {
-            d.style.left = 'calc(50% + ' + ((idx - 1.5) * 44) + 'px)';
-            d.style.top = '50%';
-          }, 80);
+          d.dataset.k = k;
+          d.style.setProperty('--c', DOT_CSS[k]);
+          d.style.left = '50%';
+          d.style.top = '50%';
+          dotsEl.appendChild(d);
         });
-        seeds.forEach(sd => { sd.style.opacity = '0'; });
+        document.body.appendChild(dotsEl);
+        return dotsEl;
+      };
+      const dot = k => dotsInit().querySelector('i[data-k="' + k + '"]');
+      const dotGo = (k, x, y, opts = {}) => {
+        const d = dot(k);
+        if (!d) return;
+        if (x != null) d.style.left = (typeof x === 'number' ? x + 'px' : x);
+        if (y != null) d.style.top = (typeof y === 'number' ? y + 'px' : y);
+        d.style.opacity = opts.opacity != null ? String(opts.opacity) : '1';
+        d.style.transform = 'scale(' + (opts.scale != null ? opts.scale : 1) + ')';
+      };
+      const rectMid = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, r }; };
+      const coverWordEl = k => {
+        const map = { cibo: 0, ambiente: 1, salute: 2, agricoltura: 3 };
+        return document.querySelectorAll('.cover__domains span')[map[k]];
+      };
+      const cineDotsPreset = (name, arg) => {
+        dotsInit();
+        if (name === 'word') {
+          const el = coverWordEl(arg);
+          if (el) { const m = rectMid(el); dotGo(arg, m.r.left - 34, m.y); }
+        } else if (name === 'scatter') {
+          dotGo('cibo', '14%', '18%'); dotGo('ambiente', '86%', '18%');
+          dotGo('salute', '14%', '82%'); dotGo('agricoltura', '86%', '82%');
+        } else if (name === 'pulse') {
+          const a = dot(arg.from), b = dot(arg.to);
+          if (!a || !b) return;
+          const c = document.createElement('i');
+          c.className = 'pulse-clone';
+          c.style.setProperty('--c', DOT_CSS[arg.from]);
+          c.style.left = a.style.left; c.style.top = a.style.top;
+          c.style.opacity = '1';
+          dotsEl.appendChild(c);
+          requestAnimationFrame(() => setTimeout(() => {
+            c.style.left = b.style.left; c.style.top = b.style.top; c.style.opacity = '0';
+          }, 40));
+          setTimeout(() => c.remove(), 1400);
+        } else if (name === 'net') {
+          const web = document.querySelector('.problem__web');
+          if (!web) return;
+          const byFill = { '#d8a94e': 'cibo', '#7ebdae': 'ambiente', '#d08b80': 'salute', '#aab322': 'agricoltura' };
+          web.querySelectorAll('circle').forEach(c => {
+            const k = byFill[c.getAttribute('fill')];
+            if (k) { const m = rectMid(c); dotGo(k, m.x, m.y, { scale: .8 }); }
+          });
+        } else if (name === 'sign') {
+          DOT_KEYS.forEach((k, i) => dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 }));
+        } else if (name === 'intohouse') {
+          document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
+            const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y, { opacity: 0, scale: .6 });
+          });
+        } else if (name === 'anchors') {
+          document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
+            const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y);
+          });
+        } else if (name === 'letters') {
+          document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
+            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.y);
+          });
+        } else if (name === 'accent') {
+          const sp = document.querySelectorAll('.brand__letter span')[arg];
+          if (sp) { const m = rectMid(sp); dotGo(DOT_KEYS[arg], m.x, m.r.top - 26, { scale: .8 }); }
+        } else if (name === 'dive') {
+          const viz = document.querySelector('.birth__viz');
+          const m = viz ? rectMid(viz) : { x: innerWidth / 2, y: innerHeight / 2 };
+          DOT_KEYS.forEach(k => dotGo(k, m.x, m.y, { opacity: 0, scale: .3 }));
+        } else if (name === 'relay') {
+          const op = document.querySelectorAll('.operate__rail .op')[arg];
+          if (op) { const r = op.getBoundingClientRect(); dotGo(DOT_KEYS[arg], r.left + 25, r.top + 25); }
+        } else if (name === 'accents-final') {
+          document.querySelectorAll('.finale__letter span').forEach((sp, i) => {
+            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.r.top - 24, { scale: .8 });
+          });
+        } else if (name === 'off') {
+          DOT_KEYS.forEach(k => { const d = dot(k); if (d) d.style.opacity = '0'; });
+        }
       };
       const cineBridgeLetter = n => {
-        const showLetter = () => {
-          const sc = scenes[active];
-          clearInterval(sc._cascade);
-          setFragment(sc, n);
-        };
-        if (!bridgeEl || !bridgeEl.children[n]) { showLetter(); return; }
-        const d = bridgeEl.children[n];
-        const span = document.querySelectorAll('.brand__letter span')[n];
-        if (span) {
-          const r = span.getBoundingClientRect();
-          d.style.left = (r.left + r.width / 2) + 'px';
-          d.style.top = (r.top + r.height / 2) + 'px';
-        }
-        setTimeout(() => {
-          showLetter();
-          d.style.opacity = '0';
-          d.style.transform = 'scale(2.6)';
-        }, 780);
-        if (n === 3) setTimeout(() => { if (bridgeEl) { bridgeEl.remove(); bridgeEl = null; } }, 2400);
+        const sc = scenes[active];
+        clearInterval(sc._cascade);
+        setFragment(sc, n);
+        setTimeout(() => cineDotsPreset('accent', n), 350);
       };
 
-      let exitCanvas = null;
+            let exitCanvas = null;
       const cineFinaleExit = () => {
         const fin = document.querySelector('.finale');
         if (!fin || exitCanvas) return;
@@ -3396,7 +3445,11 @@
         const t0 = performance.now();
         const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.2, END_AT = 8.4;
         setTimeout(() => {
-          starts = spans.map(sp => { const r = sp.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+          const dl = document.getElementById('cineDots');
+          starts = dl && dl.children.length >= 4
+            ? [...dl.children].slice(0, 4).map(d => { const r = d.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })
+            : spans.map(sp => { const r = sp.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+          if (dl) [...dl.children].forEach(d => { d.style.opacity = '0'; d.style.transition = 'opacity .3s ease'; });
           letters.forEach((l, i) => setTimeout(() => l.classList.add('cine-vortex'), i * 180));
         }, VORTEX_AT * 1000);
         const step = now => {
@@ -3463,8 +3516,7 @@
         const fin = document.querySelector('.finale');
         if (fin) { fin.classList.remove('finale--exit'); fin.classList.remove('finale--dots'); }
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
-        if (bridgeEl) { bridgeEl.remove(); bridgeEl = null; }
-        document.querySelectorAll('.missing__seeds i').forEach(sd => { sd.style.opacity = ''; });
+        if (dotsEl) { dotsEl.remove(); dotsEl = null; }
         document.querySelectorAll('.missing__anchors .anchor.on').forEach(a => a.classList.remove('on'));
       };
 
@@ -3544,8 +3596,9 @@
             if (!sc.matches('.brand')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
           } else if (d.name === 'mark') scenes[active].classList.add(d.c);
           else if (d.name === 'anchor') { const a = document.querySelector('.missing__anchors .anchor[data-k="' + d.k + '"]'); if (a) a.classList.add('on'); }
-          else if (d.name === 'bridge') cineBridge();
+          else if (d.name === 'bridge') cineDotsPreset('letters');
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
+          else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
@@ -3610,11 +3663,18 @@
           R.D4_pallini_runner_visibili = [...document.querySelectorAll('.missing__runners circle')].every(c => getComputedStyle(c).display === 'block');
           document.querySelector('#p04').classList.add('cine-collapse');
           await sleep(200);
-          R.D4b_ponte_semi_visibili = settled(() => [...document.querySelectorAll('.missing__seeds i')].every(i => Number(getComputedStyle(i).opacity) > .9));
+          postMessage({ casa: 'fx', name: 'dots', p: 'anchors' }, '*');
+          await sleep(250);
+          R.D4b_pallini_sulle_ancore = settled(() => [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => Number(getComputedStyle(d).opacity) > .9));
           R.D4b_ponte_semi_convergono = settled(() => [...document.querySelectorAll('.missing__seeds i')].every(i => getComputedStyle(i).left === getComputedStyle(i).top || true) && [...document.querySelectorAll('.missing__seeds i')].every(i => Math.abs(parseFloat(getComputedStyle(i).left) / parseFloat(getComputedStyle(i, null).width || 1) - 0) >= 0));
           postMessage({ casa: 'fx', name: 'bridge' }, '*');
           await sleep(300);
-          R.PONTE_pallini_creati = document.querySelectorAll('#cineBridge i').length === 4;
+          R.FILO_pallini_sempre_4 = document.querySelectorAll('#cineDots i:not(.pulse-clone)').length === 4;
+          postMessage({ casa: 'fx', name: 'dots', p: 'sign' }, '*');
+          await sleep(200);
+          R.FILO_firma_visibile = settled(() => [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => Number(getComputedStyle(d).opacity) > .3));
+          postMessage({ casa: 'fx', name: 'dots', p: 'letters' }, '*');
+          await sleep(200);
           document.querySelector('#p04').classList.remove('cine-collapse');
           goi(4); await sleep(300);
           postMessage({ casa: 'fx', name: 'bridge-letter', n: 0 }, '*');
@@ -3623,9 +3683,14 @@
           [1, 2, 3].forEach(n => postMessage({ casa: 'fx', name: 'bridge-letter', n }, '*'));
           await sleep(1100);
           R.PONTE_tutte_le_lettere = document.querySelector('#p04b').dataset.fragmentStep === '3';
-          await sleep(2600);
-          R.PONTE_pallini_rimossi = !document.getElementById('cineBridge');
-          R.D5_pallino_separatore = getComputedStyle(document.querySelectorAll('.brand__letter')[1], '::before').width === '14px';
+          await sleep(1400);
+          R.FILO_accenti_sulle_lettere = settled(() => {
+            const sp = document.querySelectorAll('.brand__letter span')[0];
+            const d = document.querySelector('#cineDots i[data-k="cibo"]');
+            if (!sp || !d) return false;
+            return d.getBoundingClientRect().top < sp.getBoundingClientRect().top;
+          });
+          R.D5_niente_separatori_3 = getComputedStyle(document.querySelectorAll('.brand__letter')[1], '::before').content === 'none';
           goi(5); await sleep(300);
           R.D6_paragrafi_nascosti = [...document.querySelectorAll('#p05 .cine-hide')].every(p => getComputedStyle(p).display === 'none');
           const keys = [...document.querySelectorAll('#p05 .cine-keys p')];
