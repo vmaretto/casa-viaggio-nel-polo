@@ -461,6 +461,10 @@
       transition-delay: 0s !important;
     }
     .cinema-mode .scene .reveal.cine-in { opacity: 1; filter: none; transform: none; }
+    /* Nel film ogni scena occupa esattamente il viewport dell'iframe: la scena
+       successiva non deve mai affacciarsi durante i passaggi. */
+    body.cinema-mode .scene { height: 100dvh; min-height: 100dvh; }
+    body.cinema-mode .scene__safe { height: 100%; min-height: 100%; }
     .cinema-mode .overlay { transition: opacity 1.5s ease, visibility 0s linear 1.5s; }
     .cinema-mode .overlay.is-open { transition: opacity 1.5s ease; }
     .cinema-mode .overlay__panel { transition: transform 1.7s var(--ease); width: min(1020px, 90vw); max-height: 86vh; }
@@ -563,6 +567,12 @@
     @keyframes cineZoomOut { from { transform: scale(1.045); } to { transform: scale(1); } }
     .cinema-mode .scene.is-active { animation: cineZoomIn 32s linear forwards; }
     .cinema-mode .scene:nth-of-type(even).is-active { animation-name: cineZoomOut; }
+    /* Le scene con elementi ancorati al viewport richiedono una camera
+       ferma, altrimenti pallini e riferimenti DOM divergono lentamente. */
+    .cinema-mode .effects.is-active,
+    .cinema-mode .missing.is-active,
+    .cinema-mode .brand.is-active,
+    .cinema-mode .operate.is-active { animation: none; }
     @keyframes cinePortrait { from { transform: scale(1); } to { transform: scale(1.1); } }
     .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s var(--ease) forwards; }
     body.cinema-mode .scene--light,
@@ -596,14 +606,27 @@
     .cinema-mode .cine-only { display: inline; }
     .cine-conseq { display: none; }
     .conseq-v2 .effects__grid, .conseq-v2 .effects__sources { display: none !important; }
-    .conseq-v2 .cine-conseq { display: block; }
-    .conseq-v2 .cq { display: none; text-align: center; }
+    .conseq-v2 .cine-conseq {
+      display: grid;
+      place-items: center;
+      position: relative;
+      width: 100%;
+      min-height: min(66vh, 700px);
+    }
+    .conseq-v2 .cq {
+      display: none;
+      position: absolute;
+      inset: 0;
+      place-content: center;
+      width: 100%;
+      text-align: center;
+    }
     .static-mode .conseq-v2[data-quadro="1"] .cq-1, .static-mode .conseq-v2[data-quadro="2"] .cq-2,
     .static-mode .conseq-v2[data-quadro="3"] .cq-3, .static-mode .conseq-v2[data-quadro="4"] .cq-4,
     .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
-    .conseq-v2 .cq.on { display: block; opacity: 0; transform: translateY(26px) scale(.82); transition: opacity .7s ease, transform 1s var(--ease); }
-    .conseq-v2 .cq.on.in { opacity: 1; transform: none; }
-    body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none; }
+    .conseq-v2 .cq.on { display: grid; opacity: 0; transform: none; transition: opacity .72s ease; }
+    .conseq-v2 .cq.on.in { opacity: 1; }
+    body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none !important; }
     .static-mode .cine-conseq .cq > i { display: inline-block; }
     body.cinema-mode .cine-conseq .cq__dots i { visibility: hidden; }
     body.cinema-mode .cine-conseq .cq__dots { min-height: 20px; }
@@ -634,7 +657,9 @@
       line-height: .95;
       color: var(--c);
       text-shadow: 0 0 60px color-mix(in srgb, var(--c), transparent 70%);
+      font-variant-numeric: lining-nums tabular-nums;
     }
+    .cq__value { display: inline-block; min-width: 4.8ch; }
     .cq__num small {
       display: block;
       margin-top: clamp(12px, 2.4vh, 24px);
@@ -653,6 +678,7 @@
     }
     .cq__dots { display: flex; gap: 26px; justify-content: center; margin-bottom: clamp(20px, 4vh, 40px); }
     .cq__dots i { margin-bottom: 0; }
+    .cinema-mode .cq__dot { display: none !important; }
     .cq__claim {
       margin: 0;
       font-family: var(--serif);
@@ -669,6 +695,18 @@
     .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
     #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
     #cineDots { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
+    #cineDots .cine-dots__train {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      transform-origin: 0 0;
+    }
+    #cineDots .cine-dots__train.is-operate-flow {
+      will-change: transform;
+      contain: layout style;
+    }
     #cineDots i {
       position: absolute;
       width: 18px;
@@ -680,6 +718,13 @@
       opacity: 0;
       transition: left 1.5s var(--ease), top 1.5s var(--ease), opacity .7s ease, transform .9s var(--ease);
     }
+    #cineDots .cine-dots__train.is-operate-flow i {
+      width: 14px;
+      height: 14px;
+      margin: -7px 0 0 -7px;
+      transition: opacity .35s ease;
+      will-change: opacity;
+    }
     #cineDots i.pulse-clone {
       width: 10px;
       height: 10px;
@@ -688,8 +733,8 @@
     }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
     .cinema-mode .problem__chain::before { display: none; }
-    .cinema-mode .problem__chain { padding-left: 0; text-align: center; max-width: 64vw; margin-left: auto; margin-right: auto; }
-    .cinema-mode .problem__line { margin: clamp(12px, 2.2vh, 24px) 0; font-size: clamp(24px, 2.6vw, 44px); }
+    .cinema-mode .problem__chain { padding-left: 0; text-align: center; max-width: 78vw; margin-left: auto; margin-right: auto; }
+    .cinema-mode .problem__line { margin: clamp(14px, 2.6vh, 28px) 0; font-size: clamp(30px, 3.25vw, 58px); }
     .cinema-mode .problem__break { max-width: 58vw; margin-top: clamp(20px, 4vh, 40px); font-size: clamp(19px, 1.9vw, 32px); }
     .cinema-mode .problem__break { padding-left: 0; text-align: center; margin-left: auto; margin-right: auto; }
     /* interdipendenza: la rete dei quattro ambiti */
@@ -793,29 +838,870 @@
       color: rgba(247,245,238,.88);
     }
     .cinema-mode .science__cine strong { color: var(--food); font-weight: 500; }
-    /* D7: la linea del percorso si disegna prima dei nodi */
-    .cinema-mode .operate.is-active .operate__rail::before { transform: scaleX(0); transform-origin: left; transition: transform 2s var(--ease); }
-    .cinema-mode .operate.is-active.cine-line .operate__rail::before { transform: scaleX(1); }
-    /* D8: popup del ciclo in versione film: solo il cerchio, grande */
-    .cinema-mode #ov-ciclo .overlay__grid { grid-template-columns: 1fr; justify-items: center; }
-    .cinema-mode #ov-ciclo .overlay__grid > :not(.cycle__map) { display: none; }
-    .cinema-mode #ov-ciclo .cycle__map { max-width: min(58vh, 520px); width: 100%; }
-    /* D12: roadmap sequenziale da sinistra, linee per step */
-    .cinema-mode .roadmap .fragment { transform: translateX(-46px); }
-    .cinema-mode .roadmap .fragment.is-current, .cinema-mode .roadmap .fragment.is-done { transform: none; }
-    .cinema-mode .phase:not(.phase--1)::after {
+    /* D7/D8: p09 diventa un film tipografico, non una timeline animata. */
+    .operate-cine { display: none; }
+    .cinema-mode .operate .scene__safe {
+      display: block;
+      padding: 0;
+    }
+    .cinema-mode .operate > .scene__safe > header {
+      position: absolute;
+      z-index: 6;
+      top: 50%;
+      left: 8.5vw;
+      width: 83vw;
+      transform: translateY(-50%);
+      transition: top 1.2s var(--ease), left 1.2s var(--ease), width 1.2s var(--ease), transform 1.2s var(--ease), opacity .9s ease;
+    }
+    .cinema-mode .operate > .scene__safe > header .display {
+      font-size: clamp(58px, 4.5vw, 88px);
+      transition: font-size 1.2s var(--ease), opacity .9s ease;
+    }
+    .cinema-mode .operate[data-fragment-step="0"] > .scene__safe > header,
+    .cinema-mode .operate[data-fragment-step="1"] > .scene__safe > header,
+    .cinema-mode .operate[data-fragment-step="2"] > .scene__safe > header,
+    .cinema-mode .operate[data-fragment-step="3"] > .scene__safe > header {
+      top: 6vh;
+      left: 8.5vw;
+      width: 76vw;
+      transform: none;
+    }
+    .cinema-mode .operate[data-fragment-step="0"] > .scene__safe > header .display,
+    .cinema-mode .operate[data-fragment-step="1"] > .scene__safe > header .display,
+    .cinema-mode .operate[data-fragment-step="2"] > .scene__safe > header .display,
+    .cinema-mode .operate[data-fragment-step="3"] > .scene__safe > header .display {
+      font-size: clamp(50px, 3.5vw, 72px);
+      opacity: .82;
+    }
+    .cinema-mode .operate.cine-cycle > .scene__safe > header { opacity: 0; }
+    .cinema-mode .operate .operate__rail,
+    .cinema-mode .operate .operate__loop,
+    .cinema-mode .operate .operate__more { display: none !important; }
+    .cinema-mode .operate-cine {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .cinema-mode .operate-cine::before {
       content: "";
       position: absolute;
-      top: 22px;
-      left: calc(-1 * clamp(16px, 2.2vw, 30px));
-      width: clamp(16px, 2.2vw, 30px);
-      height: 1px;
-      background: rgba(170,179,34,.75);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .9s var(--ease) .35s;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 54%, rgba(247,245,238,.035), transparent 36%),
+        radial-gradient(circle at 74% 22%, rgba(170,179,34,.055), transparent 42%);
+      opacity: .9;
     }
-    .cinema-mode .phase.is-current::after, .cinema-mode .phase.is-done::after { transform: scaleX(1); }
+    .operate-cine__field {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: min(82vh, 900px);
+      aspect-ratio: 1;
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(2vh) scale(.94);
+      transition: opacity .9s ease, transform 1.35s var(--ease);
+    }
+    .operate-cine__field::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      width: 128vw;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(247,245,238,.035) 22%, rgba(170,179,34,.12) 50%, rgba(247,245,238,.035) 78%, transparent);
+      transform: translate(-50%, -50%);
+    }
+    .operate-cine__field::after {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      border: 1px solid rgba(247,245,238,.035);
+      border-radius: 50%;
+      box-shadow: 0 0 110px rgba(170,179,34,.035), inset 0 0 90px rgba(126,189,174,.02);
+    }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__field,
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(2vh) scale(1);
+    }
+    .operate-cine__field-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .operate-cine__field-base,
+    .operate-cine__field-inner,
+    .operate-cine__field-progress {
+      fill: none;
+      vector-effect: non-scaling-stroke;
+    }
+    .operate-cine__field-base { stroke: rgba(247,245,238,.12); stroke-width: 1; }
+    .operate-cine__field-inner { stroke: rgba(126,189,174,.075); stroke-width: 1; stroke-dasharray: 2 7; }
+    .operate-cine__field-progress {
+      stroke: rgba(170,179,34,.72);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transform: rotate(-90deg);
+      transform-origin: 250px 250px;
+      transition: stroke-dashoffset 1.5s var(--ease);
+      filter: drop-shadow(0 0 8px rgba(170,179,34,.42));
+    }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__field-progress { stroke-dashoffset: 75; }
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-progress { stroke-dashoffset: 50; }
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-progress { stroke-dashoffset: 25; }
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-progress { stroke-dashoffset: 0; }
+    .operate-cine__field-node {
+      fill: none;
+      stroke: var(--node-color);
+      stroke-width: 2;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+      opacity: .18;
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: opacity .7s ease, transform .9s var(--ease), filter .7s ease;
+    }
+    .operate-cine__field-node--1 { --node-color: var(--food); }
+    .operate-cine__field-node--2 { --node-color: var(--environment); }
+    .operate-cine__field-node--3 { --node-color: var(--health); }
+    .operate-cine__field-node--4 { --node-color: var(--agriculture); }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__field-node--1,
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-node--2,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--3,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--4 {
+      opacity: 1;
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 12px var(--node-color));
+    }
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-node--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--1,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--3 {
+      opacity: .52;
+    }
+    .cinema-mode .operate-cine__phase {
+      --verb-size: 4.6vw;
+      position: absolute;
+      z-index: 2;
+      top: 52%;
+      left: 50%;
+      width: min(72vw, 1180px);
+      opacity: 0;
+      filter: none;
+      text-align: center;
+      transform: translate(-50%, -46%) scale(.96);
+      transition: opacity .32s ease, transform .85s var(--ease);
+    }
+    .cinema-mode .operate-cine__phase--2,
+    .cinema-mode .operate-cine__phase--3,
+    .cinema-mode .operate-cine__phase--4 { --verb-size: 4.6vw; }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__phase[data-cine-phase="0"],
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__phase[data-cine-phase="1"],
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__phase[data-cine-phase="2"],
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__phase[data-cine-phase="3"] {
+      opacity: 1;
+      filter: none;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__phase {
+      opacity: 0 !important;
+      transform: translate(-50%, -58%) scale(1.08) !important;
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__field {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(2vh) scale(1);
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__field-node { opacity: 0; }
+    .operate-cine__verb {
+      display: inline-block;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(76px, 5.8vw, 118px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .96;
+      letter-spacing: -.025em;
+      text-transform: none;
+      text-shadow: 0 0 70px rgba(247,245,238,.055);
+    }
+    .operate-cine__tag {
+      display: block;
+      width: min(30vw, 520px);
+      margin: clamp(22px, 3.2vh, 34px) auto 0;
+      color: rgba(247,245,238,.82);
+      font-family: var(--serif);
+      font-size: clamp(22px, 1.6vw, 32px);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: .01em;
+      line-height: 1.25;
+    }
+    .operate-cine__cycle {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      transform: none;
+      transition: opacity 1.15s ease;
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__cycle {
+      opacity: 1;
+      transform: none;
+    }
+    .operate-cine__orbit {
+      position: relative;
+      width: min(82vh, 900px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 48px rgba(126,189,174,.045));
+      transform: translateY(2vh);
+    }
+    .operate-cine__cycle-path {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .operate-cine__cycle-path path {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+    .operate-cine__cycle-path marker path {
+      fill: var(--acid);
+      stroke: none;
+    }
+    .operate-cine__orbit-label {
+      position: absolute;
+      z-index: 3;
+      padding: 3px 11px 5px;
+      color: rgba(247,245,238,.9);
+      background: transparent;
+      font-family: var(--serif);
+      font-size: clamp(22px, 1.65vw, 32px);
+      font-style: italic;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .operate-cine__orbit-label--top { top: 4%; left: 50%; transform: translateX(-50%); }
+    .operate-cine__orbit-label--right { top: 50%; right: -61px; transform: translateY(-50%); }
+    .operate-cine__orbit-label--bottom { bottom: 4%; left: 50%; transform: translateX(-50%); }
+    .operate-cine__orbit-label--left { top: 50%; left: -66px; transform: translateY(-50%); }
+    .operate-cine__core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 10px;
+      width: 68%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(247,245,238,.13);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,179,34,.13), rgba(7,29,33,.48) 60%, rgba(7,29,33,.1));
+      transform: translate(-50%, -50%);
+    }
+    .operate-cine__core strong {
+      max-width: 82%;
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(40px, 3.4vw, 64px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.02;
+      text-align: center;
+    }
+    .operate-cine__core small {
+      width: 72%;
+      color: rgba(247,245,238,.68);
+      font-family: var(--serif);
+      font-size: clamp(16px, 1.1vw, 20px);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: .015em;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .operate-cine__closing {
+      position: absolute;
+      left: 50%;
+      bottom: max(10.5vh, 104px);
+      width: min(80vw, 1100px);
+      margin: 0;
+      color: rgba(247,245,238,.82);
+      font-family: var(--serif);
+      font-size: clamp(26px, 1.95vw, 38px);
+      font-style: italic;
+      text-align: center;
+      transform: translateX(-50%);
+    }
+    @media (max-height: 800px) and (min-width: 900px) {
+      .operate-cine__field,
+      .operate-cine__orbit { width: min(68vh, 560px); }
+      .operate-cine__verb { font-size: clamp(68px, 5.4vw, 92px); }
+      .operate-cine__tag { width: min(42vw, 300px); }
+      .operate-cine__closing { bottom: 10vh; }
+    }
+    /* ============ CINEMA P10–P13 · quattro grammatiche distinte ============ */
+    .cinema-mode .who .scene__safe,
+    .cinema-mode .actors .scene__safe,
+    .cinema-mode .heritage .scene__safe,
+    .cinema-mode .roadmap .scene__safe {
+      display: block;
+      padding: 0;
+    }
+    .cinema-mode .who header,
+    .cinema-mode .actors header,
+    .cinema-mode .heritage header,
+    .cinema-mode .roadmap header {
+      position: absolute;
+      z-index: 8;
+      top: 5.8vh;
+      left: 8.5vw;
+      width: 83vw;
+    }
+    .cinema-mode .who header .display,
+    .cinema-mode .actors header .display,
+    .cinema-mode .heritage header .display,
+    .cinema-mode .roadmap header .display {
+      margin: 0;
+      font-size: clamp(48px, 3.7vw, 72px);
+      line-height: 1.04;
+    }
+
+    /* P10 · costellazione: quattro ingressi convergono in CASA */
+    .cinema-mode .who__grid {
+      position: absolute;
+      inset: 17vh 7.5vw 9vh;
+      display: block;
+      width: auto;
+      margin: 0;
+      border: 0;
+      overflow: visible;
+    }
+    .who-cine__links,
+    .who-cine__core { display: none; }
+    .cinema-mode .who-cine__links {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .cinema-mode .who-cine__links line {
+      vector-effect: non-scaling-stroke;
+      stroke: rgba(247,245,238,.18);
+      stroke-width: 1;
+      opacity: 0;
+      transition: opacity 1.1s ease, stroke .7s ease;
+    }
+    .cinema-mode .who[data-fragment-step="0"] .who-cine__link--1,
+    .cinema-mode .who[data-fragment-step="1"] .who-cine__link--1,
+    .cinema-mode .who[data-fragment-step="1"] .who-cine__link--2,
+    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--1,
+    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--2,
+    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--3,
+    .cinema-mode .who[data-fragment-step="3"] .who-cine__links line { opacity: 1; }
+    .cinema-mode .who-cine__core {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      width: clamp(148px, 14vw, 220px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(170,179,34,.32);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,179,34,.11), rgba(7,29,33,.16) 65%, transparent);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 72px rgba(170,179,34,.08);
+    }
+    .cinema-mode .who-cine__core strong {
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(40px, 3.6vw, 64px);
+      font-style: italic;
+      font-weight: 400;
+      line-height: .9;
+    }
+    .cinema-mode .who-cine__core small {
+      margin-top: 9px;
+      color: rgba(247,245,238,.62);
+      font-family: var(--serif);
+      font-size: clamp(15px, 1.05vw, 19px);
+      font-style: italic;
+    }
+    .cinema-mode .who .aud {
+      position: absolute;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: clamp(42px, 4vw, 58px) 1fr;
+      grid-template-rows: auto auto;
+      align-items: center;
+      gap: 5px 15px;
+      width: clamp(250px, 27vw, 430px);
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: none !important;
+      text-align: left;
+      transform: translateY(14px) !important;
+    }
+    .cinema-mode .who .aud.is-current,
+    .cinema-mode .who .aud.is-done { transform: none !important; }
+    .cinema-mode .who .aud.is-done { opacity: .6; }
+    .cinema-mode .who .aud.is-current { opacity: 1; }
+    .cinema-mode .who .aud--1 { top: 18%; left: 3%; }
+    .cinema-mode .who .aud--2 { top: 6%; right: 1%; }
+    .cinema-mode .who .aud--3 { bottom: 2%; left: 10%; }
+    .cinema-mode .who .aud--4 { right: 3%; bottom: 8%; }
+    .cinema-mode .who .cine-glyph {
+      grid-row: 1 / span 2;
+      display: block;
+      width: clamp(42px, 4vw, 58px);
+      stroke-width: 2;
+    }
+    .cinema-mode .who .aud h3 {
+      grid-column: 2;
+      margin: 0;
+      color: var(--paper);
+      font-size: clamp(28px, 2.25vw, 40px);
+      line-height: 1;
+    }
+    .cinema-mode .who .aud p.cine-tag {
+      grid-column: 2;
+      display: block;
+      margin: 0;
+      color: rgba(247,245,238,.72);
+      font-size: clamp(16px, 1.18vw, 21px);
+      line-height: 1.25;
+    }
+    .cinema-mode .who__closing {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      bottom: 4.5vh;
+      width: min(74vw, 1080px);
+      margin: 0;
+      color: rgba(247,245,238,.86);
+      font-size: clamp(22px, 1.75vw, 32px);
+      text-align: center;
+      transform: translateX(-50%);
+    }
+    .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
+    .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
+
+    /* P11 · spina di regia: ruoli distinti, responsabilità leggibile */
+    .cinema-mode .actors__grid {
+      --spine-x: clamp(220px, 23vw, 330px);
+      position: absolute;
+      inset: 18vh 10vw 8vh 15vw;
+      display: grid;
+      grid-template-rows: repeat(5, minmax(0, 1fr));
+      width: auto;
+      margin: 0;
+      overflow: visible;
+    }
+    .cinema-mode .actors__grid::before,
+    .cinema-mode .actors__grid::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      top: 5%;
+      left: var(--spine-x);
+      width: 1px;
+      height: 90%;
+      background: rgba(247,245,238,.15);
+    }
+    .cinema-mode .actors__grid::after {
+      height: 0;
+      background: linear-gradient(var(--acid), rgba(170,179,34,.38));
+      box-shadow: 0 0 18px rgba(170,179,34,.26);
+      transition: height 1.15s var(--ease);
+    }
+    .cinema-mode .actors[data-fragment-step="0"] .actors__grid::after { height: 10%; }
+    .cinema-mode .actors[data-fragment-step="1"] .actors__grid::after { height: 30%; }
+    .cinema-mode .actors[data-fragment-step="2"] .actors__grid::after { height: 50%; }
+    .cinema-mode .actors[data-fragment-step="3"] .actors__grid::after { height: 72%; }
+    .cinema-mode .actors[data-fragment-step="4"] .actors__grid::after { height: 90%; }
+    .cinema-mode .actors .role,
+    .cinema-mode .actors .role--sci {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: calc(var(--spine-x) - 42px) 1fr;
+      align-items: center;
+      column-gap: 84px;
+      min-height: 0;
+      padding: 8px 0;
+      border: 0;
+      background: none;
+      transform: translateX(18px);
+      transition: opacity .65s ease, transform .75s var(--ease);
+    }
+    .cinema-mode .actors .role.is-current,
+    .cinema-mode .actors .role.is-done,
+    .cinema-mode .actors .role--sci.is-current,
+    .cinema-mode .actors .role--sci.is-done { transform: none; }
+    .cinema-mode .actors .role.is-done,
+    .cinema-mode .actors .role--sci.is-done { opacity: .48; }
+    .cinema-mode .actors .role.is-current,
+    .cinema-mode .actors .role--sci.is-current { opacity: 1; }
+    .cinema-mode .actors__grid .role--promote {
+      margin: 0;
+      padding: 8px 0;
+      border: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+    }
+    .cinema-mode .actors .role::before,
+    .cinema-mode .actors .role--sci::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: var(--spine-x);
+      width: 11px;
+      height: 11px;
+      border: 1px solid rgba(247,245,238,.32);
+      border-radius: 50%;
+      background: var(--ink-deep);
+      transform: translate(-50%, -50%);
+      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+    }
+    .cinema-mode .actors .role.is-current::before,
+    .cinema-mode .actors .role--sci.is-current::before {
+      border-color: var(--acid);
+      background: var(--acid);
+      box-shadow: 0 0 20px rgba(170,179,34,.62);
+    }
+    .cinema-mode .actors .role.is-done::before,
+    .cinema-mode .actors .role--sci.is-done::before { border-color: rgba(170,179,34,.72); }
+    .cinema-mode .actors .role h3,
+    .cinema-mode .actors .role--sci > h3 {
+      grid-column: 1;
+      margin: 0;
+      color: rgba(247,245,238,.62);
+      font-size: clamp(13px, .95vw, 16px);
+      font-weight: 500;
+      letter-spacing: .09em;
+      line-height: 1.3;
+      text-align: right;
+    }
+    .cinema-mode .actors .role h4 {
+      grid-column: 2;
+      margin: 0;
+      color: var(--paper);
+      font-size: clamp(30px, 2.45vw, 44px);
+      white-space: normal;
+    }
+    .cinema-mode .actors .role h4 small {
+      margin-top: 5px;
+      font-size: clamp(12px, .86vw, 15px);
+    }
+    .cinema-mode .actors .role--sci .sci__grid {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(18px, 2.2vw, 34px);
+    }
+    .cinema-mode .actors .sci {
+      padding: 0;
+      border: 0;
+    }
+    .cinema-mode .actors .sci h4 { font-size: clamp(25px, 2vw, 36px); }
+    .cinema-mode .actors .sci small { margin: 4px 0 0; font-size: clamp(11px, .78vw, 13px); }
+    .cinema-mode .actors .more-link,
+    .cinema-mode .actors__note { display: none; }
+    .actors-cine__spine-anchor { display: none; }
+    .cinema-mode .actors-cine__spine-anchor {
+      position: absolute;
+      left: var(--spine-x);
+      bottom: 0;
+      display: block;
+      width: 1px;
+      height: 1px;
+    }
+
+    /* P12 · strati: il patrimonio si accumula e diventa sistema */
+    .cap__keywords,
+    .heritage-cine__system { display: none; }
+    .cinema-mode .heritage__grid {
+      position: absolute;
+      inset: 23vh 11vw 17vh 11vw;
+      display: block;
+      width: auto;
+      margin: 0;
+      overflow: visible;
+    }
+    .cinema-mode .heritage .cap {
+      position: absolute;
+      left: var(--layer-x);
+      top: var(--layer-y);
+      display: grid;
+      grid-template-columns: minmax(190px, .34fr) 1fr;
+      align-items: center;
+      width: var(--layer-w);
+      min-height: 0;
+      padding: clamp(13px, 1.8vh, 20px) clamp(18px, 1.7vw, 28px);
+      border: 0;
+      border-left: 4px solid var(--cap-color);
+      border-bottom: 1px solid color-mix(in srgb, var(--cap-color), transparent 58%);
+      background: linear-gradient(90deg, color-mix(in srgb, var(--cap-color), transparent 92%), transparent 74%);
+      backdrop-filter: none;
+      transform: translateY(22px);
+      box-shadow: none;
+      transition: opacity .7s ease, transform .85s var(--ease);
+    }
+    .cinema-mode .heritage .cap.is-current,
+    .cinema-mode .heritage .cap.is-done { transform: none; }
+    .cinema-mode .heritage .cap.is-done { opacity: .5; }
+    .cinema-mode .heritage .cap.is-current { opacity: 1; }
+    .cinema-mode .heritage .cap--1 { --layer-x: 3%; --layer-y: 2%; --layer-w: 72%; }
+    .cinema-mode .heritage .cap--2 { --layer-x: 11%; --layer-y: 27%; --layer-w: 82%; }
+    .cinema-mode .heritage .cap--3 { --layer-x: 6%; --layer-y: 52%; --layer-w: 88%; }
+    .cinema-mode .heritage .cap--4 { --layer-x: 15%; --layer-y: 77%; --layer-w: 75%; }
+    .cinema-mode .heritage .cap h3 {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(27px, 2.15vw, 38px);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .cinema-mode .heritage .cap p { display: none; }
+    .cinema-mode .heritage .cap__keywords {
+      display: block;
+      color: color-mix(in srgb, var(--cap-color), rgba(247,245,238,.78) 42%);
+      font-size: clamp(15px, 1.12vw, 20px);
+      font-weight: 300;
+      letter-spacing: .025em;
+    }
+    .cinema-mode .heritage-cine__system {
+      position: absolute;
+      z-index: -1;
+      inset: -2% -1% -5% auto;
+      display: block;
+      width: 68px;
+      border-top: 1px solid var(--acid);
+      border-right: 1px solid var(--acid);
+      border-bottom: 1px solid var(--acid);
+      opacity: 0;
+      transform: scaleY(.25);
+      transition: opacity .85s ease, transform 1.1s var(--ease);
+    }
+    .cinema-mode .heritage-cine__system span {
+      position: absolute;
+      right: -2px;
+      top: 50%;
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(18px, 1.35vw, 24px);
+      font-style: italic;
+      white-space: nowrap;
+      padding: 7px 4px;
+      background: var(--ink-deep);
+      transform: translate(100%, -50%) rotate(90deg);
+      transform-origin: left center;
+    }
+    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__system {
+      opacity: .72;
+      transform: scaleY(1);
+    }
+    .cinema-mode .heritage__closing {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      bottom: 5vh;
+      display: block;
+      width: min(78vw, 1120px);
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: rgba(247,245,238,.86);
+      font-family: var(--serif);
+      font-size: clamp(22px, 1.75vw, 32px);
+      font-style: italic;
+      font-weight: 400;
+      text-align: center;
+      transform: translateX(-50%);
+    }
+    .cinema-mode .scene .heritage__closing.reveal { transform: translate(-50%, 26px); }
+    .cinema-mode .scene .heritage__closing.reveal.cine-in { transform: translateX(-50%); }
+    body.cinema-mode .heritage.scene--light .heritage__closing {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: rgba(247,245,238,.86);
+      backdrop-filter: none;
+    }
+    .cinema-mode .heritage .operate__more { display: none; }
+
+    /* P13 · percorso: tre soglie, una sola direzione */
+    .roadmap-cine__path,
+    .phase__cine { display: none; }
+    .cinema-mode .roadmap__track {
+      position: absolute;
+      inset: 22vh 8.5vw 16vh;
+      display: block;
+      width: auto;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+    .cinema-mode .roadmap-cine__path {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .cinema-mode .roadmap-cine__path path {
+      fill: none;
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: round;
+    }
+    .cinema-mode .roadmap-cine__path-base { stroke: rgba(247,245,238,.14); stroke-width: 1; }
+    .cinema-mode .roadmap-cine__path-progress {
+      stroke: var(--acid);
+      stroke-width: 2;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      filter: drop-shadow(0 0 8px rgba(170,179,34,.38));
+      transition: stroke-dashoffset 1.35s var(--ease);
+    }
+    .cinema-mode .roadmap[data-fragment-step="0"] .roadmap-cine__path-progress { stroke-dashoffset: 72; }
+    .cinema-mode .roadmap[data-fragment-step="1"] .roadmap-cine__path-progress { stroke-dashoffset: 38; }
+    .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dashoffset: 0; }
+    .cinema-mode .roadmap .phase {
+      position: absolute;
+      z-index: 2;
+      width: min(29vw, 430px);
+      margin: 0;
+      padding: 0 0 0 26px;
+      border: 0;
+      transform: translateY(16px);
+      transition: opacity .7s ease, transform .85s var(--ease);
+    }
+    .cinema-mode .roadmap .phase.is-current,
+    .cinema-mode .roadmap .phase.is-done { transform: none; }
+    .cinema-mode .roadmap .phase.is-done { opacity: .5; }
+    .cinema-mode .roadmap .phase.is-current { opacity: 1; }
+    .cinema-mode .roadmap .phase--1 {
+      top: 85.5%;
+      left: 7.2%;
+      padding-bottom: 56px;
+      translate: 0 -100%;
+    }
+    .cinema-mode .roadmap .phase--2 {
+      top: 54.5%;
+      left: 50.6%;
+      padding-bottom: 56px;
+      text-align: center;
+      translate: -50% -100%;
+    }
+    .cinema-mode .roadmap .phase--3 {
+      top: 16.5%;
+      left: 93.6%;
+      text-align: right;
+      translate: -100% 0;
+    }
+    .cinema-mode .roadmap .phase::before {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 13px;
+      height: 13px;
+      border: 1px solid rgba(247,245,238,.35);
+      border-radius: 50%;
+      background: var(--ink-deep);
+      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+    }
+    .cinema-mode .roadmap .phase--2::before { left: 50%; }
+    .cinema-mode .roadmap .phase--3::before { top: 0; left: 100%; }
+    .cinema-mode .roadmap .phase.is-current::before {
+      border-color: var(--acid);
+      background: var(--acid);
+      box-shadow: 0 0 18px rgba(170,179,34,.58);
+    }
+    .cinema-mode .roadmap .phase.is-done::before { border-color: rgba(170,179,34,.72); }
+    .cinema-mode .roadmap .phase__year {
+      margin: 0 0 9px;
+      color: var(--paper);
+      font-size: clamp(52px, 4.5vw, 78px);
+    }
+    .cinema-mode .roadmap .phase h3 {
+      margin: 0 0 9px;
+      color: var(--acid);
+      font-family: var(--serif);
+      font-size: clamp(23px, 1.8vw, 32px);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.08;
+      text-transform: none;
+    }
+    .cinema-mode .roadmap .phase > p:not(.phase__year):not(.phase__cine) { display: none; }
+    .cinema-mode .roadmap .phase__cine {
+      display: block;
+      max-width: 34ch;
+      margin: 0;
+      color: rgba(247,245,238,.76);
+      font-size: clamp(15px, 1.12vw, 20px);
+      line-height: 1.4;
+    }
+    .cinema-mode .roadmap__closing {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      bottom: 9vh;
+      width: min(78vw, 1120px);
+      margin: 0;
+      font-size: clamp(22px, 1.75vw, 32px);
+      text-align: center;
+      transform: translateX(-50%);
+    }
+    .cinema-mode .scene .roadmap__closing.reveal { transform: translate(-50%, 26px); }
+    .cinema-mode .scene .roadmap__closing.reveal.cine-in { transform: translateX(-50%); }
+    .cinema-mode .roadmap .operate__more { display: none; }
+
+    @media (max-height: 800px) and (min-width: 900px) {
+      .cinema-mode .who header .display,
+      .cinema-mode .actors header .display,
+      .cinema-mode .heritage header .display,
+      .cinema-mode .roadmap header .display { font-size: clamp(42px, 3.3vw, 58px); }
+      .cinema-mode .who__grid { inset: 18vh 7vw 10vh; }
+      .cinema-mode .who .aud h3 { font-size: clamp(24px, 2vw, 32px); }
+      .cinema-mode .actors__grid { inset: 19vh 9vw 8vh 14vw; }
+      .cinema-mode .actors .role h4 { font-size: clamp(25px, 2.15vw, 35px); }
+      .cinema-mode .actors .sci h4 { font-size: clamp(22px, 1.8vw, 30px); }
+      .cinema-mode .heritage__grid { inset: 24vh 10vw 18vh; }
+      .cinema-mode .heritage .cap h3 { font-size: clamp(23px, 1.9vw, 31px); }
+      .cinema-mode .roadmap__track { inset: 23vh 8vw 17vh; }
+      .cinema-mode .roadmap .phase__year { font-size: clamp(44px, 4vw, 62px); }
+    }
     /* D15: camera ferma sul finale + vortice delle lettere */
     .cinema-mode .finale.is-active { animation: none !important; }
     .cine-notrans, .cine-notrans *, .cine-notrans *::before, .cine-notrans *::after { transition: none !important; }
@@ -2527,17 +3413,17 @@
           </div>
           <div class="cq cq-2">
             <i style="--c: var(--agriculture)"></i>
-            <p class="cq__num" style="--c: var(--agriculture)">−21%</p>
+            <p class="cq__num" style="--c: var(--agriculture)" data-count="21" data-prefix="−" data-suffix="%"><span class="cq__value">−21%</span></p>
             <p class="cq__ctx">produttività agricola persa · per il clima</p>
           </div>
           <div class="cq cq-3">
             <i style="--c: var(--health)"></i>
-            <p class="cq__num" style="--c: var(--health)">10.000<small>mld $ / anno</small></p>
+            <p class="cq__num" style="--c: var(--health)" data-count="10000" data-sep="1"><span class="cq__value">10.000</span><small>mld $ / anno</small></p>
             <p class="cq__ctx">i costi nascosti del cibo · salute, ambiente, società</p>
           </div>
           <div class="cq cq-4">
             <i style="--c: var(--food)"></i>
-            <p class="cq__num" style="--c: var(--food)">733<small>milioni di persone</small></p>
+            <p class="cq__num" style="--c: var(--food)" data-count="733"><span class="cq__value">733</span><small>milioni di persone</small></p>
             <p class="cq__ctx">senza cibo adeguato · mentre un terzo del cibo prodotto si spreca</p>
           </div>
           <div class="cq cq-5">
@@ -2589,17 +3475,9 @@
         </g>
       </svg>
       <div class="scene__safe missing__content">
-        <div class="missing__anchors" aria-hidden="true">
-        <span class="anchor" data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>
-        <span class="anchor" data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>
-        <span class="anchor" data-k="cibo" style="--c: var(--food); left: 50%; top: 98%">cibo</span>
-        <span class="anchor" data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
+        <div class="missing__anchors" aria-hidden="true">        <span class="anchor" data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>        <span class="anchor" data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>        <span class="anchor" data-k="cibo" style="--c: var(--food); left: 50%; top: 98%">cibo</span>        <span class="anchor" data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
       </div>
-      <div class="missing__seeds" aria-hidden="true">
-        <i data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%"></i>
-        <i data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%"></i>
-        <i data-k="cibo" style="--c: var(--food); left: 50%; top: 98%"></i>
-        <i data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%"></i>
+      <div class="missing__seeds" aria-hidden="true">        <i data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%"></i>        <i data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%"></i>        <i data-k="cibo" style="--c: var(--food); left: 50%; top: 98%"></i>        <i data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%"></i>
       </div>
       <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
@@ -2673,8 +3551,61 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">05 · Come opera CASA</p>
-          <h2 class="display reveal delay-1">Dalle competenze all’impatto.</h2>
+          <h2 class="display reveal delay-1">Dalle competenze all’<em class="k-acid">impatto</em>.</h2>
         </header>
+        <div class="operate-cine" aria-hidden="true">
+          <div class="operate-cine__field">
+            <svg class="operate-cine__field-svg" viewBox="0 0 500 500">
+              <circle class="operate-cine__field-base" cx="250" cy="250" r="208"></circle>
+              <circle class="operate-cine__field-inner" cx="250" cy="250" r="170"></circle>
+              <circle class="operate-cine__field-progress" cx="250" cy="250" r="208" pathLength="100"></circle>
+              <line class="operate-cine__field-node operate-cine__field-node--1" x1="250" y1="34" x2="250" y2="50"></line>
+              <line class="operate-cine__field-node operate-cine__field-node--2" x1="450" y1="250" x2="466" y2="250"></line>
+              <line class="operate-cine__field-node operate-cine__field-node--3" x1="250" y1="450" x2="250" y2="466"></line>
+              <line class="operate-cine__field-node operate-cine__field-node--4" x1="34" y1="250" x2="50" y2="250"></line>
+            </svg>
+          </div>
+          <article class="operate-cine__phase operate-cine__phase--1" data-cine-phase="0">
+            <strong class="operate-cine__verb">Formare</strong>
+            <span class="operate-cine__tag">Competenze che leggono il sistema insieme.</span>
+          </article>
+          <article class="operate-cine__phase operate-cine__phase--2" data-cine-phase="1">
+            <strong class="operate-cine__verb">Sperimentare</strong>
+            <span class="operate-cine__tag">Campi, serre e laboratori diventano spazio comune.</span>
+          </article>
+          <article class="operate-cine__phase operate-cine__phase--3" data-cine-phase="2">
+            <strong class="operate-cine__verb">Co-sviluppare</strong>
+            <span class="operate-cine__tag">Ricerca e bisogni reali lavorano fianco a fianco.</span>
+          </article>
+          <article class="operate-cine__phase operate-cine__phase--4" data-cine-phase="3">
+            <strong class="operate-cine__verb">Trasferire</strong>
+            <span class="operate-cine__tag">I risultati diventano competenze, strumenti e decisioni.</span>
+          </article>
+          <div class="operate-cine__cycle">
+            <div class="operate-cine__orbit">
+              <svg class="operate-cine__cycle-path" viewBox="0 0 500 500" aria-hidden="true">
+                <defs>
+                  <marker id="operate-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z"></path>
+                  </marker>
+                </defs>
+                <path d="M 278 44 A 208 208 0 0 1 456 222" marker-end="url(#operate-arrow)"></path>
+                <path d="M 456 278 A 208 208 0 0 1 278 456" marker-end="url(#operate-arrow)"></path>
+                <path d="M 222 456 A 208 208 0 0 1 44 278" marker-end="url(#operate-arrow)"></path>
+                <path d="M 44 222 A 208 208 0 0 1 222 44" marker-end="url(#operate-arrow)"></path>
+              </svg>
+              <span class="operate-cine__orbit-label operate-cine__orbit-label--top">Formare</span>
+              <span class="operate-cine__orbit-label operate-cine__orbit-label--right">Sperimentare</span>
+              <span class="operate-cine__orbit-label operate-cine__orbit-label--bottom">Co-sviluppare</span>
+              <span class="operate-cine__orbit-label operate-cine__orbit-label--left">Trasferire</span>
+              <div class="operate-cine__core">
+                <strong>Impatto</strong>
+                <small>genera nuova capacità</small>
+              </div>
+            </div>
+            <p class="operate-cine__closing">Ogni risultato riapre il ciclo.</p>
+          </div>
+        </div>
         <div class="operate__rail" data-fragment-cumulative>
           <article class="op op--1 fragment" data-fragment="0">
             <h3>Formare sul sistema</h3>
@@ -2706,27 +3637,34 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">06 · Per chi è CASA</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Si entra con un bisogno, una competenza o una risorsa.</h2>
+          <h2 class="display reveal delay-1">Capacità avanzate, senza doverle possedere.</h2>
         </header>
         <div class="who__grid" data-fragment-cumulative>
+          <svg class="who-cine__links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <line class="who-cine__link--1" x1="50" y1="50" x2="22" y2="29" pathLength="100"></line>
+            <line class="who-cine__link--2" x1="50" y1="50" x2="78" y2="20" pathLength="100"></line>
+            <line class="who-cine__link--3" x1="50" y1="50" x2="27" y2="79" pathLength="100"></line>
+            <line class="who-cine__link--4" x1="50" y1="50" x2="79" y2="73" pathLength="100"></line>
+          </svg>
+          <div class="who-cine__core"><strong>CASA</strong><small>capacità condivisa</small></div>
           <article class="aud aud--1 fragment" data-fragment="0">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52 V24 H30 V52 M38 52 V14 H54 V52 M10 52 H58 M19 30 h6 M19 38 h6 M43 22 h6 M43 30 h6 M43 38 h6"/></svg><h3>Imprese e startup</h3><p class="cine-tag">Ricerca applicata e open innovation.</p>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52 V24 H30 V52 M38 52 V14 H54 V52 M10 52 H58 M19 30 h6 M19 38 h6 M43 22 h6 M43 30 h6 M43 38 h6"/></svg><h3>Imprese e startup</h3><p class="cine-tag">Testare senza costruire tutto.</p>
             <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
           </article>
           <article class="aud aud--2 fragment" data-fragment="1">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 26 L32 14 L56 26 L32 38 Z M20 33 V44 C20 49 44 49 44 44 V33 M56 26 V40"/></svg><h3>Università e ricerca</h3><p class="cine-tag">Formazione e ricerca sui quattro ambiti.</p>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 26 L32 14 L56 26 L32 38 Z M20 33 V44 C20 49 44 49 44 44 V33 M56 26 V40"/></svg><h3>Università e ricerca</h3><p class="cine-tag">Integrare competenze e infrastrutture.</p>
             <p>Ricerca applicata e formazione congiunta sui quattro ambiti.</p>
           </article>
           <article class="aud aud--3 fragment" data-fragment="2">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="22" r="7"/><circle cx="43" cy="24" r="6"/><path d="M10 50 C10 38 34 38 34 50 M32 50 C32 40 54 40 54 50"/></svg><h3>Persone e professionisti</h3><p class="cine-tag">Competenze interdisciplinari, sul campo.</p>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="22" r="7"/><circle cx="43" cy="24" r="6"/><path d="M10 50 C10 38 34 38 34 50 M32 50 C32 40 54 40 54 50"/></svg><h3>Persone e professionisti</h3><p class="cine-tag">Trasformare lo studio in esperienza.</p>
             <p>Sviluppano competenze interdisciplinari lavorando con tecnologie, dati e contesti reali di sperimentazione.</p>
           </article>
           <article class="aud aud--4 fragment" data-fragment="3">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 26 L32 13 L52 26 M16 26 V46 M27 26 V46 M37 26 V46 M48 26 V46 M12 50 H52 M9 26 H55"/></svg><h3>Istituzioni e territori</h3><p class="cine-tag">Evidenze per decisioni e politiche.</p>
+            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 26 L32 13 L52 26 M16 26 V46 M27 26 V46 M37 26 V46 M48 26 V46 M12 50 H52 M9 26 H55"/></svg><h3>Istituzioni e territori</h3><p class="cine-tag">Decidere su evidenze condivise.</p>
             <p>Evidenze utili per decisioni e politiche.</p>
           </article>
         </div>
-        <p class="who__closing reveal delay-3">In CASA ogni soggetto può utilizzare risorse, metterne a disposizione e contribuire a sviluppare nuova capacità condivisa.</p>
+        <p class="who__closing reveal delay-3">Quattro ingressi. Uno spazio comune per trasformare bisogni e risorse in capacità utilizzabile.</p>
       </div>
     </section>
 
@@ -2735,7 +3673,7 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">07 · Chi rende possibile CASA</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(32px, 3.3vw, 52px)">Ruoli distinti, una capacità comune.</h2>
+          <h2 class="display reveal delay-1">Ruoli distinti. Una regia li trasforma in CASA.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
           <article class="role role--promote fragment" data-fragment="0">
@@ -2754,7 +3692,7 @@
             <p>Forma le competenze interdisciplinari — tecnologie, ambiente, agricoltura, cibo, salute — necessarie per operare in CASA.</p>
           </article>
           <div class="role--sci fragment" data-fragment="3">
-            <h3>Portano le capacità scientifiche</h3>
+            <h3>Contribuiscono con capacità scientifiche</h3>
             <div class="sci__grid">
               <div class="sci" style="--c: var(--environment)">
                 <i aria-hidden="true"></i>
@@ -2784,6 +3722,7 @@
               <button type="button" class="more-link more-link--sm" data-overlay="ov-tuscia">L’accordo UNIUST × Tuscia ↗</button>
             </div>
           </article>
+          <span class="actors-cine__spine-anchor" aria-hidden="true"></span>
         </div>
         <p class="actors__note reveal delay-3">* collaborazioni in corso di definizione, non ancora formalizzate.</p>
       </div>
@@ -2794,27 +3733,32 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">08 · Il patrimonio di partenza</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Capacità già attive, pronte a diventare sistema.</h2>
+          <h2 class="display reveal delay-1">CASA parte da capacità reali, non da una pagina bianca.</h2>
         </header>
         <div class="heritage__grid" data-fragment-cumulative>
           <article class="cap cap--1 fragment" data-fragment="0">
             <h3>Formazione</h3>
+            <span class="cap__keywords">carbon farming · digitale · competenze ibride</span>
             <p>Esperienze su carbon farming, agricoltura digitale e competenze ibride collegano clima, suolo, pratiche agricole e tecnologie.</p>
           </article>
           <article class="cap cap--2 fragment" data-fragment="1">
             <h3>Capacità scientifiche</h3>
+            <span class="cap__keywords">dati · clima · agricoltura · cibo · salute</span>
             <p>L’ecosistema riunisce dati e modelli ambientali, ricerca su agricoltura e cibo e competenze scientifiche sulla salute.</p>
           </article>
           <article class="cap cap--3 fragment" data-fragment="2">
             <h3>Esperienza operativa</h3>
+            <span class="cap__keywords">sperimentazione · ricerca · open innovation</span>
             <p>Esistono capacità per costruire percorsi formativi, sperimentazioni, ricerca applicata e iniziative di open innovation insieme a imprese e istituzioni.</p>
           </article>
           <article class="cap cap--4 fragment" data-fragment="3">
             <h3>Relazioni</h3>
+            <span class="cap__keywords">università · imprese · ricerca · territori</span>
             <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
           </article>
+          <div class="heritage-cine__system" aria-hidden="true"><span>patrimonio connesso</span></div>
         </div>
-        <p class="heritage__closing reveal delay-3">CASA mette a sistema questo patrimonio attraverso uno spazio comune e <strong>l’IoR</strong>, trasformandolo in una capacità stabile e accessibile.</p>
+        <p class="heritage__closing reveal delay-3">Un patrimonio esiste. Il prossimo passo è qualificarlo e connetterlo.</p>
         <div class="operate__more reveal delay-4" style="justify-content: center;">
           <button type="button" class="more-link" data-overlay="ov-arredo">La casa è già arredata ↗</button>
         </div>
@@ -2826,32 +3770,39 @@
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">09 · Roadmap</p>
-          <h2 class="display reveal delay-1" style="font-size: clamp(40px, 4.6vw, 74px)">Costruire, attivare, estendere.</h2>
+          <h2 class="display reveal delay-1">Costruire. Attivare. Verificare. Poi estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
+          <svg class="roadmap-cine__path" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+            <path class="roadmap-cine__path-base" d="M 72 342 C 270 330, 380 252, 506 218 S 760 92, 936 66"></path>
+            <path class="roadmap-cine__path-progress" d="M 72 342 C 270 330, 380 252, 506 218 S 760 92, 936 66" pathLength="100"></path>
+          </svg>
           <article class="phase phase--1 fragment" data-fragment="0">
             <p class="phase__year">2026</p>
-            <h3>Costruire le fondamenta</h3>
+            <h3>Fondare</h3>
+            <p class="phase__cine">Spazio, governance e risorse.</p>
             <p>Definire la configurazione funzionale dello spazio CASA e i criteri per individuare l’area.</p>
             <p>Consolidare governance, accordi e regole di accesso.</p>
             <p>Mappare campi, laboratori, dati, tecnologie e competenze disponibili nei quattro ambiti.</p>
           </article>
           <article class="phase phase--2 fragment" data-fragment="1">
             <p class="phase__year">2027</p>
-            <h3>Attivare CASA</h3>
+            <h3>Attivare</h3>
+            <p class="phase__cine">Il luogo e il primo ciclo operativo.</p>
             <p>Progettare e predisporre lo spazio con le prime aree sperimentali, infrastrutture digitali e ambienti condivisi.</p>
             <p>Attivare l’IoR.</p>
             <p>Avviare i primi cicli integrati di formazione, sperimentazione, ricerca applicata e open innovation su ambiente, agricoltura, cibo e salute.</p>
           </article>
           <article class="phase phase--3 fragment" data-fragment="2">
             <p class="phase__year">2028–2030</p>
-            <h3>Estendere la capacità</h3>
+            <h3>Verificare, poi estendere</h3>
+            <p class="phase__cine">Risultati prima della replica.</p>
             <p>Ampliare lo spazio, le risorse accessibili e la rete scientifica e industriale.</p>
             <p>Collegare nuovi territori e partner europei e mediterranei.</p>
             <p>Replicare il modello CASA attraverso nuovi spazi connessi dallo stesso sistema di accesso.</p>
           </article>
         </div>
-        <p class="roadmap__closing reveal delay-3">Ogni fase costruisce le capacità necessarie per quella successiva.</p>
+        <p class="roadmap__closing reveal delay-3">Prima si costruisce. Poi si prova. Solo dopo si scala.</p>
         <div class="operate__more reveal delay-4">
           <button type="button" class="more-link" data-overlay="ov-europa">Dimensione europea e mediterranea ↗</button>
         </div>
@@ -3304,6 +4255,12 @@
           scene,
           start() {
             t0 = performance.now();
+            maxP = 0;
+            if (!on) { on = true; resize(); raf = requestAnimationFrame(frame); }
+          },
+          restart() {
+            t0 = performance.now();
+            maxP = 0;
             if (!on) { on = true; resize(); raf = requestAnimationFrame(frame); }
           },
           stop() { on = false; cancelAnimationFrame(raf); },
@@ -3398,6 +4355,12 @@
         setFragment(scenes[target], cinemaMode ? -1 : (openAtEnd && count ? count - 1 : 0));
         scenes[target].scrollIntoView({ behavior: (cinemaMode || matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth' });
         setActive(target, true);
+        if (cinemaMode && (target === 3 || target === 4)) {
+          requestAnimationFrame(() => {
+            if (active !== target) return;
+            cineDotsPreset(target === 3 ? 'house-stage' : 'letter-stage');
+          });
+        }
       };
 
       const advance = () => {
@@ -3453,38 +4416,248 @@
       /* --- il filo dei quattro pallini: vivono per tutto il film --- */
       const DOT_KEYS = ['cibo', 'ambiente', 'salute', 'agricoltura'];
       const DOT_CSS = { cibo: 'var(--food)', ambiente: 'var(--environment)', salute: 'var(--health)', agricoltura: 'var(--agriculture)' };
-      let dotsEl = null;
+      let dotsEl = null, dotsTrain = null;
       const dotsInit = () => {
         if (dotsEl) return dotsEl;
         dotsEl = document.createElement('div');
         dotsEl.id = 'cineDots';
+        dotsTrain = document.createElement('div');
+        dotsTrain.className = 'cine-dots__train';
+        dotsEl.appendChild(dotsTrain);
         DOT_KEYS.forEach(k => {
           const d = document.createElement('i');
           d.dataset.k = k;
           d.style.setProperty('--c', DOT_CSS[k]);
           d.style.left = '50%';
           d.style.top = '50%';
-          dotsEl.appendChild(d);
+          dotsTrain.appendChild(d);
         });
         document.body.appendChild(dotsEl);
         return dotsEl;
       };
       const dot = k => dotsInit().querySelector('i[data-k="' + k + '"]');
+      let operateFlow = null, operateFlowRaf = null;
+      let operateCycleAnimations = [];
+      const stopOperateCycleDots = () => {
+        operateCycleAnimations.forEach(animation => animation.cancel());
+        operateCycleAnimations = [];
+      };
+      const stopOperateFlow = () => {
+        const current = dotsEl ? DOT_KEYS.map(k => {
+          const d = dot(k);
+          const r = d.getBoundingClientRect();
+          return { d, x: r.left + r.width / 2, y: r.top + r.height / 2, opacity: getComputedStyle(d).opacity };
+        }) : [];
+        if (operateFlowRaf) cancelAnimationFrame(operateFlowRaf);
+        operateFlowRaf = null;
+        operateFlow = null;
+        if (!dotsTrain) return;
+        dotsTrain.classList.remove('is-operate-flow');
+        dotsTrain.style.transform = '';
+        current.forEach(({ d, x, y, opacity }) => {
+          d.style.transition = 'none';
+          d.style.left = x + 'px';
+          d.style.top = y + 'px';
+          d.style.opacity = opacity;
+          d.style.transform = 'scale(.78)';
+        });
+        if (dotsEl) void dotsEl.offsetWidth;
+        current.forEach(({ d }) => { d.style.transition = ''; });
+      };
       const dotGo = (k, x, y, opts = {}) => {
         const d = dot(k);
         if (!d) return;
+        if (!opts.keepFlow && operateFlow) stopOperateFlow();
+        if (opts.instant) d.style.transition = 'none';
         if (x != null) d.style.left = (typeof x === 'number' ? x + 'px' : x);
         if (y != null) d.style.top = (typeof y === 'number' ? y + 'px' : y);
         d.style.opacity = opts.opacity != null ? String(opts.opacity) : '1';
         d.style.transform = 'scale(' + (opts.scale != null ? opts.scale : 1) + ')';
+        if (opts.instant) {
+          void d.offsetWidth;
+          requestAnimationFrame(() => { d.style.transition = ''; });
+        }
+      };
+      const cubicPoint = (p0, p1, p2, p3, t) => {
+        const u = 1 - t;
+        return {
+          x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x,
+          y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y
+        };
+      };
+      const runOperateCycleDots = () => {
+        stopOperateCycleDots();
+        if (reducedMotion) return;
+        const orbit = document.querySelector('.operate-cine__orbit');
+        if (!orbit) return;
+        const or = orbit.getBoundingClientRect();
+        const center = { x: or.left + or.width / 2, y: or.top + or.height / 2 };
+        const radius = or.width * (208 / 500);
+        const bottom = { x: center.x, y: center.y + radius };
+        const duration = 8200;
+
+        DOT_KEYS.forEach((k, i) => {
+          const d = dot(k);
+          if (!d) return;
+          const dr = d.getBoundingClientRect();
+          const start = { x: dr.left + dr.width / 2, y: dr.top + dr.height / 2 };
+          const lift = Math.max(76, (start.y - bottom.y) * .55);
+          const tangent = Math.max(72, Math.abs(start.y - bottom.y) * .42);
+          const points = [];
+
+          for (let n = 0; n <= 12; n += 1) {
+            const t = n / 12;
+            points.push({
+              ...cubicPoint(
+                start,
+                { x: start.x, y: start.y - lift },
+                { x: bottom.x + tangent, y: bottom.y },
+                bottom,
+                t
+              ),
+              offset: t * .1
+            });
+          }
+          for (let n = 1; n <= 144; n += 1) {
+            const t = n / 144;
+            const angle = Math.PI / 2 + Math.PI * 4 * t;
+            points.push({
+              x: center.x + Math.cos(angle) * radius,
+              y: center.y + Math.sin(angle) * radius,
+              offset: .1 + t * .8
+            });
+          }
+          for (let n = 1; n <= 12; n += 1) {
+            const t = n / 12;
+            points.push({
+              ...cubicPoint(
+                bottom,
+                { x: bottom.x - tangent, y: bottom.y },
+                { x: start.x, y: start.y - lift },
+                start,
+                t
+              ),
+              offset: .9 + t * .1
+            });
+          }
+
+          const animation = d.animate(points.map(p => ({
+            offset: p.offset,
+            transform: 'translate3d(' + (p.x - start.x) + 'px,' + (p.y - start.y) + 'px,0) scale(.72)'
+          })), {
+            duration,
+            delay: i * 350,
+            easing: 'linear',
+            fill: 'none'
+          });
+          operateCycleAnimations.push(animation);
+        });
+      };
+      const operateOrbitGeometry = () => {
+        const orbit = document.querySelector('.operate-cine__orbit');
+        if (!orbit) return null;
+        const r = orbit.getBoundingClientRect();
+        return {
+          cx: r.left + r.width / 2,
+          cy: r.top + r.height / 2,
+          rx: r.width * .46,
+          ry: r.height * (150 / 360)
+        };
+      };
+      const positionOperateTrain = () => {
+        if (!operateFlow || !dotsTrain) return;
+        const { cx, cy, rx, ry, theta } = operateFlow;
+        const x = cx + Math.cos(theta) * rx;
+        const y = cy + Math.sin(theta) * ry;
+        const tangent = Math.atan2(ry * Math.cos(theta), -rx * Math.sin(theta));
+        dotsTrain.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + tangent + 'rad)';
+      };
+      const startOperateFlow = () => {
+        dotsInit();
+        if (operateFlow) return;
+        const geometry = operateOrbitGeometry();
+        if (!geometry || !dotsTrain) return;
+        const now = performance.now();
+        operateFlow = {
+          ...geometry,
+          theta: -2.72,
+          last: now,
+          speed: reducedMotion ? 0 : 95,
+          opacity: .84
+        };
+        dotsTrain.classList.add('is-operate-flow');
+        DOT_KEYS.forEach((k, i) => {
+          const d = dot(k);
+          d.style.transition = 'none';
+          d.style.left = ((i - 1.5) * 40) + 'px';
+          d.style.top = '0px';
+          d.style.transform = 'none';
+        });
+        positionOperateTrain();
+        if (dotsEl) void dotsEl.offsetWidth;
+        DOT_KEYS.forEach(k => {
+          const d = dot(k);
+          d.style.transition = 'opacity .35s ease';
+          d.style.opacity = String(operateFlow.opacity);
+        });
+        if (reducedMotion) return;
+        const tick = t => {
+          if (!operateFlow) { operateFlowRaf = null; return; }
+          const dt = Math.min(48, Math.max(0, t - operateFlow.last));
+          operateFlow.last = t;
+          const derivative = Math.hypot(
+            operateFlow.rx * Math.sin(operateFlow.theta),
+            operateFlow.ry * Math.cos(operateFlow.theta)
+          );
+          operateFlow.theta += (operateFlow.speed * dt / 1000) / Math.max(1, derivative);
+          positionOperateTrain();
+          operateFlowRaf = requestAnimationFrame(tick);
+        };
+        operateFlowRaf = requestAnimationFrame(tick);
+      };
+      addEventListener('resize', () => {
+        if (!operateFlow) return;
+        const geometry = operateOrbitGeometry();
+        if (geometry) Object.assign(operateFlow, geometry);
+        positionOperateTrain();
+      }, { passive: true });
+      const dotSignature = (k, i, opts = {}) => {
+        dotGo(k, innerWidth / 2 + (i - 1.5) * (opts.gap || 44), innerHeight - (opts.bottom || 58), {
+          opacity: opts.opacity != null ? opts.opacity : .58,
+          scale: opts.scale != null ? opts.scale : .58
+        });
+      };
+      const dotPulseTo = (k, x, y, ms = 1300) => {
+        const d = dot(k);
+        if (!d || !dotsEl) return;
+        const r = d.getBoundingClientRect();
+        const c = document.createElement('i');
+        c.className = 'pulse-clone';
+        c.style.setProperty('--c', DOT_CSS[k]);
+        c.style.left = (r.left + r.width / 2) + 'px';
+        c.style.top = (r.top + r.height / 2) + 'px';
+        c.style.opacity = '1';
+        c.style.transitionDuration = (ms / 1000) + 's';
+        dotsEl.appendChild(c);
+        requestAnimationFrame(() => setTimeout(() => {
+          c.style.left = x + 'px'; c.style.top = y + 'px'; c.style.opacity = '0';
+        }, 40));
+        setTimeout(() => c.remove(), ms + 220);
       };
       const rectMid = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, r }; };
+      /* Coordinate di layout senza il transform d'ingresso del fragment. */
+      const layoutMid = el => {
+        let x = el.offsetWidth / 2, y = el.offsetHeight / 2, cur = el;
+        while (cur) { x += cur.offsetLeft || 0; y += cur.offsetTop || 0; cur = cur.offsetParent; }
+        return { x: x - scrollX, y: y - scrollY };
+      };
       const coverWordEl = k => {
         const map = { cibo: 0, ambiente: 1, salute: 2, agricoltura: 3 };
         return document.querySelectorAll('.cover__domains span')[map[k]];
       };
       const cineDotsPreset = (name, arg) => {
         dotsInit();
+        if (name !== 'operate-cycle') stopOperateCycleDots();
         if (name === 'word') {
           const el = coverWordEl(arg);
           if (el) {
@@ -3495,8 +4668,15 @@
             dotGo(arg, x, m.y - dy);
           }
         } else if (name === 'scatter') {
-          dotGo('cibo', '12%', '14%'); dotGo('ambiente', '88%', '14%');
-          dotGo('salute', '12%', '86%'); dotGo('agricoltura', '88%', '86%');
+          dotGo('cibo', innerWidth * .12, innerHeight * .14); dotGo('ambiente', innerWidth * .88, innerHeight * .14);
+          dotGo('salute', innerWidth * .12, innerHeight * .86); dotGo('agricoltura', innerWidth * .88, innerHeight * .86);
+        } else if (name === 'constellation') {
+          const vertical = Math.min(innerHeight * .27, 260);
+          const horizontal = Math.min(innerWidth * .13, 150);
+          dotGo('cibo', innerWidth / 2, innerHeight / 2 - vertical, { scale: .82 });
+          dotGo('ambiente', innerWidth / 2 + horizontal, innerHeight / 2, { scale: .82 });
+          dotGo('salute', innerWidth / 2, innerHeight / 2 + vertical, { scale: .82 });
+          dotGo('agricoltura', innerWidth / 2 - horizontal, innerHeight / 2, { scale: .82 });
         } else if (name === 'pulse') {
           const a = dot(arg.from), b = dot(arg.to);
           if (!a || !b) return;
@@ -3519,26 +4699,100 @@
             if (k) { const m = rectMid(c); dotGo(k, m.x, m.y, { scale: .8 }); }
           });
         } else if (name === 'sign') {
-          DOT_KEYS.forEach((k, i) => dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 }));
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 42, { opacity: .5, scale: .55 }));
+        } else if (name === 'who-field') {
+          const audiences = [...document.querySelectorAll('.who .aud')];
+          audiences.forEach((audience, i) => {
+            const m = layoutMid(audience);
+            dotGo(DOT_KEYS[i], m.x - audience.offsetWidth / 2 - 18, m.y - audience.offsetHeight / 2 + 28, {
+              opacity: .72,
+              scale: .66
+            });
+          });
+        } else if (name === 'actors-knot') {
+          const anchor = document.querySelector('.actors-cine__spine-anchor');
+          const m = anchor ? layoutMid(anchor) : { x: innerWidth * .38, y: innerHeight - 62 };
+          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 30, m.y, {
+            opacity: .66,
+            scale: .66
+          }));
+        } else if (name === 'heritage-rivets') {
+          const layers = [...document.querySelectorAll('.heritage .cap')];
+          layers.forEach((layer, i) => {
+            const m = layoutMid(layer);
+            dotGo(DOT_KEYS[i], m.x - layer.offsetWidth / 2 + 2, m.y, {
+              opacity: .72,
+              scale: .66
+            });
+          });
+        } else if (name === 'roadmap-sign') {
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 42, {
+            opacity: .6,
+            scale: .66
+          }));
+        } else if (name === 'chain') {
+          const chain = document.querySelector('.problem__chain');
+          const r = chain ? chain.getBoundingClientRect() : { left: innerWidth * .22, width: innerWidth * .56, top: innerHeight * .24 };
+          const order = ['ambiente', 'agricoltura', 'cibo', 'salute'];
+          const y = Math.max(82, r.top - 54);
+          const x0 = r.left + r.width * .14;
+          const step = r.width * .24;
+          order.forEach((k, i) => dotGo(k, x0 + step * i, y, { opacity: .72, scale: .62 }));
+        } else if (name === 'hold-chain') {
+          const br = document.querySelector('.problem__break');
+          const m = br ? rectMid(br) : { x: innerWidth / 2, y: innerHeight * .66 };
+          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 38, m.y + 58, { opacity: .42, scale: .46 }));
+        } else if (name === 'house-stage') {
+          const width = Math.min(innerWidth * .8, innerHeight * 1.12);
+          const height = width * 660 / 800;
+          const r = { left: (innerWidth - width) / 2, width, top: innerHeight * .485 - height / 2, height };
+          const y = r.top + r.height * .88;
+          DOT_KEYS.forEach((k, i) => dotGo(k, r.left + r.width / 2 + (i - 1.5) * 38, y, {
+            opacity: .56, scale: .56, instant: true
+          }));
         } else if (name === 'intohouse') {
-          document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
-            const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y, { opacity: 0, scale: .6 });
+          DOT_KEYS.forEach(k => {
+            const d = dot(k);
+            if (d) { d.style.opacity = '0'; d.style.transform = 'scale(.42)'; }
           });
         } else if (name === 'anchors') {
           document.querySelectorAll('.missing__anchors .anchor').forEach(a => {
             const m = rectMid(a); dotGo(a.dataset.k, m.x, m.y);
           });
+        } else if (name === 'letter-stage') {
+          const spans = [...document.querySelectorAll('.brand__letter span')];
+          const lockup = document.querySelector('.brand__lockup');
+          const lr = lockup ? lockup.getBoundingClientRect() : { bottom: innerHeight * .62 };
+          const y = Math.min(innerHeight - 86, Math.max(innerHeight * .8, lr.bottom + 92));
+          spans.forEach((sp, i) => {
+            const m = layoutMid(sp);
+            dotGo(DOT_KEYS[i], m.x, y, { opacity: .68, scale: .64, instant: true });
+          });
         } else if (name === 'letters') {
           document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
-            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.y);
+            const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.r.top - 26, { scale: .85 });
           });
         } else if (name === 'accent') {
           const sp = document.querySelectorAll('.brand__letter span')[arg];
-          if (sp) { const m = rectMid(sp); dotGo(DOT_KEYS[arg], m.x, m.r.top - 26, { scale: .8 }); }
+          if (sp) {
+            const m = rectMid(sp);
+            dotGo(DOT_KEYS[arg], m.x, m.r.top - 26, { scale: .8 });
+          }
         } else if (name === 'dive') {
           const viz = document.querySelector('.birth__viz');
           const m = viz ? rectMid(viz) : { x: innerWidth / 2, y: innerHeight / 2 };
           DOT_KEYS.forEach(k => dotGo(k, m.x, m.y, { opacity: 0, scale: .3 }));
+        } else if (name === 'operate-title' || name === 'operate-phase') {
+          if (operateFlow) stopOperateFlow();
+          const cx = innerWidth / 2;
+          const cy = innerHeight - 54;
+          DOT_KEYS.forEach((k, i) => dotGo(k, cx + (i - 1.5) * 34, cy, {
+            opacity: .7,
+            scale: .72
+          }));
+        } else if (name === 'operate-cycle') {
+          if (operateFlow) stopOperateFlow();
+          runOperateCycleDots();
         } else if (name === 'relay') {
           const op = document.querySelectorAll('.operate__rail .op')[arg];
           if (op) { const r = op.getBoundingClientRect(); dotGo(DOT_KEYS[arg], r.left + 25, r.top + 25); }
@@ -3554,28 +4808,52 @@
         const scene = document.querySelector('#p03');
         if (!scene) return;
         const MAP = ['ambiente', 'agricoltura', 'salute', 'cibo'];
+        const COUNT = {
+          2: { to: 21, prefix: '−', suffix: '%' },
+          3: { to: 10000, format: 'it', small: 'mld $ / anno' },
+          4: { to: 733, small: 'milioni di persone' }
+        };
+        const renderNum = (el, cfg, value) => {
+          const nTxt = cfg.format === 'it' ? value.toLocaleString('it-IT') : String(value);
+          const valueEl = el.querySelector('.cq__value') || el;
+          valueEl.textContent = (cfg.prefix || '') + nTxt + (cfg.suffix || '');
+        };
+        const countNum = (el, cfg) => {
+          const run = (el._cineRun = (el._cineRun || 0) + 1);
+          if (reducedMotion) { renderNum(el, cfg, cfg.to); return; }
+          renderNum(el, cfg, 0);
+          const t0 = performance.now(), dur = 1750;
+          const tick = now => {
+            if (el._cineRun !== run) return;
+            const p = Math.min(1, (now - t0) / dur);
+            const e = 1 - Math.pow(1 - p, 3);
+            renderNum(el, cfg, Math.round(cfg.to * e));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+        const run = scene._conseqRun = (scene._conseqRun || 0) + 1;
         scene.querySelectorAll('.cq').forEach((q, i) => {
+          q.classList.remove('on', 'in');
           if (i === n - 1) {
             q.classList.add('on');
-            setTimeout(() => q.classList.add('in'), 40);
-          } else if (q.classList.contains('on')) {
-            q.classList.remove('in');
-            setTimeout(() => q.classList.remove('on'), 550);
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              if (scene._conseqRun === run) q.classList.add('in');
+            }));
           }
+          const qNum = q.querySelector('.cq__num');
+          if (qNum && i !== n - 1) qNum._cineRun = (qNum._cineRun || 0) + 1;
         });
-        if (n <= 4) {
-          DOT_KEYS.forEach((k, i) => {
-            if (k === MAP[n - 1]) {
-              dotGo(k, '50%', 'calc(50% - min(13vw, 250px))');
-            } else {
-              dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 });
-            }
+        const num = scene.querySelector('.cq-' + n + ' .cq__num');
+        if (num && COUNT[n]) countNum(num, COUNT[n]);
+        const activeKey = MAP[n - 1];
+        DOT_KEYS.forEach((k, i) => {
+          const isActive = k === activeKey;
+          dotGo(k, innerWidth / 2 + (i - 1.5) * 34, innerHeight - 58, {
+            opacity: n <= 4 ? (isActive ? .78 : .38) : .56,
+            scale: n <= 4 ? (isActive ? .64 : .46) : .54
           });
-        } else {
-          DOT_KEYS.forEach((k, i) => {
-            dotGo(k, 'calc(50% + ' + ((i - 1.5) * 52) + 'px)', 'calc(50% - min(7vw, 140px))');
-          });
-        }
+        });
       };
       const cineBridgeLetter = n => {
         const sc = scenes[active];
@@ -3584,7 +4862,7 @@
         setTimeout(() => cineDotsPreset('accent', n), 350);
       };
 
-            let exitCanvas = null;
+      let exitCanvas = null;
       const cineFinaleExit = () => {
         const fin = document.querySelector('.finale');
         if (!fin || exitCanvas) return;
@@ -3673,14 +4951,16 @@
       };
 
       const cineReset = () => {
+        stopOperateCycleDots();
+        stopOperateFlow();
         document.querySelectorAll('.reveal.cine-in').forEach(w => { w.classList.remove('cine-in'); delete w.dataset.cined; });
         document.querySelectorAll('[data-fragment]').forEach(f => { delete f.dataset.cined; });
-        scenes.forEach(sc => { delete sc.dataset.cineFlip; sc.classList.remove('cine-line', 'cine-web'); });
+        scenes.forEach(sc => { delete sc.dataset.cineFlip; sc.classList.remove('cine-line', 'cine-web', 'cine-cycle'); });
         document.querySelectorAll('.finale__letter.cine-vortex').forEach(l => l.classList.remove('cine-vortex'));
         const fin = document.querySelector('.finale');
         if (fin) { fin.classList.remove('finale--exit'); fin.classList.remove('finale--dots'); }
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
-        if (dotsEl) { dotsEl.remove(); dotsEl = null; }
+        if (dotsEl) { dotsEl.remove(); dotsEl = null; dotsTrain = null; }
         document.querySelectorAll('.cine-conseq .cq').forEach(q => q.classList.remove('on', 'in'));
         document.querySelectorAll('.missing__anchors .anchor.on').forEach(a => a.classList.remove('on'));
       };
@@ -3758,13 +5038,14 @@
             const sc = scenes[active];
             clearInterval(sc._cascade);
             setFragment(sc, d.n);
-            if (!sc.matches('.brand')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
+            if (!sc.matches('.brand, .operate')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
           } else if (d.name === 'mark') scenes[active].classList.add(d.c);
           else if (d.name === 'anchor') { const a = document.querySelector('.missing__anchors .anchor[data-k="' + d.k + '"]'); if (a) a.classList.add('on'); }
           else if (d.name === 'bridge') cineDotsPreset('letters');
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
           else if (d.name === 'conseq') cineConseq(d.n);
+          else if (d.name === 'birth') birth && birth.restart();
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
@@ -3785,10 +5066,13 @@
           scenes.forEach(sc => { if (sc !== target) sc.style.display = 'none'; });
           target.classList.add('is-active');
           steps.forEach((st, i) => {
-            const [name, a] = st.split(',');
+            const [name, a, b] = st.split(',');
             setTimeout(() => {
               if (name === 'conseq') cineConseq(Number(a));
-              else if (name === 'dots') cineDotsPreset(a);
+              else if (name === 'anchor') { const el = document.querySelector('.missing__anchors .anchor[data-k="' + a + '"]'); if (el) el.classList.add('on'); }
+              else if (name === 'bridge') cineDotsPreset('letters');
+              else if (name === 'bridge-letter') cineBridgeLetter(Number(a));
+              else if (name === 'dots') cineDotsPreset(a, b == null ? undefined : (/^-?\d+$/.test(b) ? Number(b) : b));
               else if (name === 'step') { setFragment(target, Number(a)); }
               else if (name === 'show') { const el = target.querySelectorAll('.reveal')[Number(a)]; if (el) cineIn(el, false); }
               else if (name === 'mark') target.classList.add(a);
@@ -3891,10 +5175,24 @@
           R.D6_keys_visibili_dopo = settled(() => keys.every(k => op(k) > .9));
           goi(6); await sleep(400);
           const rail = document.querySelector('.operate__rail');
-          R.D7_linea_nascosta_iniziale = mtx(rail, '::before').includes('matrix(0');
-          fx('mark', { c: 'cine-line' });
-          await sleep(2400);
-          R.D7_linea_disegnata_dopo = settled(() => mtx(rail, '::before') === 'matrix(1, 0, 0, 1, 0, 0)');
+          const phase0 = document.querySelector('.operate-cine__phase[data-cine-phase="0"]');
+          R.D7_timeline_web_nascosta = getComputedStyle(rail).display === 'none';
+          R.D7_fase_iniziale_vuota = op(phase0) === 0;
+          fx('show', { n: 1, flip: false });
+          fx('step', { n: 0 });
+          postMessage({ casa: 'fx', name: 'dots', p: 'operate-phase', a: 0 }, '*');
+          await sleep(1400);
+          R.D7_fase_tipografica_visibile = settled(() => op(phase0) > .9);
+          R.D7_quattro_pallini_insieme = document.querySelectorAll('#cineDots i:not(.pulse-clone)').length === 4;
+          R.D7_pallini_accesi = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .6);
+          fx('mark', { c: 'cine-cycle' });
+          postMessage({ casa: 'fx', name: 'dots', p: 'operate-cycle' }, '*');
+          await sleep(200);
+          R.D8_pallini_senza_stacco = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .6);
+          await sleep(1600);
+          R.D8_ciclo_in_scena = settled(() => op(document.querySelector('.operate-cine__cycle')) > .9);
+          R.D8_nessuna_modale = !document.querySelector('#ov-ciclo').classList.contains('is-open');
+          R.D8_camera_ferma = getComputedStyle(document.querySelector('#p09')).animationName === 'none';
           goi(7); await sleep(300);
           R.D9_descrizioni_nascoste = [...document.querySelectorAll('#p10 .aud p:not(.cine-tag)')].every(p => getComputedStyle(p).display === 'none');
           R.D9_tagline_visibili = [...document.querySelectorAll('#p10 .cine-tag')].every(p => getComputedStyle(p).display === 'block');
@@ -3926,13 +5224,6 @@
           R.D13_riga_nobel_iniziale_vuota = op(cine) === 0;
           fx('show', { n: 3 }); await sleep(1600);
           R.D13_riga_nobel_visibile_dopo = settled(() => op(cine) > .9);
-          postMessage({ casa: 'overlay', id: 'ov-ciclo' }, '*');
-          await sleep(600);
-          const grid = document.querySelector('#ov-ciclo .overlay__grid');
-          R.D8_solo_cerchio = [...grid.children].filter(c => !c.matches('.cycle__map')).every(c => getComputedStyle(c).display === 'none');
-          R.D8_cerchio_grande = parseFloat(getComputedStyle(grid.querySelector('.cycle__map')).maxWidth) >= 400;
-          postMessage({ casa: 'overlay' }, '*');
-          await sleep(300);
           goi(13); await sleep(400);
           R.D15_camera_ferma = getComputedStyle(document.querySelector('#p15')).animationName === 'none';
           [0, 1, 2, 3, 4, 5].forEach(n => fx('show', { n }));
