@@ -603,7 +603,7 @@
     .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
     .conseq-v2 .cq.on { display: block; opacity: 0; transition: opacity .9s ease; }
     .conseq-v2 .cq.on.in { opacity: 1; }
-    body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none; }
+    body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none !important; }
     .static-mode .cine-conseq .cq > i { display: inline-block; }
     body.cinema-mode .cine-conseq .cq__dots i { visibility: hidden; }
     body.cinema-mode .cine-conseq .cq__dots { min-height: 20px; }
@@ -653,6 +653,7 @@
     }
     .cq__dots { display: flex; gap: 26px; justify-content: center; margin-bottom: clamp(20px, 4vh, 40px); }
     .cq__dots i { margin-bottom: 0; }
+    .cinema-mode .cq__dot { display: none !important; }
     .cq__claim {
       margin: 0;
       font-family: var(--serif);
@@ -3603,46 +3604,21 @@
             setTimeout(() => q.classList.remove('on'), 550);
           }
         });
-        const numEl = scene.querySelector('.cq-' + n + ' .cq__num');
-        if (numEl && numEl.dataset.count) {
-          const target = Number(numEl.dataset.count);
-          const pre = numEl.dataset.prefix || '';
-          const suf = numEl.dataset.suffix || '';
-          const fmt = v => pre + (numEl.dataset.sep ? v.toLocaleString('it-IT') : String(v)) + suf;
-          const node = numEl.childNodes[0];
-          const t0 = performance.now();
-          const tick = now => {
-            const k = Math.min(1, (now - t0) / 1400);
-            const e = 1 - Math.pow(1 - k, 3);
-            node.textContent = fmt(Math.round(target * e));
-            if (k < 1) requestAnimationFrame(tick);
-            else node.textContent = fmt(target);
-          };
-          requestAnimationFrame(tick);
-        }
-        if (n <= 4) {
-          DOT_KEYS.forEach((k, i) => {
-            if (k === MAP[n - 1]) {
-              dotGo(k, '50%', 'calc(50% - min(13vw, 250px))', { scale: 1.08 });
-            } else {
-              dotGo(k, 'calc(50% + ' + ((i - 1.5) * 34) + 'px)', 'calc(100% - 58px)', { opacity: .45, scale: .5 });
-            }
+        const activeKey = MAP[n - 1];
+        DOT_KEYS.forEach((k, i) => {
+          const isActive = k === activeKey;
+          dotGo(k, 'calc(50% + ' + ((i - 1.5) * 34) + 'px)', 'calc(100% - 58px)', {
+            opacity: n <= 4 ? (isActive ? .78 : .38) : .56,
+            scale: n <= 4 ? (isActive ? .64 : .46) : .54
           });
-        } else {
-          DOT_KEYS.forEach((k, i) => {
-            dotGo(k, 'calc(50% + ' + ((i - 1.5) * 58) + 'px)', 'calc(50% - min(7vw, 140px))', { scale: .78 });
-          });
-        }
+        });
       };
       const cineBridgeLetter = n => {
         const sc = scenes[active];
         clearInterval(sc._cascade);
         setFragment(sc, n);
         if (n === 0) {
-          document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
-            const m = rectMid(sp);
-            dotGo(DOT_KEYS[i], m.x, m.r.top - 26, { opacity: .28, scale: .42 });
-          });
+          cineDotsPreset('off');
         }
         setTimeout(() => cineDotsPreset('accent', n), 350);
       };
