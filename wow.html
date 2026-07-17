@@ -603,9 +603,10 @@
     .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
     .conseq-v2 .cq.on { display: block; opacity: 0; transform: translateY(26px) scale(.82); transition: opacity .7s ease, transform 1s var(--ease); }
     .conseq-v2 .cq.on.in { opacity: 1; transform: none; }
-    body.cinema-mode:not(.x) .cine-conseq .cq > i { visibility: hidden; }
-    .static-mode .cine-conseq .cq > i { visibility: visible; }
+    body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none; }
+    .static-mode .cine-conseq .cq > i { display: inline-block; }
     body.cinema-mode .cine-conseq .cq__dots i { visibility: hidden; }
+    body.cinema-mode .cine-conseq .cq__dots { min-height: 20px; }
     .static-mode .cine-conseq .cq__dots i { visibility: visible; }
     body.cinema-mode .conseq-v2 .effects__sources {
       display: block !important;
@@ -687,7 +688,9 @@
     }
     /* D2: la linea della catena si disegna alla fine, legando le frasi */
     .cinema-mode .problem__chain::before { display: none; }
-    .cinema-mode .problem__chain { padding-left: 0; text-align: center; }
+    .cinema-mode .problem__chain { padding-left: 0; text-align: center; max-width: 64vw; margin-left: auto; margin-right: auto; }
+    .cinema-mode .problem__line { margin: clamp(12px, 2.2vh, 24px) 0; font-size: clamp(24px, 2.6vw, 44px); }
+    .cinema-mode .problem__break { max-width: 58vw; margin-top: clamp(20px, 4vh, 40px); font-size: clamp(19px, 1.9vw, 32px); }
     .cinema-mode .problem__break { padding-left: 0; text-align: center; margin-left: auto; margin-right: auto; }
     /* interdipendenza: la rete dei quattro ambiti */
     .problem__web { display: none; }
@@ -3492,8 +3495,8 @@
             dotGo(arg, x, m.y - dy);
           }
         } else if (name === 'scatter') {
-          dotGo('cibo', '14%', '18%'); dotGo('ambiente', '86%', '18%');
-          dotGo('salute', '14%', '82%'); dotGo('agricoltura', '86%', '82%');
+          dotGo('cibo', '12%', '14%'); dotGo('ambiente', '88%', '14%');
+          dotGo('salute', '12%', '86%'); dotGo('agricoltura', '88%', '86%');
         } else if (name === 'pulse') {
           const a = dot(arg.from), b = dot(arg.to);
           if (!a || !b) return;
@@ -3561,22 +3564,17 @@
           }
         });
         if (n <= 4) {
-          setTimeout(() => {
-            const ph = scene.querySelector('.cq-' + n + ' > i');
-            DOT_KEYS.forEach((k, i) => {
-              if (k === MAP[n - 1] && ph) {
-                const m = rectMid(ph);
-                dotGo(k, m.x, m.y);
-              } else {
-                dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 });
-              }
-            });
-          }, 120);
+          DOT_KEYS.forEach((k, i) => {
+            if (k === MAP[n - 1]) {
+              dotGo(k, '50%', 'calc(50% - min(13vw, 250px))');
+            } else {
+              dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 });
+            }
+          });
         } else {
-          setTimeout(() => {
-            const phs = scene.querySelectorAll('.cq-5 .cq__dots i');
-            phs.forEach((ph, i) => { const m = rectMid(ph); dotGo(DOT_KEYS[i], m.x, m.y); });
-          }, 120);
+          DOT_KEYS.forEach((k, i) => {
+            dotGo(k, 'calc(50% + ' + ((i - 1.5) * 52) + 'px)', 'calc(50% - min(7vw, 140px))');
+          });
         }
       };
       const cineBridgeLetter = n => {
@@ -3774,6 +3772,32 @@
 
       const ovParam = new URLSearchParams(location.search).get('overlay');
       if (ovParam) openOverlay(ovParam);
+
+      // runner demo: fotografa stati reali della regia (?cinema&demo=p03;conseq,1;conseq,2)
+      if (cinemaMode && new URLSearchParams(location.search).get('demo')) {
+        const steps = new URLSearchParams(location.search).get('demo').split(';');
+        postMessage({ casa: 'auto', on: false }, '*');
+        const sceneId = steps.shift();
+        setTimeout(() => {
+          const idx = scenes.findIndex(sc => sc.id === sceneId);
+          if (idx >= 0) go(idx);
+          const target = scenes[idx];
+          scenes.forEach(sc => { if (sc !== target) sc.style.display = 'none'; });
+          target.classList.add('is-active');
+          steps.forEach((st, i) => {
+            const [name, a] = st.split(',');
+            setTimeout(() => {
+              if (name === 'conseq') cineConseq(Number(a));
+              else if (name === 'dots') cineDotsPreset(a);
+              else if (name === 'step') { setFragment(target, Number(a)); }
+              else if (name === 'show') { const el = target.querySelectorAll('.reveal')[Number(a)]; if (el) cineIn(el, false); }
+              else if (name === 'mark') target.classList.add(a);
+            }, 700 + i * 1400);
+          });
+          // fotogramma finale deterministico: transizioni al valore d'arrivo
+          setTimeout(() => document.body.classList.add('cine-notrans'), 900 + steps.length * 1400);
+        }, 400);
+      }
 
       // collaudo automatico della regia cinema: ?cinema&cinetest -> report in #testreport
       if (cinemaMode && new URLSearchParams(location.search).has('cinetest')) {
