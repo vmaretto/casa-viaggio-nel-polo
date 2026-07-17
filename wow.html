@@ -518,6 +518,16 @@
       pointer-events: none;
       z-index: 2;
     }
+    .cinema-mode .missing__anchors .anchor {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.8);
+    }
+    .cinema-mode .missing__anchors .anchor.on,
+    .static-mode .cinema-mode .missing__anchors .anchor {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity .5s ease, transform .6s var(--ease);
+    }
     .missing__anchors .anchor {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -2456,10 +2466,10 @@
       </svg>
       <div class="scene__safe missing__content">
         <div class="missing__anchors" aria-hidden="true">
-        <span class="anchor" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>
-        <span class="anchor" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>
-        <span class="anchor" style="--c: var(--food); left: 50%; top: 98%">cibo</span>
-        <span class="anchor" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
+        <span class="anchor" data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>
+        <span class="anchor" data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>
+        <span class="anchor" data-k="cibo" style="--c: var(--food); left: 50%; top: 98%">cibo</span>
+        <span class="anchor" data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
       </div>
       <div class="missing__seeds" aria-hidden="true">
         <i data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%"></i>
@@ -3039,7 +3049,7 @@
       const staticMode = new URLSearchParams(location.search).has('static');
       if (new URLSearchParams(location.search).has('cinema')) {
         document.body.classList.add('cinema-mode');
-        if (new URLSearchParams(location.search).get('pillole') === 'fisse') document.body.classList.add('pillole-fisse');
+        document.body.classList.add('pillole-fisse');
         document.documentElement.style.overflow = 'hidden';
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
@@ -3453,6 +3463,7 @@
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
         if (bridgeEl) { bridgeEl.remove(); bridgeEl = null; }
         document.querySelectorAll('.missing__seeds i').forEach(sd => { sd.style.opacity = ''; });
+        document.querySelectorAll('.missing__anchors .anchor.on').forEach(a => a.classList.remove('on'));
       };
 
       const ratios = new Map();
@@ -3530,6 +3541,7 @@
             setFragment(sc, d.n);
             if (!sc.matches('.brand')) cineIn(sc.querySelector('[data-fragment="' + d.n + '"]'));
           } else if (d.name === 'mark') scenes[active].classList.add(d.c);
+          else if (d.name === 'anchor') { const a = document.querySelector('.missing__anchors .anchor[data-k="' + d.k + '"]'); if (a) a.classList.add('on'); }
           else if (d.name === 'bridge') cineBridge();
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'finale-exit') cineFinaleExit();
@@ -3589,7 +3601,11 @@
           fx('step', { n: 1 }); await sleep(150);
           R.D3_secondo_senza_volo = !p03.querySelector('[data-fragment="1"]').style.transform;
           goi(3); await sleep(300);
-          R.D4_pillole_visibili = getComputedStyle(document.querySelector('.missing__runners rect')).display === 'block';
+          R.D4_ancore_spente_iniziali = settled(() => [...document.querySelectorAll('.missing__anchors .anchor')].every(a => Number(getComputedStyle(a).opacity) === 0));
+          ['ambiente','agricoltura','cibo','salute'].forEach(k => postMessage({ casa: 'fx', name: 'anchor', k }, '*'));
+          await sleep(250);
+          R.D4_ancore_accese_dopo_cue = settled(() => [...document.querySelectorAll('.missing__anchors .anchor')].every(a => Number(getComputedStyle(a).opacity) > .9));
+          R.D4_pallini_runner_visibili = [...document.querySelectorAll('.missing__runners circle')].every(c => getComputedStyle(c).display === 'block');
           document.querySelector('#p04').classList.add('cine-collapse');
           await sleep(200);
           R.D4b_ponte_semi_visibili = settled(() => [...document.querySelectorAll('.missing__seeds i')].every(i => Number(getComputedStyle(i).opacity) > .9));
@@ -3676,7 +3692,12 @@
           pre.id = 'testreport';
           pre.textContent = JSON.stringify(R);
           document.body.appendChild(pre);
-        })();
+        })().catch(e => {
+          const pre = document.createElement('pre');
+          pre.id = 'testreport';
+          pre.textContent = JSON.stringify({ ERRORE: String(e && e.stack || e) });
+          document.body.appendChild(pre);
+        });
       }
 
       if (staticMode) {
