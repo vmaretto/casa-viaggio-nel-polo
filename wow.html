@@ -601,7 +601,7 @@
     .static-mode .conseq-v2[data-quadro="1"] .cq-1, .static-mode .conseq-v2[data-quadro="2"] .cq-2,
     .static-mode .conseq-v2[data-quadro="3"] .cq-3, .static-mode .conseq-v2[data-quadro="4"] .cq-4,
     .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
-    .conseq-v2 .cq.on { display: block; opacity: 0; transition: opacity .9s ease; }
+    .conseq-v2 .cq.on { display: block; opacity: 0; transform: none; transition: opacity .9s ease; }
     .conseq-v2 .cq.on.in { opacity: 1; }
     body.cinema-mode:not(.static-mode-x) .cine-conseq .cq > i { display: none !important; }
     .static-mode .cine-conseq .cq > i { display: inline-block; }
@@ -2590,17 +2590,9 @@
         </g>
       </svg>
       <div class="scene__safe missing__content">
-        <div class="missing__anchors" aria-hidden="true">
-        <span class="anchor" data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%">salute</span>
-        <span class="anchor" data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%">agricoltura</span>
-        <span class="anchor" data-k="cibo" style="--c: var(--food); left: 50%; top: 98%">cibo</span>
-        <span class="anchor" data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%">ambiente</span>
+        <div class="missing__anchors" aria-hidden="true">        <span class="anchor" data-k="salute" style="--c: var(--health); left: 50%; top: 13%">salute</span>        <span class="anchor" data-k="agricoltura" style="--c: var(--agriculture); left: 82%; top: 58%">agricoltura</span>        <span class="anchor" data-k="cibo" style="--c: var(--food); left: 50%; top: 88%">cibo</span>        <span class="anchor" data-k="ambiente" style="--c: var(--environment); left: 18%; top: 58%">ambiente</span>
       </div>
-      <div class="missing__seeds" aria-hidden="true">
-        <i data-k="salute" style="--c: var(--health); left: 50%; top: 6.6%"></i>
-        <i data-k="agricoltura" style="--c: var(--agriculture); left: 89.5%; top: 60%"></i>
-        <i data-k="cibo" style="--c: var(--food); left: 50%; top: 98%"></i>
-        <i data-k="ambiente" style="--c: var(--environment); left: 10.5%; top: 60%"></i>
+      <div class="missing__seeds" aria-hidden="true">        <i data-k="salute" style="--c: var(--health); left: 50%; top: 13%"></i>        <i data-k="agricoltura" style="--c: var(--agriculture); left: 82%; top: 58%"></i>        <i data-k="cibo" style="--c: var(--food); left: 50%; top: 88%"></i>        <i data-k="ambiente" style="--c: var(--environment); left: 18%; top: 58%"></i>
       </div>
       <p class="eyebrow missing__kicker reveal">03 · Cosa manca davvero?</p>
         <div class="missing__inner">
@@ -3305,6 +3297,12 @@
           scene,
           start() {
             t0 = performance.now();
+            maxP = 0;
+            if (!on) { on = true; resize(); raf = requestAnimationFrame(frame); }
+          },
+          restart() {
+            t0 = performance.now();
+            maxP = 0;
             if (!on) { on = true; resize(); raf = requestAnimationFrame(frame); }
           },
           stop() { on = false; cancelAnimationFrame(raf); },
@@ -3595,15 +3593,41 @@
         const scene = document.querySelector('#p03');
         if (!scene) return;
         const MAP = ['ambiente', 'agricoltura', 'salute', 'cibo'];
+        const COUNT = {
+          2: { to: 21, prefix: '−', suffix: '%' },
+          3: { to: 10000, format: 'it', small: 'mld $ / anno' },
+          4: { to: 733, small: 'milioni di persone' }
+        };
+        const renderNum = (el, cfg, value) => {
+          const nTxt = cfg.format === 'it' ? value.toLocaleString('it-IT') : String(value);
+          const main = (cfg.prefix || '') + nTxt + (cfg.suffix || '');
+          el.innerHTML = cfg.small ? main + '<small>' + cfg.small + '</small>' : main;
+        };
+        const countNum = (el, cfg) => {
+          const run = (el._cineRun = (el._cineRun || 0) + 1);
+          if (reducedMotion) { renderNum(el, cfg, cfg.to); return; }
+          renderNum(el, cfg, 0);
+          const t0 = performance.now(), dur = 1450;
+          const tick = now => {
+            if (el._cineRun !== run) return;
+            const p = Math.min(1, (now - t0) / dur);
+            const e = 1 - Math.pow(1 - p, 3);
+            renderNum(el, cfg, Math.round(cfg.to * e));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
         scene.querySelectorAll('.cq').forEach((q, i) => {
           if (i === n - 1) {
             q.classList.add('on');
             setTimeout(() => q.classList.add('in'), 40);
           } else if (q.classList.contains('on')) {
             q.classList.remove('in');
-            setTimeout(() => q.classList.remove('on'), 550);
+            setTimeout(() => q.classList.remove('on'), 950);
           }
         });
+        const num = scene.querySelector('.cq-' + n + ' .cq__num');
+        if (num && COUNT[n]) countNum(num, COUNT[n]);
         const activeKey = MAP[n - 1];
         DOT_KEYS.forEach((k, i) => {
           const isActive = k === activeKey;
@@ -3617,9 +3641,6 @@
         const sc = scenes[active];
         clearInterval(sc._cascade);
         setFragment(sc, n);
-        if (n === 0) {
-          cineDotsPreset('off');
-        }
         setTimeout(() => cineDotsPreset('accent', n), 350);
       };
 
@@ -3804,6 +3825,7 @@
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
           else if (d.name === 'conseq') cineConseq(d.n);
+          else if (d.name === 'birth') birth && birth.restart();
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
