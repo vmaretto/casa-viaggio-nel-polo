@@ -592,13 +592,29 @@
     .cinema-mode .scene--light .op::before { background: var(--paper); }
     .cinema-mode .heritage .cap h3 { color: var(--paper); }
     .cinema-mode .heritage .cap p { color: rgba(247,245,238,.78); }
+    .cine-only { display: none; }
+    .cinema-mode .cine-only { display: inline; }
     .cine-conseq { display: none; }
     .conseq-v2 .effects__grid, .conseq-v2 .effects__sources { display: none !important; }
     .conseq-v2 .cine-conseq { display: block; }
     .conseq-v2 .cq { display: none; text-align: center; }
-    .conseq-v2[data-quadro="1"] .cq-1, .conseq-v2[data-quadro="2"] .cq-2,
-    .conseq-v2[data-quadro="3"] .cq-3, .conseq-v2[data-quadro="4"] .cq-4,
-    .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
+    .static-mode .conseq-v2[data-quadro="1"] .cq-1, .static-mode .conseq-v2[data-quadro="2"] .cq-2,
+    .static-mode .conseq-v2[data-quadro="3"] .cq-3, .static-mode .conseq-v2[data-quadro="4"] .cq-4,
+    .static-mode .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
+    .conseq-v2 .cq.on { display: block; opacity: 0; transform: translateY(26px) scale(.82); transition: opacity .7s ease, transform 1s var(--ease); }
+    .conseq-v2 .cq.on.in { opacity: 1; transform: none; }
+    body.cinema-mode:not(.x) .cine-conseq .cq > i { visibility: hidden; }
+    .static-mode .cine-conseq .cq > i { visibility: visible; }
+    body.cinema-mode .cine-conseq .cq__dots i { visibility: hidden; }
+    .static-mode .cine-conseq .cq__dots i { visibility: visible; }
+    body.cinema-mode .conseq-v2 .effects__sources {
+      display: block !important;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 3.6vh;
+      text-align: center;
+    }
     .cq i {
       display: inline-block;
       width: 20px;
@@ -2545,7 +2561,7 @@
             <p class="stat__takeaway">Le conseguenze non rimangono confinate in un solo ambito.</p>
           </article>
         </div>
-        <p class="effects__sources reveal delay-3">Fonti: FAO, The State of Food and Agriculture; FAOSTAT; Nature Climate Change.</p>
+        <p class="effects__sources reveal delay-3">Fonti: FAO, The State of Food and Agriculture; FAOSTAT; Nature Climate Change<span class="cine-only">; FAO SOFI 2024</span>.</p>
       </div>
     </section>
 
@@ -3155,11 +3171,9 @@
       if (new URLSearchParams(location.search).has('cinema')) {
         document.body.classList.add('cinema-mode');
         document.body.classList.add('pillole-fisse');
+        document.body.classList.add('conseq-v2');
         const cq = new URLSearchParams(location.search);
-        if (cq.get('conseq') === 'v2') {
-          document.body.classList.add('conseq-v2');
-          document.body.dataset.quadro = cq.get('quadro') || '1';
-        }
+        if (cq.get('quadro')) document.body.dataset.quadro = cq.get('quadro');
         document.documentElement.style.overflow = 'hidden';
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
@@ -3533,6 +3547,38 @@
           DOT_KEYS.forEach(k => { const d = dot(k); if (d) d.style.opacity = '0'; });
         }
       };
+      const cineConseq = n => {
+        const scene = document.querySelector('#p03');
+        if (!scene) return;
+        const MAP = ['ambiente', 'agricoltura', 'salute', 'cibo'];
+        scene.querySelectorAll('.cq').forEach((q, i) => {
+          if (i === n - 1) {
+            q.classList.add('on');
+            setTimeout(() => q.classList.add('in'), 40);
+          } else if (q.classList.contains('on')) {
+            q.classList.remove('in');
+            setTimeout(() => q.classList.remove('on'), 550);
+          }
+        });
+        if (n <= 4) {
+          setTimeout(() => {
+            const ph = scene.querySelector('.cq-' + n + ' > i');
+            DOT_KEYS.forEach((k, i) => {
+              if (k === MAP[n - 1] && ph) {
+                const m = rectMid(ph);
+                dotGo(k, m.x, m.y);
+              } else {
+                dotGo(k, 'calc(50% + ' + ((i - 1.5) * 30) + 'px)', 'calc(100% - 42px)', { opacity: .5, scale: .55 });
+              }
+            });
+          }, 120);
+        } else {
+          setTimeout(() => {
+            const phs = scene.querySelectorAll('.cq-5 .cq__dots i');
+            phs.forEach((ph, i) => { const m = rectMid(ph); dotGo(DOT_KEYS[i], m.x, m.y); });
+          }, 120);
+        }
+      };
       const cineBridgeLetter = n => {
         const sc = scenes[active];
         clearInterval(sc._cascade);
@@ -3637,6 +3683,7 @@
         if (fin) { fin.classList.remove('finale--exit'); fin.classList.remove('finale--dots'); }
         if (exitCanvas) { exitCanvas.remove(); exitCanvas = null; }
         if (dotsEl) { dotsEl.remove(); dotsEl = null; }
+        document.querySelectorAll('.cine-conseq .cq').forEach(q => q.classList.remove('on', 'in'));
         document.querySelectorAll('.missing__anchors .anchor.on').forEach(a => a.classList.remove('on'));
       };
 
@@ -3719,6 +3766,7 @@
           else if (d.name === 'bridge') cineDotsPreset('letters');
           else if (d.name === 'bridge-letter') cineBridgeLetter(d.n);
           else if (d.name === 'dots') cineDotsPreset(d.p, d.a);
+          else if (d.name === 'conseq') cineConseq(d.n);
           else if (d.name === 'finale-exit') cineFinaleExit();
           else if (d.name === 'reset') cineReset();
         }
@@ -3767,13 +3815,13 @@
           goi(2); await sleep(400);
           const p03 = document.querySelector('#p03');
           R.D3_iniziale_vuota = p03.dataset.fragmentStep === '-1' && !p03.querySelector('.is-current');
-          fx('step', { n: 0 }); await sleep(150);
-          const f0 = p03.querySelector('[data-fragment="0"]');
-          R.D3_primo_pannello_vola = !!f0.style.transform;
-          await sleep(1500);
-          R.D3_primo_pannello_visibile = settled(() => op(f0) > .9);
-          fx('step', { n: 1 }); await sleep(150);
-          R.D3_secondo_senza_volo = !p03.querySelector('[data-fragment="1"]').style.transform;
+          fx('conseq', { n: 1 }); await sleep(400);
+          R.D3_quadro1_attivo = p03.querySelector('.cq-1').classList.contains('in');
+          R.D3_quadro1_visibile = settled(() => op(p03.querySelector('.cq-1')) > .9);
+          fx('conseq', { n: 2 }); await sleep(800);
+          R.D3_quadro2_subentra = p03.querySelector('.cq-2').classList.contains('in') && !p03.querySelector('.cq-1').classList.contains('on');
+          fx('conseq', { n: 5 }); await sleep(400);
+          R.D3_chiusa_attiva = p03.querySelector('.cq-5').classList.contains('in');
           goi(3); await sleep(300);
           R.D4_ancore_spente_iniziali = settled(() => [...document.querySelectorAll('.missing__anchors .anchor')].every(a => Number(getComputedStyle(a).opacity) === 0));
           ['ambiente','agricoltura','cibo','salute'].forEach(k => postMessage({ casa: 'fx', name: 'anchor', k }, '*'));
