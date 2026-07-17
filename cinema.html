@@ -129,7 +129,7 @@
 </style>
 </head>
 <body class="nosubs">
-  <iframe id="stage" src="wow.html?cinema" aria-label="CASA — presentazione"></iframe>
+  <iframe id="stage" src="about:blank" aria-label="CASA — presentazione"></iframe>
 
   <div id="subs" aria-live="polite"></div>
 
@@ -260,6 +260,11 @@
   const endScreen = document.getElementById('end');
   const startButton = document.getElementById('start');
   const directP09 = document.getElementById('directP09');
+
+  // Safari conserva con particolare tenacia gli iframe aperti da file://.
+  // Una versione diversa a ogni apertura garantisce che il film utilizzi
+  // sempre il wow.html appena salvato, anche dopo revisioni ravvicinate.
+  stage.src = 'wow.html?cinema&v=' + Date.now();
 
   if (START_AT > 0) {
     const pageLabel = requestedStart || ('scena ' + START_AT);
