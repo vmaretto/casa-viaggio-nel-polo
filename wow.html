@@ -597,7 +597,8 @@
     .conseq-v2 .cine-conseq { display: block; }
     .conseq-v2 .cq { display: none; text-align: center; }
     .conseq-v2[data-quadro="1"] .cq-1, .conseq-v2[data-quadro="2"] .cq-2,
-    .conseq-v2[data-quadro="3"] .cq-3, .conseq-v2[data-quadro="4"] .cq-4 { display: block; }
+    .conseq-v2[data-quadro="3"] .cq-3, .conseq-v2[data-quadro="4"] .cq-4,
+    .conseq-v2[data-quadro="5"] .cq-5 { display: block; }
     .cq i {
       display: inline-block;
       width: 20px;
@@ -619,13 +620,15 @@
     }
     .cq__num small {
       display: block;
+      margin-top: clamp(12px, 2.4vh, 24px);
+      line-height: 1.1;
       font-size: clamp(24px, 2.4vw, 42px);
       font-style: italic;
       letter-spacing: .04em;
       color: color-mix(in srgb, var(--c), var(--paper) 40%);
     }
     .cq__ctx {
-      margin: clamp(14px, 2.6vh, 26px) 0 0;
+      margin: clamp(26px, 4.6vh, 48px) 0 0;
       font-family: var(--sans);
       font-size: clamp(15px, 1.3vw, 21px);
       letter-spacing: .06em;
@@ -2514,6 +2517,11 @@
             <p class="cq__ctx">i costi nascosti del cibo · salute, ambiente, società</p>
           </div>
           <div class="cq cq-4">
+            <i style="--c: var(--food)"></i>
+            <p class="cq__num" style="--c: var(--food)">733<small>milioni di persone</small></p>
+            <p class="cq__ctx">senza cibo adeguato · mentre un terzo del cibo prodotto si spreca</p>
+          </div>
+          <div class="cq cq-5">
             <div class="cq__dots">
               <i style="--c: var(--food)"></i><i style="--c: var(--environment)"></i><i style="--c: var(--health)"></i><i style="--c: var(--agriculture)"></i>
             </div>
