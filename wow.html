@@ -1642,9 +1642,9 @@
     .cinema-mode .actors__note {
       position: fixed;
       z-index: 7;
-      left: 0;
-      right: 0;
+      left: 50%;
       bottom: 2.2vh;
+      width: max-content;
       margin: 0;
       color: rgba(247,245,238,.4);
       font-size: 12px;
@@ -1656,7 +1656,7 @@
     .cinema-mode .scene .actors__note.reveal {
       opacity: .55;
       filter: none;
-      transform: none;
+      transform: translateX(-50%);
     }
     .actors-cine__spine-anchor { display: none; }
     .cinema-mode .actors-cine__spine-anchor {
