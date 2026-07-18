@@ -1815,8 +1815,9 @@
     }
     .cinema-mode .roadmap-cine__path-base { stroke: rgba(247,245,238,.14); stroke-width: 1; }
     .cinema-mode .roadmap-cine__path-progress {
-      stroke: var(--acid);
-      stroke-width: 2;
+      /* Il gradiente si accende verso la meta: lo slancio cresce, non muore. */
+      stroke: url(#rm-grad);
+      stroke-width: 2.5;
       stroke-dasharray: 100;
       stroke-dashoffset: 100;
       filter: drop-shadow(0 0 8px rgba(170,179,34,.38));
@@ -1824,7 +1825,7 @@
     }
     .cinema-mode .roadmap[data-fragment-step="0"] .roadmap-cine__path-progress { stroke-dashoffset: 72; }
     .cinema-mode .roadmap[data-fragment-step="1"] .roadmap-cine__path-progress { stroke-dashoffset: 38; }
-    .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dashoffset: 0; }
+    .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dasharray: none; stroke-dashoffset: 0; }
     .cinema-mode .roadmap .phase {
       position: absolute;
       z-index: 2;
@@ -1837,7 +1838,8 @@
     }
     .cinema-mode .roadmap .phase.is-current,
     .cinema-mode .roadmap .phase.is-done { transform: none; }
-    .cinema-mode .roadmap .phase.is-done { opacity: .5; }
+    /* Le tappe percorse restano leggibili: il futuro brilla, il passato non muore. */
+    .cinema-mode .roadmap .phase.is-done { opacity: .92; }
     .cinema-mode .roadmap .phase.is-current { opacity: 1; }
     .cinema-mode .roadmap .phase--1 {
       top: 85.5%;
@@ -1872,12 +1874,37 @@
     }
     .cinema-mode .roadmap .phase--2::before { left: 50%; }
     .cinema-mode .roadmap .phase--3::before { top: 0; left: 100%; }
+    /* Tick: la label appartiene a questo nodo, senza ambiguità. */
+    .cinema-mode .roadmap .phase::after {
+      content: "";
+      position: absolute;
+      bottom: 22px;
+      left: 6px;
+      width: 1px;
+      height: 26px;
+      background: rgba(247,245,238,.28);
+    }
+    .cinema-mode .roadmap .phase--2::after { left: 50%; }
+    .cinema-mode .roadmap .phase--3::after { display: none; }
     .cinema-mode .roadmap .phase.is-current::before {
       border-color: var(--acid);
       background: var(--acid);
       box-shadow: 0 0 18px rgba(170,179,34,.58);
     }
-    .cinema-mode .roadmap .phase.is-done::before { border-color: rgba(170,179,34,.72); }
+    /* I nodi percorsi restano accesi. */
+    .cinema-mode .roadmap .phase.is-done::before {
+      border-color: var(--acid);
+      background: var(--acid);
+    }
+    /* L'arrivo pulsa una volta sola: traguardo, non loop. */
+    .cinema-mode .roadmap[data-fragment-step="2"] .phase--3::before {
+      animation: rmEndPulse .9s var(--ease) 1.3s 1 both;
+    }
+    @keyframes rmEndPulse {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.55); }
+      100% { transform: scale(1); }
+    }
     .cinema-mode .roadmap .phase__year {
       margin: 0 0 9px;
       color: var(--paper);
@@ -4056,8 +4083,15 @@
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
           <svg class="roadmap-cine__path" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
-            <path class="roadmap-cine__path-base" d="M 72 342 C 270 330, 380 252, 506 218 S 760 92, 936 66"></path>
-            <path class="roadmap-cine__path-progress" d="M 72 342 C 270 330, 380 252, 506 218 S 760 92, 936 66" pathLength="100"></path>
+            <defs>
+              <linearGradient id="rm-grad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#aab322" stop-opacity=".3"></stop>
+                <stop offset=".55" stop-color="#aab322" stop-opacity=".65"></stop>
+                <stop offset="1" stop-color="#aab322" stop-opacity="1"></stop>
+              </linearGradient>
+            </defs>
+            <path class="roadmap-cine__path-base" d="M -40 352 C 250 336, 380 252, 506 218 S 760 92, 936 66"></path>
+            <path class="roadmap-cine__path-progress" d="M -40 352 C 250 336, 380 252, 506 218 S 760 92, 936 66" pathLength="100"></path>
           </svg>
           <article class="phase phase--1 fragment" data-fragment="0">
             <p class="phase__year">2026</p>
@@ -4633,6 +4667,8 @@
       const cinemaMode = document.body.classList.contains('cinema-mode');
       // &pick: rende selezionabili i singoli elementi del film (ispezione/di design).
       if (new URLSearchParams(location.search).has('pick')) document.body.classList.add('cine-pick');
+      // &notrans: stati istantanei per screenshot deterministici.
+      if (new URLSearchParams(location.search).has('notrans')) document.body.classList.add('cine-notrans');
       const go = (index, openAtEnd = false) => {
         const target = Math.max(0, Math.min(scenes.length - 1, index));
         const count = fragmentCount(scenes[target]);
