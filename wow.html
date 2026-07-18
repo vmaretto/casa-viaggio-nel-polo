@@ -573,8 +573,32 @@
     .cinema-mode .missing.is-active,
     .cinema-mode .brand.is-active,
     .cinema-mode .operate.is-active { animation: none; }
-    @keyframes cinePortrait { from { transform: scale(1); } to { transform: scale(1.1); } }
-    .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s var(--ease) forwards; }
+    /* Ken Burns sul contenuto, mai sul contenitore: la cornice resta ferma. */
+    @keyframes cinePortrait { from { background-size: 112%; } to { background-size: 128%; } }
+    .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s linear forwards; }
+    .cinema-mode .science__photo {
+      width: clamp(200px, 19vw, 270px);
+      border: 0;
+      background-position: 32% 38%;
+      background-size: 112%;
+      /* Duotone: il ritratto stampato con lo stesso inchiostro del film. */
+      filter: grayscale(1) sepia(.24) saturate(1.05) contrast(1.06) brightness(1.02);
+      box-shadow:
+        0 0 0 6px var(--ink-deep, #071d21),
+        0 0 0 7.5px rgba(201,163,90,.62),
+        0 0 0 14px rgba(201,163,90,.1),
+        0 26px 60px rgba(0,0,0,.42);
+    }
+    .cinema-mode .science__photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(7,29,33,.2);
+      mix-blend-mode: multiply;
+    }
+    .cinema-mode .science__photo::after { display: none; }
+    .cinema-mode .science__inner { transform: translateY(2.5vh); }
     body.cinema-mode .scene--light,
     body.cinema-mode .effects.scene--light,
     body.cinema-mode .operate.scene--light,
@@ -837,7 +861,8 @@
       font-size: clamp(19px, 1.8vw, 28px);
       color: rgba(247,245,238,.88);
     }
-    .cinema-mode .science__cine strong { color: var(--food); font-weight: 500; }
+    /* Oro istituzionale, distinto dall'ambito cibo. */
+    .cinema-mode .science__cine strong { color: #c9a35a; font-weight: 500; }
     /* D7/D8: p09 diventa un film tipografico, non una timeline animata. */
     .operate-cine { display: none; }
     .cinema-mode .operate .scene__safe {
