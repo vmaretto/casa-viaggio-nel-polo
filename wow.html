@@ -1254,6 +1254,32 @@
       .operate-cine__tag { width: min(42vw, 300px); }
       .operate-cine__closing { top: 4vh; }
     }
+    /* Finestre strette: tutto dentro il cerchio, etichette laterali sopra i nodi. */
+    @media (max-width: 980px) {
+      .cinema-mode .operate > .scene__safe > header .display,
+      .cinema-mode .operate[data-fragment-step="0"] > .scene__safe > header .display,
+      .cinema-mode .operate[data-fragment-step="1"] > .scene__safe > header .display,
+      .cinema-mode .operate[data-fragment-step="2"] > .scene__safe > header .display,
+      .cinema-mode .operate[data-fragment-step="3"] > .scene__safe > header .display {
+        font-size: clamp(26px, 4.2vw, 44px);
+      }
+      .operate-cine__field,
+      .operate-cine__orbit { width: min(62vh, 82vw); }
+      .cinema-mode .operate-cine__phase { width: 86vw; }
+      .operate-cine__verb { font-size: clamp(38px, 9vw, 80px); }
+      .operate-cine__tag {
+        width: min(64vw, 420px);
+        font-size: clamp(16px, 2.6vw, 22px);
+      }
+      .operate-cine__num { font-size: 12px; margin-bottom: 12px; }
+      .operate-cine__nlabel { font-size: 10.5px; letter-spacing: .18em; }
+      .operate-cine__nlabel--1 { transform: translate(-50%, calc(-100% - 14px)); }
+      .operate-cine__nlabel--2 { transform: translate(-50%, calc(-100% - 14px)); }
+      .operate-cine__nlabel--3 { transform: translate(-50%, 16px); }
+      .operate-cine__nlabel--4 { transform: translate(-50%, calc(-100% - 14px)); }
+      .operate-cine__core strong { font-size: clamp(30px, 6vw, 48px); }
+      .operate-cine__closing { top: auto; bottom: 3.5vh; font-size: clamp(17px, 2.6vw, 24px); }
+    }
     /* ============ CINEMA P10–P13 · quattro grammatiche distinte ============ */
     .cinema-mode .who .scene__safe,
     .cinema-mode .actors .scene__safe,
@@ -1801,6 +1827,28 @@
     /* D15: camera ferma sul finale + vortice delle lettere */
     .cinema-mode .finale.is-active { animation: none !important; }
     .cine-notrans, .cine-notrans *, .cine-notrans *::before, .cine-notrans *::after { transition: none !important; }
+    /* &pick nell'URL: gli elementi foglia del film diventano cliccabili per l'ispezione,
+       i contenitori a tutto schermo restano trasparenti al puntatore. */
+    .cine-pick [aria-hidden="true"] * { pointer-events: auto !important; }
+    .cine-pick [aria-hidden="true"],
+    .cine-pick .operate-cine,
+    .cine-pick .operate-cine__field,
+    .cine-pick .operate-cine__field-svg,
+    .cine-pick .operate-cine__glow,
+    .cine-pick .operate-cine__sweep,
+    .cine-pick .operate-cine__cycle,
+    .cine-pick .operate-cine__orbit,
+    .cine-pick #cineDots,
+    .cine-pick .cine-dots__train,
+    .cine-pick .operate-cine__phase { pointer-events: none !important; }
+    .cine-pick #cineDots i,
+    .cine-pick .operate-cine__node,
+    .cine-pick .operate-cine__nlabel,
+    .cine-pick .operate-cine__num,
+    .cine-pick .operate-cine__verb,
+    .cine-pick .operate-cine__tag,
+    .cine-pick .operate-cine__core,
+    .cine-pick .operate-cine__closing { pointer-events: auto !important; }
     @keyframes cineVortex { to { transform: rotate(660deg) scale(0); opacity: 0; } }
     .finale__letter.cine-vortex span { display: inline-block; animation: cineVortex 1.15s var(--ease) forwards; }
     .finale__letter.cine-vortex small { opacity: 0; transition: opacity .5s ease; }
@@ -4454,6 +4502,8 @@
       };
 
       const cinemaMode = document.body.classList.contains('cinema-mode');
+      // &pick: rende selezionabili i singoli elementi del film (ispezione/di design).
+      if (new URLSearchParams(location.search).has('pick')) document.body.classList.add('cine-pick');
       const go = (index, openAtEnd = false) => {
         const target = Math.max(0, Math.min(scenes.length - 1, index));
         const count = fragmentCount(scenes[target]);
