@@ -1684,7 +1684,8 @@
       left: var(--layer-x);
       top: var(--layer-y);
       display: grid;
-      grid-template-columns: minmax(190px, .34fr) 1fr;
+      grid-template-columns: max-content 1fr;
+      column-gap: clamp(28px, 3vw, 56px);
       align-items: center;
       width: var(--layer-w);
       min-height: 0;
@@ -1700,12 +1701,14 @@
     }
     .cinema-mode .heritage .cap.is-current,
     .cinema-mode .heritage .cap.is-done { transform: none; }
-    .cinema-mode .heritage .cap.is-done { opacity: .5; }
+    /* Settle: il patrimonio è la somma, nessuna card "vincitrice". */
+    .cinema-mode .heritage .cap.is-done { opacity: .92; }
     .cinema-mode .heritage .cap.is-current { opacity: 1; }
-    .cinema-mode .heritage .cap--1 { --layer-x: 3%; --layer-y: 2%; --layer-w: 72%; }
-    .cinema-mode .heritage .cap--2 { --layer-x: 11%; --layer-y: 27%; --layer-w: 82%; }
-    .cinema-mode .heritage .cap--3 { --layer-x: 6%; --layer-y: 52%; --layer-w: 88%; }
-    .cinema-mode .heritage .cap--4 { --layer-x: 15%; --layer-y: 77%; --layer-w: 75%; }
+    /* Scala monotona: passo costante in x e y, larghezza costante. */
+    .cinema-mode .heritage .cap--1 { --layer-x: 0%; --layer-y: 0%; --layer-w: 64%; }
+    .cinema-mode .heritage .cap--2 { --layer-x: 8.6%; --layer-y: 26%; --layer-w: 64%; }
+    .cinema-mode .heritage .cap--3 { --layer-x: 17.2%; --layer-y: 52%; --layer-w: 64%; }
+    .cinema-mode .heritage .cap--4 { --layer-x: 25.8%; --layer-y: 78%; --layer-w: 64%; }
     .cinema-mode .heritage .cap h3 {
       margin: 0;
       color: var(--paper);
@@ -1713,6 +1716,7 @@
       font-size: clamp(27px, 2.15vw, 38px);
       font-style: italic;
       font-weight: 400;
+      white-space: nowrap;
     }
     .cinema-mode .heritage .cap p { display: none; }
     .cinema-mode .heritage .cap__keywords {
@@ -1722,26 +1726,27 @@
       font-weight: 300;
       letter-spacing: .025em;
     }
+    /* La parentesi di sintesi: agganciata alla prima e all'ultima card, leggibile. */
     .cinema-mode .heritage-cine__system {
       position: absolute;
       z-index: -1;
-      inset: -2% -1% -5% auto;
+      inset: 0 -1% 9% auto;
       display: block;
       width: 68px;
-      border-top: 1px solid var(--acid);
-      border-right: 1px solid var(--acid);
-      border-bottom: 1px solid var(--acid);
+      border-top: 1.5px solid rgba(170,179,34,.55);
+      border-right: 1.5px solid rgba(170,179,34,.55);
+      border-bottom: 1.5px solid rgba(170,179,34,.55);
       opacity: 0;
       transform: scaleY(.25);
-      transition: opacity .85s ease, transform 1.1s var(--ease);
+      transition: opacity .85s ease .55s, transform 1.1s var(--ease) .55s;
     }
     .cinema-mode .heritage-cine__system span {
       position: absolute;
       right: -2px;
       top: 50%;
-      color: var(--acid);
+      color: rgba(170,179,34,.9);
       font-family: var(--serif);
-      font-size: clamp(18px, 1.35vw, 24px);
+      font-size: clamp(20px, 1.5vw, 26px);
       font-style: italic;
       white-space: nowrap;
       padding: 7px 4px;
@@ -1750,7 +1755,7 @@
       transform-origin: left center;
     }
     .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__system {
-      opacity: .72;
+      opacity: .95;
       transform: scaleY(1);
     }
     .cinema-mode .heritage__closing {
