@@ -920,7 +920,6 @@
       content: "";
       position: absolute;
       inset: -12%;
-      border: 1px solid rgba(247,245,238,.035);
       border-radius: 50%;
       box-shadow: 0 0 110px rgba(170,179,34,.035), inset 0 0 90px rgba(126,189,174,.02);
     }
@@ -937,13 +936,11 @@
       overflow: visible;
     }
     .operate-cine__field-base,
-    .operate-cine__field-inner,
     .operate-cine__field-progress {
       fill: none;
       vector-effect: non-scaling-stroke;
     }
     .operate-cine__field-base { stroke: rgba(247,245,238,.12); stroke-width: 1; }
-    .operate-cine__field-inner { stroke: rgba(126,189,174,.075); stroke-width: 1; stroke-dasharray: 2 7; }
     .operate-cine__field-progress {
       stroke: rgba(170,179,34,.72);
       stroke-width: 2;
@@ -959,36 +956,114 @@
     .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-progress { stroke-dashoffset: 50; }
     .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-progress { stroke-dashoffset: 25; }
     .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-progress { stroke-dashoffset: 0; }
-    .operate-cine__field-node {
-      fill: none;
-      stroke: var(--node-color);
-      stroke-width: 2;
-      stroke-linecap: round;
-      vector-effect: non-scaling-stroke;
-      opacity: .18;
+    /* Nodi veri sul cerchio: dot pieno + halo, uno per fase, colore d'ambito. */
+    .operate-cine__node {
+      opacity: 0;
       transform-box: fill-box;
       transform-origin: center;
-      transition: opacity .7s ease, transform .9s var(--ease), filter .7s ease;
+      transition: opacity .8s ease, transform .9s var(--ease), filter .8s ease;
     }
-    .operate-cine__field-node--1 { --node-color: var(--food); }
-    .operate-cine__field-node--2 { --node-color: var(--environment); }
-    .operate-cine__field-node--3 { --node-color: var(--health); }
-    .operate-cine__field-node--4 { --node-color: var(--agriculture); }
-    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__field-node--1,
-    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-node--2,
-    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--3,
-    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--4 {
+    .operate-cine__node--1 { --node-color: var(--food); }
+    .operate-cine__node--2 { --node-color: var(--environment); }
+    .operate-cine__node--3 { --node-color: var(--health); }
+    .operate-cine__node--4 { --node-color: var(--agriculture); }
+    .operate-cine__node-dot { fill: var(--node-color); }
+    .operate-cine__node-halo {
+      fill: none;
+      stroke: var(--node-color);
+      stroke-width: 1.5;
+      opacity: .42;
+      vector-effect: non-scaling-stroke;
+    }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__node--1,
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__node--2,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__node--3,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__node--4 {
       opacity: 1;
-      transform: scale(1.18);
-      filter: drop-shadow(0 0 12px var(--node-color));
+      transform: scale(1.16);
+      filter: drop-shadow(0 0 10px var(--node-color));
     }
-    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field-node--1,
-    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--1,
-    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-node--2,
-    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--1,
-    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--2,
-    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-node--3 {
-      opacity: .52;
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__node--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__node--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__node--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__node--1,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__node--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__node--3 {
+      opacity: .65;
+    }
+    /* Etichette di fase ai quattro punti cardinali del quadrante. */
+    .operate-cine__nlabel {
+      position: absolute;
+      z-index: 2;
+      color: var(--node-color, rgba(247,245,238,.55));
+      font-family: var(--sans);
+      font-size: clamp(12px, .85vw, 15px);
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+    .operate-cine__nlabel--1 { --node-color: var(--food); top: 8.4%; left: 50%; transform: translate(-50%, calc(-100% - 20px)); }
+    .operate-cine__nlabel--2 { --node-color: var(--environment); top: 50%; left: 91.6%; transform: translate(26px, -50%); }
+    .operate-cine__nlabel--3 { --node-color: var(--health); top: 91.6%; left: 50%; transform: translate(-50%, 24px); }
+    .operate-cine__nlabel--4 { --node-color: var(--agriculture); top: 50%; left: 8.4%; transform: translate(calc(-100% - 26px), -50%); }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__nlabel--1,
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__nlabel--2,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__nlabel--3,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__nlabel--4 { opacity: 1; }
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__nlabel--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__nlabel--1,
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__nlabel--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__nlabel--1,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__nlabel--2,
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__nlabel--3 { opacity: .58; }
+    /* Luce che migra sul nodo attivo, colore d'ambito. */
+    .operate-cine__glow {
+      position: absolute;
+      z-index: 0;
+      top: 50%;
+      left: 50%;
+      width: 92%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--glow-color, rgba(170,179,34,.12)), transparent 62%);
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: top 1.3s var(--ease), left 1.3s var(--ease), opacity .9s ease;
+    }
+    .cinema-mode .operate[data-fragment-step="0"] .operate-cine__glow { top: 8.4%; left: 50%; --glow-color: rgba(216,169,78,.15); opacity: 1; }
+    .cinema-mode .operate[data-fragment-step="1"] .operate-cine__glow { top: 50%; left: 91.6%; --glow-color: rgba(126,189,174,.15); opacity: 1; }
+    .cinema-mode .operate[data-fragment-step="2"] .operate-cine__glow { top: 91.6%; left: 50%; --glow-color: rgba(208,139,128,.15); opacity: 1; }
+    .cinema-mode .operate[data-fragment-step="3"] .operate-cine__glow { top: 50%; left: 8.4%; --glow-color: rgba(170,179,34,.15); opacity: 1; }
+    .cinema-mode .operate.cine-cycle .operate-cine__glow { top: 50%; left: 50%; --glow-color: rgba(170,179,34,.10); opacity: 1; }
+    /* Impulso di luce che continua a percorrere l'anello nel tableau finale. */
+    .operate-cine__sweep {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: 83.2%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(170,179,34,0) 0%, rgba(170,179,34,.55) 10%, rgba(170,179,34,0) 22%);
+      -webkit-mask: radial-gradient(circle closest-side, transparent 92%, #000 96%, #000 100%, transparent 101%);
+      mask: radial-gradient(circle closest-side, transparent 92%, #000 96%, #000 100%, transparent 101%);
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: opacity 1s ease;
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__sweep {
+      opacity: 1;
+      animation: opSweep 9s linear infinite;
+    }
+    @keyframes opSweep {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cinema-mode .operate.cine-cycle .operate-cine__sweep { animation: none; opacity: 0; }
     }
     .cinema-mode .operate-cine__phase {
       --verb-size: 4.6vw;
@@ -1020,14 +1095,30 @@
     }
     .cinema-mode .operate.cine-cycle .operate-cine__field {
       opacity: 1;
-      transform: translate(-50%, -50%) translateY(2vh) scale(1);
+      transform: translate(-50%, -50%) translateY(4vh) scale(1);
     }
-    .cinema-mode .operate.cine-cycle .operate-cine__field-node { opacity: 0; }
+    .cinema-mode .operate.cine-cycle .operate-cine__orbit { transform: translateY(4vh); }
+    /* Tableau finale: il quadrante completo — tutti i nodi accesi, tutte le etichette. */
+    .cinema-mode .operate.cine-cycle .operate-cine__node {
+      opacity: 1;
+      transform: scale(1);
+      filter: drop-shadow(0 0 7px var(--node-color));
+    }
+    .cinema-mode .operate.cine-cycle .operate-cine__nlabel { opacity: .85; }
+    .operate-cine__num {
+      display: block;
+      margin-bottom: clamp(14px, 2vh, 22px);
+      color: rgba(170,179,34,.85);
+      font-family: var(--sans);
+      font-size: clamp(13px, .9vw, 16px);
+      font-weight: 500;
+      letter-spacing: .34em;
+    }
     .operate-cine__verb {
       display: inline-block;
       color: var(--paper);
       font-family: var(--serif);
-      font-size: clamp(76px, 5.8vw, 118px);
+      font-size: clamp(84px, 6.4vw, 130px);
       font-style: italic;
       font-weight: 400;
       line-height: .96;
@@ -1070,6 +1161,8 @@
       transform: translateY(2vh);
     }
     .operate-cine__cycle-path {
+      /* Le frecce sono sostituite dallo sweep di luce e dai pallini sui nodi. */
+      display: none;
       position: absolute;
       inset: 0;
       width: 100%;
@@ -1087,6 +1180,8 @@
       stroke: none;
     }
     .operate-cine__orbit-label {
+      /* Sostituite dalle nlabel del quadrante, che restano accese nel tableau. */
+      display: none;
       position: absolute;
       z-index: 3;
       padding: 3px 11px 5px;
@@ -1139,9 +1234,10 @@
       text-align: center;
     }
     .operate-cine__closing {
+      /* La chiusa prende il posto del titolo, in alto: il quadrante resta pulito. */
       position: absolute;
       left: 50%;
-      bottom: max(10.5vh, 104px);
+      top: 4.5vh;
       width: min(80vw, 1100px);
       margin: 0;
       color: rgba(247,245,238,.82);
@@ -1156,7 +1252,7 @@
       .operate-cine__orbit { width: min(68vh, 560px); }
       .operate-cine__verb { font-size: clamp(68px, 5.4vw, 92px); }
       .operate-cine__tag { width: min(42vw, 300px); }
-      .operate-cine__closing { bottom: 10vh; }
+      .operate-cine__closing { top: 4vh; }
     }
     /* ============ CINEMA P10–P13 · quattro grammatiche distinte ============ */
     .cinema-mode .who .scene__safe,
@@ -3555,29 +3651,38 @@
         </header>
         <div class="operate-cine" aria-hidden="true">
           <div class="operate-cine__field">
+            <div class="operate-cine__glow"></div>
             <svg class="operate-cine__field-svg" viewBox="0 0 500 500">
               <circle class="operate-cine__field-base" cx="250" cy="250" r="208"></circle>
-              <circle class="operate-cine__field-inner" cx="250" cy="250" r="170"></circle>
               <circle class="operate-cine__field-progress" cx="250" cy="250" r="208" pathLength="100"></circle>
-              <line class="operate-cine__field-node operate-cine__field-node--1" x1="250" y1="34" x2="250" y2="50"></line>
-              <line class="operate-cine__field-node operate-cine__field-node--2" x1="450" y1="250" x2="466" y2="250"></line>
-              <line class="operate-cine__field-node operate-cine__field-node--3" x1="250" y1="450" x2="250" y2="466"></line>
-              <line class="operate-cine__field-node operate-cine__field-node--4" x1="34" y1="250" x2="50" y2="250"></line>
+              <g class="operate-cine__node operate-cine__node--1"><circle class="operate-cine__node-halo" cx="250" cy="42" r="11"></circle><circle class="operate-cine__node-dot" cx="250" cy="42" r="5"></circle></g>
+              <g class="operate-cine__node operate-cine__node--2"><circle class="operate-cine__node-halo" cx="458" cy="250" r="11"></circle><circle class="operate-cine__node-dot" cx="458" cy="250" r="5"></circle></g>
+              <g class="operate-cine__node operate-cine__node--3"><circle class="operate-cine__node-halo" cx="250" cy="458" r="11"></circle><circle class="operate-cine__node-dot" cx="250" cy="458" r="5"></circle></g>
+              <g class="operate-cine__node operate-cine__node--4"><circle class="operate-cine__node-halo" cx="42" cy="250" r="11"></circle><circle class="operate-cine__node-dot" cx="42" cy="250" r="5"></circle></g>
             </svg>
+            <div class="operate-cine__sweep"></div>
+            <span class="operate-cine__nlabel operate-cine__nlabel--1">Formare</span>
+            <span class="operate-cine__nlabel operate-cine__nlabel--2">Sperimentare</span>
+            <span class="operate-cine__nlabel operate-cine__nlabel--3">Co-sviluppare</span>
+            <span class="operate-cine__nlabel operate-cine__nlabel--4">Trasferire</span>
           </div>
           <article class="operate-cine__phase operate-cine__phase--1" data-cine-phase="0">
+            <span class="operate-cine__num">01 · 04</span>
             <strong class="operate-cine__verb">Formare</strong>
             <span class="operate-cine__tag">Competenze che leggono il sistema insieme.</span>
           </article>
           <article class="operate-cine__phase operate-cine__phase--2" data-cine-phase="1">
+            <span class="operate-cine__num">02 · 04</span>
             <strong class="operate-cine__verb">Sperimentare</strong>
             <span class="operate-cine__tag">Campi, serre e laboratori diventano spazio comune.</span>
           </article>
           <article class="operate-cine__phase operate-cine__phase--3" data-cine-phase="2">
+            <span class="operate-cine__num">03 · 04</span>
             <strong class="operate-cine__verb">Co-sviluppare</strong>
             <span class="operate-cine__tag">Ricerca e bisogni reali lavorano fianco a fianco.</span>
           </article>
           <article class="operate-cine__phase operate-cine__phase--4" data-cine-phase="3">
+            <span class="operate-cine__num">04 · 04</span>
             <strong class="operate-cine__verb">Trasferire</strong>
             <span class="operate-cine__tag">I risultati diventano competenze, strumenti e decisioni.</span>
           </article>
@@ -4485,9 +4590,26 @@
           y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y
         };
       };
+      const operateNodePoints = () => {
+        const ring = document.querySelector('.operate-cine__orbit') || document.querySelector('.operate-cine__field');
+        if (!ring) return null;
+        const r = ring.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const rad = r.width * (208 / 500);
+        return [
+          { x: cx, y: cy - rad },
+          { x: cx + rad, y: cy },
+          { x: cx, y: cy + rad },
+          { x: cx - rad, y: cy }
+        ];
+      };
       const runOperateCycleDots = () => {
         stopOperateCycleDots();
-        if (reducedMotion) return;
+        if (reducedMotion) {
+          const nodes = operateNodePoints();
+          if (nodes) DOT_KEYS.forEach((k, i) => dotGo(k, nodes[i].x, nodes[i].y, { scale: .8, instant: true }));
+          return;
+        }
         const orbit = document.querySelector('.operate-cine__orbit');
         if (!orbit) return;
         const or = orbit.getBoundingClientRect();
@@ -4527,16 +4649,15 @@
               offset: .1 + t * .8
             });
           }
-          for (let n = 1; n <= 12; n += 1) {
-            const t = n / 12;
+          // Ultimo tratto: dal fondo dell'anello ogni pallino prosegue fino al SUO nodo
+          // (cibo in alto, ambiente a destra, salute in basso, agricoltura a sinistra) e vi si posa.
+          const extra = [Math.PI, Math.PI * 1.5, 0, Math.PI * .5][i];
+          for (let n = 1; n <= 24; n += 1) {
+            const t = n / 24;
+            const angle = Math.PI / 2 + extra * t;
             points.push({
-              ...cubicPoint(
-                bottom,
-                { x: bottom.x - tangent, y: bottom.y },
-                { x: start.x, y: start.y - lift },
-                start,
-                t
-              ),
+              x: center.x + Math.cos(angle) * radius,
+              y: center.y + Math.sin(angle) * radius,
               offset: .9 + t * .1
             });
           }
@@ -4550,6 +4671,10 @@
             easing: 'linear',
             fill: 'none'
           });
+          animation.onfinish = () => {
+            const nodes = operateNodePoints();
+            if (nodes) dotGo(k, nodes[i].x, nodes[i].y, { scale: .8, instant: true });
+          };
           operateCycleAnimations.push(animation);
         });
       };
@@ -4621,6 +4746,12 @@
         if (geometry) Object.assign(operateFlow, geometry);
         positionOperateTrain();
       }, { passive: true });
+      // Le posizioni dei pallini sono in pixel: al resize l'ultimo preset va riapplicato.
+      addEventListener('resize', () => {
+        if (operateFlow || !lastDotsPreset) return;
+        if (lastDotsPreset.name === 'operate-cycle') return; // il giro riparte da solo al prossimo cue
+        cineDotsPreset(lastDotsPreset.name, lastDotsPreset.arg);
+      }, { passive: true });
       const dotSignature = (k, i, opts = {}) => {
         dotGo(k, innerWidth / 2 + (i - 1.5) * (opts.gap || 44), innerHeight - (opts.bottom || 58), {
           opacity: opts.opacity != null ? opts.opacity : .58,
@@ -4655,8 +4786,10 @@
         const map = { cibo: 0, ambiente: 1, salute: 2, agricoltura: 3 };
         return document.querySelectorAll('.cover__domains span')[map[k]];
       };
+      let lastDotsPreset = null;
       const cineDotsPreset = (name, arg) => {
         dotsInit();
+        lastDotsPreset = { name, arg };
         if (name !== 'operate-cycle') stopOperateCycleDots();
         if (name === 'word') {
           const el = coverWordEl(arg);
@@ -4784,15 +4917,26 @@
           DOT_KEYS.forEach(k => dotGo(k, m.x, m.y, { opacity: 0, scale: .3 }));
         } else if (name === 'operate-title' || name === 'operate-phase') {
           if (operateFlow) stopOperateFlow();
-          const cx = innerWidth / 2;
-          const cy = innerHeight - 54;
-          DOT_KEYS.forEach((k, i) => dotGo(k, cx + (i - 1.5) * 34, cy, {
-            opacity: .7,
-            scale: .72
-          }));
+          // I pallini attendono in fila dentro il quadrante e si posano sul
+          // proprio nodo man mano che le fasi si accendono (arg = fase attiva).
+          const nodes = operateNodePoints();
+          const reached = name === 'operate-phase' && typeof arg === 'number' ? arg : -1;
+          const waitY = nodes ? nodes[0].y + (nodes[2].y - nodes[0].y) * .78 : innerHeight - 54;
+          DOT_KEYS.forEach((k, i) => {
+            if (nodes && i <= reached) {
+              dotGo(k, nodes[i].x, nodes[i].y, { scale: .8 });
+            } else {
+              dotGo(k, innerWidth / 2 + (i - 1.5) * 34, waitY, { opacity: .55, scale: .6 });
+            }
+          });
         } else if (name === 'operate-cycle') {
           if (operateFlow) stopOperateFlow();
           runOperateCycleDots();
+        } else if (name === 'operate-rest') {
+          if (operateFlow) stopOperateFlow();
+          stopOperateCycleDots();
+          const nodes = operateNodePoints();
+          if (nodes) DOT_KEYS.forEach((k, i) => dotGo(k, nodes[i].x, nodes[i].y, { scale: .8, instant: true }));
         } else if (name === 'relay') {
           const op = document.querySelectorAll('.operate__rail .op')[arg];
           if (op) { const r = op.getBoundingClientRect(); dotGo(DOT_KEYS[arg], r.left + 25, r.top + 25); }
