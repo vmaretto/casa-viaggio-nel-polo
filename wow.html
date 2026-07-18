@@ -825,7 +825,7 @@
     .cinema-mode .who__closing { text-align: center; margin-top: clamp(18px, 3vh, 30px); }
     .cinema-mode .role p, .cinema-mode .sci p, .cinema-mode .role__body p { display: none; }
     .cinema-mode .role h4, .cinema-mode .sci h4 { font-size: clamp(24px, 2.2vw, 34px); }
-    .cinema-mode .actors__note { display: none; }
+    /* (nota asterischi: ora visibile come piè di pagina, stile più sotto) */
     .cinema-mode .heritage__closing { display: none; }
     .cinema-mode .science__body { display: none; }
     .science__cine { display: none; }
@@ -1491,7 +1491,7 @@
     .cinema-mode .actors__grid {
       --spine-x: clamp(220px, 23vw, 330px);
       position: absolute;
-      inset: 18vh 10vw 8vh 15vw;
+      inset: 18vh 7vw 8vh 13vw;
       display: grid;
       grid-template-rows: repeat(5, minmax(0, 1fr));
       width: auto;
@@ -1525,9 +1525,9 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: calc(var(--spine-x) - 42px) 1fr;
+      grid-template-columns: calc(var(--spine-x) - 42px) minmax(0, .9fr) 1fr;
       align-items: center;
-      column-gap: 84px;
+      column-gap: clamp(44px, 4.4vw, 84px);
       min-height: 0;
       padding: 8px 0;
       border: 0;
@@ -1539,10 +1539,21 @@
     .cinema-mode .actors .role.is-done,
     .cinema-mode .actors .role--sci.is-current,
     .cinema-mode .actors .role--sci.is-done { transform: none; }
+    /* Settle: tutte le righe restano a piena luce; la gerarchia la fa il box verde. */
     .cinema-mode .actors .role.is-done,
-    .cinema-mode .actors .role--sci.is-done { opacity: .48; }
+    .cinema-mode .actors .role--sci.is-done { opacity: .92; }
     .cinema-mode .actors .role.is-current,
     .cinema-mode .actors .role--sci.is-current { opacity: 1; }
+    /* Descrittore a destra: la metà destra del frame torna a vivere. */
+    .cine-role-desc { display: none; }
+    .cinema-mode .actors .cine-role-desc {
+      grid-column: 3;
+      display: block;
+      max-width: 380px;
+      color: rgba(247,245,238,.48);
+      font-size: clamp(13px, 1vw, 16px);
+      line-height: 1.45;
+    }
     .cinema-mode .actors__grid .role--promote {
       margin: 0;
       padding: 8px 0;
@@ -1551,6 +1562,16 @@
       background: none;
       box-shadow: none;
     }
+    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
+    .cinema-mode .actors .role--promote h4 {
+      justify-self: start;
+      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
+      border: 1.5px solid var(--acid);
+      border-radius: 6px;
+      background: rgba(170,179,34,.09);
+      box-shadow: 0 0 36px rgba(170,179,34,.14);
+    }
+    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
     .cinema-mode .actors .role::before,
     .cinema-mode .actors .role--sci::before {
       content: "";
@@ -1571,8 +1592,12 @@
       background: var(--acid);
       box-shadow: 0 0 20px rgba(170,179,34,.62);
     }
+    /* La spina conduce: ogni nodo percorso resta acceso. */
     .cinema-mode .actors .role.is-done::before,
-    .cinema-mode .actors .role--sci.is-done::before { border-color: rgba(170,179,34,.72); }
+    .cinema-mode .actors .role--sci.is-done::before {
+      border-color: var(--acid);
+      background: var(--acid);
+    }
     .cinema-mode .actors .role h3,
     .cinema-mode .actors .role--sci > h3 {
       grid-column: 1;
@@ -1596,7 +1621,7 @@
       font-size: clamp(12px, .86vw, 15px);
     }
     .cinema-mode .actors .role--sci .sci__grid {
-      grid-column: 2;
+      grid-column: 2 / -1;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: clamp(18px, 2.2vw, 34px);
@@ -1607,8 +1632,32 @@
     }
     .cinema-mode .actors .sci h4 { font-size: clamp(25px, 2vw, 36px); }
     .cinema-mode .actors .sci small { margin: 4px 0 0; font-size: clamp(11px, .78vw, 13px); }
-    .cinema-mode .actors .more-link,
-    .cinema-mode .actors__note { display: none; }
+    .cinema-mode .actors .sci i {
+      width: 9px;
+      height: 9px;
+      opacity: 1;
+    }
+    .cinema-mode .actors .more-link { display: none; }
+    /* Nota degli asterischi: piccola, a piè di pagina, senza rumore. */
+    .cinema-mode .actors__note {
+      position: fixed;
+      z-index: 7;
+      left: 0;
+      right: 0;
+      bottom: 2.2vh;
+      margin: 0;
+      color: rgba(247,245,238,.4);
+      font-size: 12px;
+      letter-spacing: .02em;
+      text-align: center;
+      white-space: nowrap;
+    }
+    /* La nota sfugge al gating dei reveal: sempre presente, mai protagonista. */
+    .cinema-mode .scene .actors__note.reveal {
+      opacity: .55;
+      filter: none;
+      transform: none;
+    }
     .actors-cine__spine-anchor { display: none; }
     .cinema-mode .actors-cine__spine-anchor {
       position: absolute;
@@ -3903,16 +3952,19 @@
           <article class="role role--promote fragment" data-fragment="0">
             <h3>Promuove e sostiene</h3>
             <h4>InnovaliaTech</h4>
+            <span class="cine-role-desc" aria-hidden="true">Capitale, visione di lungo periodo, connessioni internazionali.</span>
             <p>Capitale, visione di lungo periodo e connessioni con il sistema accademico e internazionale.</p>
           </article>
           <article class="role role--manage fragment" data-fragment="1">
             <h3>Gestisce e mette in relazione</h3>
             <h4>FIB<small>Food Innovation Broker</small></h4>
+            <span class="cine-role-desc" aria-hidden="true">Organizza l’accesso a spazi e risorse, costruisce i percorsi.</span>
             <p>La regia operativa: organizza l’accesso a spazi e risorse e costruisce i percorsi tra i partner.</p>
           </article>
           <article class="role role--train fragment" data-fragment="2">
             <h3>Forma</h3>
             <h4>UNIUST<small>Università non statale</small></h4>
+            <span class="cine-role-desc" aria-hidden="true">Le competenze interdisciplinari per operare in CASA.</span>
             <p>Forma le competenze interdisciplinari — tecnologie, ambiente, agricoltura, cibo, salute — necessarie per operare in CASA.</p>
           </article>
           <div class="role--sci fragment" data-fragment="3">
@@ -3941,6 +3993,7 @@
           <article class="role role--net fragment" data-fragment="4">
             <h3>Ampliano le capacità</h3>
             <h4>Convenzioni<small>con università, ricerca e imprese</small></h4>
+            <span class="cine-role-desc" aria-hidden="true">Nuove competenze, tecnologie e relazioni nei quattro ambiti.</span>
             <div class="role__body">
               <p>Accordi che CASA e i singoli partner attivano con altri soggetti, per portare nei quattro ambiti nuove competenze, tecnologie e relazioni.</p>
               <button type="button" class="more-link more-link--sm" data-overlay="ov-tuscia">L’accordo UNIUST × Tuscia ↗</button>
@@ -5468,7 +5521,16 @@
           R.D9_glifi_visibili = [...document.querySelectorAll('#p10 .cine-glyph')].every(g => getComputedStyle(g).display === 'block');
           goi(8); await sleep(300);
           R.D10_paragrafi_nascosti = [...document.querySelectorAll('#p11 .role p, #p11 .sci p')].every(p => getComputedStyle(p).display === 'none');
-          R.D10_nota_nascosta = getComputedStyle(document.querySelector('.actors__note')).display === 'none';
+          R.D10_nota_footnote_discreta = (() => {
+            const note = document.querySelector('.actors__note');
+            const cs = getComputedStyle(note);
+            return cs.display !== 'none' && parseFloat(cs.fontSize) <= 13;
+          })();
+          R.D10_box_innovalia_distinto = (() => {
+            const h4 = document.querySelector('#p11 .role--promote h4');
+            const cs = getComputedStyle(h4);
+            return cs.borderTopWidth !== '0px' && cs.backgroundColor !== 'rgba(0, 0, 0, 0)';
+          })();
           goi(9); await sleep(300);
           R.D11_chiusura_nascosta = getComputedStyle(document.querySelector('.heritage__closing')).display === 'none';
           fx('show', { n: 1 }); await sleep(150);
