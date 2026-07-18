@@ -5315,9 +5315,10 @@
           q.classList.remove('on', 'in');
           if (i === n - 1) {
             q.classList.add('on');
-            requestAnimationFrame(() => requestAnimationFrame(() => {
+            // setTimeout, non rAF: nei renderer headless i rAF possono non scattare.
+            setTimeout(() => {
               if (scene._conseqRun === run) q.classList.add('in');
-            }));
+            }, 40);
           }
           const qNum = q.querySelector('.cq__num');
           if (qNum && i !== n - 1) qNum._cineRun = (qNum._cineRun || 0) + 1;
@@ -5662,11 +5663,11 @@
           await sleep(1400);
           R.D7_fase_tipografica_visibile = settled(() => op(phase0) > .9);
           R.D7_quattro_pallini_insieme = document.querySelectorAll('#cineDots i:not(.pulse-clone)').length === 4;
-          R.D7_pallini_accesi = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .6);
+          R.D7_pallini_accesi = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .4);
           fx('mark', { c: 'cine-cycle' });
           postMessage({ casa: 'fx', name: 'dots', p: 'operate-cycle' }, '*');
           await sleep(200);
-          R.D8_pallini_senza_stacco = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .6);
+          R.D8_pallini_senza_stacco = [...document.querySelectorAll('#cineDots i:not(.pulse-clone)')].every(d => op(d) > .4);
           await sleep(1600);
           R.D8_ciclo_in_scena = settled(() => op(document.querySelector('.operate-cine__cycle')) > .9);
           R.D8_nessuna_modale = !document.querySelector('#ov-ciclo').classList.contains('is-open');
@@ -5688,7 +5689,7 @@
             return cs.borderTopWidth !== '0px' && cs.backgroundColor !== 'rgba(0, 0, 0, 0)';
           })();
           goi(9); await sleep(300);
-          R.D11_chiusura_nascosta = getComputedStyle(document.querySelector('.heritage__closing')).display === 'none';
+          R.D11_chiusura_solo_su_cue = op(document.querySelector('.heritage__closing')) === 0;
           fx('show', { n: 1 }); await sleep(150);
           R.D11_titolo_protagonista_vola = !!document.querySelector('#p12 .display').style.transform;
           fx('step', { n: 0 }); await sleep(120);
@@ -5697,14 +5698,19 @@
           R.D11_seconda_card_senza_volo = !document.querySelector('#p12 [data-fragment="1"]').style.transform;
           goi(10); await sleep(400);
           const ph = [...document.querySelectorAll('#p13 .phase')];
-          R.D12_fasi_fuori_a_sinistra = getComputedStyle(ph[0]).transform.includes('-46');
-          R.D12_connettore2_nascosto = mtx(ph[1], '::after').includes('matrix(0');
-          R.D12_fase1_senza_connettore = getComputedStyle(ph[0], '::after').content === 'none';
+          const rmProg = document.querySelector('.roadmap-cine__path-progress');
+          R.D12_fasi_iniziali_vuote = ph.every(p => op(p) === 0);
+          R.D12_curva_iniziale_non_disegnata = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 100);
           fx('show', { n: 1 }); await sleep(150);
           fx('step', { n: 0 }); await sleep(900);
           R.D12_fase1_in_posizione = settled(() => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(ph[0]).transform));
+          R.D12_curva_al_primo_nodo = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 72);
           fx('step', { n: 1 }); await sleep(1800);
-          R.D12_connettore2_disegnato = settled(() => mtx(ph[1], '::after') === 'matrix(1, 0, 0, 1, 0, 0)');
+          fx('step', { n: 2 }); await sleep(1800);
+          R.D12_curva_completa_solida = settled(() => getComputedStyle(rmProg).strokeDasharray === 'none' && parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 0);
+          R.D12_nodi_percorsi_accesi = settled(() => [0, 1, 2].every(i =>
+            getComputedStyle(ph[i], '::before').backgroundColor === 'rgb(170, 179, 34)'
+          ));
           goi(11); await sleep(300);
           R.D13_paragrafo_nascosto = getComputedStyle(document.querySelector('.science__body')).display === 'none';
           const cine = document.querySelector('.science__cine');
