@@ -2049,6 +2049,34 @@
     }
     /* D15: camera ferma sul finale + vortice delle lettere */
     .cinema-mode .finale.is-active { animation: none !important; }
+    /* P15 · il finale vive sul fondo unico del film: ink, colori d'ambito pieni. */
+    body.cinema-mode .finale {
+      background:
+        radial-gradient(circle at 50% 34%, rgba(170,179,34,.07), transparent 46%),
+        var(--ink-deep, #071d21);
+      color: var(--paper);
+      --food: #d8a94e;
+      --environment: #7ebdae;
+      --health: #d08b80;
+      --agriculture: #aab322;
+    }
+    body.cinema-mode .finale__statement { color: var(--paper); }
+    body.cinema-mode .finale__letter span {
+      color: var(--c);
+      text-shadow: 0 0 60px color-mix(in srgb, var(--c), transparent 72%);
+    }
+    body.cinema-mode .finale__letter small { color: color-mix(in srgb, var(--c), transparent 15%); }
+    body.cinema-mode .finale__pillars { gap: clamp(28px, 3.3vw, 64px); }
+    body.cinema-mode .finale__pillars span {
+      color: rgba(247,245,238,.78);
+      font-size: clamp(16px, 1.25vw, 19px);
+      letter-spacing: .02em;
+    }
+    body.cinema-mode .finale__pillars span + span::before {
+      content: "·";
+      margin-right: clamp(28px, 3.3vw, 64px);
+      color: rgba(170,179,34,.45);
+    }
     .cine-notrans, .cine-notrans *, .cine-notrans *::before, .cine-notrans *::after { transition: none !important; }
     /* &pick nell'URL: gli elementi foglia del film diventano cliccabili per l'ispezione,
        i contenitori a tutto schermo restano trasparenti al puntatore. */
