@@ -1970,6 +1970,68 @@
     .cinema-mode .scene .roadmap__closing.reveal.cine-in { transform: translateX(-50%); }
     .cinema-mode .roadmap .operate__more { display: none; }
 
+    /* P14B · le prossime azioni: una sola colonna ottica, numerali che si vedono */
+    .cinema-mode .actions .scene__safe {
+      display: block;
+      padding: 0;
+    }
+    .cinema-mode .actions header {
+      position: absolute;
+      z-index: 8;
+      top: 9vh;
+      left: calc(50vw - min(490px, 39vw));
+      width: min(980px, 78vw);
+    }
+    .cinema-mode .actions header .display { margin: 0; }
+    .cinema-mode .actions__list {
+      position: absolute;
+      top: 27vh;
+      left: 50%;
+      width: min(980px, 78vw);
+      margin: 0;
+      gap: clamp(24px, 4.6vh, 44px);
+      transform: translateX(-50%);
+    }
+    .cinema-mode .action {
+      position: relative;
+      border-bottom: 0;
+      padding-bottom: clamp(18px, 3vh, 30px);
+    }
+    .cinema-mode .action:first-child {
+      border-top: 1px solid rgba(247,245,238,.12);
+      padding-top: clamp(18px, 3vh, 30px);
+    }
+    /* La hairline si stende dopo il testo, da sinistra. */
+    .cinema-mode .action::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: rgba(247,245,238,.14);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .55s var(--ease) .3s;
+    }
+    .cinema-mode .action.is-current::after,
+    .cinema-mode .action.is-done::after { transform: scaleX(1); }
+    .cinema-mode .action.is-done { opacity: .95; }
+    .cinema-mode .action__num {
+      width: 64px;
+      height: 64px;
+      border: 1.25px solid rgba(170,179,34,.85);
+      font-size: 21px;
+    }
+    .cinema-mode .action h3 {
+      font-size: clamp(28px, 2.2vw, 36px);
+    }
+    .cinema-mode .action p {
+      color: rgba(247,245,238,.78);
+      font-size: clamp(15px, 1.15vw, 18px);
+      line-height: 1.5;
+    }
+
     @media (max-height: 800px) and (min-width: 900px) {
       .cinema-mode .who header .display,
       .cinema-mode .actors header .display,
