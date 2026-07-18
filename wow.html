@@ -777,7 +777,7 @@
     }
     .cine-keys p strong { color: var(--acid); font-weight: 500; }
     .cinema-mode .aud p { display: none; }
-    .cine-glyph, .cine-tag { display: none; }
+    .cine-glyph, .cine-tag, .cine-quarter { display: none; }
     .cinema-mode .who__grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1373,14 +1373,15 @@
       font-style: italic;
     }
     .cinema-mode .who .aud {
+      --qc: var(--acid);
       position: absolute;
       z-index: 3;
       display: grid;
-      grid-template-columns: clamp(42px, 4vw, 58px) 1fr;
+      grid-template-columns: clamp(78px, 7.2vw, 112px) 1fr;
       grid-template-rows: auto auto;
       align-items: center;
-      gap: 5px 15px;
-      width: clamp(250px, 27vw, 430px);
+      gap: 6px 22px;
+      width: clamp(300px, 30vw, 470px);
       padding: 0;
       border: 0;
       border-radius: 0;
@@ -1390,22 +1391,73 @@
     }
     .cinema-mode .who .aud.is-current,
     .cinema-mode .who .aud.is-done { transform: none !important; }
-    .cinema-mode .who .aud.is-done { opacity: .6; }
+    .cinema-mode .who .aud.is-done { opacity: .92; }
     .cinema-mode .who .aud.is-current { opacity: 1; }
-    .cinema-mode .who .aud--1 { top: 18%; left: 3%; }
-    .cinema-mode .who .aud--2 { top: 6%; right: 1%; }
-    .cinema-mode .who .aud--3 { bottom: 2%; left: 10%; }
-    .cinema-mode .who .aud--4 { right: 3%; bottom: 8%; }
-    .cinema-mode .who .cine-glyph {
+    /* Geometria radiale rigorosa: quattro anchor simmetrici sulle diagonali. */
+    .cinema-mode .who .aud--1 { --qc: var(--food); top: 13%; left: 6.5%; }
+    .cinema-mode .who .aud--2 { --qc: var(--environment); top: 13%; right: 6.5%; }
+    .cinema-mode .who .aud--3 { --qc: var(--health); bottom: 7%; left: 6.5%; }
+    .cinema-mode .who .aud--4 { --qc: var(--agriculture); bottom: 7%; right: 6.5%; }
+    /* Blocchi a destra specchiati: il quarto sta sul lato esterno. */
+    .cinema-mode .who .aud--2,
+    .cinema-mode .who .aud--4 {
+      grid-template-columns: 1fr clamp(78px, 7.2vw, 112px);
+      text-align: right;
+    }
+    .cinema-mode .who .cine-quarter {
+      position: relative;
       grid-row: 1 / span 2;
       display: block;
-      width: clamp(42px, 4vw, 58px);
-      stroke-width: 2;
+      width: clamp(78px, 7.2vw, 112px);
+      aspect-ratio: 1;
     }
+    .cinema-mode .who .aud.aud--2 .cine-quarter,
+    .cinema-mode .who .aud.aud--4 .cine-quarter { grid-column: 2; grid-row: 1 / span 2; }
+    .cinema-mode .who .aud.aud--2 h3, .cinema-mode .who .aud.aud--4 h3,
+    .cinema-mode .who .aud.aud--2 p.cine-tag, .cinema-mode .who .aud.aud--4 p.cine-tag { grid-column: 1; grid-row: auto; }
+    /* I quattro quarti, ricomposti, formano il cerchio CASA: ognuno guarda il centro. */
+    .cinema-mode .who .cine-glyph {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .cinema-mode .who .cine-glyph path {
+      fill: none;
+      stroke: var(--qc);
+      stroke-width: 2;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition: stroke-dashoffset 1s var(--ease) .15s;
+    }
+    .cinema-mode .who .aud.is-current .cine-glyph path,
+    .cinema-mode .who .aud.is-done .cine-glyph path { stroke-dashoffset: 0; }
+    /* Orientamento: 1 alto-sx, 2 alto-dx, 3 basso-sx, 4 basso-dx. */
+    .cinema-mode .who .aud--2 .cine-glyph { transform: rotate(90deg); }
+    .cinema-mode .who .aud--4 .cine-glyph { transform: rotate(180deg); }
+    .cinema-mode .who .aud--3 .cine-glyph { transform: rotate(270deg); }
+    .cinema-mode .who .cine-qnum {
+      position: absolute;
+      right: 12%;
+      bottom: 6%;
+      display: block;
+      color: rgba(247,245,238,.9);
+      font-family: var(--serif);
+      font-size: clamp(40px, 3.4vw, 58px);
+      font-style: italic;
+      line-height: 1;
+    }
+    .cinema-mode .who .aud--2 .cine-qnum { right: auto; left: 12%; }
+    .cinema-mode .who .aud--3 .cine-qnum { right: 12%; bottom: auto; top: 6%; }
+    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 12%; bottom: auto; top: 6%; }
     .cinema-mode .who .aud h3 {
       grid-column: 2;
       margin: 0;
       color: var(--paper);
+      font-family: var(--serif);
+      font-weight: 500;
       font-size: clamp(28px, 2.25vw, 40px);
       line-height: 1;
     }
@@ -1413,19 +1465,22 @@
       grid-column: 2;
       display: block;
       margin: 0;
-      color: rgba(247,245,238,.72);
-      font-size: clamp(16px, 1.18vw, 21px);
-      line-height: 1.25;
+      color: rgba(247,245,238,.65);
+      font-size: clamp(15px, 1.1vw, 19px);
+      letter-spacing: .01em;
+      line-height: 1.3;
     }
     .cinema-mode .who__closing {
       position: absolute;
       z-index: 7;
       left: 50%;
       bottom: 4.5vh;
-      width: min(74vw, 1080px);
+      width: min(74vw, 1100px);
       margin: 0;
       color: rgba(247,245,238,.86);
-      font-size: clamp(22px, 1.75vw, 32px);
+      font-family: var(--serif);
+      font-size: clamp(22px, 1.75vw, 30px);
+      font-style: italic;
       text-align: center;
       transform: translateX(-50%);
     }
@@ -3794,26 +3849,42 @@
         </header>
         <div class="who__grid" data-fragment-cumulative>
           <svg class="who-cine__links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <line class="who-cine__link--1" x1="50" y1="50" x2="22" y2="29" pathLength="100"></line>
-            <line class="who-cine__link--2" x1="50" y1="50" x2="78" y2="20" pathLength="100"></line>
-            <line class="who-cine__link--3" x1="50" y1="50" x2="27" y2="79" pathLength="100"></line>
-            <line class="who-cine__link--4" x1="50" y1="50" x2="79" y2="73" pathLength="100"></line>
+            <line class="who-cine__link--1" x1="50" y1="50" x2="23" y2="24" pathLength="100"></line>
+            <line class="who-cine__link--2" x1="50" y1="50" x2="77" y2="24" pathLength="100"></line>
+            <line class="who-cine__link--3" x1="50" y1="50" x2="23" y2="77" pathLength="100"></line>
+            <line class="who-cine__link--4" x1="50" y1="50" x2="77" y2="77" pathLength="100"></line>
           </svg>
           <div class="who-cine__core"><strong>CASA</strong><small>capacità condivisa</small></div>
           <article class="aud aud--1 fragment" data-fragment="0">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 52 V24 H30 V52 M38 52 V14 H54 V52 M10 52 H58 M19 30 h6 M19 38 h6 M43 22 h6 M43 30 h6 M43 38 h6"/></svg><h3>Imprese e startup</h3><p class="cine-tag">Testare senza costruire tutto.</p>
+            <span class="cine-quarter" aria-hidden="true">
+              <svg class="cine-glyph" viewBox="0 0 100 100"><path d="M 22 100 A 78 78 0 0 1 100 22" pathLength="100"/></svg>
+              <span class="cine-qnum">1</span>
+            </span>
+            <h3>Imprese e startup</h3><p class="cine-tag">Testare senza costruire tutto.</p>
             <p>Grandi imprese e startup possono incontrarsi, sviluppare ricerca applicata e testare tecnologie, pratiche agricole e soluzioni alimentari collegandole a dati ambientali ed evidenze sulla salute.</p>
           </article>
           <article class="aud aud--2 fragment" data-fragment="1">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 26 L32 14 L56 26 L32 38 Z M20 33 V44 C20 49 44 49 44 44 V33 M56 26 V40"/></svg><h3>Università e ricerca</h3><p class="cine-tag">Integrare competenze e infrastrutture.</p>
+            <span class="cine-quarter" aria-hidden="true">
+              <svg class="cine-glyph" viewBox="0 0 100 100"><path d="M 22 100 A 78 78 0 0 1 100 22" pathLength="100"/></svg>
+              <span class="cine-qnum">2</span>
+            </span>
+            <h3>Università e ricerca</h3><p class="cine-tag">Integrare competenze e infrastrutture.</p>
             <p>Ricerca applicata e formazione congiunta sui quattro ambiti.</p>
           </article>
           <article class="aud aud--3 fragment" data-fragment="2">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="22" r="7"/><circle cx="43" cy="24" r="6"/><path d="M10 50 C10 38 34 38 34 50 M32 50 C32 40 54 40 54 50"/></svg><h3>Persone e professionisti</h3><p class="cine-tag">Trasformare lo studio in esperienza.</p>
+            <span class="cine-quarter" aria-hidden="true">
+              <svg class="cine-glyph" viewBox="0 0 100 100"><path d="M 22 100 A 78 78 0 0 1 100 22" pathLength="100"/></svg>
+              <span class="cine-qnum">3</span>
+            </span>
+            <h3>Persone e professionisti</h3><p class="cine-tag">Trasformare lo studio in esperienza.</p>
             <p>Sviluppano competenze interdisciplinari lavorando con tecnologie, dati e contesti reali di sperimentazione.</p>
           </article>
           <article class="aud aud--4 fragment" data-fragment="3">
-            <svg class="cine-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 26 L32 13 L52 26 M16 26 V46 M27 26 V46 M37 26 V46 M48 26 V46 M12 50 H52 M9 26 H55"/></svg><h3>Istituzioni e territori</h3><p class="cine-tag">Decidere su evidenze condivise.</p>
+            <span class="cine-quarter" aria-hidden="true">
+              <svg class="cine-glyph" viewBox="0 0 100 100"><path d="M 22 100 A 78 78 0 0 1 100 22" pathLength="100"/></svg>
+              <span class="cine-qnum">4</span>
+            </span>
+            <h3>Istituzioni e territori</h3><p class="cine-tag">Decidere su evidenze condivise.</p>
             <p>Evidenze utili per decisioni e politiche.</p>
           </article>
         </div>
@@ -4887,7 +4958,11 @@
           const audiences = [...document.querySelectorAll('.who .aud')];
           audiences.forEach((audience, i) => {
             const m = layoutMid(audience);
-            dotGo(DOT_KEYS[i], m.x - audience.offsetWidth / 2 - 18, m.y - audience.offsetHeight / 2 + 28, {
+            const mirrored = audience.classList.contains('aud--2') || audience.classList.contains('aud--4');
+            const x = mirrored
+              ? m.x + audience.offsetWidth / 2 + 22
+              : m.x - audience.offsetWidth / 2 - 22;
+            dotGo(DOT_KEYS[i], x, m.y - audience.offsetHeight / 2 + 28, {
               opacity: .72,
               scale: .66
             });
