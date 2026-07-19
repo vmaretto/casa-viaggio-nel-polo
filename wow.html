@@ -1374,7 +1374,7 @@
       display: grid;
       place-items: center;
       align-content: center;
-      width: clamp(148px, 14vw, 220px);
+      width: clamp(200px, 19vw, 300px);
       aspect-ratio: 1;
       border: 1px solid rgba(170,179,34,.32);
       border-radius: 50%;
@@ -1385,16 +1385,16 @@
     .cinema-mode .who-cine__core strong {
       color: var(--acid);
       font-family: var(--serif);
-      font-size: clamp(40px, 3.6vw, 64px);
+      font-size: clamp(54px, 4.8vw, 88px);
       font-style: italic;
       font-weight: 400;
       line-height: .9;
     }
     .cinema-mode .who-cine__core small {
-      margin-top: 9px;
+      margin-top: 10px;
       color: rgba(247,245,238,.62);
       font-family: var(--serif);
-      font-size: clamp(15px, 1.05vw, 19px);
+      font-size: clamp(16px, 1.2vw, 22px);
       font-style: italic;
     }
     .cinema-mode .who .aud {
@@ -1475,8 +1475,9 @@
       line-height: 1;
     }
     .cinema-mode .who .aud--2 .cine-qnum { right: auto; left: 12%; }
-    .cinema-mode .who .aud--3 .cine-qnum { right: 12%; bottom: auto; top: 6%; }
-    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 12%; bottom: auto; top: 6%; }
+    /* In 3 e 4 l'ancora è in alto: serve più aria per avere lo stesso respiro di 1 e 2. */
+    .cinema-mode .who .aud--3 .cine-qnum { right: 14%; bottom: auto; top: 16%; }
+    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 14%; bottom: auto; top: 16%; }
     .cinema-mode .who .aud h3 {
       grid-column: 2;
       margin: 0;
