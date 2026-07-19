@@ -850,7 +850,7 @@
     .cinema-mode .role p, .cinema-mode .sci p, .cinema-mode .role__body p { display: none; }
     .cinema-mode .role h4, .cinema-mode .sci h4 { font-size: clamp(24px, 2.2vw, 34px); }
     /* (nota asterischi: ora visibile come piè di pagina, stile più sotto) */
-    .cinema-mode .heritage__closing { display: none; }
+    /* (chiusa p12 ora visibile su cue, stile più sotto) */
     .cinema-mode .science__body { display: none; }
     .science__cine { display: none; }
     .cinema-mode .science__cine {
@@ -1374,7 +1374,7 @@
       display: grid;
       place-items: center;
       align-content: center;
-      width: clamp(148px, 14vw, 220px);
+      width: clamp(200px, 19vw, 300px);
       aspect-ratio: 1;
       border: 1px solid rgba(170,179,34,.32);
       border-radius: 50%;
@@ -1385,16 +1385,16 @@
     .cinema-mode .who-cine__core strong {
       color: var(--acid);
       font-family: var(--serif);
-      font-size: clamp(40px, 3.6vw, 64px);
+      font-size: clamp(54px, 4.8vw, 88px);
       font-style: italic;
       font-weight: 400;
       line-height: .9;
     }
     .cinema-mode .who-cine__core small {
-      margin-top: 9px;
+      margin-top: 10px;
       color: rgba(247,245,238,.62);
       font-family: var(--serif);
-      font-size: clamp(15px, 1.05vw, 19px);
+      font-size: clamp(16px, 1.2vw, 22px);
       font-style: italic;
     }
     .cinema-mode .who .aud {
@@ -1475,8 +1475,9 @@
       line-height: 1;
     }
     .cinema-mode .who .aud--2 .cine-qnum { right: auto; left: 12%; }
-    .cinema-mode .who .aud--3 .cine-qnum { right: 12%; bottom: auto; top: 6%; }
-    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 12%; bottom: auto; top: 6%; }
+    /* In 3 e 4 l'ancora è in alto: serve più aria per avere lo stesso respiro di 1 e 2. */
+    .cinema-mode .who .aud--3 .cine-qnum { right: 14%; bottom: auto; top: 16%; }
+    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 14%; bottom: auto; top: 16%; }
     .cinema-mode .who .aud h3 {
       grid-column: 2;
       margin: 0;
@@ -1512,130 +1513,120 @@
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
 
-    /* P11 · spina di regia: ruoli distinti, responsabilità leggibile */
+    /* P11 · i cerchi della regia: la governance come sistema orbitale */
     .cinema-mode .actors__grid {
-      --spine-x: clamp(220px, 23vw, 330px);
       position: absolute;
-      inset: 18vh 7vw 8vh 13vw;
-      display: grid;
-      grid-template-rows: repeat(5, minmax(0, 1fr));
+      inset: 0;
+      display: block;
       width: auto;
       margin: 0;
-      overflow: visible;
+      overflow: hidden;
     }
     .cinema-mode .actors__grid::before,
-    .cinema-mode .actors__grid::after {
-      content: "";
+    .cinema-mode .actors__grid::after { display: none; }
+    .actors-cine__orbits { display: none; }
+    .cinema-mode .actors-cine__orbits {
+      display: block;
       position: absolute;
-      z-index: 0;
-      top: 5%;
-      left: var(--spine-x);
-      width: 1px;
-      height: 90%;
-      background: rgba(247,245,238,.15);
+      inset: 0;
+      pointer-events: none;
     }
-    .cinema-mode .actors__grid::after {
-      height: 0;
-      background: linear-gradient(var(--acid), rgba(170,179,34,.38));
-      box-shadow: 0 0 18px rgba(170,179,34,.26);
-      transition: height 1.15s var(--ease);
+    .cine-ring {
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      display: block;
+      aspect-ratio: 1;
+      border: 1px solid rgba(247,245,238,.13);
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.94);
+      transition: opacity 1s ease, transform 1.25s var(--ease);
     }
-    .cinema-mode .actors[data-fragment-step="0"] .actors__grid::after { height: 10%; }
-    .cinema-mode .actors[data-fragment-step="1"] .actors__grid::after { height: 30%; }
-    .cinema-mode .actors[data-fragment-step="2"] .actors__grid::after { height: 50%; }
-    .cinema-mode .actors[data-fragment-step="3"] .actors__grid::after { height: 72%; }
-    .cinema-mode .actors[data-fragment-step="4"] .actors__grid::after { height: 90%; }
+    .cine-ring--1 { width: 60vh; border-color: rgba(170,179,34,.3); }
+    .cine-ring--2 { width: 68vh; }
+    .cine-ring--3 { width: 80vh; border-style: dashed; border-color: rgba(247,245,238,.11); }
+    .cinema-mode .actors[data-fragment-step="1"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="2"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--2,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--2,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--3 {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    /* Ruoli: ogni attore prende il suo posto nell'orbita. */
     .cinema-mode .actors .role,
     .cinema-mode .actors .role--sci {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: calc(var(--spine-x) - 42px) minmax(0, .9fr) 1fr;
-      align-items: center;
-      column-gap: clamp(44px, 4.4vw, 84px);
-      min-height: 0;
-      padding: 8px 0;
+      position: absolute;
+      z-index: 2;
+      display: block;
+      width: max-content;
+      max-width: 30vw;
+      margin: 0;
+      padding: 0;
       border: 0;
       background: none;
-      transform: translateX(18px);
-      transition: opacity .65s ease, transform .75s var(--ease);
+      text-align: center;
+      transform: translate(-50%, -50%) translateY(14px);
+      transition: opacity .7s ease, transform .85s var(--ease);
     }
     .cinema-mode .actors .role.is-current,
-    .cinema-mode .actors .role.is-done,
+    .cinema-mode .actors .role.is-done { transform: translate(-50%, -50%); }
+    .cinema-mode .actors .role.is-done { opacity: .92; }
+    .cinema-mode .actors .role.is-current { opacity: 1; }
+    .cinema-mode .actors .role::before,
+    .cinema-mode .actors .role--sci::before { display: none; }
+    .cinema-mode .actors .cine-role-desc { display: none; }
+    .cinema-mode .actors .role--promote { top: 54%; left: 50%; }
+    .cinema-mode .actors .role--manage { top: 54%; left: calc(50% - 30vh); max-width: 17vw; }
+    .cinema-mode .actors .role--train { top: 54%; left: calc(50% + 30vh); max-width: 17vw; }
+    .cinema-mode .actors .role--net {
+      top: calc(54% + 40vh);
+      left: 50%;
+      transform: translate(-50%, -100%) translateY(14px);
+    }
+    .cinema-mode .actors .role--net.is-current,
+    .cinema-mode .actors .role--net.is-done { transform: translate(-50%, -100%); }
+    /* Il trio scientifico si dispone sull'arco alto del secondo cerchio. */
+    .cinema-mode .actors .role--sci {
+      inset: 0;
+      width: auto;
+      max-width: none;
+      transform: none;
+      transition: opacity .7s ease;
+      pointer-events: none;
+    }
     .cinema-mode .actors .role--sci.is-current,
     .cinema-mode .actors .role--sci.is-done { transform: none; }
-    /* Settle: tutte le righe restano a piena luce; la gerarchia la fa il box verde. */
-    .cinema-mode .actors .role.is-done,
     .cinema-mode .actors .role--sci.is-done { opacity: .92; }
-    .cinema-mode .actors .role.is-current,
-    .cinema-mode .actors .role--sci.is-current { opacity: 1; }
-    /* Descrittore a destra: la metà destra del frame torna a vivere. */
-    .cine-role-desc { display: none; }
-    .cinema-mode .actors .cine-role-desc {
-      grid-column: 3;
-      display: block;
-      max-width: 380px;
-      color: rgba(247,245,238,.48);
-      font-size: clamp(13px, 1vw, 16px);
-      line-height: 1.45;
-    }
-    .cinema-mode .actors__grid .role--promote {
-      margin: 0;
-      padding: 8px 0;
-      border: 0;
-      border-radius: 0;
-      background: none;
-      box-shadow: none;
-    }
-    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
-    .cinema-mode .actors .role--promote h4 {
-      justify-self: start;
-      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
-      border: 1.5px solid var(--acid);
-      border-radius: 6px;
-      background: rgba(170,179,34,.09);
-      box-shadow: 0 0 36px rgba(170,179,34,.14);
-    }
-    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
-    .cinema-mode .actors .role::before,
-    .cinema-mode .actors .role--sci::before {
-      content: "";
+    .cinema-mode .actors .role--sci > h3 { display: none; }
+    .cinema-mode .actors .role--sci .sci__grid { display: contents; }
+    .cinema-mode .actors .sci {
       position: absolute;
-      top: 50%;
-      left: var(--spine-x);
-      width: 11px;
-      height: 11px;
-      border: 1px solid rgba(247,245,238,.32);
-      border-radius: 50%;
-      background: var(--ink-deep);
+      padding: 0;
+      border: 0;
+      text-align: center;
       transform: translate(-50%, -50%);
-      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+      pointer-events: auto;
     }
-    .cinema-mode .actors .role.is-current::before,
-    .cinema-mode .actors .role--sci.is-current::before {
-      border-color: var(--acid);
-      background: var(--acid);
-      box-shadow: 0 0 20px rgba(170,179,34,.62);
-    }
-    /* La spina conduce: ogni nodo percorso resta acceso. */
-    .cinema-mode .actors .role.is-done::before,
-    .cinema-mode .actors .role--sci.is-done::before {
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    .cinema-mode .actors .role h3,
-    .cinema-mode .actors .role--sci > h3 {
-      grid-column: 1;
-      margin: 0;
-      color: rgba(247,245,238,.62);
-      font-size: clamp(13px, .95vw, 16px);
+    .cinema-mode .actors .sci:nth-child(1) { top: calc(54% - 24vh); left: calc(50% - 24vh); }
+    .cinema-mode .actors .sci:nth-child(2) { top: calc(54% - 34vh); left: 50%; }
+    .cinema-mode .actors .sci:nth-child(3) { top: calc(54% - 24vh); left: calc(50% + 24vh); }
+    /* Etichette di ruolo: piccole, sopra il nome. */
+    .cinema-mode .actors .role h3 {
+      margin: 0 0 8px;
+      color: rgba(247,245,238,.55);
+      font-size: clamp(12px, .85vw, 14px);
       font-weight: 500;
-      letter-spacing: .09em;
+      letter-spacing: .18em;
+      text-transform: uppercase;
       line-height: 1.3;
-      text-align: right;
+      text-align: center;
     }
     .cinema-mode .actors .role h4 {
-      grid-column: 2;
+      display: inline-block;
       margin: 0;
       color: var(--paper);
       font-size: clamp(30px, 2.45vw, 44px);
@@ -1645,23 +1636,19 @@
       margin-top: 5px;
       font-size: clamp(12px, .86vw, 15px);
     }
-    .cinema-mode .actors .role--sci .sci__grid {
-      grid-column: 2 / -1;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(18px, 2.2vw, 34px);
+    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
+    .cinema-mode .actors .role--promote h4 {
+      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
+      border: 1.5px solid var(--acid);
+      border-radius: 6px;
+      background: rgba(170,179,34,.09);
+      box-shadow: 0 0 36px rgba(170,179,34,.14);
     }
-    .cinema-mode .actors .sci {
-      padding: 0;
-      border: 0;
-    }
-    .cinema-mode .actors .sci h4 { font-size: clamp(25px, 2vw, 36px); }
+    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
+    .cinema-mode .actors .sci h4 { margin: 0; font-size: clamp(24px, 1.9vw, 34px); }
     .cinema-mode .actors .sci small { margin: 4px 0 0; font-size: clamp(11px, .78vw, 13px); }
-    .cinema-mode .actors .sci i {
-      width: 9px;
-      height: 9px;
-      opacity: 1;
-    }
+    /* I pallini inline lasciano il posto ai pallini del filo, che arrivano sui nodi. */
+    .cinema-mode .actors .sci i { display: none; }
     .cinema-mode .actors .more-link { display: none; }
     /* Nota degli asterischi: piccola, a piè di pagina, senza rumore. */
     .cinema-mode .actors__note {
@@ -1686,56 +1673,86 @@
     .actors-cine__spine-anchor { display: none; }
     .cinema-mode .actors-cine__spine-anchor {
       position: absolute;
-      left: var(--spine-x);
+      left: 50%;
       bottom: 0;
       display: block;
       width: 1px;
       height: 1px;
     }
 
-    /* P12 · strati: il patrimonio si accumula e diventa sistema */
+    /* P12 · la casa è già arredata: il patrimonio prende posto nella casa */
     .cap__keywords,
-    .heritage-cine__system { display: none; }
+    .heritage-cine__house { display: none; }
     .cinema-mode .heritage__grid {
       position: absolute;
-      inset: 23vh 11vw 17vh 11vw;
+      inset: 0;
       display: block;
       width: auto;
       margin: 0;
       overflow: visible;
     }
+    .cinema-mode .heritage-cine__house {
+      position: absolute;
+      z-index: 1;
+      top: 55%;
+      left: 50%;
+      display: block;
+      width: min(102vh, 62vw);
+      aspect-ratio: 800 / 660;
+      opacity: 0;
+      transform: translate(-50%, -52%) scale(.97);
+      transition: opacity 1.1s ease, transform 1.3s var(--ease);
+      overflow: visible;
+    }
+    .cinema-mode .heritage-cine__house path {
+      fill: none;
+      stroke: rgba(247,245,238,.32);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 1.1 1.5;
+      vector-effect: non-scaling-stroke;
+      transition: stroke .9s ease;
+      filter: drop-shadow(0 0 22px rgba(170,179,34,.12));
+    }
+    .cinema-mode .heritage[data-fragment-step="0"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="1"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="2"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__house {
+      opacity: 1;
+      transform: translate(-50%, -52%) scale(1);
+    }
+    /* Man mano che la casa si arreda, il tratteggio si accende. */
+    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__house path {
+      stroke: rgba(247,245,238,.46);
+      filter: drop-shadow(0 0 26px rgba(170,179,34,.2));
+    }
     .cinema-mode .heritage .cap {
       position: absolute;
-      left: var(--layer-x);
-      top: var(--layer-y);
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: clamp(28px, 3vw, 56px);
-      align-items: center;
-      width: var(--layer-w);
+      z-index: 2;
+      display: block;
+      width: max-content;
+      max-width: 21vw;
       min-height: 0;
-      padding: clamp(13px, 1.8vh, 20px) clamp(18px, 1.7vw, 28px);
+      padding: 0;
       border: 0;
-      border-left: 4px solid var(--cap-color);
-      border-bottom: 1px solid color-mix(in srgb, var(--cap-color), transparent 58%);
-      background: linear-gradient(90deg, color-mix(in srgb, var(--cap-color), transparent 92%), transparent 74%);
+      background: none;
       backdrop-filter: none;
-      transform: translateY(22px);
       box-shadow: none;
+      text-align: center;
+      transform: translate(-50%, -50%) translateY(16px);
       transition: opacity .7s ease, transform .85s var(--ease);
     }
     .cinema-mode .heritage .cap.is-current,
-    .cinema-mode .heritage .cap.is-done { transform: none; }
-    /* Settle: il patrimonio è la somma, nessuna card "vincitrice". */
-    .cinema-mode .heritage .cap.is-done { opacity: .92; }
+    .cinema-mode .heritage .cap.is-done { transform: translate(-50%, -50%); }
+    .cinema-mode .heritage .cap.is-done { opacity: .95; }
     .cinema-mode .heritage .cap.is-current { opacity: 1; }
-    /* Scala monotona: passo costante in x e y, larghezza costante. */
-    .cinema-mode .heritage .cap--1 { --layer-x: 0%; --layer-y: 0%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--2 { --layer-x: 8.6%; --layer-y: 26%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--3 { --layer-x: 17.2%; --layer-y: 52%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--4 { --layer-x: 25.8%; --layer-y: 78%; --layer-w: 64%; }
+    /* Quattro stanze: due sopra, due sotto, dentro le mura. */
+    .cinema-mode .heritage .cap--1 { top: 51%; left: calc(50% - 10.5vw); }
+    .cinema-mode .heritage .cap--2 { top: 51%; left: calc(50% + 10.5vw); }
+    .cinema-mode .heritage .cap--3 { top: 69%; left: calc(50% - 10.5vw); }
+    .cinema-mode .heritage .cap--4 { top: 69%; left: calc(50% + 10.5vw); }
     .cinema-mode .heritage .cap h3 {
-      margin: 0;
+      margin: 0 0 7px;
       color: var(--paper);
       font-family: var(--serif);
       font-size: clamp(27px, 2.15vw, 38px);
@@ -1747,56 +1764,26 @@
     .cinema-mode .heritage .cap__keywords {
       display: block;
       color: color-mix(in srgb, var(--cap-color), rgba(247,245,238,.78) 42%);
-      font-size: clamp(15px, 1.12vw, 20px);
+      font-size: clamp(14px, 1.05vw, 18px);
       font-weight: 300;
       letter-spacing: .025em;
     }
-    /* La parentesi di sintesi: agganciata alla prima e all'ultima card, leggibile. */
-    .cinema-mode .heritage-cine__system {
-      position: absolute;
-      z-index: -1;
-      inset: 0 -1% 9% auto;
-      display: block;
-      width: 68px;
-      border-top: 1.5px solid rgba(170,179,34,.55);
-      border-right: 1.5px solid rgba(170,179,34,.55);
-      border-bottom: 1.5px solid rgba(170,179,34,.55);
-      opacity: 0;
-      transform: scaleY(.25);
-      transition: opacity .85s ease .55s, transform 1.1s var(--ease) .55s;
-    }
-    .cinema-mode .heritage-cine__system span {
-      position: absolute;
-      right: -2px;
-      top: 50%;
-      color: rgba(170,179,34,.9);
-      font-family: var(--serif);
-      font-size: clamp(20px, 1.5vw, 26px);
-      font-style: italic;
-      white-space: nowrap;
-      padding: 7px 4px;
-      background: var(--ink-deep);
-      transform: translate(100%, -50%) rotate(90deg);
-      transform-origin: left center;
-    }
-    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__system {
-      opacity: .95;
-      transform: scaleY(1);
-    }
     .cinema-mode .heritage__closing {
+      /* La chiusa siede sulla soglia: interrompe il tratteggio della base. */
       position: absolute;
       z-index: 7;
       left: 50%;
-      bottom: 5vh;
+      top: 87%;
       display: block;
-      width: min(78vw, 1120px);
+      width: max-content;
+      max-width: 70vw;
       margin: 0;
-      padding: 0;
+      padding: 8px 30px;
       border: 0;
-      background: none;
+      background: var(--ink-deep, #071d21);
       color: rgba(247,245,238,.86);
       font-family: var(--serif);
-      font-size: clamp(22px, 1.75vw, 32px);
+      font-size: clamp(24px, 1.9vw, 36px);
       font-style: italic;
       font-weight: 400;
       text-align: center;
@@ -1813,7 +1800,7 @@
     }
     .cinema-mode .heritage .operate__more { display: none; }
 
-    /* P13 · percorso: tre soglie, una sola direzione */
+    /* P13 · tre soglie: battute tipografiche a tutto schermo, poi la mappa */
     .roadmap-cine__path,
     .phase__cine { display: none; }
     .cinema-mode .roadmap__track {
@@ -1851,115 +1838,135 @@
     .cinema-mode .roadmap[data-fragment-step="0"] .roadmap-cine__path-progress { stroke-dashoffset: 72; }
     .cinema-mode .roadmap[data-fragment-step="1"] .roadmap-cine__path-progress { stroke-dashoffset: 38; }
     .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dasharray: none; stroke-dashoffset: 0; }
+    /* Le battute: ogni soglia prende tutto lo schermo. */
     .cinema-mode .roadmap .phase {
       position: absolute;
       z-index: 2;
-      width: min(29vw, 430px);
+      top: 46%;
+      left: 50%;
+      width: min(82vw, 1220px);
       margin: 0;
-      padding: 0 0 0 26px;
+      padding: 0;
       border: 0;
-      transform: translateY(16px);
-      transition: opacity .7s ease, transform .85s var(--ease);
-    }
-    .cinema-mode .roadmap .phase.is-current,
-    .cinema-mode .roadmap .phase.is-done { transform: none; }
-    /* Le tappe percorse restano leggibili: il futuro brilla, il passato non muore. */
-    .cinema-mode .roadmap .phase.is-done { opacity: .92; }
-    .cinema-mode .roadmap .phase.is-current { opacity: 1; }
-    .cinema-mode .roadmap .phase--1 {
-      top: 85.5%;
-      left: 7.2%;
-      padding-bottom: 56px;
-      translate: 0 -100%;
-    }
-    .cinema-mode .roadmap .phase--2 {
-      top: 54.5%;
-      left: 50.6%;
-      padding-bottom: 56px;
       text-align: center;
-      translate: -50% -100%;
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(20px);
+      transition: opacity .6s ease, transform .9s var(--ease),
+        top .9s var(--ease), left .9s var(--ease), width .9s var(--ease);
     }
-    .cinema-mode .roadmap .phase--3 {
-      top: 16.5%;
-      left: 93.6%;
-      text-align: right;
-      translate: -100% 0;
+    .cinema-mode .roadmap:not(.cine-map) .phase.is-current {
+      opacity: 1;
+      transform: translate(-50%, -50%);
     }
-    .cinema-mode .roadmap .phase::before {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 13px;
-      height: 13px;
-      border: 1px solid rgba(247,245,238,.35);
-      border-radius: 50%;
-      background: var(--ink-deep);
-      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+    .cinema-mode .roadmap:not(.cine-map) .phase.is-done {
+      opacity: 0;
+      transform: translate(-50%, -56%);
     }
-    .cinema-mode .roadmap .phase--2::before { left: 50%; }
-    .cinema-mode .roadmap .phase--3::before { top: 0; left: 100%; }
-    /* Tick: la label appartiene a questo nodo, senza ambiguità. */
-    .cinema-mode .roadmap .phase::after {
-      content: "";
-      position: absolute;
-      bottom: 22px;
-      left: 6px;
-      width: 1px;
-      height: 26px;
-      background: rgba(247,245,238,.28);
-    }
-    .cinema-mode .roadmap .phase--2::after { left: 50%; }
-    .cinema-mode .roadmap .phase--3::after { display: none; }
-    .cinema-mode .roadmap .phase.is-current::before {
-      border-color: var(--acid);
-      background: var(--acid);
-      box-shadow: 0 0 18px rgba(170,179,34,.58);
-    }
-    /* I nodi percorsi restano accesi. */
-    .cinema-mode .roadmap .phase.is-done::before {
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    /* L'arrivo pulsa una volta sola: traguardo, non loop. */
-    .cinema-mode .roadmap[data-fragment-step="2"] .phase--3::before {
-      animation: rmEndPulse .9s var(--ease) 1.3s 1 both;
-    }
-    @keyframes rmEndPulse {
-      0% { transform: scale(1); }
-      45% { transform: scale(1.55); }
-      100% { transform: scale(1); }
-    }
+    .cinema-mode .roadmap .phase::before,
+    .cinema-mode .roadmap .phase::after { display: none; }
     .cinema-mode .roadmap .phase__year {
-      margin: 0 0 9px;
+      margin: 0 0 10px;
       color: var(--paper);
-      font-size: clamp(52px, 4.5vw, 78px);
+      font-size: clamp(110px, 11vw, 210px);
+      line-height: .95;
+      transition: font-size .9s var(--ease);
     }
     .cinema-mode .roadmap .phase h3 {
-      margin: 0 0 9px;
+      margin: 0 0 12px;
       color: var(--acid);
       font-family: var(--serif);
-      font-size: clamp(23px, 1.8vw, 32px);
+      font-size: clamp(34px, 2.7vw, 50px);
       font-style: italic;
       font-weight: 400;
       letter-spacing: 0;
       line-height: 1.08;
       text-transform: none;
+      transition: font-size .9s var(--ease);
     }
     .cinema-mode .roadmap .phase > p:not(.phase__year):not(.phase__cine) { display: none; }
     .cinema-mode .roadmap .phase__cine {
       display: block;
-      max-width: 34ch;
-      margin: 0;
-      color: rgba(247,245,238,.76);
-      font-size: clamp(15px, 1.12vw, 20px);
+      max-width: 52ch;
+      margin: 0 auto;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(19px, 1.45vw, 26px);
       line-height: 1.4;
+      transition: font-size .9s var(--ease);
     }
+    /* La mappa finale: le tre soglie si posano sulla curva. */
+    .cinema-mode .roadmap.cine-map .phase {
+      width: min(29vw, 430px);
+      opacity: 1;
+      transform: none;
+    }
+    .cinema-mode .roadmap.cine-map .phase--1 {
+      top: 85.5%;
+      left: 7.2%;
+      padding-bottom: 44px;
+      text-align: left;
+      transform: translate(0, -100%);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2 {
+      top: 54.5%;
+      left: 50.6%;
+      padding-bottom: 44px;
+      text-align: center;
+      transform: translate(-50%, -100%);
+    }
+    .cinema-mode .roadmap.cine-map .phase--3 {
+      top: 16.5%;
+      left: 93.6%;
+      text-align: right;
+      transform: translate(-100%, 0);
+    }
+    .cinema-mode .roadmap.cine-map .phase__year {
+      margin: 0 0 8px;
+      font-size: clamp(46px, 3.8vw, 68px);
+    }
+    .cinema-mode .roadmap.cine-map .phase h3 {
+      margin: 0 0 7px;
+      font-size: clamp(21px, 1.6vw, 30px);
+    }
+    .cinema-mode .roadmap.cine-map .phase__cine {
+      margin: 0;
+      max-width: 34ch;
+      font-size: clamp(14px, 1.05vw, 18px);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2 .phase__cine { margin: 0 auto; }
+    .cinema-mode .roadmap.cine-map .phase--3 .phase__cine { margin-left: auto; }
+    /* Nodi e tick esistono solo sulla mappa. */
+    .cinema-mode .roadmap.cine-map .phase::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--acid);
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 14px rgba(170,179,34,.5);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2::before { left: 50%; }
+    .cinema-mode .roadmap.cine-map .phase--3::before { top: 0; left: 100%; }
+    .cinema-mode .roadmap.cine-map .phase--1::after,
+    .cinema-mode .roadmap.cine-map .phase--2::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: 16px;
+      left: 6px;
+      width: 1px;
+      height: 22px;
+      background: rgba(247,245,238,.28);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2::after { left: 50%; }
     .cinema-mode .roadmap__closing {
       position: absolute;
       z-index: 7;
       left: 50%;
-      bottom: 9vh;
+      bottom: 6.5vh;
       width: min(78vw, 1120px);
       margin: 0;
       font-size: clamp(22px, 1.75vw, 32px);
@@ -2100,7 +2107,8 @@
     .cine-pick .operate-cine__tag,
     .cine-pick .operate-cine__core,
     .cine-pick .operate-cine__closing { pointer-events: auto !important; }
-    @keyframes cineVortex { to { transform: rotate(660deg) scale(0); opacity: 0; } }
+    /* La lettera implode verso l'alto, dentro il suo pallino. */
+    @keyframes cineVortex { to { transform: translateY(-.55em) rotate(560deg) scale(0); opacity: 0; } }
     .finale__letter.cine-vortex span { display: inline-block; animation: cineVortex 1.15s var(--ease) forwards; }
     .finale__letter.cine-vortex small { opacity: 0; transition: opacity .5s ease; }
     .missing__content { display: grid; place-items: center; }
@@ -4096,6 +4104,11 @@
           <h2 class="display reveal delay-1">Ruoli distinti. Una regia li trasforma in CASA.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
+          <div class="actors-cine__orbits" aria-hidden="true">
+            <i class="cine-ring cine-ring--1"></i>
+            <i class="cine-ring cine-ring--2"></i>
+            <i class="cine-ring cine-ring--3"></i>
+          </div>
           <article class="role role--promote fragment" data-fragment="0">
             <h3>Promuove e sostiene</h3>
             <h4>InnovaliaTech</h4>
@@ -4180,9 +4193,11 @@
             <span class="cap__keywords">università · imprese · ricerca · territori</span>
             <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
           </article>
-          <div class="heritage-cine__system" aria-hidden="true"><span>patrimonio connesso</span></div>
+          <svg class="heritage-cine__house" viewBox="0 0 800 660" aria-hidden="true">
+            <path d="M 70 300 L 400 68 L 730 300 V 612 H 70 Z" pathLength="100"></path>
+          </svg>
         </div>
-        <p class="heritage__closing reveal delay-3">Un patrimonio esiste. Il prossimo passo è qualificarlo e connetterlo.</p>
+        <p class="heritage__closing reveal delay-3"><span class="t-web">Un patrimonio esiste. Il prossimo passo è qualificarlo e connetterlo.</span><span class="t-cine">La casa… è già arredata.</span></p>
         <div class="operate__more reveal delay-4" style="justify-content: center;">
           <button type="button" class="more-link" data-overlay="ov-arredo">La casa è già arredata ↗</button>
         </div>
@@ -5177,17 +5192,31 @@
             });
           });
         } else if (name === 'actors-knot') {
-          const anchor = document.querySelector('.actors-cine__spine-anchor');
-          const m = anchor ? layoutMid(anchor) : { x: innerWidth * .38, y: innerHeight - 62 };
-          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 30, m.y, {
-            opacity: .66,
-            scale: .66
-          }));
+          // I pallini si affiancano ai nodi scientifici del loro ambito:
+          // ambiente→CMCC, agricoltura+cibo→CREA, salute→S.Lucia.
+          const sci = [...document.querySelectorAll('.actors .sci')];
+          if (sci.length === 3) {
+            const [cmcc, crea, lucia] = sci.map(el => {
+              const m = layoutMid(el);
+              return { x: m.x, y: m.y - el.offsetHeight / 2 - 24 };
+            });
+            dotGo('ambiente', cmcc.x, cmcc.y, { opacity: .78, scale: .7 });
+            dotGo('agricoltura', crea.x - 16, crea.y, { opacity: .78, scale: .7 });
+            dotGo('cibo', crea.x + 16, crea.y, { opacity: .78, scale: .7 });
+            dotGo('salute', lucia.x, lucia.y, { opacity: .78, scale: .7 });
+          } else {
+            DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 62, {
+              opacity: .66,
+              scale: .66
+            }));
+          }
         } else if (name === 'heritage-rivets') {
           const layers = [...document.querySelectorAll('.heritage .cap')];
           layers.forEach((layer, i) => {
-            const m = layoutMid(layer);
-            dotGo(DOT_KEYS[i], m.x - layer.offsetWidth / 2 + 2, m.y, {
+            // rect reale (con transform): il pallino si posa accanto al titolo della stanza.
+            const t = layer.querySelector('h3') || layer;
+            const r = t.getBoundingClientRect();
+            dotGo(DOT_KEYS[i], r.left - 22, r.top + r.height / 2, {
               opacity: .72,
               scale: .66
             });
@@ -5360,11 +5389,18 @@
         ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
         const W = innerWidth, H = innerHeight;
         let starts = null;
-        const horizon = { x: W / 2, y: H * .38 };
         const trails = [[], [], [], []];
         const smooth = k => k * k * (3 - 2 * k);
         const t0 = performance.now();
-        const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.2, END_AT = 8.4;
+        const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.4, END_AT = 9.2;
+        // La scia attraversa lo schermo: una S che scende, risale e esce a destra.
+        const sweep = (p0, k) => cubicPoint(
+          p0,
+          { x: W * .1, y: H * .74 },
+          { x: W * .6, y: H * .14 },
+          { x: W + 160, y: H * .4 },
+          k
+        );
         setTimeout(() => {
           const dl = document.getElementById('cineDots');
           starts = dl && dl.children.length >= 4
@@ -5377,42 +5413,39 @@
           const t = (now - t0) / 1000;
           ctx2.clearRect(0, 0, W, H);
           if (starts) {
-            // fila indiana lungo la direzione dell'orizzonte, dietro il capofila (il centro dei 4)
+            // fila indiana orizzontale, dietro il capofila (a sinistra del centro dei 4)
             const cxm = (starts[0].x + starts[3].x) / 2, cym = starts[0].y;
-            const dirx = horizon.x - cxm, diry = horizon.y - cym;
-            const len = Math.hypot(dirx, diry) || 1;
-            const ux = dirx / len, uy = diry / len;
             const gap = Math.min(46, W * .034);
-            const file = [0, 1, 2, 3].map(i => ({ x: cxm - ux * gap * i, y: cym - uy * gap * i }));
+            const file = [0, 1, 2, 3].map(i => ({ x: cxm - gap * i, y: cym }));
             starts.forEach((s0, i) => {
               const base = Math.max(9, W * .008);
               let x, y, sz = base, alpha = 0;
-              if (t < GATHER_AT) {                     // il vortice si contrae nel pallino
+              if (t < GATHER_AT) {                     // la lettera implode: il pallino la assorbe e pulsa
                 const local = Math.max(0, Math.min(1, (t - VORTEX_AT - i * .18) / 1.15));
                 x = s0.x; y = s0.y;
-                sz = base * (.25 + .75 * local);
+                const pulse = local < .8 ? local : 1 + Math.sin((local - .8) / .2 * Math.PI) * .45;
+                sz = base * (.25 + .75 * Math.min(1, local)) * Math.max(1, pulse);
                 alpha = local;
               } else if (t < GO_AT) {                  // in fila indiana
                 const k = smooth(Math.min(1, (t - GATHER_AT) / 1.2));
                 x = s0.x + (file[i].x - s0.x) * k;
                 y = s0.y + (file[i].y - s0.y) * k;
                 alpha = 1;
-              } else {                                 // la scia verso l'orizzonte
-                const k = Math.min(1, (t - GO_AT) / 3.4);
-                const kk = smooth(k);
-                const fx0 = file[i].x, fy0 = file[i].y;
-                x = fx0 + (horizon.x - fx0) * kk;
-                y = fy0 + (horizon.y - fy0) * kk;
-                sz = base * (1 - kk * .94);
-                alpha = kk < .88 ? 1 : 1 - (kk - .88) / .12;
+              } else {                                 // la scia attraversa lo schermo, in fila
+                const ki = Math.max(0, Math.min(1, (t - GO_AT - i * .13) / 3.8));
+                const kk = Math.pow(smooth(ki), 1.18);
+                const p = sweep(file[i], kk);
+                x = p.x; y = p.y;
+                sz = base;
+                alpha = x > W ? Math.max(0, 1 - (x - W) / 160) : 1;
               }
               const tr = trails[i];
               tr.push({ x, y, sz });
-              if (tr.length > 20) tr.shift();
+              if (tr.length > 46) tr.shift();
               tr.forEach((pt, j) => {
-                ctx2.globalAlpha = (j / tr.length) * .26 * alpha;
+                ctx2.globalAlpha = (j / tr.length) * .3 * alpha;
                 ctx2.fillStyle = colors[i];
-                ctx2.beginPath(); ctx2.arc(pt.x, pt.y, Math.max(.4, pt.sz * (j / tr.length)), 0, Math.PI * 2); ctx2.fill();
+                ctx2.beginPath(); ctx2.arc(pt.x, pt.y, Math.max(.4, pt.sz * (.35 + .65 * j / tr.length)), 0, Math.PI * 2); ctx2.fill();
               });
               ctx2.globalAlpha = .2 * alpha;
               ctx2.fillStyle = colors[i];
@@ -5555,6 +5588,7 @@
               else if (name === 'step') { setFragment(target, Number(a)); }
               else if (name === 'show') { const el = target.querySelectorAll('.reveal')[Number(a)]; if (el) cineIn(el, false); }
               else if (name === 'mark') target.classList.add(a);
+              else if (name === 'exit') cineFinaleExit();
             }, 700 + i * 1400);
           });
           // fotogramma finale deterministico: transizioni al valore d'arrivo
@@ -5703,12 +5737,15 @@
           R.D12_curva_iniziale_non_disegnata = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 100);
           fx('show', { n: 1 }); await sleep(150);
           fx('step', { n: 0 }); await sleep(900);
-          R.D12_fase1_in_posizione = settled(() => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(ph[0]).transform));
+          R.D12_battuta1_in_scena = settled(() => op(ph[0]) > .9);
           R.D12_curva_al_primo_nodo = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 72);
           fx('step', { n: 1 }); await sleep(1800);
+          R.D12_battuta1_lascia_la_scena = settled(() => op(ph[0]) === 0);
           fx('step', { n: 2 }); await sleep(1800);
+          fx('mark', { c: 'cine-map' }); await sleep(1000);
+          R.D12_mappa_tutte_le_soglie = settled(() => ph.every(p => op(p) > .9));
           R.D12_curva_completa_solida = settled(() => getComputedStyle(rmProg).strokeDasharray === 'none' && parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 0);
-          R.D12_nodi_percorsi_accesi = settled(() => [0, 1, 2].every(i =>
+          R.D12_nodi_sulla_mappa = settled(() => [0, 1, 2].every(i =>
             getComputedStyle(ph[i], '::before').backgroundColor === 'rgb(170, 179, 34)'
           ));
           goi(11); await sleep(300);
@@ -5727,7 +5764,7 @@
           await sleep(1400);
           R.D15_vortice_partito = document.querySelectorAll('.finale__letter.cine-vortex').length === 4;
           R.D15_canvas_presente = !!document.getElementById('cineExit');
-          await sleep(7600);
+          await sleep(9600);
           R.D15_canvas_rimosso_alla_fine = !document.getElementById('cineExit');
           R.FINITO = true;
           const pre = document.createElement('pre');
