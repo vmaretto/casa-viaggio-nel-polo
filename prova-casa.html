@@ -464,6 +464,7 @@
   };
 
   let start = performance.now();
+  let started = false;
 
   const initChoreo = () => {
     const sxPts = pathPx(PATH_SX), dxPts = pathPx(PATH_DX);
@@ -545,8 +546,7 @@
       }
     }
 
-    let orbitCount = 0;
-    for (const d of DOTS) {
+    if (started) for (const d of DOTS) {
       let squash = null;
       if (d.state === 'enter') {
         const k = Math.min(1, t / .55);
@@ -751,6 +751,7 @@
   };
 
   const jumpTableau = () => {
+    started = true;
     initChoreo();
     titolo.classList.add('on', 'dim');
     chiusa.classList.add('s1', 's2');
@@ -813,6 +814,7 @@
     d.prevSample = prev;
   };
   const jumpTo = n => {
+    started = true;
     initChoreo();
     start = performance.now() - n * 1000;
     titolo.classList.add('on');
@@ -826,7 +828,7 @@
   // Il film parte solo quando la pagina è davvero visibile:
   // in una scheda in background i browser congelano i frame e il copione
   // correrebbe avanti da solo (si vedrebbe soltanto il finale).
-  const begin = () => { start = performance.now(); play(); };
+  const begin = () => { initChoreo(); started = true; start = performance.now(); play(); };
   if (TABLEAU) requestAnimationFrame(() => requestAnimationFrame(jumpTableau));
   else if (JUMP > 0) requestAnimationFrame(() => requestAnimationFrame(() => jumpTo(JUMP)));
   else if (document.hidden) {
