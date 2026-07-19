@@ -850,7 +850,7 @@
     .cinema-mode .role p, .cinema-mode .sci p, .cinema-mode .role__body p { display: none; }
     .cinema-mode .role h4, .cinema-mode .sci h4 { font-size: clamp(24px, 2.2vw, 34px); }
     /* (nota asterischi: ora visibile come piè di pagina, stile più sotto) */
-    .cinema-mode .heritage__closing { display: none; }
+    /* (chiusa p12 ora visibile su cue, stile più sotto) */
     .cinema-mode .science__body { display: none; }
     .science__cine { display: none; }
     .cinema-mode .science__cine {
@@ -1680,49 +1680,79 @@
       height: 1px;
     }
 
-    /* P12 · strati: il patrimonio si accumula e diventa sistema */
+    /* P12 · la casa è già arredata: il patrimonio prende posto nella casa */
     .cap__keywords,
-    .heritage-cine__system { display: none; }
+    .heritage-cine__house { display: none; }
     .cinema-mode .heritage__grid {
       position: absolute;
-      inset: 23vh 11vw 17vh 11vw;
+      inset: 0;
       display: block;
       width: auto;
       margin: 0;
       overflow: visible;
     }
+    .cinema-mode .heritage-cine__house {
+      position: absolute;
+      z-index: 1;
+      top: 55%;
+      left: 50%;
+      display: block;
+      width: min(102vh, 62vw);
+      aspect-ratio: 800 / 660;
+      opacity: 0;
+      transform: translate(-50%, -52%) scale(.97);
+      transition: opacity 1.1s ease, transform 1.3s var(--ease);
+      overflow: visible;
+    }
+    .cinema-mode .heritage-cine__house path {
+      fill: none;
+      stroke: rgba(247,245,238,.32);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 1.1 1.5;
+      vector-effect: non-scaling-stroke;
+      transition: stroke .9s ease;
+      filter: drop-shadow(0 0 22px rgba(170,179,34,.12));
+    }
+    .cinema-mode .heritage[data-fragment-step="0"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="1"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="2"] .heritage-cine__house,
+    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__house {
+      opacity: 1;
+      transform: translate(-50%, -52%) scale(1);
+    }
+    /* Man mano che la casa si arreda, il tratteggio si accende. */
+    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__house path {
+      stroke: rgba(247,245,238,.46);
+      filter: drop-shadow(0 0 26px rgba(170,179,34,.2));
+    }
     .cinema-mode .heritage .cap {
       position: absolute;
-      left: var(--layer-x);
-      top: var(--layer-y);
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: clamp(28px, 3vw, 56px);
-      align-items: center;
-      width: var(--layer-w);
+      z-index: 2;
+      display: block;
+      width: max-content;
+      max-width: 21vw;
       min-height: 0;
-      padding: clamp(13px, 1.8vh, 20px) clamp(18px, 1.7vw, 28px);
+      padding: 0;
       border: 0;
-      border-left: 4px solid var(--cap-color);
-      border-bottom: 1px solid color-mix(in srgb, var(--cap-color), transparent 58%);
-      background: linear-gradient(90deg, color-mix(in srgb, var(--cap-color), transparent 92%), transparent 74%);
+      background: none;
       backdrop-filter: none;
-      transform: translateY(22px);
       box-shadow: none;
+      text-align: center;
+      transform: translate(-50%, -50%) translateY(16px);
       transition: opacity .7s ease, transform .85s var(--ease);
     }
     .cinema-mode .heritage .cap.is-current,
-    .cinema-mode .heritage .cap.is-done { transform: none; }
-    /* Settle: il patrimonio è la somma, nessuna card "vincitrice". */
-    .cinema-mode .heritage .cap.is-done { opacity: .92; }
+    .cinema-mode .heritage .cap.is-done { transform: translate(-50%, -50%); }
+    .cinema-mode .heritage .cap.is-done { opacity: .95; }
     .cinema-mode .heritage .cap.is-current { opacity: 1; }
-    /* Scala monotona: passo costante in x e y, larghezza costante. */
-    .cinema-mode .heritage .cap--1 { --layer-x: 0%; --layer-y: 0%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--2 { --layer-x: 8.6%; --layer-y: 26%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--3 { --layer-x: 17.2%; --layer-y: 52%; --layer-w: 64%; }
-    .cinema-mode .heritage .cap--4 { --layer-x: 25.8%; --layer-y: 78%; --layer-w: 64%; }
+    /* Quattro stanze: due sopra, due sotto, dentro le mura. */
+    .cinema-mode .heritage .cap--1 { top: 51%; left: calc(50% - 10.5vw); }
+    .cinema-mode .heritage .cap--2 { top: 51%; left: calc(50% + 10.5vw); }
+    .cinema-mode .heritage .cap--3 { top: 69%; left: calc(50% - 10.5vw); }
+    .cinema-mode .heritage .cap--4 { top: 69%; left: calc(50% + 10.5vw); }
     .cinema-mode .heritage .cap h3 {
-      margin: 0;
+      margin: 0 0 7px;
       color: var(--paper);
       font-family: var(--serif);
       font-size: clamp(27px, 2.15vw, 38px);
@@ -1734,56 +1764,26 @@
     .cinema-mode .heritage .cap__keywords {
       display: block;
       color: color-mix(in srgb, var(--cap-color), rgba(247,245,238,.78) 42%);
-      font-size: clamp(15px, 1.12vw, 20px);
+      font-size: clamp(14px, 1.05vw, 18px);
       font-weight: 300;
       letter-spacing: .025em;
     }
-    /* La parentesi di sintesi: agganciata alla prima e all'ultima card, leggibile. */
-    .cinema-mode .heritage-cine__system {
-      position: absolute;
-      z-index: -1;
-      inset: 0 -1% 9% auto;
-      display: block;
-      width: 68px;
-      border-top: 1.5px solid rgba(170,179,34,.55);
-      border-right: 1.5px solid rgba(170,179,34,.55);
-      border-bottom: 1.5px solid rgba(170,179,34,.55);
-      opacity: 0;
-      transform: scaleY(.25);
-      transition: opacity .85s ease .55s, transform 1.1s var(--ease) .55s;
-    }
-    .cinema-mode .heritage-cine__system span {
-      position: absolute;
-      right: -2px;
-      top: 50%;
-      color: rgba(170,179,34,.9);
-      font-family: var(--serif);
-      font-size: clamp(20px, 1.5vw, 26px);
-      font-style: italic;
-      white-space: nowrap;
-      padding: 7px 4px;
-      background: var(--ink-deep);
-      transform: translate(100%, -50%) rotate(90deg);
-      transform-origin: left center;
-    }
-    .cinema-mode .heritage[data-fragment-step="3"] .heritage-cine__system {
-      opacity: .95;
-      transform: scaleY(1);
-    }
     .cinema-mode .heritage__closing {
+      /* La chiusa siede sulla soglia: interrompe il tratteggio della base. */
       position: absolute;
       z-index: 7;
       left: 50%;
-      bottom: 5vh;
+      top: 87%;
       display: block;
-      width: min(78vw, 1120px);
+      width: max-content;
+      max-width: 70vw;
       margin: 0;
-      padding: 0;
+      padding: 8px 30px;
       border: 0;
-      background: none;
+      background: var(--ink-deep, #071d21);
       color: rgba(247,245,238,.86);
       font-family: var(--serif);
-      font-size: clamp(22px, 1.75vw, 32px);
+      font-size: clamp(24px, 1.9vw, 36px);
       font-style: italic;
       font-weight: 400;
       text-align: center;
@@ -4172,9 +4172,11 @@
             <span class="cap__keywords">università · imprese · ricerca · territori</span>
             <p>Università, centri di ricerca, imprese, istituzioni e territori hanno già sviluppato collaborazioni nei quattro ambiti.</p>
           </article>
-          <div class="heritage-cine__system" aria-hidden="true"><span>patrimonio connesso</span></div>
+          <svg class="heritage-cine__house" viewBox="0 0 800 660" aria-hidden="true">
+            <path d="M 70 300 L 400 68 L 730 300 V 612 H 70 Z" pathLength="100"></path>
+          </svg>
         </div>
-        <p class="heritage__closing reveal delay-3">Un patrimonio esiste. Il prossimo passo è qualificarlo e connetterlo.</p>
+        <p class="heritage__closing reveal delay-3"><span class="t-web">Un patrimonio esiste. Il prossimo passo è qualificarlo e connetterlo.</span><span class="t-cine">La casa… è già arredata.</span></p>
         <div class="operate__more reveal delay-4" style="justify-content: center;">
           <button type="button" class="more-link" data-overlay="ov-arredo">La casa è già arredata ↗</button>
         </div>
@@ -5190,8 +5192,10 @@
         } else if (name === 'heritage-rivets') {
           const layers = [...document.querySelectorAll('.heritage .cap')];
           layers.forEach((layer, i) => {
-            const m = layoutMid(layer);
-            dotGo(DOT_KEYS[i], m.x - layer.offsetWidth / 2 + 2, m.y, {
+            // rect reale (con transform): il pallino si posa accanto al titolo della stanza.
+            const t = layer.querySelector('h3') || layer;
+            const r = t.getBoundingClientRect();
+            dotGo(DOT_KEYS[i], r.left - 22, r.top + r.height / 2, {
               opacity: .72,
               scale: .66
             });
