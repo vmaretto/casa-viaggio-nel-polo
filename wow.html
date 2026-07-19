@@ -2107,7 +2107,8 @@
     .cine-pick .operate-cine__tag,
     .cine-pick .operate-cine__core,
     .cine-pick .operate-cine__closing { pointer-events: auto !important; }
-    @keyframes cineVortex { to { transform: rotate(660deg) scale(0); opacity: 0; } }
+    /* La lettera implode verso l'alto, dentro il suo pallino. */
+    @keyframes cineVortex { to { transform: translateY(-.55em) rotate(560deg) scale(0); opacity: 0; } }
     .finale__letter.cine-vortex span { display: inline-block; animation: cineVortex 1.15s var(--ease) forwards; }
     .finale__letter.cine-vortex small { opacity: 0; transition: opacity .5s ease; }
     .missing__content { display: grid; place-items: center; }
@@ -5388,11 +5389,18 @@
         ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
         const W = innerWidth, H = innerHeight;
         let starts = null;
-        const horizon = { x: W / 2, y: H * .38 };
         const trails = [[], [], [], []];
         const smooth = k => k * k * (3 - 2 * k);
         const t0 = performance.now();
-        const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.2, END_AT = 8.4;
+        const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.4, END_AT = 9.2;
+        // La scia attraversa lo schermo: una S che scende, risale e esce a destra.
+        const sweep = (p0, k) => cubicPoint(
+          p0,
+          { x: W * .1, y: H * .74 },
+          { x: W * .6, y: H * .14 },
+          { x: W + 160, y: H * .4 },
+          k
+        );
         setTimeout(() => {
           const dl = document.getElementById('cineDots');
           starts = dl && dl.children.length >= 4
@@ -5405,42 +5413,39 @@
           const t = (now - t0) / 1000;
           ctx2.clearRect(0, 0, W, H);
           if (starts) {
-            // fila indiana lungo la direzione dell'orizzonte, dietro il capofila (il centro dei 4)
+            // fila indiana orizzontale, dietro il capofila (a sinistra del centro dei 4)
             const cxm = (starts[0].x + starts[3].x) / 2, cym = starts[0].y;
-            const dirx = horizon.x - cxm, diry = horizon.y - cym;
-            const len = Math.hypot(dirx, diry) || 1;
-            const ux = dirx / len, uy = diry / len;
             const gap = Math.min(46, W * .034);
-            const file = [0, 1, 2, 3].map(i => ({ x: cxm - ux * gap * i, y: cym - uy * gap * i }));
+            const file = [0, 1, 2, 3].map(i => ({ x: cxm - gap * i, y: cym }));
             starts.forEach((s0, i) => {
               const base = Math.max(9, W * .008);
               let x, y, sz = base, alpha = 0;
-              if (t < GATHER_AT) {                     // il vortice si contrae nel pallino
+              if (t < GATHER_AT) {                     // la lettera implode: il pallino la assorbe e pulsa
                 const local = Math.max(0, Math.min(1, (t - VORTEX_AT - i * .18) / 1.15));
                 x = s0.x; y = s0.y;
-                sz = base * (.25 + .75 * local);
+                const pulse = local < .8 ? local : 1 + Math.sin((local - .8) / .2 * Math.PI) * .45;
+                sz = base * (.25 + .75 * Math.min(1, local)) * Math.max(1, pulse);
                 alpha = local;
               } else if (t < GO_AT) {                  // in fila indiana
                 const k = smooth(Math.min(1, (t - GATHER_AT) / 1.2));
                 x = s0.x + (file[i].x - s0.x) * k;
                 y = s0.y + (file[i].y - s0.y) * k;
                 alpha = 1;
-              } else {                                 // la scia verso l'orizzonte
-                const k = Math.min(1, (t - GO_AT) / 3.4);
-                const kk = smooth(k);
-                const fx0 = file[i].x, fy0 = file[i].y;
-                x = fx0 + (horizon.x - fx0) * kk;
-                y = fy0 + (horizon.y - fy0) * kk;
-                sz = base * (1 - kk * .94);
-                alpha = kk < .88 ? 1 : 1 - (kk - .88) / .12;
+              } else {                                 // la scia attraversa lo schermo, in fila
+                const ki = Math.max(0, Math.min(1, (t - GO_AT - i * .13) / 3.8));
+                const kk = Math.pow(smooth(ki), 1.18);
+                const p = sweep(file[i], kk);
+                x = p.x; y = p.y;
+                sz = base;
+                alpha = x > W ? Math.max(0, 1 - (x - W) / 160) : 1;
               }
               const tr = trails[i];
               tr.push({ x, y, sz });
-              if (tr.length > 20) tr.shift();
+              if (tr.length > 46) tr.shift();
               tr.forEach((pt, j) => {
-                ctx2.globalAlpha = (j / tr.length) * .26 * alpha;
+                ctx2.globalAlpha = (j / tr.length) * .3 * alpha;
                 ctx2.fillStyle = colors[i];
-                ctx2.beginPath(); ctx2.arc(pt.x, pt.y, Math.max(.4, pt.sz * (j / tr.length)), 0, Math.PI * 2); ctx2.fill();
+                ctx2.beginPath(); ctx2.arc(pt.x, pt.y, Math.max(.4, pt.sz * (.35 + .65 * j / tr.length)), 0, Math.PI * 2); ctx2.fill();
               });
               ctx2.globalAlpha = .2 * alpha;
               ctx2.fillStyle = colors[i];
@@ -5583,6 +5588,7 @@
               else if (name === 'step') { setFragment(target, Number(a)); }
               else if (name === 'show') { const el = target.querySelectorAll('.reveal')[Number(a)]; if (el) cineIn(el, false); }
               else if (name === 'mark') target.classList.add(a);
+              else if (name === 'exit') cineFinaleExit();
             }, 700 + i * 1400);
           });
           // fotogramma finale deterministico: transizioni al valore d'arrivo
@@ -5758,7 +5764,7 @@
           await sleep(1400);
           R.D15_vortice_partito = document.querySelectorAll('.finale__letter.cine-vortex').length === 4;
           R.D15_canvas_presente = !!document.getElementById('cineExit');
-          await sleep(7600);
+          await sleep(9600);
           R.D15_canvas_rimosso_alla_fine = !document.getElementById('cineExit');
           R.FINITO = true;
           const pre = document.createElement('pre');
