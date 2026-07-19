@@ -46,8 +46,8 @@
   }
   .win .glass {
     position: absolute; inset: 0; border-radius: 2px;
-    background: radial-gradient(130% 140% at 30% 80%,
-      rgba(244,229,193,.97) 0%, rgba(232,212,154,.9) 52%, rgba(206,180,120,.22) 100%);
+    background: radial-gradient(130% 140% at var(--gx, 30%) var(--gy, 80%),
+      var(--g1) 0%, var(--g2) 52%, var(--g3) 100%);
     box-shadow: inset 0 0 3px 1.5px rgba(4,16,18,.75);
   }
   .win .ceiling {
@@ -90,14 +90,14 @@
     font-family: var(--sans); font-weight: 500;
     font-size: clamp(.68rem, .85vw, .92rem);
     letter-spacing: .14em; text-transform: uppercase;
-    color: rgba(247,245,238,.85);
+    color: rgba(247,245,238,.92);
   }
   .tag .keys {
     margin-top: .5vh;
     font-family: var(--sans); font-weight: 300;
     font-size: clamp(.55rem, .68vw, .72rem);
     letter-spacing: .06em;
-    color: rgba(247,245,238,.42);
+    color: rgba(247,245,238,.62);
     white-space: nowrap;
   }
   .tag.on { opacity: 1; }
@@ -115,6 +115,7 @@
   }
   #titolo.on { opacity: 1; transform: translateX(-50%); }
   #titolo.dim { opacity: .5; transition: opacity 1s ease; }
+  #titolo.ghost { opacity: .38; transition: opacity .8s ease; }
   #titolo strong { color: var(--acid); font-weight: 600; }
 
   #word {
@@ -136,7 +137,7 @@
   }
 
   #chiusa {
-    position: fixed; top: 87.5vh; left: 50%;
+    position: fixed; top: 83vh; left: 50%;
     transform: translateX(-50%);
     width: min(86vw, 1000px); text-align: center;
     font-family: var(--serif); font-style: italic; font-weight: 500;
@@ -176,15 +177,7 @@
   <path id="mass" d="M 28 78
     L 28 47 L 47 30 L 58 30 L 58 26.5 L 61.5 26.5 L 61.5 30 L 66 30
     L 72 36 L 72 78 Z" fill="url(#wallg)"></path>
-  <!-- il colmo e le falde prendono la luna: il bordo che disegna la casa -->
-  <path id="rimL" d="M 28 47 L 47 30" fill="none" stroke="rgba(247,245,238,.30)" stroke-linejoin="round"
-    vector-effect="non-scaling-stroke" style="stroke-width:1.8px"></path>
-  <path id="rim" d="M 47 30 L 58 30 L 58 26.5 L 61.5 26.5 L 61.5 30 L 66 30 L 72 36"
-    fill="none" stroke="rgba(247,245,238,.13)" stroke-width=".22" stroke-linejoin="round"
-    vector-effect="non-scaling-stroke" style="stroke-width:1.5px"></path>
-  <!-- spigoli laterali, appena -->
-  <path d="M 28 47 L 28 78 M 72 36 L 72 78" fill="none" stroke="rgba(247,245,238,.06)"
-    vector-effect="non-scaling-stroke" style="stroke-width:1px"></path>
+  <!-- la sagoma la disegnano i pallini: nessun contorno statico -->
   <!-- la porta: scura, socchiusa di luce calda -->
   <rect x="48.6" y="69.5" width="2.8" height="8.5" fill="#061c1d"></rect>
   <rect x="48.75" y="69.65" width="2.5" height="8.35" fill="#03120f"></rect>
@@ -204,6 +197,7 @@
   'use strict';
   const qs = new URLSearchParams(location.search);
   const TABLEAU = qs.has('tableau');
+  const JUMP = Math.min(2.5, parseFloat(qs.get('t') || '0') || 0);
 
   const rgba = (hex, a) => {
     const n = parseInt(hex.slice(1), 16);
@@ -216,23 +210,26 @@
     const h = c => Math.round(c).toString(16).padStart(2, '0');
     return '#' + h(w[0] + (r - w[0]) * p) + h(w[1] + (g - w[1]) * p) + h(w[2] + (b - w[2]) * p);
   };
-  const mixWarm = (hex, p) => {
+  const glassStop = (base, hex, p, a) => {
     const n = parseInt(hex.slice(1), 16);
     const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-    const base = [255, 243, 210];
-    return `rgba(${Math.round(base[0] + (r - base[0]) * p)},${Math.round(base[1] + (g - base[1]) * p)},${Math.round(base[2] + (b - base[2]) * p)},.96)`;
+    return `rgba(${Math.round(base[0] + (r - base[0]) * p)},${Math.round(base[1] + (g - base[1]) * p)},${Math.round(base[2] + (b - base[2]) * p)},${a})`;
+  };
+  const mixWhite = (hex, p) => {
+    const n = parseInt(hex.slice(1), 16);
+    const w = [255, 250, 235];
+    const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    return `rgb(${Math.round(r + (w[0] - r) * p)},${Math.round(g + (w[1] - g) * p)},${Math.round(b + (w[2] - b) * p)})`;
   };
 
-  // Finestre dentro la sagoma (coordinate in vw/vh dello schermo).
-  // Piano alto piccolo e discreto, piano terra più generoso. Asimmetrie deliberate.
   const WINS = [
-    { k: 'A', name: 'Formazione', keys: 'carbon farming · digitale · competenze ibride', c: '#aab322', x: 40.5, y: 51, w: 4.6, h: 7, peak: .9, tagY: 57.2, up: true },
-    { k: 'B', name: 'Capacità scientifiche', keys: 'dati · clima · agricoltura · cibo · salute', c: '#7ebdae', x: 60.5, y: 50, w: 4.6, h: 7, peak: .9, tagY: 56.2, up: true },
-    { k: 'C', name: 'Esperienza operativa', keys: 'sperimentazione · ricerca · open innovation', c: '#d8a94e', x: 38.5, y: 66.5, w: 5.4, h: 8.4, peak: 1, tagY: 72.6 },
-    { k: 'D', name: 'Relazioni', keys: 'università · imprese · ricerca · territori', c: '#d08b80', x: 62.5, y: 66, w: 6.6, h: 8.8, peak: 1, tagY: 72.3 },
+    { k: 'A', name: 'Formazione', keys: 'carbon farming · digitale · competenze ibride', c: '#aab322', x: 40.5, y: 51, w: 4.6, h: 7, peak: .9, tagY: 57.2, side: 'L', up: true },
+    { k: 'B', name: 'Capacità scientifiche', keys: 'dati · clima · agricoltura · cibo · salute', c: '#7ebdae', x: 60.5, y: 50, w: 4.6, h: 7, peak: .9, tagY: 56.2, side: 'R', up: true },
+    { k: 'C', name: 'Esperienza operativa', keys: 'sperimentazione · ricerca · open innovation', c: '#d8a94e', x: 38.5, y: 66.5, w: 5.4, h: 8.4, peak: 1, tagY: 72.6, side: 'L' },
+    { k: 'D', name: 'Relazioni', keys: 'università · imprese · ricerca · territori', c: '#d08b80', x: 62.5, y: 66, w: 6.6, h: 8.8, peak: 1, tagY: 72.3, side: 'R' },
   ];
   const BEATS = [
-    { at: 2.6, win: 'C', word: ['ESPERIENZA'], sub: 'sperimentazione · ricerca · open innovation' },
+    { at: 2.7, win: 'C', word: ['ESPERIENZA'], sub: 'sperimentazione · ricerca · open innovation' },
     { at: 4.8, win: 'B', word: ['CAPACITÀ', 'SCIENTIFICHE'], sub: 'dati · clima · agricoltura · cibo · salute' },
     { at: 6.9, win: 'A', word: ['FORMAZIONE'], sub: 'carbon farming · digitale · competenze ibride' },
     { at: 9.0, win: 'D', word: ['RELAZIONI'], sub: 'università · imprese · ricerca · territori' },
@@ -244,8 +241,10 @@
     div.className = 'win';
     div.style.cssText = `left:${w.x}vw; top:${w.y}vh; width:${w.w}vw; height:${w.h}vh;` +
       `--halo1:${rgba(tint(w.c, .35), .26)}; --halo2:${rgba(tint(w.c, .35), .09)};` +
-      `--spill:rgba(232,200,130,.07);`;
-    div.innerHTML = `<div class="halo"></div><div class="spill"></div><div class="glass"></div><div class="ceiling"></div><div class="mullion-v"></div><div class="mullion-h"></div>`;
+      `--g1:${glassStop([244,229,193], w.c, .10, .97)}; --g2:${glassStop([232,212,154], w.c, .10, .9)}; --g3:${glassStop([206,180,120], w.c, .12, .22)};` +
+      `--spill:rgba(232,200,130,.07);` +
+      `--gx:${w.side === 'L' ? '10%' : '90%'}; --gy: 6%;`;
+    div.innerHTML = '<div class="halo"></div><div class="spill"></div><div class="glass"></div><div class="ceiling"></div><div class="mullion-v"></div><div class="mullion-h"></div>';
     document.body.appendChild(div);
 
     const tag = document.createElement('div');
@@ -258,129 +257,383 @@
     if (!w.up) {
       pool = document.createElement('div');
       pool.className = 'pool';
-      pool.style.cssText = `left:${w.x}vw; top:${78.4}vh; --c:rgba(232,200,130,.28);`;
+      pool.style.cssText = `left:${w.x}vw; top:78.4vh; --c:rgba(232,200,130,.28);`;
       document.body.appendChild(pool);
     }
     els[w.k] = { div, tag, pool, cfg: w, lit: false, level: 0, peakLevel: 0 };
   }
-
   const doorPool = document.createElement('div');
   doorPool.className = 'pool';
   doorPool.style.cssText = 'left:50vw; top:78.2vh; width:19vw; height:3vh; --c:rgba(216,169,78,.5); filter: blur(11px);';
   document.body.appendChild(doorPool);
+
   const titolo = document.getElementById('titolo');
   const word = document.getElementById('word');
   const chiusa = document.getElementById('chiusa');
   const doorlight = document.getElementById('doorlight');
+  const doorglow = document.getElementById('doorglow');
 
-  /* ---------- canvas: pallini con scie + pulviscolo nei coni ---------- */
   const cv = document.getElementById('fx');
   const ctx = cv.getContext('2d');
-  let W = 0, H = 0;
-  const fit = () => {
-    const dpr = Math.min(2, devicePixelRatio || 1);
-    W = innerWidth; H = innerHeight;
-    cv.width = W * dpr; cv.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
-  fit(); addEventListener('resize', fit, { passive: true });
+  let W = 0, H = 0, DPR = 1;
+  let rimLayer, rimCtx, rimHot, hotCtx;
   const vw = v => v * W / 100, vh = v => v * H / 100;
+  const P = (x, y) => ({ x: vw(x), y: vh(y) });
 
-  const DOTC = ['#d8a94e', '#7ebdae', '#d08b80', '#aab322'];
-  const DOT_BEAT = [0, 1, 3, 2];
-  const dots = DOTC.map((c, i) => ({
-    c, i, x: -vw(6) - i * vw(2.2), y: vh(84), trail: [], state: 'enter', t0: 0,
-  }));
+  const PATH_SX = [[28, 78], [28, 47], [47, 30], [52, 30]];
+  const PATH_DX = [[72, 78], [72, 36], [66, 30], [61.5, 30], [61.5, 26.5], [58, 26.5], [58, 30], [52, 30]];
 
-  const sillPos = k => {
+  const pathPx = pts => pts.map(([x, y]) => P(x, y));
+  const cumLen = pts => {
+    const L = [0];
+    for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
+    return L;
+  };
+  const sampleAt = (pts, L, d) => {
+    const total = L[L.length - 1];
+    d = Math.max(0, Math.min(total, d));
+    let i = 1;
+    while (L[i] < d && i < L.length - 1) i++;
+    const t = (d - L[i - 1]) / (L[i] - L[i - 1] || 1);
+    return {
+      x: pts[i - 1].x + (pts[i].x - pts[i - 1].x) * t,
+      y: pts[i - 1].y + (pts[i].y - pts[i - 1].y) * t,
+      nx: -(pts[i].y - pts[i - 1].y), ny: (pts[i].x - pts[i - 1].x),
+    };
+  };
+
+  const easeOutQuart = k => 1 - Math.pow(1 - k, 4);
+  const easeInOutSine = k => -(Math.cos(Math.PI * k) - 1) / 2;
+  const smooth = k => k * k * (3 - 2 * k);
+  const flyEase = k => smooth(k) * (0.62 + 0.38 * k);
+
+  const DOTS = [
+    { c: '#d8a94e', win: 'C', squad: 'SX', role: 'leader' },
+    { c: '#7ebdae', win: 'B', squad: 'DX', role: 'leader' },
+    { c: '#d08b80', win: 'D', squad: 'DX', role: 'wing' },
+    { c: '#aab322', win: 'A', squad: 'SX', role: 'wing' },
+  ].map((d, i) => ({ ...d, i, x: -100, y: -100, trail: [], state: 'enter', pulseK: 1 }));
+  const dotByWin = k => DOTS.find(d => d.win === k);
+
+  const winRect = k => {
     const c = els[k].cfg;
-    return { x: vw(c.x) - vw(c.w) / 2 + vw(.7), y: vh(c.y) + vh(c.h) / 2 - vh(.8) };
+    return {
+      left: vw(c.x) - vw(c.w) / 2, right: vw(c.x) + vw(c.w) / 2,
+      top: vh(c.y) - vh(c.h) / 2, bottom: vh(c.y) + vh(c.h) / 2,
+      cx: vw(c.x),
+    };
+  };
+  const touchPoint = k => {
+    const r = winRect(k);
+    return { x: els[k].cfg.side === 'L' ? r.left : r.right, y: r.top };
+  };
+  const sillPoint = k => {
+    const r = winRect(k);
+    return { x: r.cx, y: r.bottom - vh(.9) };
+  };
+
+  // formazione sul colmo: quattro identità leggibili, mai un blob
+  const formSlot = (i, now) => {
+    const bob = Math.sin(now / 1000 * 1.4 + i * 1.1) * 3;
+    return { x: vw(52) + (i - 1.5) * 28, y: vh(30) - 15 + bob };
   };
 
   const dust = [];
-  const mk = (n, r0, r1, dr, a) => { for (let i = 0; i < n; i++) dust.push({ x: Math.random() * W, y: Math.random() * H, r: r0 + Math.random() * (r1 - r0), dr, a, ph: Math.random() * 7 }); };
+  const mk = (n, r0, r1, dr, a) => { for (let i = 0; i < n; i++) dust.push({ x: Math.random(), y: Math.random(), r: r0 + Math.random() * (r1 - r0), dr, a, ph: Math.random() * 7 }); };
   mk(40, .5, .8, 2, .04); mk(28, .8, 1.5, 4, .07); mk(12, 1.5, 2.5, 7, .10);
 
   const inCone = p => {
     for (const k in els) {
       const e = els[k];
       if (e.level < .2) continue;
-      const c = e.cfg;
-      const sill = vh(c.y + c.h / 2);
-      const dy = p.y - sill;
+      const r = winRect(k);
+      const dy = p.y - r.bottom;
       if (dy < 0 || dy > vh(16)) continue;
-      const half = vw(c.w) / 2 * (1 + .9 * dy / vh(16));
-      if (Math.abs(p.x - vw(c.x)) < half) return [e.level, c.c];
+      const half = (r.right - r.left) / 2 * (1 + .9 * dy / vh(16));
+      if (Math.abs(p.x - r.cx) < half) return [e.level, e.cfg.c];
     }
     return [0, null];
   };
 
-  let start = performance.now();
+  const rings = [];
+  const spawnRings = (x, y, color) => {
+    rings.push({ x, y, color: mixWhite(color, .4), r1: vw(7), dur: 320, w: 2.5, a: .85, t0: performance.now() });
+    rings.push({ x, y, color: mixWhite(color, .4), r1: vw(3.5), dur: 180, w: 1.8, a: .5, t0: performance.now() });
+  };
+  let flare = null;
+  let rimAlpha = 1;
+  let pulseT0 = 0;
 
-  const qbez = (p0, p1, p2, t) => {
-    const u = 1 - t;
-    return { x: u * u * p0.x + 2 * u * t * p1.x + t * t * p2.x, y: u * u * p0.y + 2 * u * t * p1.y + t * t * p2.y };
+  const drawRimSegment = (a, b, color) => {
+    rimCtx.lineCap = 'round';
+    rimCtx.globalAlpha = .5;
+    rimCtx.strokeStyle = color;
+    rimCtx.lineWidth = Math.max(2, vw(.28));
+    rimCtx.beginPath(); rimCtx.moveTo(a.x, a.y); rimCtx.lineTo(b.x, b.y); rimCtx.stroke();
+    rimCtx.globalAlpha = .9;
+    rimCtx.strokeStyle = 'rgba(247,245,238,.9)';
+    rimCtx.lineWidth = Math.max(1, vw(.1));
+    rimCtx.beginPath(); rimCtx.moveTo(a.x, a.y); rimCtx.lineTo(b.x, b.y); rimCtx.stroke();
+    rimCtx.globalAlpha = 1;
+    hotCtx.globalAlpha = .85;
+    hotCtx.strokeStyle = 'rgba(255,250,235,.95)';
+    hotCtx.lineWidth = Math.max(2, vw(.24));
+    hotCtx.lineCap = 'round';
+    hotCtx.beginPath(); hotCtx.moveTo(a.x, a.y); hotCtx.lineTo(b.x, b.y); hotCtx.stroke();
+    hotCtx.globalAlpha = 1;
+  };
+  const baseLine = (x0, x1) => {
+    rimCtx.globalAlpha = .16;
+    rimCtx.strokeStyle = '#d8a94e';
+    rimCtx.lineWidth = 1;
+    rimCtx.beginPath(); rimCtx.moveTo(x0, vh(77.7)); rimCtx.lineTo(x1, vh(77.7)); rimCtx.stroke();
+    rimCtx.globalAlpha = 1;
+  };
+  const paintFullRim = () => {
+    const seg = (path, color) => {
+      const pts = pathPx(path);
+      for (let i = 1; i < pts.length; i++) drawRimSegment(pts[i - 1], pts[i], color);
+    };
+    seg(PATH_SX, '#d8a94e');
+    seg(PATH_DX, '#7ebdae');
+    baseLine(vw(28), vw(72));
+    hotCtx.clearRect(0, 0, W, H);
   };
 
-  const drawDot = (d, now) => {
-    d.trail.push({ x: d.x, y: d.y });
-    if (d.trail.length > 14) d.trail.shift();
-    d.trail.forEach((p, j) => {
-      const f = j / d.trail.length;
-      ctx.globalAlpha = f * .5;
-      ctx.fillStyle = d.c;
-      ctx.beginPath(); ctx.arc(p.x, p.y, vw(.75) / 2 * (.15 + .85 * f), 0, 7); ctx.fill();
-    });
-    const breath = 1 + .06 * Math.sin(now / 1000 * 2 + d.i * .6);
+  const drawTrail = d => {
+    const n = d.trail.length;
+    for (let j = 1; j < n; j++) {
+      const k = j / n;
+      const a = Math.pow(k, 1.7) * .55;
+      const w = vw(.9) * (0.06 + .94 * k);
+      ctx.globalAlpha = a * .25;
+      ctx.strokeStyle = d.c; ctx.lineWidth = w * 2.2; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(d.trail[j - 1].x, d.trail[j - 1].y); ctx.lineTo(d.trail[j].x, d.trail[j].y); ctx.stroke();
+      ctx.globalAlpha = a;
+      ctx.lineWidth = w;
+      ctx.beginPath(); ctx.moveTo(d.trail[j - 1].x, d.trail[j - 1].y); ctx.lineTo(d.trail[j].x, d.trail[j].y); ctx.stroke();
+    }
     ctx.globalAlpha = 1;
-    ctx.shadowColor = d.c; ctx.shadowBlur = 8;
-    ctx.fillStyle = d.c;
-    ctx.beginPath(); ctx.arc(d.x, d.y, vw(.75) / 2 * breath, 0, 7); ctx.fill();
-    ctx.shadowBlur = 0;
+  };
+
+  const drawCore = (d, now, mode, squash) => {
+    const lamp = mode === 'lamp' || mode === 'rest';
+    const baseR = lamp ? vw(.8) : vw(.55);
+    const period = mode === 'rest' ? 4.0 : 2.8;
+    let pulse = 1;
+    if (pulseT0) {
+      const pk = (now - pulseT0) / 300;
+      if (pk >= 0 && pk <= 1) pulse = 1 + .25 * Math.sin(Math.PI * pk);
+    }
+    const breath = lamp ? 1 + .07 * Math.sin(now / 1000 * 2 * Math.PI / period + d.i * .7) : 1;
+    const R = baseR * breath * d.pulseK * pulse;
+    const glows = lamp
+      ? [[1.6, .45 * pulse], [3.2, .18]]
+      : mode === 'form'
+        ? [[1.1, .35], [2.2, .15]]
+        : [[1.2, .5], [2.6, .22], [5, .07]];
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const [gr, ga] of glows) {
+      const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, vw(gr));
+      g.addColorStop(0, rgba(d.c, Math.max(0, Math.min(1, ga))));
+      g.addColorStop(1, rgba(d.c, 0));
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(d.x, d.y, vw(gr), 0, 7); ctx.fill();
+    }
+    ctx.restore();
+    ctx.fillStyle = mixWhite(d.c, lamp ? .5 : .65);
+    if (squash) {
+      ctx.save();
+      ctx.translate(d.x, d.y);
+      ctx.rotate(squash.ang);
+      ctx.scale(squash.sx, squash.sy);
+      ctx.beginPath(); ctx.arc(0, 0, R, 0, 7);
+      ctx.restore();
+      ctx.fill();
+    } else {
+      ctx.beginPath(); ctx.arc(d.x, d.y, R, 0, 7);
+      ctx.fill();
+    }
+  };
+
+  let start = performance.now();
+
+  const initChoreo = () => {
+    const sxPts = pathPx(PATH_SX), dxPts = pathPx(PATH_DX);
+    const sxLen = cumLen(sxPts), dxLen = cumLen(dxPts);
+    for (const d of DOTS) {
+      d.pathPts = d.squad === 'SX' ? sxPts : dxPts;
+      d.pathLen = d.squad === 'SX' ? sxLen : dxLen;
+      d.drawStart = d.squad === 'SX' ? .75 : 1.0;
+      d.drawEnd = d.squad === 'SX' ? 2.35 : 2.4;
+      d.lag = d.role === 'wing' ? .12 : 0;
+      d.prevSample = null;
+      d.baseX = null;
+    }
   };
 
   const frame = now => {
     const t = (now - start) / 1000;
+    // auto-riparazione: se la viewport è cambiata senza evento resize, ritara tutto
+    if (W !== innerWidth || H !== innerHeight) {
+      fit();
+      if (TABLEAU) jumpTableau();
+      else if (t > 2.5) paintFullRim();
+    }
     ctx.clearRect(0, 0, W, H);
 
+    hotCtx.save();
+    hotCtx.setTransform(1, 0, 0, 1, 0, 0);
+    hotCtx.globalCompositeOperation = 'destination-out';
+    hotCtx.globalAlpha = .06;
+    hotCtx.fillRect(0, 0, rimHot.width, rimHot.height);
+    hotCtx.restore();
+
     for (const p of dust) {
-      p.y -= p.dr / 60;
-      p.x += Math.sin(now / 1000 * .3 + p.ph) * .05;
-      if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
-      const [lit, col] = inCone(p);
+      p.y -= p.dr / 60 / H;
+      p.x += Math.sin(now / 1000 * .3 + p.ph) * .00005;
+      if (p.y < -.01) { p.y = 1.01; p.x = Math.random(); }
+      const px = { x: p.x * W, y: p.y * H };
+      const [lit, col] = inCone(px);
       ctx.globalAlpha = p.a * (.4 + .6 * lit);
       ctx.fillStyle = lit && col ? col : '#f7f5ee';
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(px.x, px.y, p.r, 0, 7); ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    for (const d of dots) {
+    ctx.save();
+    ctx.globalAlpha = rimAlpha;
+    ctx.drawImage(rimLayer, 0, 0, W, H);
+    ctx.drawImage(rimHot, 0, 0, W, H);
+    ctx.restore();
+
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const r = rings[i];
+      const k = (now - r.t0) / r.dur;
+      if (k >= 1) { rings.splice(i, 1); continue; }
+      ctx.globalAlpha = r.a * (1 - k);
+      ctx.strokeStyle = r.color;
+      ctx.lineWidth = r.w * (1 - k) + .3;
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.r1 * easeOutQuart(k), 0, 7); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    if (flare) {
+      const k = (now - flare.t0) / 260;
+      if (k >= 1) flare = null;
+      else {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        const rr = Math.max(1, vw(4) * easeOutQuart(k));
+        const g = ctx.createRadialGradient(flare.x, flare.y, 0, flare.x, flare.y, rr);
+        g.addColorStop(0, `rgba(255,250,235,${.5 * (1 - k)})`);
+        g.addColorStop(1, 'rgba(255,250,235,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(flare.x, flare.y, rr, 0, 7); ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    let orbitCount = 0;
+    for (const d of DOTS) {
+      let squash = null;
       if (d.state === 'enter') {
-        const k = Math.min(1, t / .9);
-        const e = 1 - Math.pow(1 - k, 3);
-        const targetX = vw(50) + (d.i - 1.5) * vw(2.4);
-        d.x = -vw(6) + (targetX + vw(6)) * e - d.i * vw(1.2) * (1 - e);
-        d.y = vh(84);
-        if (k >= 1) d.state = 'idle';
-        drawDot(d, now);
-      } else if (d.state === 'idle') {
-        d.y = vh(84) + Math.sin(now / 1000 * 1.2 + d.i) * vh(.35);
-        drawDot(d, now);
+        const k = Math.min(1, t / .55);
+        const e = smooth(k);
+        d.x = vw(-8) + (vw(24) - vw(-8)) * e - d.i * Math.max(48, vw(2.6)) * (1 - e * .35);
+        d.y = vh(76.6) - (d.i % 2) * 8 - d.i * 2;
+        if (k >= 1) d.state = 'toStart';
+      } else if (d.state === 'toStart') {
+        const t0 = .55, t1 = d.drawStart + d.lag;
+        const k = Math.max(0, Math.min(1, (t - t0) / (t1 - t0)));
+        const e = smooth(k);
+        const p0 = d.pathPts[0];
+        const fromX = vw(24) - d.i * vw(1.1);
+        d.x = fromX + (p0.x - fromX) * e;
+        d.y = vh(76.6) + (p0.y - vh(76.6)) * e * .9;
+        if (d.squad === 'DX' && d.role === 'leader') {
+          if (d.baseX != null && d.x > d.baseX) baseLine(d.baseX, d.x);
+          d.baseX = d.x;
+        }
+        if (k >= 1) d.state = 'draw';
+      } else if (d.state === 'draw') {
+        const total = d.pathLen[d.pathLen.length - 1];
+        const kk = Math.max(0, Math.min(1, (t - d.drawStart - d.lag) / (d.drawEnd - d.drawStart)));
+        const s = sampleAt(d.pathPts, d.pathLen, total * kk);
+        const nl = Math.hypot(s.nx, s.ny) || 1;
+        // il gregario vola all'ESTERNO della sagoma (segno per squadra)
+        const off = (d.role === 'wing' ? vw(.8) : 0) * (d.squad === 'SX' ? -1 : 1);
+        d.x = s.x + s.nx / nl * off;
+        d.y = s.y + s.ny / nl * off;
+        if (d.role === 'leader') {
+          if (d.prevSample) drawRimSegment(d.prevSample, s, d.c);
+          d.prevSample = { x: s.x, y: s.y };
+        }
+        if (kk >= 1) {
+          d.state = 'toForm';
+          d.t0 = now;
+          d.f0 = { x: d.x, y: d.y };
+          if (!flare && d.squad === 'DX' && d.role === 'leader') flare = { x: vw(52), y: vh(29.2), t0: now };
+        }
+      } else if (d.state === 'toForm') {
+        const k = Math.min(1, (now - d.t0) / 450);
+        const e = smooth(k);
+        const slot = formSlot(d.i, now);
+        d.x = d.f0.x + (slot.x - d.f0.x) * e;
+        d.y = d.f0.y + (slot.y - d.f0.y) * e;
+        if (k >= 1) d.state = 'form';
+      } else if (d.state === 'form') {
+        const slot = formSlot(d.i, now);
+        d.x = slot.x; d.y = slot.y;
       } else if (d.state === 'fly') {
-        const k = Math.min(1, (now - d.t0) / 700);
-        const e = k * k * (3 - 2 * k);
-        const p = qbez(d.p0, d.pc, d.p1, e);
-        d.x = p.x; d.y = p.y;
-        drawDot(d, now);
-        if (k >= 1) d.state = 'lamp';
-      } else if (d.state === 'lamp') {
-        // la lampada resta viva sul davanzale
-        const breath = 1 + .05 * Math.sin(now / 1000 * 1.6 + d.i * .8);
-        ctx.globalAlpha = 1;
-        ctx.shadowColor = d.c; ctx.shadowBlur = 10;
-        ctx.fillStyle = d.c;
-        ctx.beginPath(); ctx.arc(d.x, d.y, vw(.8) / 2 * breath, 0, 7); ctx.fill();
-        ctx.shadowBlur = 0;
+        const k = Math.min(1, (now - d.t0) / 1100);
+        const e = flyEase(k);
+        const u = 1 - e;
+        d.px = d.x; d.py = d.y;
+        d.x = u * u * d.p0.x + 2 * u * e * d.pc.x + e * e * d.p1.x;
+        d.y = u * u * d.p0.y + 2 * u * e * d.pc.y + e * e * d.p1.y;
+        if (k >= 1) {
+          d.vx = d.x - (d.px ?? d.x); d.vy = d.y - (d.py ?? d.y);
+          d.state = 'touch'; d.t0 = now;
+          spawnRings(d.x, d.y, d.c);
+          const wk = d.win;
+          setTimeout(() => igniteWin(wk), 60);
+        }
+      } else if (d.state === 'touch') {
+        const k = Math.min(1, (now - d.t0) / 140);
+        const ang = Math.atan2(d.vy || 0, d.vx || 1);
+        if (k < .6) squash = { ang, sx: .72, sy: 1.28 };
+        const nl = Math.hypot(d.vx || 0, d.vy || 1) || 1;
+        const back = Math.sin(k * Math.PI) * vw(.9);
+        d.x -= (d.vx || 0) / nl * back * .12;
+        d.y -= (d.vy || 1) / nl * back * .12;
+        if (k >= 1) { d.state = 'settle'; d.t0 = now; d.s0 = { x: d.x, y: d.y }; }
+      } else if (d.state === 'settle') {
+        const k = Math.min(1, (now - d.t0) / 400);
+        const e = easeInOutSine(k);
+        const sp = sillPoint(d.win);
+        d.x = d.s0.x + (sp.x - d.s0.x) * e;
+        d.y = d.s0.y + (sp.y - d.s0.y) * e;
+        d.pulseK = k > .8 ? 1 + .15 * Math.sin((k - .8) / .2 * Math.PI) : 1;
+        if (k >= 1) { d.state = 'lamp'; d.pulseK = 1; d.trail = []; }
+      }
+
+      if (d.jumpClear) { d.trail = []; d.jumpClear--; }
+      if (['enter', 'toStart', 'draw', 'toForm', 'form', 'fly'].includes(d.state)) {
+        d.trail.push({ x: d.x, y: d.y });
+        const maxTrail = (d.state === 'form' || d.state === 'toForm') ? 10 : 22;
+        while (d.trail.length > maxTrail) d.trail.shift();
+        drawTrail(d);
+        drawCore(d, now, d.state === 'form' || d.state === 'toForm' ? 'form' : 'fly', null);
+      } else if (d.state === 'touch' || d.state === 'settle') {
+        if (d.trail.length > 1) { d.trail.shift(); d.trail.shift(); drawTrail(d); }
+        drawCore(d, now, 'fly', squash);
+      } else {
+        // la lampada resta ancorata al davanzale anche se la finestra cambia misura
+        const sp = sillPoint(d.win);
+        d.x = sp.x; d.y = sp.y;
+        drawCore(d, now, t > 12 ? 'rest' : 'lamp', null);
       }
     }
 
@@ -391,15 +644,15 @@
       e.div.style.opacity = f;
       e.level = e.peakLevel;
     }
+
     requestAnimationFrame(frame);
   };
-  requestAnimationFrame(frame);
 
-  /* ---------- regia ---------- */
   const sched = (s, fn) => setTimeout(fn, s * 1000);
 
-  const ignite = k => {
+  const igniteWin = k => {
     const e = els[k];
+    if (e.lit) return;
     const peak = e.cfg.peak;
     e.peakLevel = peak;
     e.div.animate([
@@ -426,7 +679,6 @@
       { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
     ], { duration: 250, easing: 'ease-out', fill: 'forwards' });
   };
-
   const retreatWord = beat => {
     const c = els[beat.win].cfg;
     const from = word.querySelector('.big').getBoundingClientRect();
@@ -441,45 +693,58 @@
       .onfinish = () => { word.hidden = true; };
   };
 
-  const flyDot = (beatIndex, winK) => {
-    const d = dots[DOT_BEAT.indexOf(beatIndex)];
-    const to = sillPos(winK);
+  const CTRL = { C: [25, 47], B: [75, 34], A: [26, 35], D: [77, 47] };
+  const launchDot = winK => {
+    const d = dotByWin(winK);
+    if (!d || ['fly', 'touch', 'settle', 'lamp'].includes(d.state)) return;
     d.p0 = { x: d.x, y: d.y };
-    d.p1 = to;
-    d.pc = { x: (d.x + to.x) / 2, y: Math.min(d.y, to.y) - vh(9) };
+    d.pc = P(CTRL[winK][0], CTRL[winK][1]);
+    d.p1 = touchPoint(winK);
     d.t0 = performance.now();
     d.state = 'fly';
   };
 
-  const runBeat = (beat, index) => {
-    flyDot(index, beat.win);
+  const runBeat = beat => {
+    launchDot(beat.win);
     sched(.15, () => showWord(beat));
-    sched(1.25, () => retreatWord(beat));
-    sched(1.5, () => ignite(beat.win));
-    if (beat.win === 'D') sched(2.0, () => {
-      doorlight.animate([{ opacity: 0 }, { opacity: .85 }], { duration: 700, fill: 'forwards', easing: 'ease-out' });
-      doorPool.style.opacity = .8;
-      document.getElementById('doorglow').animate([{ opacity: 0 }, { opacity: .28 }], { duration: 900, fill: 'forwards', easing: 'ease-out' });
-      for (const k in els) if (els[k].lit) els[k].div.animate(
-        [{ opacity: els[k].peakLevel }, { opacity: Math.min(1, els[k].peakLevel + .05), offset: .5 }, { opacity: els[k].peakLevel }],
-        { duration: 600, easing: 'ease-in-out' });
-    });
+    sched(1.2, () => retreatWord(beat));
+    sched(1.8, () => igniteWin(beat.win)); // rete di sicurezza: la scena si completa comunque
   };
 
   const play = () => {
+    initChoreo();
     sched(.8, () => titolo.classList.add('on'));
-    BEATS.forEach((b, i) => sched(b.at, () => runBeat(b, i)));
-    sched(10.8, () => { chiusa.classList.add('s1'); titolo.classList.add('dim'); });
-    sched(11.7, () => chiusa.classList.add('s2'));
+    sched(1.3, () => titolo.classList.add('ghost'));
+    sched(10.7, () => titolo.classList.remove('ghost'));
+    BEATS.forEach(b => sched(b.at, () => runBeat(b)));
+    sched(10.85, () => { pulseT0 = performance.now(); });
+    sched(10.95, () => {
+      doorlight.animate([{ opacity: 0 }, { opacity: .85 }], { duration: 550, fill: 'forwards', easing: 'ease-out' });
+      doorglow.animate([{ opacity: 0 }, { opacity: .28 }], { duration: 700, fill: 'forwards', easing: 'ease-out' });
+      doorPool.style.opacity = .8;
+    });
+    sched(11.2, () => {
+      chiusa.classList.add('s1'); titolo.classList.add('dim');
+      const t0 = performance.now();
+      const dimRim = () => {
+        const k = Math.min(1, (performance.now() - t0) / 1200);
+        rimAlpha = 1 - .55 * k;
+        if (k < 1) requestAnimationFrame(dimRim);
+      };
+      requestAnimationFrame(dimRim);
+    });
+    sched(12.0, () => chiusa.classList.add('s2'));
   };
 
   const jumpTableau = () => {
+    initChoreo();
     titolo.classList.add('on', 'dim');
     chiusa.classList.add('s1', 's2');
     doorlight.setAttribute('opacity', '.85');
+    doorglow.setAttribute('opacity', '.28');
     doorPool.style.opacity = .8;
-    document.getElementById('doorglow').setAttribute('opacity', '.28');
-    start = performance.now() - 12000;
+    rimAlpha = .45;
+    start = performance.now() - 13000;
     for (const k in els) {
       const e = els[k];
       e.peakLevel = e.cfg.peak; e.lit = true; e.level = e.cfg.peak;
@@ -487,15 +752,57 @@
       e.tag.classList.add('on');
       if (e.pool) e.pool.style.opacity = .75;
     }
-    dots.forEach((d, i) => {
-      const beatIndex = DOT_BEAT[i];
-      const to = sillPos(BEATS[beatIndex].win);
-      d.x = to.x; d.y = to.y; d.state = 'lamp';
-    });
+    for (const d of DOTS) {
+      const sp = sillPoint(d.win);
+      d.x = sp.x; d.y = sp.y; d.state = 'lamp'; d.trail = [];
+    }
+    paintFullRim();
   };
 
-  document.getElementById('replay').onclick = () => location.search = '';
+  const fit = () => {
+    DPR = Math.min(2, devicePixelRatio || 1);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    rimLayer = document.createElement('canvas'); rimLayer.width = W * DPR; rimLayer.height = H * DPR;
+    rimCtx = rimLayer.getContext('2d'); rimCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    rimHot = document.createElement('canvas'); rimHot.width = W * DPR; rimHot.height = H * DPR;
+    hotCtx = rimHot.getContext('2d'); hotCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  };
+  fit();
+  addEventListener('resize', () => {
+    fit();
+    if (TABLEAU) { jumpTableau(); return; }
+    // il rim vive su un canvas: dopo il resize va ridipinto per intero
+    const t = (performance.now() - start) / 1000;
+    if (t > 2.5) paintFullRim();
+  }, { passive: true });
+  requestAnimationFrame(frame);
+  document.getElementById('replay').onclick = () => location.reload();
+  const paintRimUpTo = (d, kk) => {
+    const total = d.pathLen[d.pathLen.length - 1];
+    const steps = Math.max(2, Math.round(60 * kk));
+    let prev = null;
+    for (let i = 0; i <= steps; i++) {
+      const sPt = sampleAt(d.pathPts, d.pathLen, total * kk * i / steps);
+      if (prev) drawRimSegment(prev, sPt, d.c);
+      prev = { x: sPt.x, y: sPt.y };
+    }
+    d.prevSample = prev;
+  };
+  const jumpTo = n => {
+    initChoreo();
+    start = performance.now() - n * 1000;
+    titolo.classList.add('on');
+    if (n > 1.3) titolo.classList.add('ghost');
+    for (const d of DOTS) {
+      const kk = Math.max(0, Math.min(1, (n - d.drawStart - d.lag) / (d.drawEnd - d.drawStart)));
+      if (d.role === 'leader' && kk > 0) paintRimUpTo(d, kk);
+      d.jumpClear = 4; // la scia riparte pulita dopo il salto temporale
+    }
+  };
   if (TABLEAU) requestAnimationFrame(() => requestAnimationFrame(jumpTableau));
+  else if (JUMP > 0) requestAnimationFrame(() => requestAnimationFrame(() => jumpTo(JUMP)));
   else play();
 })();
 </script>
