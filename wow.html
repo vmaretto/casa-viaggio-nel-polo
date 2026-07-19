@@ -1800,7 +1800,7 @@
     }
     .cinema-mode .heritage .operate__more { display: none; }
 
-    /* P13 · percorso: tre soglie, una sola direzione */
+    /* P13 · tre soglie: battute tipografiche a tutto schermo, poi la mappa */
     .roadmap-cine__path,
     .phase__cine { display: none; }
     .cinema-mode .roadmap__track {
@@ -1838,115 +1838,135 @@
     .cinema-mode .roadmap[data-fragment-step="0"] .roadmap-cine__path-progress { stroke-dashoffset: 72; }
     .cinema-mode .roadmap[data-fragment-step="1"] .roadmap-cine__path-progress { stroke-dashoffset: 38; }
     .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dasharray: none; stroke-dashoffset: 0; }
+    /* Le battute: ogni soglia prende tutto lo schermo. */
     .cinema-mode .roadmap .phase {
       position: absolute;
       z-index: 2;
-      width: min(29vw, 430px);
+      top: 46%;
+      left: 50%;
+      width: min(82vw, 1220px);
       margin: 0;
-      padding: 0 0 0 26px;
+      padding: 0;
       border: 0;
-      transform: translateY(16px);
-      transition: opacity .7s ease, transform .85s var(--ease);
-    }
-    .cinema-mode .roadmap .phase.is-current,
-    .cinema-mode .roadmap .phase.is-done { transform: none; }
-    /* Le tappe percorse restano leggibili: il futuro brilla, il passato non muore. */
-    .cinema-mode .roadmap .phase.is-done { opacity: .92; }
-    .cinema-mode .roadmap .phase.is-current { opacity: 1; }
-    .cinema-mode .roadmap .phase--1 {
-      top: 85.5%;
-      left: 7.2%;
-      padding-bottom: 56px;
-      translate: 0 -100%;
-    }
-    .cinema-mode .roadmap .phase--2 {
-      top: 54.5%;
-      left: 50.6%;
-      padding-bottom: 56px;
       text-align: center;
-      translate: -50% -100%;
+      opacity: 0;
+      transform: translate(-50%, -50%) translateY(20px);
+      transition: opacity .6s ease, transform .9s var(--ease),
+        top .9s var(--ease), left .9s var(--ease), width .9s var(--ease);
     }
-    .cinema-mode .roadmap .phase--3 {
-      top: 16.5%;
-      left: 93.6%;
-      text-align: right;
-      translate: -100% 0;
+    .cinema-mode .roadmap:not(.cine-map) .phase.is-current {
+      opacity: 1;
+      transform: translate(-50%, -50%);
     }
-    .cinema-mode .roadmap .phase::before {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 13px;
-      height: 13px;
-      border: 1px solid rgba(247,245,238,.35);
-      border-radius: 50%;
-      background: var(--ink-deep);
-      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+    .cinema-mode .roadmap:not(.cine-map) .phase.is-done {
+      opacity: 0;
+      transform: translate(-50%, -56%);
     }
-    .cinema-mode .roadmap .phase--2::before { left: 50%; }
-    .cinema-mode .roadmap .phase--3::before { top: 0; left: 100%; }
-    /* Tick: la label appartiene a questo nodo, senza ambiguità. */
-    .cinema-mode .roadmap .phase::after {
-      content: "";
-      position: absolute;
-      bottom: 22px;
-      left: 6px;
-      width: 1px;
-      height: 26px;
-      background: rgba(247,245,238,.28);
-    }
-    .cinema-mode .roadmap .phase--2::after { left: 50%; }
-    .cinema-mode .roadmap .phase--3::after { display: none; }
-    .cinema-mode .roadmap .phase.is-current::before {
-      border-color: var(--acid);
-      background: var(--acid);
-      box-shadow: 0 0 18px rgba(170,179,34,.58);
-    }
-    /* I nodi percorsi restano accesi. */
-    .cinema-mode .roadmap .phase.is-done::before {
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    /* L'arrivo pulsa una volta sola: traguardo, non loop. */
-    .cinema-mode .roadmap[data-fragment-step="2"] .phase--3::before {
-      animation: rmEndPulse .9s var(--ease) 1.3s 1 both;
-    }
-    @keyframes rmEndPulse {
-      0% { transform: scale(1); }
-      45% { transform: scale(1.55); }
-      100% { transform: scale(1); }
-    }
+    .cinema-mode .roadmap .phase::before,
+    .cinema-mode .roadmap .phase::after { display: none; }
     .cinema-mode .roadmap .phase__year {
-      margin: 0 0 9px;
+      margin: 0 0 10px;
       color: var(--paper);
-      font-size: clamp(52px, 4.5vw, 78px);
+      font-size: clamp(110px, 11vw, 210px);
+      line-height: .95;
+      transition: font-size .9s var(--ease);
     }
     .cinema-mode .roadmap .phase h3 {
-      margin: 0 0 9px;
+      margin: 0 0 12px;
       color: var(--acid);
       font-family: var(--serif);
-      font-size: clamp(23px, 1.8vw, 32px);
+      font-size: clamp(34px, 2.7vw, 50px);
       font-style: italic;
       font-weight: 400;
       letter-spacing: 0;
       line-height: 1.08;
       text-transform: none;
+      transition: font-size .9s var(--ease);
     }
     .cinema-mode .roadmap .phase > p:not(.phase__year):not(.phase__cine) { display: none; }
     .cinema-mode .roadmap .phase__cine {
       display: block;
-      max-width: 34ch;
-      margin: 0;
-      color: rgba(247,245,238,.76);
-      font-size: clamp(15px, 1.12vw, 20px);
+      max-width: 52ch;
+      margin: 0 auto;
+      color: rgba(247,245,238,.78);
+      font-size: clamp(19px, 1.45vw, 26px);
       line-height: 1.4;
+      transition: font-size .9s var(--ease);
     }
+    /* La mappa finale: le tre soglie si posano sulla curva. */
+    .cinema-mode .roadmap.cine-map .phase {
+      width: min(29vw, 430px);
+      opacity: 1;
+      transform: none;
+    }
+    .cinema-mode .roadmap.cine-map .phase--1 {
+      top: 85.5%;
+      left: 7.2%;
+      padding-bottom: 44px;
+      text-align: left;
+      transform: translate(0, -100%);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2 {
+      top: 54.5%;
+      left: 50.6%;
+      padding-bottom: 44px;
+      text-align: center;
+      transform: translate(-50%, -100%);
+    }
+    .cinema-mode .roadmap.cine-map .phase--3 {
+      top: 16.5%;
+      left: 93.6%;
+      text-align: right;
+      transform: translate(-100%, 0);
+    }
+    .cinema-mode .roadmap.cine-map .phase__year {
+      margin: 0 0 8px;
+      font-size: clamp(46px, 3.8vw, 68px);
+    }
+    .cinema-mode .roadmap.cine-map .phase h3 {
+      margin: 0 0 7px;
+      font-size: clamp(21px, 1.6vw, 30px);
+    }
+    .cinema-mode .roadmap.cine-map .phase__cine {
+      margin: 0;
+      max-width: 34ch;
+      font-size: clamp(14px, 1.05vw, 18px);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2 .phase__cine { margin: 0 auto; }
+    .cinema-mode .roadmap.cine-map .phase--3 .phase__cine { margin-left: auto; }
+    /* Nodi e tick esistono solo sulla mappa. */
+    .cinema-mode .roadmap.cine-map .phase::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--acid);
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 14px rgba(170,179,34,.5);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2::before { left: 50%; }
+    .cinema-mode .roadmap.cine-map .phase--3::before { top: 0; left: 100%; }
+    .cinema-mode .roadmap.cine-map .phase--1::after,
+    .cinema-mode .roadmap.cine-map .phase--2::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: 16px;
+      left: 6px;
+      width: 1px;
+      height: 22px;
+      background: rgba(247,245,238,.28);
+    }
+    .cinema-mode .roadmap.cine-map .phase--2::after { left: 50%; }
     .cinema-mode .roadmap__closing {
       position: absolute;
       z-index: 7;
       left: 50%;
-      bottom: 9vh;
+      bottom: 6.5vh;
       width: min(78vw, 1120px);
       margin: 0;
       font-size: clamp(22px, 1.75vw, 32px);
@@ -5711,12 +5731,15 @@
           R.D12_curva_iniziale_non_disegnata = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 100);
           fx('show', { n: 1 }); await sleep(150);
           fx('step', { n: 0 }); await sleep(900);
-          R.D12_fase1_in_posizione = settled(() => ['none', 'matrix(1, 0, 0, 1, 0, 0)'].includes(getComputedStyle(ph[0]).transform));
+          R.D12_battuta1_in_scena = settled(() => op(ph[0]) > .9);
           R.D12_curva_al_primo_nodo = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 72);
           fx('step', { n: 1 }); await sleep(1800);
+          R.D12_battuta1_lascia_la_scena = settled(() => op(ph[0]) === 0);
           fx('step', { n: 2 }); await sleep(1800);
+          fx('mark', { c: 'cine-map' }); await sleep(1000);
+          R.D12_mappa_tutte_le_soglie = settled(() => ph.every(p => op(p) > .9));
           R.D12_curva_completa_solida = settled(() => getComputedStyle(rmProg).strokeDasharray === 'none' && parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 0);
-          R.D12_nodi_percorsi_accesi = settled(() => [0, 1, 2].every(i =>
+          R.D12_nodi_sulla_mappa = settled(() => [0, 1, 2].every(i =>
             getComputedStyle(ph[i], '::before').backgroundColor === 'rgb(170, 179, 34)'
           ));
           goi(11); await sleep(300);
