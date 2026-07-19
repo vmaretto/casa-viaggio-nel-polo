@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROVA · P11 — Titoli di coda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#071d21; --paper:#f7f5ee; --acid:#aab322;
+    --food:#d8a94e; --env:#7ebdae; --health:#d08b80; --agr:#aab322;
+    --serif:"Cormorant Garamond",serif; --sans:"Outfit",sans-serif;
+    --gutter: 46%;
+  }
+  * { box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    margin:0; background:
+      radial-gradient(ellipse 130vw 90vh at 50% 34%, #08222770, transparent 70%),
+      var(--ink);
+    color:var(--paper); font-family:var(--sans); overflow:hidden;
+  }
+  .scene { position:relative; height:100vh; padding:6.5vh 6vw 4vh; }
+  .col { max-width:1360px; margin:0 auto; position:relative; height:100%;
+         display:flex; flex-direction:column; justify-content:center; }
+
+  /* filo di gutter verticale (spina tipografica dei credits) */
+  .col::before {
+    content:""; position:absolute; top:20.5vh; bottom:12vh; left:var(--gutter);
+    width:1px; background:rgba(247,245,238,.12);
+  }
+
+  .kicker {
+    margin:0 0 1.4vh; font-size:clamp(11px,.9vw,13px); font-weight:600;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--acid);
+  }
+  .title {
+    margin:0; font-family:var(--serif); font-weight:500;
+    font-size:clamp(30px,4.4vw,60px); line-height:1.04; color:var(--paper);
+    max-width:17ch;
+  }
+  .title .acid { color:var(--acid); }
+  .rule {
+    height:1px; margin:2.4vh 0 0; background:rgba(247,245,238,.14);
+    transform:scaleX(0); transform-origin:left;
+    transition:transform .5s cubic-bezier(.22,1,.36,1) .3s;
+  }
+  body.in .rule { transform:scaleX(1); }
+
+  /* box investitore: unico riquadro della scena, allineato alla colonna dei nomi */
+  .investor { margin:3vh 0 0; display:grid; grid-template-columns:var(--gutter) 1fr; column-gap:clamp(24px,3vw,56px); }
+  .ibox {
+    grid-column:2; justify-self:start;
+    display:inline-flex; flex-direction:column; gap:7px;
+    padding:22px 30px; border:1.5px solid var(--acid); border-radius:4px;
+    background:rgba(170,179,34,.06);
+    box-shadow:0 0 0 1px rgba(170,179,34,.14), 0 0 28px rgba(170,179,34,.16), 0 12px 46px -14px rgba(170,179,34,.3);
+  }
+  .irole { margin:0; font-size:clamp(10px,.85vw,12px); font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--acid); }
+  .iname { margin:0; font-family:var(--serif); font-weight:600; font-size:clamp(30px,3.8vw,52px); line-height:1; color:var(--paper); }
+
+  /* lista cast */
+  .cast { margin:4.4vh 0 0; display:flex; flex-direction:column; gap:clamp(14px,2.4vh,26px); }
+  .row {
+    display:grid; grid-template-columns:var(--gutter) 1fr;
+    column-gap:clamp(24px,3vw,56px); align-items:baseline;
+  }
+  .row.trio { align-items:center; } /* il ruolo si centra sull'intero blocco del trio */
+  .role {
+    text-align:right; font-size:clamp(10px,.82vw,12.5px); font-weight:500;
+    letter-spacing:.16em; text-transform:uppercase; line-height:1.4;
+    color:rgba(247,245,238,.62);
+  }
+  .name { font-family:var(--serif); font-size:clamp(24px,3vw,40px); line-height:1.05; color:var(--paper); }
+  .name.dim { color:rgba(247,245,238,.85); }
+  .name .ext { font-family:var(--serif); font-style:italic; font-size:clamp(15px,1.4vw,20px); color:rgba(247,245,238,.55); margin-left:.5em; }
+
+  /* trio scientifico */
+  .trio .names { display:flex; flex-direction:column; gap:1.1vh; border-left:1px solid rgba(247,245,238,.10); padding-left:clamp(14px,1.4vw,22px); }
+  .sci { display:flex; align-items:baseline; font-family:var(--serif); font-size:clamp(20px,2.4vw,32px); line-height:1.05; color:var(--paper); }
+  .sci .dots { flex:none; align-self:center; display:inline-flex; gap:6px; margin-right:14px; }
+  .sci .dots i {
+    width:clamp(9px,.85vw,12px); height:clamp(9px,.85vw,12px); border-radius:50%; background:var(--c);
+    box-shadow:0 0 8px var(--c);
+    opacity:0; transform:translateX(-34px);
+    transition:opacity .5s ease, transform .55s cubic-bezier(.25,.9,.3,1);
+  }
+  body.in .sci .dots i { opacity:1; transform:none; }
+  .sci .amb { font-family:var(--sans); font-size:clamp(11px,.85vw,13px); font-weight:400; letter-spacing:.04em; color:rgba(247,245,238,.5); margin-left:.7em; align-self:center; }
+  .sci sup { color:rgba(230,238,240,.45); font-size:.55em; vertical-align:super; }
+  .sci .dots i.split { background:linear-gradient(90deg, var(--agr) 0 50%, var(--food) 50% 100%); box-shadow:0 0 8px rgba(170,179,34,.55); }
+
+  .note {
+    position:absolute; left:0; bottom:0; margin:0;
+    font-size:clamp(10px,.75vw,12px); color:rgba(247,245,238,.42); letter-spacing:.02em;
+  }
+
+  /* entrata a step: solo opacity + translateY */
+  .kicker,.title,.investor,.row,.note {
+    opacity:0; transform:translateY(8px);
+    transition:opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1);
+  }
+  body.in .kicker,body.in .title,body.in .investor,body.in .row,body.in .note { opacity:1; transform:none; }
+  body.in .title { transition-delay:.05s; }
+  body.in .investor { transition-delay:.5s; }
+  body.in .row:nth-child(1) { transition-delay:.85s; }
+  body.in .row:nth-child(2) { transition-delay:1.0s; }
+  body.in .row:nth-child(3) { transition-delay:1.15s; }
+  body.in .row:nth-child(4) { transition-delay:1.6s; }
+  body.in .trio .dots i { transition-delay:1.4s; }
+  body.in .trio .names .sci:nth-child(2) .dots i { transition-delay:1.5s; }
+  body.in .trio .names .sci:nth-child(3) .dots i { transition-delay:1.6s; }
+  body.in .note { transition-delay:1.9s; }
+</style>
+</head>
+<body>
+<div class="scene"><div class="col">
+  <p class="kicker">Chi rende possibile CASA</p>
+  <h2 class="title">Ruoli distinti. Una regia li trasforma in <span class="acid">CASA</span>.</h2>
+  <div class="rule"></div>
+
+  <div class="investor">
+    <div class="ibox">
+      <p class="irole">L'investitore — Promuove e sostiene</p>
+      <p class="iname">InnovaliaTech</p>
+    </div>
+  </div>
+
+  <div class="cast">
+    <div class="row">
+      <div class="role">La regia operativa · Gestisce e mette in relazione</div>
+      <div class="name">FIB <span class="ext">Food Innovation Broker</span></div>
+    </div>
+    <div class="row">
+      <div class="role">Forma</div>
+      <div class="name">UNIUST <span class="ext">Università non statale</span></div>
+    </div>
+    <div class="row trio">
+      <div class="role">La scienza · Contribuiscono con capacità scientifiche</div>
+      <div class="names">
+        <div class="sci"><span class="dots"><i style="--c:var(--env)"></i></span>CMCC<span class="amb">Ambiente</span></div>
+        <div class="sci"><span class="dots"><i class="split"></i></span>CREA<span class="amb">Agricoltura e cibo</span></div>
+        <div class="sci"><span class="dots"><i style="--c:var(--health)"></i></span>Fondazione Santa Lucia<sup>*</sup><span class="amb">Salute</span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="role">Ampliano le capacità</div>
+      <div class="name dim">Convenzioni <span class="ext">con università, ricerca e imprese</span></div>
+    </div>
+  </div>
+
+  <p class="note">* Collaborazioni in corso di definizione, non ancora formalizzate.</p>
+</div></div>
+<script>requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add('in')));</script>
+</body>
+</html>
