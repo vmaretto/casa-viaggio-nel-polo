@@ -1513,130 +1513,120 @@
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
 
-    /* P11 · spina di regia: ruoli distinti, responsabilità leggibile */
+    /* P11 · i cerchi della regia: la governance come sistema orbitale */
     .cinema-mode .actors__grid {
-      --spine-x: clamp(220px, 23vw, 330px);
       position: absolute;
-      inset: 18vh 7vw 8vh 13vw;
-      display: grid;
-      grid-template-rows: repeat(5, minmax(0, 1fr));
+      inset: 0;
+      display: block;
       width: auto;
       margin: 0;
-      overflow: visible;
+      overflow: hidden;
     }
     .cinema-mode .actors__grid::before,
-    .cinema-mode .actors__grid::after {
-      content: "";
+    .cinema-mode .actors__grid::after { display: none; }
+    .actors-cine__orbits { display: none; }
+    .cinema-mode .actors-cine__orbits {
+      display: block;
       position: absolute;
-      z-index: 0;
-      top: 5%;
-      left: var(--spine-x);
-      width: 1px;
-      height: 90%;
-      background: rgba(247,245,238,.15);
+      inset: 0;
+      pointer-events: none;
     }
-    .cinema-mode .actors__grid::after {
-      height: 0;
-      background: linear-gradient(var(--acid), rgba(170,179,34,.38));
-      box-shadow: 0 0 18px rgba(170,179,34,.26);
-      transition: height 1.15s var(--ease);
+    .cine-ring {
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      display: block;
+      aspect-ratio: 1;
+      border: 1px solid rgba(247,245,238,.13);
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.94);
+      transition: opacity 1s ease, transform 1.25s var(--ease);
     }
-    .cinema-mode .actors[data-fragment-step="0"] .actors__grid::after { height: 10%; }
-    .cinema-mode .actors[data-fragment-step="1"] .actors__grid::after { height: 30%; }
-    .cinema-mode .actors[data-fragment-step="2"] .actors__grid::after { height: 50%; }
-    .cinema-mode .actors[data-fragment-step="3"] .actors__grid::after { height: 72%; }
-    .cinema-mode .actors[data-fragment-step="4"] .actors__grid::after { height: 90%; }
+    .cine-ring--1 { width: 60vh; border-color: rgba(170,179,34,.3); }
+    .cine-ring--2 { width: 68vh; }
+    .cine-ring--3 { width: 80vh; border-style: dashed; border-color: rgba(247,245,238,.11); }
+    .cinema-mode .actors[data-fragment-step="1"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="2"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--1,
+    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--2,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--2,
+    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--3 {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    /* Ruoli: ogni attore prende il suo posto nell'orbita. */
     .cinema-mode .actors .role,
     .cinema-mode .actors .role--sci {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: calc(var(--spine-x) - 42px) minmax(0, .9fr) 1fr;
-      align-items: center;
-      column-gap: clamp(44px, 4.4vw, 84px);
-      min-height: 0;
-      padding: 8px 0;
+      position: absolute;
+      z-index: 2;
+      display: block;
+      width: max-content;
+      max-width: 30vw;
+      margin: 0;
+      padding: 0;
       border: 0;
       background: none;
-      transform: translateX(18px);
-      transition: opacity .65s ease, transform .75s var(--ease);
+      text-align: center;
+      transform: translate(-50%, -50%) translateY(14px);
+      transition: opacity .7s ease, transform .85s var(--ease);
     }
     .cinema-mode .actors .role.is-current,
-    .cinema-mode .actors .role.is-done,
+    .cinema-mode .actors .role.is-done { transform: translate(-50%, -50%); }
+    .cinema-mode .actors .role.is-done { opacity: .92; }
+    .cinema-mode .actors .role.is-current { opacity: 1; }
+    .cinema-mode .actors .role::before,
+    .cinema-mode .actors .role--sci::before { display: none; }
+    .cinema-mode .actors .cine-role-desc { display: none; }
+    .cinema-mode .actors .role--promote { top: 54%; left: 50%; }
+    .cinema-mode .actors .role--manage { top: 54%; left: calc(50% - 30vh); max-width: 17vw; }
+    .cinema-mode .actors .role--train { top: 54%; left: calc(50% + 30vh); max-width: 17vw; }
+    .cinema-mode .actors .role--net {
+      top: calc(54% + 40vh);
+      left: 50%;
+      transform: translate(-50%, -100%) translateY(14px);
+    }
+    .cinema-mode .actors .role--net.is-current,
+    .cinema-mode .actors .role--net.is-done { transform: translate(-50%, -100%); }
+    /* Il trio scientifico si dispone sull'arco alto del secondo cerchio. */
+    .cinema-mode .actors .role--sci {
+      inset: 0;
+      width: auto;
+      max-width: none;
+      transform: none;
+      transition: opacity .7s ease;
+      pointer-events: none;
+    }
     .cinema-mode .actors .role--sci.is-current,
     .cinema-mode .actors .role--sci.is-done { transform: none; }
-    /* Settle: tutte le righe restano a piena luce; la gerarchia la fa il box verde. */
-    .cinema-mode .actors .role.is-done,
     .cinema-mode .actors .role--sci.is-done { opacity: .92; }
-    .cinema-mode .actors .role.is-current,
-    .cinema-mode .actors .role--sci.is-current { opacity: 1; }
-    /* Descrittore a destra: la metà destra del frame torna a vivere. */
-    .cine-role-desc { display: none; }
-    .cinema-mode .actors .cine-role-desc {
-      grid-column: 3;
-      display: block;
-      max-width: 380px;
-      color: rgba(247,245,238,.48);
-      font-size: clamp(13px, 1vw, 16px);
-      line-height: 1.45;
-    }
-    .cinema-mode .actors__grid .role--promote {
-      margin: 0;
-      padding: 8px 0;
-      border: 0;
-      border-radius: 0;
-      background: none;
-      box-shadow: none;
-    }
-    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
-    .cinema-mode .actors .role--promote h4 {
-      justify-self: start;
-      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
-      border: 1.5px solid var(--acid);
-      border-radius: 6px;
-      background: rgba(170,179,34,.09);
-      box-shadow: 0 0 36px rgba(170,179,34,.14);
-    }
-    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
-    .cinema-mode .actors .role::before,
-    .cinema-mode .actors .role--sci::before {
-      content: "";
+    .cinema-mode .actors .role--sci > h3 { display: none; }
+    .cinema-mode .actors .role--sci .sci__grid { display: contents; }
+    .cinema-mode .actors .sci {
       position: absolute;
-      top: 50%;
-      left: var(--spine-x);
-      width: 11px;
-      height: 11px;
-      border: 1px solid rgba(247,245,238,.32);
-      border-radius: 50%;
-      background: var(--ink-deep);
+      padding: 0;
+      border: 0;
+      text-align: center;
       transform: translate(-50%, -50%);
-      transition: background .55s ease, border-color .55s ease, box-shadow .55s ease;
+      pointer-events: auto;
     }
-    .cinema-mode .actors .role.is-current::before,
-    .cinema-mode .actors .role--sci.is-current::before {
-      border-color: var(--acid);
-      background: var(--acid);
-      box-shadow: 0 0 20px rgba(170,179,34,.62);
-    }
-    /* La spina conduce: ogni nodo percorso resta acceso. */
-    .cinema-mode .actors .role.is-done::before,
-    .cinema-mode .actors .role--sci.is-done::before {
-      border-color: var(--acid);
-      background: var(--acid);
-    }
-    .cinema-mode .actors .role h3,
-    .cinema-mode .actors .role--sci > h3 {
-      grid-column: 1;
-      margin: 0;
-      color: rgba(247,245,238,.62);
-      font-size: clamp(13px, .95vw, 16px);
+    .cinema-mode .actors .sci:nth-child(1) { top: calc(54% - 24vh); left: calc(50% - 24vh); }
+    .cinema-mode .actors .sci:nth-child(2) { top: calc(54% - 34vh); left: 50%; }
+    .cinema-mode .actors .sci:nth-child(3) { top: calc(54% - 24vh); left: calc(50% + 24vh); }
+    /* Etichette di ruolo: piccole, sopra il nome. */
+    .cinema-mode .actors .role h3 {
+      margin: 0 0 8px;
+      color: rgba(247,245,238,.55);
+      font-size: clamp(12px, .85vw, 14px);
       font-weight: 500;
-      letter-spacing: .09em;
+      letter-spacing: .18em;
+      text-transform: uppercase;
       line-height: 1.3;
-      text-align: right;
+      text-align: center;
     }
     .cinema-mode .actors .role h4 {
-      grid-column: 2;
+      display: inline-block;
       margin: 0;
       color: var(--paper);
       font-size: clamp(30px, 2.45vw, 44px);
@@ -1646,23 +1636,19 @@
       margin-top: 5px;
       font-size: clamp(12px, .86vw, 15px);
     }
-    .cinema-mode .actors .role--sci .sci__grid {
-      grid-column: 2 / -1;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(18px, 2.2vw, 34px);
+    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
+    .cinema-mode .actors .role--promote h4 {
+      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
+      border: 1.5px solid var(--acid);
+      border-radius: 6px;
+      background: rgba(170,179,34,.09);
+      box-shadow: 0 0 36px rgba(170,179,34,.14);
     }
-    .cinema-mode .actors .sci {
-      padding: 0;
-      border: 0;
-    }
-    .cinema-mode .actors .sci h4 { font-size: clamp(25px, 2vw, 36px); }
+    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
+    .cinema-mode .actors .sci h4 { margin: 0; font-size: clamp(24px, 1.9vw, 34px); }
     .cinema-mode .actors .sci small { margin: 4px 0 0; font-size: clamp(11px, .78vw, 13px); }
-    .cinema-mode .actors .sci i {
-      width: 9px;
-      height: 9px;
-      opacity: 1;
-    }
+    /* I pallini inline lasciano il posto ai pallini del filo, che arrivano sui nodi. */
+    .cinema-mode .actors .sci i { display: none; }
     .cinema-mode .actors .more-link { display: none; }
     /* Nota degli asterischi: piccola, a piè di pagina, senza rumore. */
     .cinema-mode .actors__note {
@@ -1687,7 +1673,7 @@
     .actors-cine__spine-anchor { display: none; }
     .cinema-mode .actors-cine__spine-anchor {
       position: absolute;
-      left: var(--spine-x);
+      left: 50%;
       bottom: 0;
       display: block;
       width: 1px;
@@ -4097,6 +4083,11 @@
           <h2 class="display reveal delay-1">Ruoli distinti. Una regia li trasforma in CASA.</h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
+          <div class="actors-cine__orbits" aria-hidden="true">
+            <i class="cine-ring cine-ring--1"></i>
+            <i class="cine-ring cine-ring--2"></i>
+            <i class="cine-ring cine-ring--3"></i>
+          </div>
           <article class="role role--promote fragment" data-fragment="0">
             <h3>Promuove e sostiene</h3>
             <h4>InnovaliaTech</h4>
@@ -5178,12 +5169,24 @@
             });
           });
         } else if (name === 'actors-knot') {
-          const anchor = document.querySelector('.actors-cine__spine-anchor');
-          const m = anchor ? layoutMid(anchor) : { x: innerWidth * .38, y: innerHeight - 62 };
-          DOT_KEYS.forEach((k, i) => dotGo(k, m.x + (i - 1.5) * 30, m.y, {
-            opacity: .66,
-            scale: .66
-          }));
+          // I pallini si affiancano ai nodi scientifici del loro ambito:
+          // ambiente→CMCC, agricoltura+cibo→CREA, salute→S.Lucia.
+          const sci = [...document.querySelectorAll('.actors .sci')];
+          if (sci.length === 3) {
+            const [cmcc, crea, lucia] = sci.map(el => {
+              const m = layoutMid(el);
+              return { x: m.x, y: m.y - el.offsetHeight / 2 - 24 };
+            });
+            dotGo('ambiente', cmcc.x, cmcc.y, { opacity: .78, scale: .7 });
+            dotGo('agricoltura', crea.x - 16, crea.y, { opacity: .78, scale: .7 });
+            dotGo('cibo', crea.x + 16, crea.y, { opacity: .78, scale: .7 });
+            dotGo('salute', lucia.x, lucia.y, { opacity: .78, scale: .7 });
+          } else {
+            DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 62, {
+              opacity: .66,
+              scale: .66
+            }));
+          }
         } else if (name === 'heritage-rivets') {
           const layers = [...document.querySelectorAll('.heritage .cap')];
           layers.forEach((layer, i) => {
