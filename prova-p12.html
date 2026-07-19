@@ -823,9 +823,18 @@
       d.jumpClear = 4; // la scia riparte pulita dopo il salto temporale
     }
   };
+  // Il film parte solo quando la pagina è davvero visibile:
+  // in una scheda in background i browser congelano i frame e il copione
+  // correrebbe avanti da solo (si vedrebbe soltanto il finale).
+  const begin = () => { start = performance.now(); play(); };
   if (TABLEAU) requestAnimationFrame(() => requestAnimationFrame(jumpTableau));
   else if (JUMP > 0) requestAnimationFrame(() => requestAnimationFrame(() => jumpTo(JUMP)));
-  else play();
+  else if (document.hidden) {
+    LOG('in attesa di visibilità');
+    document.addEventListener('visibilitychange', function once() {
+      if (!document.hidden) { document.removeEventListener('visibilitychange', once); LOG('visibile: si parte'); begin(); }
+    });
+  } else begin();
 })();
 </script>
 </body>
