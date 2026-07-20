@@ -5309,6 +5309,27 @@
             scale: .6
           }));
         } else if (name === 'roadmap-sign' || name === 'road-convoy' || name === 'road-stars') {
+          // p13 · alla meta: i quattro in fondo alla strada, dentro la luce
+          // dell'orizzonte — la destinazione del cammino sono loro insieme.
+          const PTS = [[85.0, 64.2], [88.0, 63.4], [91.0, 62.6], [94.0, 61.8]];
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * PTS[i][0] / 100, innerHeight * PTS[i][1] / 100));
+        } else if (name === 'presidio') {
+          // p14 · in colonna nel filetto tra la foto e i testi
+          const ph = document.querySelector('#p14 .science__photo');
+          const id = document.querySelector('#p14 .science__id');
+          if (!ph || !id) { cineDotsPreset('sign'); return; }
+          const rp = ph.getBoundingClientRect();
+          const ri = id.getBoundingClientRect();
+          const x = (rp.right + ri.left) / 2;
+          const top = ri.top + 8, bottom = ri.bottom - 8;
+          DOT_KEYS.forEach((k, i) => dotGo(k, x, top + (bottom - top) * i / 3));
+        } else if (name === 'house-door') {
+          // p12 · arrivano in riga davanti alla porta, prima di salire alle finestre
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 34, innerHeight * .845, {
+            opacity: .8,
+            scale: .6
+          }));
+        } else if (name === 'roadmap-sign' || name === 'road-convoy' || name === 'road-stars') {
           // p13 · costellazione nel cielo notturno sopra la strada:
           // il richiamo della p01, le quattro stelle guidano il cammino.
           const cx = innerWidth * .56, cy = innerHeight * .20;
