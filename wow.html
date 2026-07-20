@@ -545,9 +545,9 @@
       padding: 9px 26px;
       border: 1.5px solid var(--c);
       border-radius: 999px;
-      background: rgba(7,29,33,.38);   /* ben trasparente: cornice e pallini si vedono sotto */
-      backdrop-filter: blur(2.5px);
-      -webkit-backdrop-filter: blur(2.5px);
+      /* velo leggero e NIENTE blur: la cornice tratteggiata e i pallini
+         devono passare sotto l'etichetta restando nitidi e riconoscibili */
+      background: rgba(7,29,33,.26);
       color: var(--paper);
       font-family: var(--serif);
       font-style: italic;
