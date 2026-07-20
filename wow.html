@@ -1032,6 +1032,9 @@
     .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field-progress { stroke-dashoffset: 25; }
     .cinema-mode .operate[data-fragment-step="3"] .operate-cine__field-progress { stroke-dashoffset: 0; }
     /* Nodi veri sul cerchio: dot pieno + halo, uno per fase, colore d'ambito. */
+    /* i nodi statici del quadrante sono doppioni dei quattro protagonisti:
+       nel film i pallini veri sono quelli di #cineDots — i nodi restano spenti */
+    .cinema-mode .operate-cine__node { display: none; }
     .operate-cine__node {
       opacity: 0;
       transform-box: fill-box;
