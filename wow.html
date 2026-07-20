@@ -493,8 +493,7 @@
     .cinema-mode .missing__seeds { display: none !important; }
     /* le etichette orbitanti passano SOPRA i pallini (loro le passano sotto) */
     .cinema-mode .missing__frame { z-index: 40; }
-    body.cinema-mode.pillole-fisse .missing__anchors { z-index: 41; }
-    body.cinema-mode .missing__anchors .anchor { background: rgba(7,29,33,.88); }
+    body.cinema-mode.pillole-fisse .missing__anchors { z-index: 45; }   /* sopra cornice (40) e pallini (30) */
     .cinema-mode .missing__seeds {
       display: block;
       position: absolute;
@@ -546,7 +545,7 @@
       padding: 9px 26px;
       border: 1.5px solid var(--c);
       border-radius: 999px;
-      background: rgba(7,29,33,.85);
+      background: rgba(7,29,33,.72);   /* semitrasparente, richiesta 21 lug */
       color: var(--paper);
       font-family: var(--serif);
       font-style: italic;
@@ -3832,7 +3831,7 @@
     </section>
 
     <!-- 04b · LA PAROLA CASA (reveal del brand) -->
-    <section class="scene brand" id="p04b" data-index="4" data-title="CASA" data-cascade="1150" aria-label="La parola CASA">
+    <section class="scene brand" data-dots-enter="letters" id="p04b" data-index="4" data-title="CASA" data-cascade="1150" aria-label="La parola CASA">
       <div class="scene__safe brand__content">
         <div class="brand__lockup" data-fragment-cumulative>
           <div class="brand__letter fragment" data-fragment="0" style="--c: var(--food)"><span>C</span><small>cibo</small></div>
@@ -4837,6 +4836,10 @@
           // i preset rAF lasciano transition:none inline: senza ripristino il
           // primo dotGo della scena nuova teletrasporta i pallini
           document.querySelectorAll('#cineDots i').forEach(el => { el.style.transition = ''; });
+          // ingresso immediato: se la scena dichiara data-dots-enter, i pallini
+          // partono subito verso la nuova configurazione (niente pose residue)
+          const enterPreset = scenes[active] && scenes[active].dataset.dotsEnter;
+          if (enterPreset) setTimeout(() => cineDotsPreset(enterPreset), 30);
           const prevSc = scenes[lastActive];
           const mode = scenes[active].dataset.cineEnter || 'left';
           prevSc.classList.add('cine-prev');
