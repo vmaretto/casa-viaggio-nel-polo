@@ -609,13 +609,15 @@
     .cinema-mode .actors.is-active > .scene__safe,
     .cinema-mode .operate.is-active > .scene__safe { animation: none; }
     /* Ken Burns sul contenuto, mai sul contenitore: la cornice resta ferma. */
-    @keyframes cinePortrait { from { background-size: 112%; } to { background-size: 128%; } }
+    /* la foto è orizzontale (1024×768): la misura va data sull'altezza
+       ("auto NN%"), altrimenti restano due bande vuote sopra e sotto */
+    @keyframes cinePortrait { from { background-size: auto 112%; } to { background-size: auto 128%; } }
     .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s linear forwards; }
     .cinema-mode .science__photo {
       width: clamp(200px, 19vw, 270px);
       border: 0;
       background-position: 32% 38%;
-      background-size: 112%;
+      background-size: auto 112%;
       /* Duotone: il ritratto stampato con lo stesso inchiostro del film. */
       filter: grayscale(1) contrast(1.04) brightness(1.02); /* b/n puro, niente patina bronzo */
       box-shadow:
@@ -1421,6 +1423,18 @@
       font-size: clamp(1rem, 1.75vw, 1.5rem); letter-spacing: .06em; line-height: 1.3;
       color: rgba(247,245,238,.92);
     }
+    /* Blindatura (bug visto nel montato): durante il pan il titolo finiva al
+       centro, sopra il cerchio CASA. Con l'ID queste regole vincono su
+       qualunque stato transitorio della transizione. */
+    .cinema-mode #p10 header {
+      position: absolute; z-index: 4; left: 50%; top: 8vh; bottom: auto; right: auto;
+      transform: translateX(-50%); width: min(80vw, 900px); margin: 0; padding: 0; text-align: center;
+    }
+    .cinema-mode #p10 .display {
+      margin: 0; font-family: var(--sans); font-weight: 500;
+      font-size: clamp(1rem, 1.75vw, 1.5rem); letter-spacing: .06em; line-height: 1.3;
+      color: rgba(247,245,238,.92);
+    }
     .cinema-mode .who__grid {
       position: absolute; inset: 0; display: block; width: auto; margin: 0; border: 0;
       overflow: visible;
@@ -1517,9 +1531,14 @@
     .cinema-mode .actors__grid > * { transform: translateY(100vh); }
     .cinema-mode .actors.is-active .actors__grid > *,
     .cinema-mode .actors.cine-prev .actors__grid > * {
-      /* i titoli partono dopo il viaggio dei pallini dal quadrato alla firma */
-      animation: creditsRoll 29.5s linear 2.1s forwards;
+      /* i titoli partono dopo il viaggio dei pallini dal quadrato alla firma;
+         fill "both": durante il ritardo vale il fotogramma iniziale (100vh),
+         così nessun ruolo è visibile prima che il roll cominci */
+      animation: creditsRoll 29.5s linear 2.1s both;
     }
+    /* nessuna eccezione: anche i fragment del cast restano sotto lo schermo
+       finché il roll non li porta su (il refuso dei ruoli "a caso") */
+    .cinema-mode .actors:not(.is-active):not(.cine-prev) .actors__grid > * { transform: translateY(100vh); opacity: 1; }
     .actors-cine__orbits, .cinema-mode .actors-cine__orbits { display: none; }
     .cinema-mode .actors .cine-role-desc { display: none; }
     .cinema-mode .actors .role > p, .cinema-mode .actors .role .role__body { display: none; }
@@ -3343,14 +3362,15 @@
       opacity: 0; pointer-events: none;
     }
     .cinema-mode .overlay.is-open .ov-sketch {
-      opacity: 1; animation: ovSketchLoop 18s ease-in-out infinite;
+      opacity: 1; animation: ovSketchLoop 8.2s ease-in-out infinite;
     }
-    /* loop: rendering (piu' a lungo) -> foto reale -> ritorno al rendering */
-    @keyframes ovSketchLoop { 0%, 44% { opacity: 1; } 53%, 86% { opacity: 0; } 95%, 100% { opacity: 1; } }
-    .cinema-mode .overlay.is-open .ov-transito--a { animation: ovTransA 18s ease-in-out infinite; }
-    .cinema-mode .overlay.is-open .ov-transito--b { animation: ovTransB 18s ease-in-out infinite; }
-    @keyframes ovTransA { 0%, 44% { opacity: 1; } 53%, 86% { opacity: 0; } 95%, 100% { opacity: 1; } }
-    @keyframes ovTransB { 0%, 44% { opacity: 0; } 53%, 86% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    /* un ciclo intero nella finestra del film (~8s): sosta lunga sul rendering,
+       sosta lunga sulla foto reale, e ritorno all'immagine di partenza */
+    @keyframes ovSketchLoop { 0%, 30% { opacity: 1; } 40%, 72% { opacity: 0; } 82%, 100% { opacity: 1; } }
+    .cinema-mode .overlay.is-open .ov-transito--a { animation: ovTransA 8.2s ease-in-out infinite; }
+    .cinema-mode .overlay.is-open .ov-transito--b { animation: ovTransB 8.2s ease-in-out infinite; }
+    @keyframes ovTransA { 0%, 30% { opacity: 1; } 40%, 72% { opacity: 0; } 82%, 100% { opacity: 1; } }
+    @keyframes ovTransB { 0%, 30% { opacity: 0; } 40%, 72% { opacity: 1; } 82%, 100% { opacity: 0; } }
     /* niente testi sotto le immagini durante la finestra */
     .cinema-mode #ov-spazio .overlay__list { display: none; }
     .ov-marker {
@@ -4306,7 +4326,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" data-cine-enter="fade" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" data-cine-enter="fade" data-dots-enter="accents-final" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -5390,10 +5410,30 @@
           const path = document.querySelector('#p13 .roadmap-cine__path-progress');
           if (!path) { DOT_KEYS.forEach((k, i2) => dotGo(k, innerWidth / 2 + (i2 - 1.5) * 38, innerHeight * .955)); return; }
           const L = path.getTotalLength();
+          const sceneEl13 = document.querySelector('#p13');
+          // tangenti ai due capi, per estrapolare oltre il tracciato:
+          // len negativi = fuori schermo a sinistra (ingresso in fila indiana),
+          // len > L = fuori schermo a destra (uscita verso Valentini)
+          const tp0 = path.getPointAtLength(0), tp1 = path.getPointAtLength(Math.min(6, L));
+          const tpE = path.getPointAtLength(L), tpD = path.getPointAtLength(Math.max(0, L - 6));
           const at = len => {
-            const q = path.getPointAtLength(Math.max(0, Math.min(L, len)));
+            let q;
+            if (len < 0) {
+              const n = Math.hypot(tp1.x - tp0.x, tp1.y - tp0.y) || 1;
+              q = { x: tp0.x + (tp1.x - tp0.x) / n * len, y: tp0.y + (tp1.y - tp0.y) / n * len };
+            } else if (len > L) {
+              const n = Math.hypot(tpE.x - tpD.x, tpE.y - tpD.y) || 1;
+              q = { x: tpE.x + (tpE.x - tpD.x) / n * (len - L), y: tpE.y + (tpE.y - tpD.y) / n * (len - L) };
+            } else {
+              q = path.getPointAtLength(len);
+            }
             const ctm = path.getScreenCTM();
-            return new DOMPoint(q.x, q.y).matrixTransform(ctm);
+            const pt = new DOMPoint(q.x, q.y).matrixTransform(ctm);
+            // durante il pan la scena trasla: si sottrae il suo spostamento,
+            // così i pallini puntano subito alle coordinate finali (mai
+            // "prima a destra e poi indietro")
+            const sr = sceneEl13.getBoundingClientRect();
+            return { x: pt.x - sr.left, y: pt.y - sr.top };
           };
           const nearest = (xv, yv) => {   // punto del percorso più vicino (coord viewBox 0-100)
             let best = 0, bd = Infinity;
@@ -5406,7 +5446,9 @@
           };
           // tappe sui pin (coord viewBox della strada) e tabella di marcia del
           // capofila: pin1 a 2.4s, pin2 a 7.0s, pin3 a 10.5s dal preset
-          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [16.0, L]];
+          // ultima tappa ben oltre il capo destro (L*1.45): anche l'ultimo della
+          // fila esce davvero dallo schermo, pronto a ricomparire attorno al ritratto
+          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [16.0, L * 1.45]];
           const sm = e => e * e * (3 - 2 * e);
           const leaderLen = t => {
             if (t <= KF[0][0]) return 0;
@@ -5416,7 +5458,9 @@
                 return l0 + (l1 - l0) * sm((t - t0) / (t1 - t0));
               }
             }
-            return L;
+            // oltre l'ultima tappa si resta ALLA tappa (fuori schermo a destra),
+            // non a L: tornare a L riporterebbe il convoglio dentro lo schermo
+            return KF[KF.length - 1][1];
           };
           const GAP = L * .045, LAG = .38, ENTRY = 1.2;
           const startPos = {}, t0 = performance.now();
@@ -5434,8 +5478,11 @@
               const pt = at(len);
               let x = pt.x, y = pt.y;
               if (t < ENTRY) {
+                // dalle finestre all'imbocco della strada, in fila indiana:
+                // ognuno punta al proprio posto PRIMA dell'inizio del tracciato
+                // (fuori schermo a sinistra), senza mai passare da destra
                 const e = sm(t / ENTRY);
-                const p0 = at(Math.max(0, -GAP * i2));
+                const p0 = at(-GAP * i2);
                 x = startPos[k].x + (p0.x - startPos[k].x) * e;
                 y = startPos[k].y + (p0.y - startPos[k].y) * e;
               }
@@ -5460,10 +5507,15 @@
             startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight / 2 };
           });
           const sm = e => e * e * (3 - 2 * e);
+          const sceneEl14 = document.querySelector('#p14');
           const step = now => {
             const t = (now - t0) / 1000;
             const r = ph.getBoundingClientRect();
-            const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+            // compensazione del pan: il centro dell'orbita è quello FINALE
+            // della scena, così dall'uscita della roadmap si va dritti
+            // attorno al ritratto, senza inseguire la scena che scorre
+            const sr = sceneEl14.getBoundingClientRect();
+            const cx = r.left + r.width / 2 - sr.left, cy = r.top + r.height / 2 - sr.top;
             const R = r.width / 2 + 26;
             DOT_KEYS.forEach((k, i2) => {
               const el = dot(k);
