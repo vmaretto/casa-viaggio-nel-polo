@@ -588,11 +588,11 @@
       background-position: 32% 38%;
       background-size: 112%;
       /* Duotone: il ritratto stampato con lo stesso inchiostro del film. */
-      filter: grayscale(1) sepia(.24) saturate(1.05) contrast(1.06) brightness(1.02);
+      filter: grayscale(1) contrast(1.04) brightness(1.02); /* b/n puro, niente patina bronzo */
       box-shadow:
         0 0 0 6px var(--ink-deep, #071d21),
-        0 0 0 7.5px rgba(201,163,90,.62),
-        0 0 0 14px rgba(201,163,90,.1),
+        0 0 0 7.5px rgba(170,179,34,.6),
+        0 0 0 14px rgba(170,179,34,.1),
         0 26px 60px rgba(0,0,0,.42);
     }
     .cinema-mode .science__photo::before {
@@ -628,21 +628,21 @@
     .cinema-mode .science__targa {
       display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px;
       margin-top: clamp(22px, 3vh, 34px); padding: clamp(16px, 2.4vh, 26px) 0;
-      border-top: 1px solid rgba(201,163,90,.38); border-bottom: 1px solid rgba(201,163,90,.38);
+      border-top: 1px solid rgba(247,245,238,.22); border-bottom: 1px solid rgba(247,245,238,.22);
     }
     .cinema-mode .science__targa .targa__label {
       display: block; margin-bottom: 10px;
       font-size: .66rem; font-weight: 600; letter-spacing: .4em; text-transform: uppercase;
-      color: rgba(201,163,90,.85);
+      color: var(--acid);
     }
     .cinema-mode .science__targa .targa__title {
       display: block; font-family: var(--serif); font-weight: 500;
-      font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: .98; letter-spacing: .01em; color: #c9a35a;
+      font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: .98; letter-spacing: .01em; color: var(--paper);
     }
     .cinema-mode .science__targa .targa__year {
       font-family: var(--serif); font-weight: 500; font-style: italic;
       font-size: clamp(3.4rem, 7vw, 6rem); line-height: .8; letter-spacing: -.01em;
-      color: #c9a35a; opacity: .9; text-align: right;
+      color: var(--acid); opacity: .92; text-align: right;
     }
     .cinema-mode .science__subrole {
       display: block; margin: 20px 0 0;
@@ -1395,26 +1395,28 @@
     .cinema-mode .who .cine-quarter { display: none; }
     .cinema-mode .who .aud > p:not(.cine-tag) { display: none; }
 
+    /* nucleo come nella versione approvata: CASA nel cerchio luminoso verde */
     .cinema-mode .who-cine__core {
-      position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%);
-      display: block; width: max-content; text-align: center;
-      padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none;
+      position: absolute; z-index: 2; top: 47%; left: 50%;
+      display: grid; place-items: center; align-content: center;
+      width: clamp(210px, 21vw, 320px); aspect-ratio: 1;
+      border: 1px solid rgba(170,179,34,.32); border-radius: 50%;
+      background: radial-gradient(circle, rgba(170,179,34,.11), rgba(7,29,33,.16) 65%, transparent);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 72px rgba(170,179,34,.08);
+      padding: 0; text-align: center; backdrop-filter: none;
     }
     .cinema-mode .who-cine__core strong {
-      display: block; font-family: var(--serif); font-weight: 600;
-      font-size: clamp(5.5rem, 14vw, 13rem); line-height: .9; letter-spacing: .05em;
-      color: var(--paper);
-      text-shadow: 0 0 50px rgba(247,245,238,.28), 0 0 130px rgba(170,179,34,.14);
+      display: block; color: var(--acid); font-family: var(--serif);
+      font-size: clamp(54px, 4.8vw, 88px); font-style: italic; font-weight: 400; line-height: .9;
+      letter-spacing: 0; text-shadow: none;
     }
     .cinema-mode .who-cine__core small {
-      display: block; margin-top: 1.4vh; font-family: var(--sans); font-weight: 300;
-      font-size: clamp(.85rem, 1.35vw, 1.1rem); letter-spacing: .36em; text-transform: uppercase;
-      color: rgba(247,245,238,.6);
+      display: block; margin-top: 10px; color: rgba(247,245,238,.62);
+      font-family: var(--serif); font-size: clamp(16px, 1.2vw, 22px); font-style: italic;
+      font-weight: 400; letter-spacing: 0; text-transform: none;
     }
-    .cinema-mode .who-cine__core::after {
-      content: ""; display: block; width: 60px; height: 1px; margin: 1.6vh auto 0;
-      background: rgba(170,179,34,.5);
-    }
+    .cinema-mode .who-cine__core::after { content: none; }
 
     /* i quattro ingressi: pallino del film verso il centro, testo verso l'angolo */
     .cinema-mode .who .aud {
@@ -1444,9 +1446,7 @@
     }
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
-    /* P11 · titoli di coda: la regia come cast, gutter tipografico */
-    .cinema-mode .actors .sci i { visibility: hidden; } /* il segno lo fanno i pallini del film */
-    .cinema-mode .actors { --gutter: 46%; }
+    /* P11 · titoli di coda veri: il cast scorre dal basso e si dissolve a meta' schermo */
     .cinema-mode .actors header {
       position: absolute; z-index: 8; top: 6.5vh; left: 6vw; width: 60vw;
     }
@@ -1455,41 +1455,51 @@
       font-size: clamp(25px, 3.1vw, 42px); line-height: 1.08;
     }
     .cinema-mode .actors .eyebrow { text-align: left; }
+
+    /* il rullo: tutto il cast in colonna, scorre in su per la durata della scena */
     .cinema-mode .actors__grid {
-      position: absolute; left: 6vw; right: 6vw; top: 20.5vh; bottom: 10vh;
-      display: flex; flex-direction: column; justify-content: center;
-      gap: clamp(8px, 1.35vh, 15px);
-      width: auto; margin: 0; overflow: visible;
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      gap: clamp(28px, 5.5vh, 54px);
+      width: auto; margin: 0; overflow: hidden; pointer-events: none;
+      /* la maschera resta ferma sullo schermo: le carte nascono nitide dal
+         basso e si dissolvono salendo oltre meta' schermo */
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 30%, #000 46%, #000 96%, transparent 100%);
+      mask-image: linear-gradient(180deg, transparent 0%, transparent 30%, #000 46%, #000 96%, transparent 100%);
     }
-    /* la spina verticale dei credits */
-    .cinema-mode .actors__grid::before {
-      content: ""; display: block; position: absolute; top: 0; bottom: 4vh;
-      left: var(--gutter); width: 1px; background: rgba(247,245,238,.12);
+    /* a scorrere sono le carte (il contenitore con la maschera e' fermo) */
+    @keyframes creditsRoll { from { transform: translateY(100vh); } to { transform: translateY(-135vh); } }
+    .cinema-mode .actors__grid > * { transform: translateY(100vh); }
+    .cinema-mode .actors.is-active .actors__grid > * {
+      animation: creditsRoll 31s linear .6s forwards;
     }
-    .cinema-mode .actors__grid::after { display: none; }
     .actors-cine__orbits, .cinema-mode .actors-cine__orbits { display: none; }
     .cinema-mode .actors .cine-role-desc { display: none; }
     .cinema-mode .actors .role > p, .cinema-mode .actors .role .role__body { display: none; }
     .cinema-mode .actors .sci > p { display: none; }
     .cinema-mode .actors .actors-cine__spine-anchor { display: none; }
+    .cinema-mode .actors__grid::before, .cinema-mode .actors__grid::after { display: none; }
 
-    /* riga generica: ruolo a destra nella colonna sinistra, nome a sinistra nella colonna destra */
+    /* carta generica dei credits: ruolo sopra, nome sotto, tutto centrato */
     .cinema-mode .actors .role, .cinema-mode .actors .role--sci {
-      position: relative; display: grid; grid-template-columns: var(--gutter) 1fr;
-      column-gap: clamp(14px, 1.5vw, 26px); align-items: baseline;
-      width: auto; max-width: none; padding: 0; border: 0; border-radius: 0;
-      background: none; box-shadow: none; backdrop-filter: none; text-align: left;
+      position: relative; display: block; width: min(80vw, 900px);
+      padding: 0; border: 0; border-radius: 0;
+      background: none; box-shadow: none; backdrop-filter: none; text-align: center;
     }
     .cinema-mode .actors .role::before, .cinema-mode .actors .role--sci::before { display: none; }
+    /* niente gating a step: nel rullo le carte sono sempre presenti */
+    .cinema-mode .actors .role.fragment, .cinema-mode .actors .role--sci.fragment {
+      opacity: 1; transform: none; filter: none; transition: none;
+    }
     .cinema-mode .actors .role h3, .cinema-mode .actors .role--sci > h3 {
-      margin: 0; text-align: right;
+      margin: 0 0 1.2vh; text-align: center;
       font-family: var(--sans); font-size: clamp(10px, .82vw, 12.5px); font-weight: 500;
-      letter-spacing: .16em; text-transform: uppercase; line-height: 1.4;
-      color: rgba(247,245,238,.62);
+      letter-spacing: .3em; text-transform: uppercase; line-height: 1.4;
+      color: rgba(247,245,238,.55);
     }
     .cinema-mode .actors .role h4 {
       margin: 0; font-family: var(--serif); font-weight: 400;
-      font-size: clamp(21px, 2.3vw, 31px); line-height: 1.08; color: var(--paper);
+      font-size: clamp(24px, 2.6vw, 36px); line-height: 1.08; color: var(--paper);
     }
     .cinema-mode .actors .role h4 small {
       display: inline; margin-left: .5em; font-family: var(--serif); font-style: italic;
@@ -1497,32 +1507,25 @@
       text-transform: none; color: rgba(247,245,238,.55);
     }
 
-    /* l'investitore: l'unico riquadro della scena */
-    .cinema-mode .actors .role--promote { margin-bottom: .6vh; align-items: start; }
-    .cinema-mode .actors .role--promote h3 {
-      align-self: center;
-      color: var(--acid); font-weight: 600; letter-spacing: .22em;
-      font-size: clamp(10px, .85vw, 12px);
-    }
+    /* l'investitore: l'unico riquadro dei credits */
     .cinema-mode .actors .role--promote h4 {
-      justify-self: start; display: inline-block;
-      padding: 12px 24px; border: 1.5px solid var(--acid); border-radius: 3px;
+      display: inline-block; padding: 12px 28px;
+      border: 1.5px solid var(--acid); border-radius: 3px;
       background: rgba(170,179,34,.06);
       box-shadow: 0 0 0 1px rgba(170,179,34,.14), 0 0 28px rgba(170,179,34,.16),
                   0 12px 46px -14px rgba(170,179,34,.3);
-      font-weight: 600; font-size: clamp(26px, 3vw, 40px); line-height: 1.05;
+      font-weight: 600; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.05;
     }
+    .cinema-mode .actors .role--promote h3 { color: var(--acid); letter-spacing: .3em; }
 
-    /* il trio scientifico */
-    .cinema-mode .actors .role--sci { align-items: center; }
+    /* il trio scientifico: tre righe centrate con i segni d'ambito */
     .cinema-mode .actors .role--sci .sci__grid {
-      display: flex; flex-direction: column; gap: .7vh;
-      border-left: 1px solid rgba(247,245,238,.10);
-      padding-left: clamp(14px, 1.4vw, 22px);
+      display: flex; flex-direction: column; gap: 1.6vh; align-items: center;
+      border: 0; padding: 0;
     }
     .cinema-mode .actors .sci {
-      display: flex; align-items: baseline;
-      padding: 0; border: 0; background: none; box-shadow: none; text-align: left;
+      display: flex; align-items: baseline; justify-content: center;
+      padding: 0; border: 0; background: none; box-shadow: none; text-align: center;
     }
     .cinema-mode .actors .sci i {
       flex: none; align-self: center; width: clamp(9px, .85vw, 12px); height: clamp(9px, .85vw, 12px);
@@ -1532,7 +1535,7 @@
     .cinema-mode .actors .sci i + i { margin-left: -8px; }
     .cinema-mode .actors .sci h4 {
       margin: 0; font-family: var(--serif); font-weight: 400;
-      font-size: clamp(19px, 2.1vw, 28px); line-height: 1.08; color: var(--paper);
+      font-size: clamp(21px, 2.2vw, 30px); line-height: 1.08; color: var(--paper);
     }
     .cinema-mode .actors .sci h4 .sci__mark { color: rgba(230,238,240,.45); font-size: .55em; }
     .cinema-mode .actors .sci small {
@@ -1541,23 +1544,12 @@
       letter-spacing: .04em; text-transform: none; color: rgba(247,245,238,.5);
     }
 
-    /* convenzioni: nome attenuato */
     .cinema-mode .actors .role--net h4 { color: rgba(247,245,238,.85); }
-
-    /* ingresso: solo opacita e un passo verso l'alto */
-    .cinema-mode .actors .role.fragment, .cinema-mode .actors .role--sci.fragment {
-      opacity: 0; transform: translateY(8px); filter: none;
-      transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1);
-    }
-    .cinema-mode .actors .role.is-current, .cinema-mode .actors .role.is-done,
-    .cinema-mode .actors .role--sci.is-current, .cinema-mode .actors .role--sci.is-done {
-      opacity: 1; transform: none;
-    }
 
     .cinema-mode .actors__note {
       position: absolute; left: 6vw; bottom: 4.5vh; margin: 0; transform: none;
       font-size: clamp(10px, .75vw, 12px); letter-spacing: .02em;
-      color: rgba(247,245,238,.42); text-align: left; width: auto;
+      color: rgba(247,245,238,.42); text-align: left; width: auto; z-index: 3;
     }
     .cinema-mode .scene .actors__note.reveal { transform: translateY(10px); }
     .cinema-mode .scene .actors__note.reveal.cine-in { transform: none; }
@@ -1645,12 +1637,12 @@
     .cinema-mode .heritage-cine__word.on { opacity: 1; }
     .heritage-cine__word .w-big {
       display: block; font-family: var(--serif); font-weight: 600; color: var(--paper);
-      font-size: clamp(3rem, 8.6vw, 7.6rem); line-height: .95; letter-spacing: .02em;
+      font-size: clamp(2.4rem, 5.4vw, 4.8rem); line-height: .98; letter-spacing: .02em;
       text-shadow: 0 0 80px rgba(247,245,238,.12);
     }
     .heritage-cine__word .w-sub {
-      display: block; margin-top: 1.6vh; font-family: var(--sans); font-weight: 300;
-      font-size: clamp(.85rem, 1.3vw, 1.05rem); letter-spacing: .22em; text-transform: uppercase;
+      display: block; margin-top: 1.4vh; font-family: var(--sans); font-weight: 300;
+      font-size: clamp(.75rem, 1vw, .95rem); letter-spacing: .22em; text-transform: uppercase;
       color: rgba(247,245,238,.8);
     }
 
@@ -3459,8 +3451,10 @@
       .nav { display: none; }
       .controls { display: none; }
 
-      /* su mobile i fragment si animano in cascata come su desktop */
-      .fragment { position: static !important; pointer-events: auto; }
+      /* su mobile i fragment si animano in cascata come su desktop
+         (solo versione web: nel cinema il posizionamento assoluto e' il layout) */
+      body:not(.cinema-mode) .fragment { position: static !important; pointer-events: auto; }
+      .cinema-mode .fragment { pointer-events: auto; }
 
       .problem__chain { padding-left: 22px; }
       .problem__break { padding-left: 22px; font-size: 19px; }
@@ -4047,7 +4041,7 @@
             <line x1="0" y1="78" x2="100" y2="78" stroke="rgba(247,245,238,.09)" stroke-width=".12"></line>
             <path d="M 30 78 L 30 45.5 L 50 29.5 L 70 45.5 L 70 78 Z" fill="url(#hg-wall)"></path>
             <path d="M 30 78 L 30 45.5 L 50 29.5 L 70 45.5 L 70 78" fill="none"
-              stroke="rgba(200,222,226,.34)" stroke-width=".22" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+              stroke="rgba(170,179,34,.8)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
             <ellipse class="hg-doorglow" cx="50" cy="79.2" rx="10.5" ry="5.4" fill="url(#hg-door)"></ellipse>
             <linearGradient id="hg-doorfill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stop-color="rgba(240,222,176,.62)"></stop>
