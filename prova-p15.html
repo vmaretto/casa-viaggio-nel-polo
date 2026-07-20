@@ -16,9 +16,7 @@
   *{box-sizing:border-box;}
   html,body{height:100%;}
   body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans);
-    background:
-      radial-gradient(ellipse 60% 45% at 50% 46%, #0b262b 0%, #071d21 70%),
-      var(--ink);}
+    background:radial-gradient(ellipse 60% 45% at 50% 46%, #0b262b 0%, #071d21 70%), var(--ink);}
 
   .frase{position:fixed; top:14vh; left:50%; transform:translateX(-50%); width:min(60ch,84vw);
     text-align:center; font-family:var(--serif); font-weight:500; font-size:clamp(21px,2.5vw,34px);
@@ -27,11 +25,9 @@
   .lockup{position:fixed; top:47vh; left:50%; transform:translate(-50%,-50%);
     display:flex; justify-content:center; align-items:flex-start; gap:clamp(18px,3.2vw,52px);}
   .col{flex:0 0 auto; min-width:clamp(90px,15vw,220px); display:flex; flex-direction:column; align-items:center;}
-  /* pallino-accento: scala con le lettere (responsive) */
   .accento{width:clamp(13px,1.3vw,24px); height:clamp(13px,1.3vw,24px); border-radius:50%;
     margin:0 0 clamp(14px,2vh,32px); background:var(--c); box-shadow:0 0 clamp(11px,1.4vw,24px) var(--c), 0 0 clamp(26px,3vw,48px) var(--c);}
-  .lettera{font-family:var(--serif); font-weight:600; font-size:clamp(96px,17vw,260px); line-height:.9; color:var(--c);
-    transform-origin:center 20%;}
+  .lettera{font-family:var(--serif); font-weight:600; font-size:clamp(96px,17vw,260px); line-height:.9; color:var(--c); transform-origin:center 30%;}
   .col.warm .lettera{text-shadow:0 0 clamp(14px,1.8vw,32px) color-mix(in srgb,var(--c) 46%,transparent), 0 0 clamp(38px,4.6vw,84px) color-mix(in srgb,var(--c) 22%,transparent);}
   .col.cool .lettera{text-shadow:0 0 clamp(16px,2vw,36px) color-mix(in srgb,var(--c) 60%,transparent), 0 0 clamp(44px,5.2vw,92px) color-mix(in srgb,var(--c) 30%,transparent);}
   .etichetta{margin-top:clamp(14px,2vh,26px); font-family:var(--sans); font-weight:600;
@@ -63,11 +59,6 @@
   body.in .col:nth-child(1) .accento{transition-delay:1.65s;} body.in .col:nth-child(2) .accento{transition-delay:1.74s;}
   body.in .col:nth-child(3) .accento{transition-delay:1.83s;} body.in .col:nth-child(4) .accento{transition-delay:1.92s;}
 
-  /* uscita: le lettere implodono verso l'alto (dentro il loro pallino) */
-  body.exit .frase,body.exit .etichetta,body.exit .pilastri{opacity:0 !important; transition:opacity .5s ease;}
-  body.exit .col .lettera{opacity:0 !important; transform:translateY(-1.1em) scale(.02) !important; transition:opacity .55s ease .15s, transform .7s cubic-bezier(.6,0,.2,1) !important;}
-  body.exit .col .accento{opacity:0 !important; transition:opacity .2s ease .35s;}  /* i pallini passano al canvas */
-
   #replay{position:fixed; right:18px; bottom:14px; z-index:40; padding:6px 14px; border:1px solid rgba(247,245,238,.22); border-radius:99px; background:none; color:rgba(247,245,238,.55); font-size:12px; letter-spacing:.08em; cursor:pointer;}
 </style>
 </head>
@@ -93,90 +84,132 @@
 <script>
 (() => {
   'use strict';
-  const cv = document.getElementById('comet');
-  const ctx = cv.getContext('2d');
-  let W, H, DPR;
-  const fit = () => { DPR = Math.min(2, devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); };
+  const P = new URLSearchParams(location.search);
+  const cv = document.getElementById('comet'), ctx = cv.getContext('2d');
+  let W,H,DPR;
+  const fit=()=>{
+    DPR=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight;
+    cv.width=W*DPR; cv.height=H*DPR;
+    cv.style.width=W+'px'; cv.style.height=H+'px';   // dimensione CSS esplicita: senza, su retina il canvas raddoppia
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  };
   fit(); addEventListener('resize', fit, {passive:true});
 
-  const COLORS = ['--food','--env','--health','--agr'].map(v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim());
-  const smooth = k => k*k*(3-2*k);
+  const cs = getComputedStyle(document.documentElement);
+  const COLORS = ['--food','--env','--health','--agr'].map(v=>cs.getPropertyValue(v).trim());
+  const letters = [...document.querySelectorAll('.lettera')];
+  const accenti = [...document.querySelectorAll('.accento')];
+  const frase = document.querySelector('.frase'), pil = document.querySelector('.pilastri');
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), smooth=k=>k*k*(3-2*k), lerp=(a,b,k)=>a+(b-a)*k;
 
-  const runExit = () => {
-    // posizioni di partenza = i 4 pallini-accento
-    const dots = [...document.querySelectorAll('.accento')].map((el,i)=>{
-      const r = el.getBoundingClientRect();
-      return { x:r.left+r.width/2, y:r.top+r.height/2, c:COLORS[i], trail:[], r0:Math.max(7, r.width/2) };
-    });
-    if (dots.length<4) return;
-    document.body.classList.add('exit');
+  // ---- fasi (secondi dall'inizio dell'uscita) ----
+  const T_IMPL=0.85, T_GATHER=1.75, T_SHOOT=1.7;   // shoot: base 0->1 su T_SHOOT
+  const BEAD=0.052;                                 // sfasamento di scia tra un pallino e il successivo
 
-    const cx=W/2, cy=H*0.42;
-    const gap = Math.min(46, W*0.028);
-    const file = dots.map((d,i)=>({x: cx+(i-1.5)*gap, y: cy}));   // fila indiana orizzontale
-    const vp = {x: W+140, y: H*0.40};                              // punto di fuga a destra
+  let geom=null;
+  const initGeom=()=>{
+    const starts = accenti.map(el=>{const r=el.getBoundingClientRect(); return {x:r.left+r.width/2, y:r.top+r.height/2};});
+    const cy = starts[0].y;                         // riga dei pallini
+    const cx = W/2;
+    const L = {x:cx, y:cy};                          // punto di lancio della fila
+    const ctrl = {x:W*0.72, y:cy - H*0.30};          // controllo: arco verso l'alto
+    const exit = {x:W*1.18, y:H*0.02};               // fuori campo, alto-destra (stella cometa)
+    // direzione iniziale, per allineare la fila indiana dietro il capofila
+    const dir = {x:ctrl.x-L.x, y:ctrl.y-L.y}; const dl=Math.hypot(dir.x,dir.y)||1; dir.x/=dl; dir.y/=dl;
+    const gap = Math.min(52, W*0.03);
+    const launch = starts.map((s,i)=>({x:L.x - dir.x*gap*i, y:L.y - dir.y*gap*i}));
+    const baseR = Math.max(8, accenti[0].getBoundingClientRect().width/2);
+    geom = {starts, L, ctrl, exit, launch, baseR, cy, cx};
+  };
+  // bezier quadratica (accetta s<0 o >1 per estrapolare la coda)
+  const C = s => { const g=geom, u=1-s; return {x:u*u*g.L.x+2*u*s*g.ctrl.x+s*s*g.exit.x, y:u*u*g.L.y+2*u*s*g.ctrl.y+s*s*g.exit.y}; };
 
-    const T_IMPL=0.9, T_GATHER=1.7, T_FLY_END=3.6;
-    let t0=null;
-    const frame = now => {
-      if(t0===null) t0=now;
-      const t=(now-t0)/1000;
-      ctx.clearRect(0,0,W,H);
-      dots.forEach((d,i)=>{
-        let x,y,rad=d.r0,alpha=1;
-        if(t<T_IMPL){                       // le lettere implodono: il pallino pulsa e assorbe
-          const k=Math.min(1,t/T_IMPL);
-          x=d.x; y=d.y;
-          rad=d.r0*(1 + 0.5*Math.sin(k*Math.PI));   // piccola pulsazione d'assorbimento
-        } else if(t<T_GATHER){              // vanno in fila indiana al centro
-          const k=smooth(Math.min(1,(t-T_IMPL)/(T_GATHER-T_IMPL)));
-          x=d.x+(file[i].x-d.x)*k; y=d.y+(file[i].y-d.y)*k;
-        } else {                            // partono come cometa verso il punto di fuga
-          const k=Math.pow(smooth(Math.max(0,Math.min(1,(t-T_GATHER-i*0.09)/(T_FLY_END-T_GATHER)))),1.15);
-          x=file[i].x+(vp.x-file[i].x)*k; y=file[i].y+(vp.y-file[i].y)*k;
-          rad=d.r0*(1-k*0.85);
-          alpha = x>W? Math.max(0,1-(x-W)/140) : 1;
-        }
-        // scia + alone: additivi (glow); nucleo: pieno colorato
-        d.trail.push({x,y,rad});
-        if(d.trail.length>34) d.trail.shift();
-        ctx.save(); ctx.globalCompositeOperation='lighter';
-        d.trail.forEach((p,j)=>{
-          const f=j/d.trail.length;
-          ctx.globalAlpha=Math.pow(f,1.6)*0.5*alpha;
-          ctx.fillStyle=d.c;
-          ctx.beginPath(); ctx.arc(p.x,p.y,Math.max(.5,p.rad*(0.3+0.7*f)),0,7); ctx.fill();
-        });
-        ctx.globalAlpha=0.22*alpha; ctx.fillStyle=d.c;
-        ctx.beginPath(); ctx.arc(x,y,rad*2.6,0,7); ctx.fill();
-        ctx.restore();
-        ctx.globalAlpha=alpha; ctx.fillStyle=d.c;   // nucleo colorato (source-over)
-        ctx.beginPath(); ctx.arc(x,y,rad,0,7); ctx.fill();
-        ctx.globalAlpha=1;
-      });
-      if(t<T_FLY_END+0.4) requestAnimationFrame(frame);
-      else ctx.clearRect(0,0,W,H);
-    };
-    requestAnimationFrame(frame);
+  // posizione + raggio + alpha del pallino i al tempo t
+  const dotAt=(i,t)=>{
+    const g=geom;
+    if(t<T_IMPL){                       // implosione: il pallino assorbe la lettera e pulsa
+      const k=smooth(clamp(t/T_IMPL,0,1));
+      return {x:g.starts[i].x, y:g.starts[i].y, r:g.baseR*(1+0.45*Math.sin(k*Math.PI)), a:1};
+    } else if(t<T_GATHER){              // si mettono in fila indiana dietro il capofila
+      const k=smooth(clamp((t-T_IMPL)/(T_GATHER-T_IMPL),0,1));
+      return {x:lerp(g.starts[i].x,g.launch[i].x,k), y:lerp(g.starts[i].y,g.launch[i].y,k), r:g.baseR, a:1};
+    } else {                            // partono come cometa lungo la curva C
+      const base=(t-T_GATHER)/T_SHOOT;
+      const s=base*1.15 - i*BEAD;       // capofila avanti, gli altri a scia (fila indiana)
+      const p=C(s);
+      const r=g.baseR*(1-clamp(base,0,1)*0.72);
+      const a = p.x>W*1.02 || p.y<-H*0.02 ? clamp(1-(Math.max(p.x-W, -p.y)/(W*0.12)),0,1) : 1;
+      return {x:p.x, y:p.y, r:Math.max(1,r), a};
+    }
   };
 
-  const play = () => {
-    document.body.classList.remove('exit');
+  // fotogramma completo al tempo assoluto t (funzione pura → verificabile)
+  const render=t=>{
+    // testi: la frase e i pilastri svaniscono all'inizio
+    const tf=clamp(1-t/0.5,0,1);
+    frase.style.opacity=(0.86*tf); frase.style.transition='none';
+    pil.style.opacity=(0.72*tf); pil.style.transition='none';
+    // lettere: implodono verso l'alto dentro il loro pallino
+    letters.forEach((l,i)=>{
+      const k=smooth(clamp(t/T_IMPL,0,1));
+      l.style.transition='none';
+      l.style.opacity=String(1-k);
+      l.style.transform=`translateY(${-k*0.95}em) scale(${1-k})`;
+      l.parentElement.querySelector('.etichetta').style.opacity=String(0.92*tf);
+    });
+    accenti.forEach(a=>a.style.opacity='0');
+    // canvas: pallini + scie (scia calcolata analiticamente da C → deterministica)
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<4;i++){
+      const d=dotAt(i,t), col=COLORS[i];
+      if(t>=T_GATHER){                  // scia solo nella fase cometa
+        ctx.save(); ctx.globalCompositeOperation='lighter';
+        for(let j=1;j<26;j++){
+          const dp=dotAt(i,t-j*0.016);
+          const f=1-j/26;
+          ctx.globalAlpha=Math.pow(f,1.7)*0.5*d.a;
+          ctx.fillStyle=col;
+          ctx.beginPath(); ctx.arc(dp.x,dp.y,Math.max(.5,d.r*(0.25+0.75*f)),0,7); ctx.fill();
+        }
+        ctx.restore();
+      }
+      ctx.save(); ctx.globalCompositeOperation='lighter';
+      ctx.globalAlpha=0.22*d.a; ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r*2.6,0,7); ctx.fill();
+      ctx.restore();
+      ctx.globalAlpha=d.a; ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,7); ctx.fill();
+      ctx.globalAlpha=1;
+    }
+  };
+
+  const T_END = T_GATHER + T_SHOOT + 0.5;
+  let t0=null, raf=null;
+  const loop=now=>{ if(t0===null)t0=now; const t=(now-t0)/1000; render(t); if(t<T_END) raf=requestAnimationFrame(loop); else ctx.clearRect(0,0,W,H); };
+  const runExit=()=>{ initGeom(); t0=null; raf=requestAnimationFrame(loop); };
+
+  const play=()=>{
+    // ripristina lo stato "pulito" (togli inline dell'uscita)
+    letters.forEach(l=>{l.style.cssText='';}); accenti.forEach(a=>a.style.cssText=''); frase.style.cssText=''; pil.style.cssText='';
     ctx.clearRect(0,0,W,H);
     requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('in')));
-    setTimeout(runExit, 4200);   // dopo che il lockup si è posato, parte l'uscita
+    setTimeout(runExit, 4400);
   };
 
-  document.getElementById('replay').onclick = () => { document.body.classList.remove('in'); location.reload(); };
+  document.getElementById('replay').onclick=()=>{ document.body.classList.remove('in'); location.reload(); };
 
-  const P = new URLSearchParams(location.search);
-  if (P.has('exitnow')) {   // solo per collaudo: lockup posato + uscita immediata
+  // ?frame=T : disegna esattamente il fotogramma al tempo T (collaudo deterministico)
+  if(P.has('frame')){
+    const T=parseFloat(P.get('frame'))||0;
     document.body.classList.add('in');
-    requestAnimationFrame(()=>requestAnimationFrame(runExit));
+    const draw=()=>{ try{ initGeom(); render(T); }catch(e){ document.title='ERR '+e.message; } };
+    requestAnimationFrame(()=>requestAnimationFrame(draw));
+    addEventListener('resize', ()=>{ fit(); draw(); });   // un resize azzera il canvas: ridisegna
+    setTimeout(draw,250); setTimeout(draw,700); setTimeout(draw,1150);
     return;
   }
-  const force = P.has('force');
-  if (!force && document.hidden) {
+  const force=P.has('force');
+  if(!force && document.hidden){
     document.addEventListener('visibilitychange', function once(){ if(!document.hidden){ document.removeEventListener('visibilitychange',once); play(); }});
   } else play();
 })();
