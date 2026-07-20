@@ -5332,10 +5332,25 @@
             opacity: .8,
             scale: .6
           }));
-        } else if (name === 'roadmap-sign' || name === 'road-convoy') {
-          // p13 · firma bassa centrata, sotto la chiusa (decisione 20 lug:
-          // niente convoglio sulla strada).
-          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 38, innerHeight * .955));
+        } else if (name === 'roadmap-sign' || name === 'road-convoy' || name === 'road-stars') {
+          // p13 · costellazione nel cielo notturno sopra la strada:
+          // il richiamo della p01, le quattro stelle guidano il cammino.
+          const cx = innerWidth * .56, cy = innerHeight * .20;
+          const R = Math.min(innerWidth, innerHeight) * .105;
+          const P = [[0, -1], [1, 0], [0, 1], [-1, 0]];   // alto, destra, basso, sinistra
+          DOT_KEYS.forEach((k, i) => dotGo(k, cx + P[i][0] * R, cy + P[i][1] * R));
+        } else if (name === 'presidio') {
+          // p14 · a presidio attorno al ritratto: "un presidio comune ai quattro ambiti"
+          const ph = document.querySelector('#p14 .science__photo');
+          if (!ph) { cineDotsPreset('sign'); return; }
+          const r = ph.getBoundingClientRect();
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          const R = r.width / 2 + 30;
+          const ANG = [-90, 0, 90, 180];                  // alto, destra, basso, sinistra
+          DOT_KEYS.forEach((k, i) => {
+            const a = ANG[i] * Math.PI / 180;
+            dotGo(k, cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+          });
         } else if (name === 'chain') {
           const chain = document.querySelector('.problem__chain');
           const r = chain ? chain.getBoundingClientRect() : { left: innerWidth * .22, width: innerWidth * .56, top: innerHeight * .24 };
