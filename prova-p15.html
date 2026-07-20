@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROVA · P15 — Finale C·A·S·A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#071d21; --paper:#f7f5ee; --acid:#aab322;
+    --food:#d8a94e; --env:#7ebdae; --health:#d08b80; --agr:#aab322;
+    --serif:"Cormorant Garamond",serif; --sans:"Outfit",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans);
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 46%, #0b262b 0%, #071d21 70%),
+      var(--ink);}
+
+  .frase{position:fixed; top:14vh; left:50%; transform:translateX(-50%); width:min(60ch,84vw);
+    text-align:center; font-family:var(--serif); font-weight:500; font-size:clamp(21px,2.5vw,34px);
+    line-height:1.28; letter-spacing:.01em; color:var(--paper); opacity:.86;}
+
+  .lockup{position:fixed; top:47vh; left:50%; transform:translate(-50%,-50%);
+    display:flex; justify-content:center; align-items:flex-start; gap:clamp(18px,3.2vw,52px);}
+  .col{flex:0 0 auto; min-width:clamp(90px,15vw,220px); display:flex; flex-direction:column; align-items:center;}
+  .accento{width:clamp(9px,.95vw,15px); height:clamp(9px,.95vw,15px); border-radius:50%;
+    margin:0 0 clamp(12px,1.6vh,22px); background:var(--c); box-shadow:0 0 clamp(8px,1vw,16px) var(--c);}
+  .lettera{font-family:var(--serif); font-weight:600; font-size:clamp(96px,17vw,260px); line-height:.9; color:var(--c);}
+  /* glow bilanciato: caldi più contenuti, freddi più generosi */
+  .col.warm .lettera{text-shadow:0 0 clamp(14px,1.8vw,32px) color-mix(in srgb,var(--c) 46%,transparent), 0 0 clamp(38px,4.6vw,84px) color-mix(in srgb,var(--c) 22%,transparent);}
+  .col.cool .lettera{text-shadow:0 0 clamp(16px,2vw,36px) color-mix(in srgb,var(--c) 60%,transparent), 0 0 clamp(44px,5.2vw,92px) color-mix(in srgb,var(--c) 30%,transparent);}
+  .etichetta{margin-top:clamp(14px,2vh,26px); font-family:var(--sans); font-weight:600;
+    font-size:clamp(9px,.92vw,13px); letter-spacing:.22em; text-transform:uppercase;
+    color:color-mix(in srgb,var(--c) 82%,#f7f5ee); opacity:.92;}
+
+  .pilastri{position:fixed; bottom:12vh; left:50%; transform:translateX(-50%);
+    display:flex; gap:clamp(16px,2vw,30px); justify-content:center; align-items:baseline;
+    font-family:var(--sans); font-weight:300; font-size:clamp(13px,1.15vw,18px); letter-spacing:.04em; color:var(--paper);}
+  .pilastri span{opacity:.72;}
+  .pilastri .sep{color:var(--acid); opacity:.9;}
+
+  /* entrata a step */
+  .col .accento,.col .lettera,.col .etichetta,.pilastri span{opacity:0; transform:translateY(14px);}
+  .col .accento{transform:translateY(-22px);}
+  .frase{opacity:0; transform:translateX(-50%) translateY(14px);}
+  body.in .frase{opacity:.86; transform:translateX(-50%); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  body.in .col .lettera{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  body.in .col .etichetta{opacity:.92; transform:none; transition:opacity .6s ease, transform .6s ease;}
+  body.in .col .accento{opacity:1; transform:none; transition:opacity .5s ease, transform .6s cubic-bezier(.34,1.4,.5,1);}
+  body.in .pilastri span{opacity:1; transform:none; transition:opacity .6s ease, transform .6s ease;}
+  body.in .pilastri span:nth-child(1){opacity:.72;}
+  body.in .pilastri span:nth-child(3){opacity:.72;}
+  body.in .pilastri span:nth-child(5){opacity:.72;}
+  /* stagger */
+  body.in .col:nth-child(1) .lettera{transition-delay:.3s;}
+  body.in .col:nth-child(2) .lettera{transition-delay:.39s;}
+  body.in .col:nth-child(3) .lettera{transition-delay:.48s;}
+  body.in .col:nth-child(4) .lettera{transition-delay:.57s;}
+  body.in .col:nth-child(1) .etichetta{transition-delay:.9s;}
+  body.in .col:nth-child(2) .etichetta{transition-delay:.97s;}
+  body.in .col:nth-child(3) .etichetta{transition-delay:1.04s;}
+  body.in .col:nth-child(4) .etichetta{transition-delay:1.11s;}
+  body.in .pilastri span{transition-delay:1.35s;}
+  body.in .col:nth-child(1) .accento{transition-delay:1.65s;}
+  body.in .col:nth-child(2) .accento{transition-delay:1.74s;}
+  body.in .col:nth-child(3) .accento{transition-delay:1.83s;}
+  body.in .col:nth-child(4) .accento{transition-delay:1.92s;}
+</style>
+</head>
+<body>
+  <p class="frase">Il luogo in cui ambiente, agricoltura, cibo e salute<br>tornano a lavorare insieme.</p>
+
+  <div class="lockup">
+    <div class="col warm" style="--c:var(--food)"><span class="accento"></span><span class="lettera">C</span><span class="etichetta">Cibo</span></div>
+    <div class="col cool" style="--c:var(--env)"><span class="accento"></span><span class="lettera">A</span><span class="etichetta">Ambiente</span></div>
+    <div class="col cool" style="--c:var(--health)"><span class="accento"></span><span class="lettera">S</span><span class="etichetta">Salute</span></div>
+    <div class="col warm" style="--c:var(--agr)"><span class="accento"></span><span class="lettera">A</span><span class="etichetta">Agricoltura</span></div>
+  </div>
+
+  <div class="pilastri">
+    <span>Uno spazio sperimentale.</span><span class="sep">·</span>
+    <span>Una rete di risorse.</span><span class="sep">·</span>
+    <span>Una regia comune.</span>
+  </div>
+<script>requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('in')));</script>
+</body>
+</html>

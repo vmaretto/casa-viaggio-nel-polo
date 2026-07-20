@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROVA · P13 — Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#071d21; --paper:#f7f5ee; --acid:#aab322;
+    --food:#d8a94e; --env:#7ebdae; --health:#d08b80; --agr:#aab322;
+    --serif:"Cormorant Garamond",serif; --sans:"Outfit",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans);
+    background:
+      radial-gradient(120vw 90vh at 78% 30%, rgba(170,179,34,.10), transparent 55%),
+      var(--ink);}
+
+  /* anni giganti fantasma (dietro la curva) */
+  .year{position:fixed; font-family:var(--sans); font-weight:600; color:var(--paper); line-height:.85; z-index:0; white-space:nowrap;}
+  .y1{left:9vw;  bottom:16vh; font-size:clamp(5rem,11vw,11rem); opacity:.10;}
+  .y2{left:39vw; top:30vh;    font-size:clamp(6rem,13vw,13rem); opacity:.15;}
+  .y3{right:5vw; top:14vh;    font-size:clamp(7rem,15vw,15.5rem); opacity:.28;}
+  .y3 span{color:var(--acid); opacity:.5;}
+
+  /* curva */
+  #road{position:fixed; inset:0; width:100vw; height:100vh; z-index:1; overflow:visible;}
+
+  /* nodi */
+  .node{position:fixed; z-index:2; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%;
+    background:var(--ink); border:1.5px solid var(--nc,rgba(247,245,238,.4));}
+  .n1{left:24vw; top:74vh; --nc:rgba(247,245,238,.35);}
+  .n2{left:54vw; top:55vh; --nc:rgba(170,179,34,.6);}
+  .n3{left:83vw; top:34vh; --nc:var(--acid); box-shadow:0 0 22px rgba(170,179,34,.55);}
+
+  /* titolo */
+  .title{position:fixed; top:12vh; left:8vw; max-width:42vw; z-index:3;
+    font-family:var(--serif); font-weight:500; font-size:clamp(2.2rem,4.2vw,4.4rem); line-height:1.02; color:var(--paper);}
+  .title .a{opacity:.82;} .title .b{color:var(--acid); font-weight:600;}
+  .title .fil{width:3vw; height:1px; margin-top:1.6vh; background:rgba(170,179,34,.5);}
+
+  /* etichette nodi */
+  .lab{position:fixed; z-index:3;}
+  .lab .v{font-family:var(--serif); font-weight:500; font-size:clamp(1.8rem,3vw,2.8rem); line-height:1; color:var(--paper);}
+  .lab .r{margin-top:.7vh; font-weight:300; font-size:clamp(.85rem,1.05vw,1.05rem); line-height:1.35; letter-spacing:.01em; color:rgba(247,245,238,.7); max-width:22vw;}
+  .l1{left:20vw; top:60vh;}
+  .l2{left:50vw; top:41vh;}
+  .l3{right:5vw; top:44vh; text-align:right;}
+  .l3 .r{max-width:24vw; margin-left:auto;}
+
+  /* chiusa */
+  .chiusa{position:fixed; bottom:6vh; left:8vw; max-width:38vw; z-index:3;
+    font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(1.3rem,2.1vw,2rem); color:var(--paper); opacity:.9;}
+
+  /* firma 4 pallini */
+  .sig{position:fixed; top:12vh; right:8vw; z-index:3; display:flex; gap:11px;}
+  .sig i{width:10px; height:10px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c);}
+
+  /* entrata */
+  .year,.title,.lab,.chiusa,.node,.sig i{opacity:0; transform:translateY(12px);}
+  .y1{opacity:0;}
+  body.in .y1{opacity:.10;} body.in .y2{opacity:.15;} body.in .y3{opacity:.28;}
+  body.in .year{transform:none; transition:opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1);}
+  body.in .title,body.in .lab,body.in .chiusa,body.in .node,body.in .sig i{opacity:1; transform:none; transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1);}
+  body.in .lab{opacity:1;}
+  body.in .title{transition-delay:.1s;}
+  body.in .n1{transition-delay:.5s;} body.in .l1{transition-delay:.6s;}
+  body.in .n2{transition-delay:.8s;} body.in .l2{transition-delay:.9s;}
+  body.in .n3{transition-delay:1.1s;} body.in .l3{transition-delay:1.2s;}
+  body.in .chiusa{transition-delay:1.5s;}
+  #rise-run{transition:stroke-dashoffset 1.4s cubic-bezier(.5,0,.35,1) .4s;}
+</style>
+</head>
+<body>
+  <div class="year y1">2026</div>
+  <div class="year y2">2027</div>
+  <div class="year y3"><span>2</span>028–2030</div>
+
+  <svg id="road" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="rise" gradientUnits="userSpaceOnUse" x1="4" y1="84" x2="96" y2="27">
+        <stop offset="0" stop-color="#2a4247"></stop>
+        <stop offset=".55" stop-color="#5c6a2e"></stop>
+        <stop offset=".82" stop-color="#aab322"></stop>
+        <stop offset="1" stop-color="#eaf29a"></stop>
+      </linearGradient>
+    </defs>
+    <path d="M 4,84 C 20,83 22,75 34,72 S 50,58 54,55 S 78,39 83,34 S 93,29 96,27"
+      fill="none" stroke="#2a4247" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+    <path id="rise-run" d="M 4,84 C 20,83 22,75 34,72 S 50,58 54,55 S 78,39 83,34 S 93,29 96,27"
+      fill="none" stroke="url(#rise)" stroke-width="3.4" stroke-linecap="round" vector-effect="non-scaling-stroke"
+      pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></path>
+    <path d="M 54,55 S 78,39 83,34 S 93,29 96,27"
+      fill="none" stroke="url(#rise)" stroke-width="5.4" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity=".9"></path>
+  </svg>
+
+  <div class="node n1"></div>
+  <div class="node n2"></div>
+  <div class="node n3"></div>
+
+  <h2 class="title"><span class="a">Costruire. Attivare. Verificare.</span> <span class="b">Poi estendere.</span><div class="fil"></div></h2>
+
+  <div class="lab l1"><div class="v">Fondare</div><div class="r">Spazio, governance e risorse.</div></div>
+  <div class="lab l2"><div class="v">Attivare</div><div class="r">Il luogo e il primo ciclo operativo.</div></div>
+  <div class="lab l3"><div class="v">Verificare, poi estendere</div><div class="r">Risultati prima della replica.</div></div>
+
+  <p class="chiusa">Prima si costruisce. Poi si prova. Solo dopo si scala.</p>
+
+  <div class="sig">
+    <i style="--c:var(--food)"></i><i style="--c:var(--env)"></i><i style="--c:var(--health)"></i><i style="--c:var(--agr)"></i>
+  </div>
+<script>
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.body.classList.add('in');
+    setTimeout(()=>{document.getElementById('rise-run').style.strokeDashoffset='0';},400);
+  }));
+</script>
+</body>
+</html>
