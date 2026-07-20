@@ -805,6 +805,8 @@
       transition: opacity .35s ease;
       will-change: opacity;
     }
+    @keyframes cineDotBlink { 0%, 100% { opacity: 1; } 50% { opacity: .18; } }
+    #cineDots i.blink { animation: cineDotBlink .5s ease-in-out 3; }
     #cineDots i.pulse-clone {
       width: 10px;
       height: 10px;
@@ -5383,12 +5385,20 @@
         if (num && COUNT[n]) countNum(num, COUNT[n]);
         const activeKey = MAP[n - 1];
         DOT_KEYS.forEach((k, i) => {
-          const isActive = k === activeKey;
-          dotGo(k, innerWidth / 2 + (i - 1.5) * 34, innerHeight - 58, {
-            opacity: n <= 4 ? (isActive ? .78 : .38) : .56,
-            scale: n <= 4 ? (isActive ? .64 : .46) : .54
-          });
+          dotGo(k, innerWidth / 2 + (i - 1.5) * 34, innerHeight - 58);
         });
+        // il numero chiama, il pallino risponde: lampeggio del colpito
+        // (tutti e quattro sulla chiusa "E' la stessa crisi.")
+        const targets = n <= 4 ? [activeKey] : DOT_KEYS;
+        setTimeout(() => {
+          targets.forEach(k => {
+            const el = dot(k);
+            if (!el) return;
+            el.classList.remove('blink');
+            void el.offsetWidth;
+            el.classList.add('blink');
+          });
+        }, 350);
       };
       const cineBridgeLetter = n => {
         const sc = scenes[active];
