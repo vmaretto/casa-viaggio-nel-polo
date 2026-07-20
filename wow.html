@@ -487,6 +487,12 @@
     .cinema-mode .missing.cine-collapse .missing__anchors,
     .cinema-mode .missing.cine-collapse .missing__kicker { opacity: 0; transition: opacity 1.1s ease; }
     .missing__seeds { display: none; }
+    /* i vecchi pallini di scena spariscono nel film: i protagonisti sono #cineDots */
+    .cinema-mode .missing__runners circle { display: none; }
+    .cinema-mode .missing__seeds { display: none !important; }
+    /* le etichette orbitanti passano SOPRA i pallini (loro le passano sotto) */
+    .cinema-mode .missing__frame { z-index: 40; }
+    body.cinema-mode.pillole-fisse .missing__anchors { z-index: 41; }
     .cinema-mode .missing__seeds {
       display: block;
       position: absolute;
@@ -546,16 +552,14 @@
       letter-spacing: .04em;
       box-shadow: 0 0 22px color-mix(in srgb, var(--c), transparent 65%);
     }
+    /* nel film i runner sono spenti del tutto: i pallini veri (#cineDots)
+       orbitano lungo la cornice e passano sotto le etichette d'angolo */
     .pillole-fisse .missing__runners rect, .pillole-fisse .missing__runners text { display: none !important; }
-    .pillole-fisse .missing__runners circle {
-      display: block !important;
-      opacity: .95;
-      r: 9;
-    }
+    .pillole-fisse .missing__runners circle { display: none !important; }
     .pillole-fisse .missing__runners > g {
       filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 20px currentColor);
     }
-    .cinema-mode .missing__runners circle { display: none; }
+    .cinema-mode .missing__runners circle { display: none !important; }
     .cinema-mode .missing__runners text {
       font-size: 20px;
       paint-order: normal;
@@ -5256,73 +5260,45 @@
             setTimeout(() => { el.style.transition = ''; }, 700);
           }
         } else if (name === 'perimeter') {
-          // p04 · dalla firma vanno alla cornice della casa e la percorrono
-          // in avanti, distanziandosi; ognuno si ferma alla sua ancora.
-          const path = document.querySelector('#p04 .missing__frame:not(.missing__frame--mobile) #housePath');
-          const anchorEls = {};
-          DOT_KEYS.forEach(k => { anchorEls[k] = document.querySelector('#p04 .missing__anchors .anchor[data-k="' + k + '"]'); });
-          if (!path || !anchorEls.cibo) { cineDotsPreset('anchors'); return; }
+          // p04 · i quattro orbitano in continuo lungo la cornice, ciascuno in
+          // testa alla propria etichetta (stessa fase dell'animateMotion),
+          // passando SOTTO le etichette (z della cornice sopra #cineDots).
+          const svg = document.querySelector('#p04 .missing__frame:not(.missing__frame--mobile)');
+          const path = svg && svg.querySelector('#housePath');
+          if (!path) { cineDotsPreset('anchors'); return; }
           const L = path.getTotalLength();
-          const ctm = path.getScreenCTM();
-          const at = len => {
-            const q = path.getPointAtLength(((len % L) + L) % L);
-            return new DOMPoint(q.x, q.y).matrixTransform(ctm);
-          };
-          const nearest = (cx, cy) => {
-            let best = 0, bd = Infinity;
-            for (let i = 0; i <= 480; i++) {
-              const pt = at(L * i / 480);
-              const d = (pt.x - cx) ** 2 + (pt.y - cy) ** 2;
-              if (d < bd) { bd = d; best = L * i / 480; }
-            }
-            return best;
-          };
-          const target = {};
-          DOT_KEYS.forEach(k => {
-            const r = anchorEls[k].getBoundingClientRect();
-            target[k] = nearest(r.left + r.width / 2, r.top + r.height / 2);
-          });
-          // ingresso dal punto piu' basso e centrale della cornice
-          const entryLen = nearest(innerWidth / 2, innerHeight);
-          const entryPt = at(entryLen);
-          const startPos = {};
+          const DUR = 18, OFFSET = { cibo: 0, ambiente: 4.5, salute: 9, agricoltura: 13.5 };
+          const ENTRY = 1400;
+          const startPos = {}, t0 = performance.now();
           DOT_KEYS.forEach(k => {
             const el = dot(k);
             startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight - 58 };
           });
-          const ENTRY = 1600;
-          const ARRIVE = { ambiente: 9100, agricoltura: 10500, cibo: 11800, salute: 13000 };
           const sm = e => e * e * (3 - 2 * e);
-          const t0 = performance.now();
           const step = now => {
-            const t = now - t0;
-            let done = true;
+            const ctm = path.getScreenCTM();
+            if (!ctm) { perimeterRaf = requestAnimationFrame(step); return; }
+            const tSvg = svg.getCurrentTime();
             DOT_KEYS.forEach(k => {
               const el = dot(k);
               if (!el) return;
               el.style.transition = 'none';
-              let x, y;
+              const frac = (((tSvg + OFFSET[k]) % DUR) + DUR) % DUR / DUR;
+              const q = path.getPointAtLength(frac * L);
+              const pt = new DOMPoint(q.x, q.y).matrixTransform(ctm);
+              const t = now - t0;
+              let x = pt.x, y = pt.y;
               if (t < ENTRY) {
                 const e = sm(t / ENTRY);
-                x = startPos[k].x + (entryPt.x - startPos[k].x) * e;
-                y = startPos[k].y + (entryPt.y - startPos[k].y) * e;
-                done = false;
-              } else {
-                const dur = ARRIVE[k] - ENTRY;
-                const e = Math.min(1, (t - ENTRY) / dur);
-                if (e < 1) done = false;
-                let dist = target[k] - entryLen;
-                if (dist < 0) dist += L;
-                const pt = at(entryLen + dist * sm(e));
-                x = pt.x; y = pt.y;
+                x = startPos[k].x + (pt.x - startPos[k].x) * e;
+                y = startPos[k].y + (pt.y - startPos[k].y) * e;
               }
               el.style.left = x + 'px';
               el.style.top = y + 'px';
               el.style.opacity = '1';
               el.style.transform = 'scale(1)';
             });
-            if (!done) perimeterRaf = requestAnimationFrame(step);
-            else { perimeterRaf = null; DOT_KEYS.forEach(k => { const el = dot(k); if (el) el.style.transition = ''; }); }
+            perimeterRaf = requestAnimationFrame(step);
           };
           if (perimeterRaf) cancelAnimationFrame(perimeterRaf);
           perimeterRaf = requestAnimationFrame(step);
@@ -5783,7 +5759,7 @@
           ['ambiente','agricoltura','cibo','salute'].forEach(k => postMessage({ casa: 'fx', name: 'anchor', k }, '*'));
           await sleep(250);
           R.D4_ancore_accese_dopo_cue = settled(() => [...document.querySelectorAll('.missing__anchors .anchor')].every(a => Number(getComputedStyle(a).opacity) > .9));
-          R.D4_pallini_runner_visibili = [...document.querySelectorAll('.missing__runners circle')].every(c => getComputedStyle(c).display === 'block');
+          R.D4_cerchietti_runner_spenti = [...document.querySelectorAll('.missing__runners circle')].every(c => getComputedStyle(c).display === 'none');
           document.querySelector('#p04').classList.add('cine-collapse');
           await sleep(200);
           postMessage({ casa: 'fx', name: 'dots', p: 'anchors' }, '*');
