@@ -4911,7 +4911,7 @@
           d.style.left = x + 'px';
           d.style.top = y + 'px';
           d.style.opacity = opacity;
-          d.style.transform = 'scale(.78)';
+          d.style.transform = 'scale(1)';
         });
         if (dotsEl) void dotsEl.offsetWidth;
         current.forEach(({ d }) => { d.style.transition = ''; });
@@ -4923,8 +4923,11 @@
         if (opts.instant) d.style.transition = 'none';
         if (x != null) d.style.left = (typeof x === 'number' ? x + 'px' : x);
         if (y != null) d.style.top = (typeof y === 'number' ? y + 'px' : y);
-        d.style.opacity = opts.opacity != null ? String(opts.opacity) : '1';
-        d.style.transform = 'scale(' + (opts.scale != null ? opts.scale : 1) + ')';
+        // REGOLA DEI PALLINI: sempre identici — 18px pieni, intensita' 100%.
+        // Unica eccezione ammessa: la sparizione narrativa (opacity 0).
+        const vanish = opts.opacity != null && Number(opts.opacity) === 0;
+        d.style.opacity = vanish ? '0' : '1';
+        d.style.transform = 'scale(1)';
         if (opts.instant) {
           void d.offsetWidth;
           requestAnimationFrame(() => { d.style.transition = ''; });
@@ -5247,14 +5250,9 @@
             scale: .6
           }));
         } else if (name === 'roadmap-sign' || name === 'road-convoy') {
-          // p13 · escono dalle finestre e avanzano in convoglio sulla strada,
-          // verso la luce all'orizzonte. Punti presi sulla curva della strada.
-          const ROAD = [[8.5, 87.9], [13.5, 86.2], [21.5, 83.1], [30.0, 79.2]];
-          const SCALE = [.72, .66, .6, .54];
-          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * ROAD[i][0] / 100, innerHeight * ROAD[i][1] / 100, {
-            opacity: .88,
-            scale: SCALE[i]
-          }));
+          // p13 · firma bassa centrata, sotto la chiusa (decisione 20 lug:
+          // niente convoglio sulla strada).
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 38, innerHeight * .955));
         } else if (name === 'chain') {
           const chain = document.querySelector('.problem__chain');
           const r = chain ? chain.getBoundingClientRect() : { left: innerWidth * .22, width: innerWidth * .56, top: innerHeight * .24 };
@@ -5449,7 +5447,7 @@
             const gap = Math.min(46, W * .034);
             const file = [0, 1, 2, 3].map(i => ({ x: cxm - gap * i, y: cym }));
             starts.forEach((s0, i) => {
-              const base = Math.max(9, W * .008);
+              const base = 9;   // raggio: pallini canonici 18px anche in volo
               let x, y, sz = base, alpha = 0;
               if (t < GATHER_AT) {                     // la lettera implode: il pallino la assorbe e pulsa
                 const local = Math.max(0, Math.min(1, (t - VORTEX_AT - i * .18) / 1.15));
@@ -5779,12 +5777,16 @@
             return fs(0) > fs(1) && fs(1) > fs(2);
           });
           fx('dots', { p: 'road-convoy' }); await sleep(900);
-          R.D12_convoglio_in_salita = (() => {
+          R.D12_firma_bassa_centrata = (() => {
             const ds = ['cibo', 'ambiente', 'salute', 'agricoltura'].map(k => {
               const el = document.querySelector('#cineDots i[data-k="' + k + '"]');
               return [parseFloat(el.style.left), parseFloat(el.style.top)];
             });
-            return ds.every((pt, i, arr) => i === 0 || (pt[0] > arr[i - 1][0] && pt[1] < arr[i - 1][1]));
+            const stessaRiga = ds.every(pt => Math.abs(pt[1] - ds[0][1]) < 1);
+            const inFila = ds.every((pt, i, arr) => i === 0 || pt[0] > arr[i - 1][0]);
+            const centrata = Math.abs((ds[0][0] + ds[3][0]) / 2 - innerWidth / 2) < 4;
+            const bassa = ds[0][1] > innerHeight * .9;
+            return stessaRiga && inFila && centrata && bassa;
           })();
           goi(11); await sleep(300);
           R.D13_paragrafo_nascosto = getComputedStyle(document.querySelector('.science__body')).display === 'none';
