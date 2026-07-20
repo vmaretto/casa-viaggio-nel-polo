@@ -290,6 +290,7 @@
     const dpr = Math.min(2, devicePixelRatio || 1);
     W = innerWidth; H = innerHeight;
     cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';   // senza, su retina il canvas raddoppia
     cx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
   fitDust(); addEventListener('resize', fitDust, { passive: true });
