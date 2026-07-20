@@ -572,6 +572,8 @@
     .cinema-mode .effects.is-active,
     .cinema-mode .missing.is-active,
     .cinema-mode .brand.is-active,
+    .cinema-mode .heritage.is-active,
+    .cinema-mode .roadmap.is-active,
     .cinema-mode .operate.is-active { animation: none; }
     /* Ken Burns sul contenuto, mai sul contenitore: la cornice resta ferma. */
     @keyframes cinePortrait { from { background-size: 112%; } to { background-size: 128%; } }
@@ -1693,10 +1695,14 @@
         radial-gradient(ellipse 140vw 120vh at 50% 30%, #082126 30%, #04151a 100%);
       color: var(--paper);
     }
+    /* i livelli a tutto schermo sono fixed (il film non scorre): la visibilità
+       va legata a .is-active, altrimenti restano sopra le scene successive */
     .cinema-mode .heritage__grid {
-      position: fixed; inset: 0; display: block; width: auto; height: auto; margin: 0;
-      padding: 0; overflow: visible; z-index: 2; pointer-events: none;
+      position: fixed; inset: 0 !important; display: block; width: auto; height: auto;
+      margin: 0; padding: 0; overflow: visible; z-index: 2; pointer-events: none;
+      visibility: hidden;
     }
+    .cinema-mode .heritage.is-active .heritage__grid { visibility: visible; }
     .cinema-mode .heritage-cine__house {
       display: block; position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 1;
       opacity: 1;
@@ -1767,7 +1773,7 @@
     }
 
     .cinema-mode .heritage__closing {
-      position: fixed; z-index: 7; left: 50%; top: 87vh;
+      position: fixed; visibility: hidden; z-index: 7; left: 50%; top: 87vh;
       display: block; width: max-content; max-width: 70vw; margin: 0;
       padding: 8px 30px; border: 0; background: var(--ink-deep, #071d21);
       color: rgba(247,245,238,.86); font-family: var(--serif);
@@ -1791,181 +1797,93 @@
     .cinema-mode .heritage.door-on .hg-doorglow { opacity: 1; }
 
 
-    /* P13 · tre soglie: battute tipografiche a tutto schermo, poi la mappa */
-    .roadmap-cine__path,
-    .phase__cine { display: none; }
-    .cinema-mode .roadmap__track {
-      position: absolute;
-      inset: 22vh 8.5vw 16vh;
-      display: block;
-      width: auto;
-      margin: 0;
-      padding: 0;
-      overflow: visible;
-    }
-    .cinema-mode .roadmap-cine__path {
-      position: absolute;
-      inset: 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .cinema-mode .roadmap-cine__path path {
-      fill: none;
-      vector-effect: non-scaling-stroke;
-      stroke-linecap: round;
-    }
-    .cinema-mode .roadmap-cine__path-base { stroke: rgba(247,245,238,.14); stroke-width: 1; }
-    .cinema-mode .roadmap-cine__path-progress {
-      /* Il gradiente si accende verso la meta: lo slancio cresce, non muore. */
-      stroke: url(#rm-grad);
-      stroke-width: 2.5;
-      stroke-dasharray: 100;
-      stroke-dashoffset: 100;
-      filter: drop-shadow(0 0 8px rgba(170,179,34,.38));
-      transition: stroke-dashoffset 1.35s var(--ease);
-    }
-    .cinema-mode .roadmap[data-fragment-step="0"] .roadmap-cine__path-progress { stroke-dashoffset: 72; }
-    .cinema-mode .roadmap[data-fragment-step="1"] .roadmap-cine__path-progress { stroke-dashoffset: 38; }
-    .cinema-mode .roadmap[data-fragment-step="2"] .roadmap-cine__path-progress { stroke-dasharray: none; stroke-dashoffset: 0; }
-    /* Le battute: ogni soglia prende tutto lo schermo. */
-    .cinema-mode .roadmap .phase {
-      position: absolute;
-      z-index: 2;
-      top: 46%;
-      left: 50%;
-      width: min(82vw, 1220px);
-      margin: 0;
-      padding: 0;
-      border: 0;
-      text-align: center;
-      opacity: 0;
-      transform: translate(-50%, -50%) translateY(20px);
-      transition: opacity .6s ease, transform .9s var(--ease),
-        top .9s var(--ease), left .9s var(--ease), width .9s var(--ease);
-    }
-    .cinema-mode .roadmap:not(.cine-map) .phase.is-current {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-    }
-    .cinema-mode .roadmap:not(.cine-map) .phase.is-done {
-      opacity: 0;
-      transform: translate(-50%, -56%);
-    }
-    .cinema-mode .roadmap .phase::before,
-    .cinema-mode .roadmap .phase::after { display: none; }
-    .cinema-mode .roadmap .phase__year {
-      margin: 0 0 10px;
+    /* P13 · tre orizzonti: la strada di notte verso la luce */
+    body.cinema-mode #p13 { transform: none !important; }
+    body.cinema-mode #p13 .scene__safe { position: static; }
+    body.cinema-mode .roadmap {
+      background:
+        radial-gradient(38vw 26vh at 76% 46%, rgba(170,179,34,.16), transparent 62%),
+        radial-gradient(ellipse 140vw 120vh at 50% 26%, #082126 30%, #04151a 100%);
       color: var(--paper);
-      font-size: clamp(110px, 11vw, 210px);
-      line-height: .95;
-      transition: font-size .9s var(--ease);
+    }
+    .cinema-mode .roadmap__track {
+      position: fixed; inset: 0 !important; display: block; width: auto; height: auto;
+      margin: 0; padding: 0; overflow: visible; z-index: 2; pointer-events: none;
+      visibility: hidden;
+    }
+    .cinema-mode .roadmap.is-active .roadmap__track { visibility: visible; }
+    .cinema-mode .roadmap-cine__path {
+      display: block; position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 1; opacity: 1;
+    }
+    body.cinema-mode .roadmap > .scene__safe > header {
+      position: fixed !important; visibility: hidden; z-index: 4; left: 8vw !important; top: 8vh !important;
+      right: auto !important; bottom: auto !important; width: min(34vw, 520px);
+      margin: 0; padding: 0; text-align: left; transform: none !important;
+    }
+    .cinema-mode .roadmap .eyebrow { margin: 0 0 1.2vh; color: var(--acid); }
+    /* il kicker si accende insieme al titolo (la cue rivela solo il display) */
+    .cinema-mode .roadmap header:has(.display.cine-in) .eyebrow {
+      opacity: 1; transform: none; filter: none;
+      transition: opacity .7s ease .15s, transform .7s ease .15s;
+    }
+    .cinema-mode .roadmap .display {
+      margin: 0; font-family: var(--serif); font-weight: 500; text-align: left;
+      font-size: clamp(24px, 3vw, 42px); line-height: 1.08; color: var(--paper);
+    }
+
+    /* le tre tappe: si rimpiccioliscono e si schiariscono allontanandosi */
+    .cinema-mode .roadmap .phase {
+      position: absolute; z-index: 3; transform: translateX(-50%);
+      padding: 0; border: 0; background: none; box-shadow: none; backdrop-filter: none;
+      text-align: center; width: max-content;
+    }
+    .cinema-mode .roadmap .phase.fragment,
+    .cinema-mode .roadmap .phase.fragment.is-done,
+    .cinema-mode .roadmap .phase.fragment.is-current { filter: none; }
+    .cinema-mode .roadmap .phase__year {
+      margin: 0; font-family: var(--serif); font-weight: 600; line-height: .92; color: var(--paper);
     }
     .cinema-mode .roadmap .phase h3 {
-      margin: 0 0 12px;
-      color: var(--acid);
-      font-family: var(--serif);
-      font-size: clamp(34px, 2.7vw, 50px);
-      font-style: italic;
-      font-weight: 400;
-      letter-spacing: 0;
-      line-height: 1.08;
-      text-transform: none;
-      transition: font-size .9s var(--ease);
+      margin: .8vh 0 0; font-family: var(--serif); font-style: italic; font-weight: 500;
+      color: var(--acid); line-height: 1.05;
+    }
+    .cinema-mode .roadmap .phase__cine {
+      display: block; margin: .7vh auto 0; font-family: var(--sans); font-weight: 300;
+      color: rgba(247,245,238,.62); letter-spacing: .01em; line-height: 1.35;
     }
     .cinema-mode .roadmap .phase > p:not(.phase__year):not(.phase__cine) { display: none; }
-    .cinema-mode .roadmap .phase__cine {
-      display: block;
-      max-width: 52ch;
-      margin: 0 auto;
-      color: rgba(247,245,238,.78);
-      font-size: clamp(19px, 1.45vw, 26px);
-      line-height: 1.4;
-      transition: font-size .9s var(--ease);
-    }
-    /* La mappa finale: le tre soglie si posano sulla curva. */
-    .cinema-mode .roadmap.cine-map .phase {
-      width: min(29vw, 430px);
-      opacity: 1;
-      transform: none;
-    }
-    .cinema-mode .roadmap.cine-map .phase--1 {
-      top: 85.5%;
-      left: 7.2%;
-      padding-bottom: 44px;
-      text-align: left;
-      transform: translate(0, -100%);
-    }
-    .cinema-mode .roadmap.cine-map .phase--2 {
-      top: 54.5%;
-      left: 50.6%;
-      padding-bottom: 44px;
-      text-align: center;
-      transform: translate(-50%, -100%);
-    }
-    .cinema-mode .roadmap.cine-map .phase--3 {
-      top: 16.5%;
-      left: 93.6%;
-      text-align: right;
-      transform: translate(-100%, 0);
-    }
-    .cinema-mode .roadmap.cine-map .phase__year {
-      margin: 0 0 8px;
-      font-size: clamp(46px, 3.8vw, 68px);
-    }
-    .cinema-mode .roadmap.cine-map .phase h3 {
-      margin: 0 0 7px;
-      font-size: clamp(21px, 1.6vw, 30px);
-    }
-    .cinema-mode .roadmap.cine-map .phase__cine {
-      margin: 0;
-      max-width: 34ch;
-      font-size: clamp(14px, 1.05vw, 18px);
-    }
-    .cinema-mode .roadmap.cine-map .phase--2 .phase__cine { margin: 0 auto; }
-    .cinema-mode .roadmap.cine-map .phase--3 .phase__cine { margin-left: auto; }
-    /* Nodi e tick esistono solo sulla mappa. */
-    .cinema-mode .roadmap.cine-map .phase::before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 13px;
-      height: 13px;
-      border: 1px solid var(--acid);
-      border-radius: 50%;
-      background: var(--acid);
-      box-shadow: 0 0 14px rgba(170,179,34,.5);
-    }
-    .cinema-mode .roadmap.cine-map .phase--2::before { left: 50%; }
-    .cinema-mode .roadmap.cine-map .phase--3::before { top: 0; left: 100%; }
-    .cinema-mode .roadmap.cine-map .phase--1::after,
-    .cinema-mode .roadmap.cine-map .phase--2::after {
-      content: "";
-      display: block;
-      position: absolute;
-      bottom: 16px;
-      left: 6px;
-      width: 1px;
-      height: 22px;
-      background: rgba(247,245,238,.28);
-    }
-    .cinema-mode .roadmap.cine-map .phase--2::after { left: 50%; }
+    /* niente pin: sulla strada ci sono già i quattro pallini del film */
+    .cinema-mode .roadmap .phase::after { content: none; }
+    .cinema-mode .roadmap .phase--1 { left: 17%; bottom: 15vh; }
+    .cinema-mode .roadmap .phase--1 .phase__year { font-size: clamp(46px, 5.4vw, 84px); }
+    .cinema-mode .roadmap .phase--1 h3 { font-size: clamp(19px, 2vw, 30px); }
+    .cinema-mode .roadmap .phase--1 .phase__cine { font-size: clamp(13px, 1vw, 16px); max-width: 20vw; }
+    .cinema-mode .roadmap .phase--2 { left: 48%; bottom: 29vh; }
+    .cinema-mode .roadmap .phase--2 .phase__year { font-size: clamp(34px, 3.9vw, 60px); }
+    .cinema-mode .roadmap .phase--2 h3 { font-size: clamp(16px, 1.6vw, 24px); }
+    .cinema-mode .roadmap .phase--2 .phase__cine { font-size: clamp(12px, .9vw, 14px); max-width: 17vw; }
+    .cinema-mode .roadmap .phase--3 { left: 76%; bottom: 39.5vh; }
+    /* vicino pieno, lontano più tenue: solo quando la tappa è entrata */
+    .cinema-mode .roadmap .phase--1.is-current, .cinema-mode .roadmap .phase--1.is-done { opacity: 1; }
+    .cinema-mode .roadmap .phase--2.is-current, .cinema-mode .roadmap .phase--2.is-done { opacity: .9; }
+    .cinema-mode .roadmap .phase--3.is-current, .cinema-mode .roadmap .phase--3.is-done { opacity: .82; }
+    .cinema-mode .roadmap .phase--3 .phase__year { font-size: clamp(24px, 2.8vw, 42px); }
+    .cinema-mode .roadmap .phase--3 h3 { font-size: clamp(13px, 1.3vw, 19px); }
+    .cinema-mode .roadmap .phase--3 .phase__cine { font-size: clamp(11px, .82vw, 13px); max-width: 15vw; }
+
+
     .cinema-mode .roadmap__closing {
-      position: absolute;
-      z-index: 7;
-      left: 50%;
-      bottom: 6.5vh;
-      width: min(78vw, 1120px);
-      margin: 0;
-      font-size: clamp(22px, 1.75vw, 32px);
-      text-align: center;
-      transform: translateX(-50%);
+      position: fixed; visibility: hidden; z-index: 5; left: 50%; top: 89vh;
+      display: block; width: max-content; max-width: 76vw; margin: 0; padding: 0; border: 0;
+      background: none; backdrop-filter: none;
+      color: var(--paper); opacity: .9; font-family: var(--serif); font-style: italic; font-weight: 500;
+      font-size: clamp(19px, 2.1vw, 30px); text-align: center; transform: translateX(-50%);
     }
     .cinema-mode .scene .roadmap__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .roadmap__closing.reveal.cine-in { transform: translateX(-50%); }
+    .cinema-mode .roadmap.is-active > .scene__safe > header,
+    .cinema-mode .roadmap.is-active .roadmap__closing,
+    .cinema-mode .heritage.is-active .heritage__closing { visibility: visible; }
     .cinema-mode .roadmap .operate__more { display: none; }
 
     /* P14B · le prossime azioni: una sola colonna ottica, numerali che si vedono */
@@ -2041,8 +1959,7 @@
       .cinema-mode .actors .role h4 { font-size: clamp(25px, 2.15vw, 35px); }
       .cinema-mode .actors .sci h4 { font-size: clamp(22px, 1.8vw, 30px); }
       /* p12 è a schermo pieno (casa notturna): inset e corpi gestiti nel blocco P12 */
-      .cinema-mode .roadmap__track { inset: 23vh 8vw 17vh; }
-      .cinema-mode .roadmap .phase__year { font-size: clamp(44px, 4vw, 62px); }
+      /* p13 è a schermo pieno (strada notturna): inset e corpi nel blocco P13 */
     }
     /* D15: camera ferma sul finale + vortice delle lettere */
     .cinema-mode .finale.is-active { animation: none !important; }
@@ -4237,16 +4154,30 @@
           <h2 class="display reveal delay-1">Costruire. Attivare. Verificare. Poi estendere.</h2>
         </header>
         <div class="roadmap__track" data-fragment-cumulative>
-          <svg class="roadmap-cine__path" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
+          <svg class="roadmap-cine__path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             <defs>
-              <linearGradient id="rm-grad" x1="0" y1="1" x2="1" y2="0">
-                <stop offset="0" stop-color="#aab322" stop-opacity=".3"></stop>
-                <stop offset=".55" stop-color="#aab322" stop-opacity=".65"></stop>
-                <stop offset="1" stop-color="#aab322" stop-opacity="1"></stop>
+              <linearGradient id="rm-ground" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#04171a"></stop>
+                <stop offset=".72" stop-color="#020d0d"></stop>
+              </linearGradient>
+              <linearGradient id="rm-grad" gradientUnits="userSpaceOnUse" x1="8" y1="86" x2="80" y2="60">
+                <stop offset="0" stop-color="rgba(247,245,238,.10)"></stop>
+                <stop offset=".62" stop-color="rgba(170,179,34,.45)"></stop>
+                <stop offset="1" stop-color="rgba(234,242,154,.95)"></stop>
+              </linearGradient>
+              <linearGradient id="rm-horizon" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="rgba(247,245,238,0)"></stop>
+                <stop offset=".22" stop-color="rgba(247,245,238,.10)"></stop>
+                <stop offset=".76" stop-color="rgba(170,179,34,.34)"></stop>
+                <stop offset=".92" stop-color="rgba(247,245,238,.06)"></stop>
+                <stop offset="1" stop-color="rgba(247,245,238,0)"></stop>
               </linearGradient>
             </defs>
-            <path class="roadmap-cine__path-base" d="M -40 352 C 250 336, 380 252, 506 218 S 760 92, 936 66"></path>
-            <path class="roadmap-cine__path-progress" d="M -40 352 C 250 336, 380 252, 506 218 S 760 92, 936 66" pathLength="100"></path>
+            <rect x="0" y="60" width="100" height="40" fill="url(#rm-ground)"></rect>
+            <rect x="0" y="59.9" width="100" height=".2" fill="url(#rm-horizon)"></rect>
+            <path class="roadmap-cine__path-progress" d="M 2,92 C 24,88 40,76 56,69 S 72,63 79,60.4"
+              fill="none" stroke="url(#rm-grad)" stroke-width="2.4" stroke-linecap="round"
+              vector-effect="non-scaling-stroke"></path>
           </svg>
           <article class="phase phase--1 fragment" data-fragment="0">
             <p class="phase__year">2026</p>
@@ -4878,7 +4809,8 @@
         const target = Math.max(0, Math.min(scenes.length - 1, index));
         const count = fragmentCount(scenes[target]);
         setFragment(scenes[target], cinemaMode ? -1 : (openAtEnd && count ? count - 1 : 0));
-        scenes[target].scrollIntoView({ behavior: (cinemaMode || matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth' });
+        // cinema: stacco netto ('instant'); 'auto' verrebbe reso smooth dal CSS della versione scroll
+        scenes[target].scrollIntoView({ behavior: cinemaMode ? 'instant' : (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') });
         setActive(target, true);
         if (cinemaMode && (target === 3 || target === 4)) {
           requestAnimationFrame(() => {
@@ -5311,10 +5243,14 @@
             opacity: .8,
             scale: .6
           }));
-        } else if (name === 'roadmap-sign') {
-          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 42, {
-            opacity: .6,
-            scale: .66
+        } else if (name === 'roadmap-sign' || name === 'road-convoy') {
+          // p13 · escono dalle finestre e avanzano in convoglio sulla strada,
+          // verso la luce all'orizzonte. Punti presi sulla curva della strada.
+          const ROAD = [[17.5, 87.7], [28.6, 82.9], [38.9, 77.6], [48.8, 72.4]];
+          const SCALE = [.72, .66, .6, .54];
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * ROAD[i][0] / 100, innerHeight * ROAD[i][1] / 100, {
+            opacity: .88,
+            scale: SCALE[i]
           }));
         } else if (name === 'chain') {
           const chain = document.querySelector('.problem__chain');
@@ -5823,21 +5759,28 @@
           goi(10); await sleep(400);
           const ph = [...document.querySelectorAll('#p13 .phase')];
           const rmProg = document.querySelector('.roadmap-cine__path-progress');
-          R.D12_fasi_iniziali_vuote = ph.every(p => op(p) === 0);
-          R.D12_curva_iniziale_non_disegnata = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 100);
+          R.D12_tappe_iniziali_vuote = ph.every(p => op(p) === 0);
+          R.D12_strada_presente = !!rmProg && getComputedStyle(rmProg).display !== 'none';
           fx('show', { n: 1 }); await sleep(150);
           fx('step', { n: 0 }); await sleep(900);
-          R.D12_battuta1_in_scena = settled(() => op(ph[0]) > .9);
-          R.D12_curva_al_primo_nodo = settled(() => parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 72);
-          fx('step', { n: 1 }); await sleep(1800);
-          R.D12_battuta1_lascia_la_scena = settled(() => op(ph[0]) === 0);
-          fx('step', { n: 2 }); await sleep(1800);
-          fx('mark', { c: 'cine-map' }); await sleep(1000);
-          R.D12_mappa_tutte_le_soglie = settled(() => ph.every(p => op(p) > .9));
-          R.D12_curva_completa_solida = settled(() => getComputedStyle(rmProg).strokeDasharray === 'none' && parseFloat(getComputedStyle(rmProg).strokeDashoffset) === 0);
-          R.D12_nodi_sulla_mappa = settled(() => [0, 1, 2].every(i =>
-            getComputedStyle(ph[i], '::before').backgroundColor === 'rgb(170, 179, 34)'
-          ));
+          R.D12_prima_tappa_in_scena = settled(() => op(ph[0]) > .9);
+          R.D12_tappe_lontane_ancora_vuote = settled(() => op(ph[2]) === 0);
+          fx('step', { n: 1 }); await sleep(900);
+          R.D12_prima_tappa_resta = settled(() => op(ph[0]) > .9);
+          fx('step', { n: 2 }); await sleep(900);
+          R.D12_tutte_le_tappe = settled(() => op(ph[0]) > .9 && op(ph[1]) > .8 && op(ph[2]) > .7);
+          R.D12_gerarchia_prospettica = settled(() => {
+            const fs = i => parseFloat(getComputedStyle(ph[i].querySelector('.phase__year')).fontSize);
+            return fs(0) > fs(1) && fs(1) > fs(2);
+          });
+          fx('dots', { p: 'road-convoy' }); await sleep(900);
+          R.D12_convoglio_in_salita = (() => {
+            const ds = ['cibo', 'ambiente', 'salute', 'agricoltura'].map(k => {
+              const el = document.querySelector('#cineDots i[data-k="' + k + '"]');
+              return [parseFloat(el.style.left), parseFloat(el.style.top)];
+            });
+            return ds.every((pt, i, arr) => i === 0 || (pt[0] > arr[i - 1][0] && pt[1] < arr[i - 1][1]));
+          })();
           goi(11); await sleep(300);
           R.D13_paragrafo_nascosto = getComputedStyle(document.querySelector('.science__body')).display === 'none';
           const cine = document.querySelector('.science__cine');
