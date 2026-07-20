@@ -1731,23 +1731,37 @@
       color: rgba(247,245,238,.62); letter-spacing: .01em; line-height: 1.35;
     }
     .cinema-mode .roadmap .phase > p:not(.phase__year):not(.phase__cine) { display: none; }
-    .cinema-mode .roadmap .phase::after {
-      content: ""; display: block; width: 9px; height: 9px; margin: 1.4vh auto 0;
-      border-radius: 50%; background: var(--acid); box-shadow: 0 0 14px rgba(170,179,34,.6);
+    /* pin sulla strada (posizioni esatte sulla curva), non sotto i testi */
+    .cinema-mode .roadmap .phase::after { content: none; }
+    .rpin { display: none; }
+    .cinema-mode .roadmap .rpin {
+      display: block; position: absolute; z-index: 3;
+      width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%;
+      background: var(--acid); box-shadow: 0 0 14px rgba(170,179,34,.6);
+      opacity: 0; transition: opacity .7s ease, transform .7s ease;
+      transform: translateY(8px);
     }
-    .cinema-mode .roadmap .phase--3::after {
-      width: 12px; height: 12px;
+    .cinema-mode .roadmap .rpin--1 { left: 17%; top: 85%; }
+    .cinema-mode .roadmap .rpin--2 { left: 48%; top: 71%; }
+    .cinema-mode .roadmap .rpin--3 {
+      left: 76%; top: 60.5%; width: 12px; height: 12px; margin: -6px 0 0 -6px;
       box-shadow: 0 0 26px rgba(170,179,34,.85), 0 0 60px rgba(170,179,34,.4);
     }
-    .cinema-mode .roadmap .phase--1 { left: 17%; bottom: 15vh; }
+    .cinema-mode .roadmap[data-fragment-step="0"] .rpin--1,
+    .cinema-mode .roadmap[data-fragment-step="1"] .rpin--1,
+    .cinema-mode .roadmap[data-fragment-step="2"] .rpin--1,
+    .cinema-mode .roadmap[data-fragment-step="1"] .rpin--2,
+    .cinema-mode .roadmap[data-fragment-step="2"] .rpin--2,
+    .cinema-mode .roadmap[data-fragment-step="2"] .rpin--3 { opacity: 1; transform: none; }
+    .cinema-mode .roadmap .phase--1 { left: 17%; bottom: 17.5vh; }
     .cinema-mode .roadmap .phase--1 .phase__year { font-size: clamp(46px, 5.4vw, 84px); }
     .cinema-mode .roadmap .phase--1 h3 { font-size: clamp(19px, 2vw, 30px); }
     .cinema-mode .roadmap .phase--1 .phase__cine { font-size: clamp(13px, 1vw, 16px); max-width: 20vw; }
-    .cinema-mode .roadmap .phase--2 { left: 48%; bottom: 29vh; }
+    .cinema-mode .roadmap .phase--2 { left: 48%; bottom: 31.5vh; }
     .cinema-mode .roadmap .phase--2 .phase__year { font-size: clamp(34px, 3.9vw, 60px); }
     .cinema-mode .roadmap .phase--2 h3 { font-size: clamp(16px, 1.6vw, 24px); }
     .cinema-mode .roadmap .phase--2 .phase__cine { font-size: clamp(12px, .9vw, 14px); max-width: 17vw; }
-    .cinema-mode .roadmap .phase--3 { left: 76%; bottom: 39.5vh; }
+    .cinema-mode .roadmap .phase--3 { left: 76%; bottom: 42vh; }
     /* vicino pieno, lontano più tenue: solo quando la tappa è entrata */
     .cinema-mode .roadmap .phase--1.is-current, .cinema-mode .roadmap .phase--1.is-done { opacity: 1; }
     .cinema-mode .roadmap .phase--2.is-current, .cinema-mode .roadmap .phase--2.is-done { opacity: .9; }
@@ -3290,18 +3304,36 @@
       top: var(--my);
       display: grid;
       place-items: center;
-      width: 34px;
-      height: 34px;
-      border: 1.5px solid var(--acid);
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--mc, var(--acid));
       border-radius: 50%;
-      background: rgba(7,29,33,.55);
-      backdrop-filter: blur(3px);
-      color: var(--paper);
-      font-family: var(--serif);
-      font-size: 14px;
-      font-style: italic;
+      background: none;
+      color: transparent;
+      font-size: 0;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 0 6px rgba(170,179,34,.18);
+      animation: ovRingPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes ovRingPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(247,245,238,0); }
+      50% { box-shadow: 0 0 18px 4px color-mix(in srgb, var(--mc, var(--acid)) 40%, transparent); }
+    }
+    .ov-marker::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 12px);
+      transform: translateX(-50%);
+      padding: 5px 12px;
+      border: 1px solid var(--mc, var(--acid));
+      border-radius: 99px;
+      background: rgba(7,29,33,.88);
+      color: var(--mc, var(--acid));
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      white-space: nowrap;
     }
     .tiles {
       display: grid;
@@ -3682,7 +3714,7 @@
             <div class="cq__dots">
               <i style="--c: var(--food)"></i><i style="--c: var(--environment)"></i><i style="--c: var(--health)"></i><i style="--c: var(--agriculture)"></i>
             </div>
-            <p class="cq__claim">Non sono tre crisi diverse.<br><strong>È la stessa crisi.</strong></p>
+            <p class="cq__claim">Non sono quattro crisi diverse.<br><strong>È la stessa crisi.</strong></p>
           </div>
         </div>
         <div class="effects__grid" data-fragment-cumulative>
@@ -3949,8 +3981,8 @@
     <section class="scene actors" id="p11" data-index="8" data-title="Chi rende possibile CASA" aria-label="Chi rende possibile CASA">
       <div class="scene__safe scene__center">
         <header>
-          <p class="eyebrow reveal">07 · Chi rende possibile CASA</p>
-          <h2 class="display reveal delay-1">Ruoli distinti. Una regia li trasforma in CASA.</h2>
+          <p class="eyebrow reveal"><span class="t-web">07 · Chi rende possibile CASA</span><span class="t-cine">07 · Gli abitanti di CASA</span></p>
+          <h2 class="display reveal delay-1"><span class="t-web">Ruoli distinti. Una regia li trasforma in CASA.</span><span class="t-cine">Come in ogni casa, ognuno ha il suo ruolo. Insieme la fanno vivere.</span></h2>
         </header>
         <div class="actors__grid" data-fragment-cumulative>
           <div class="actors-cine__orbits" aria-hidden="true">
@@ -4102,25 +4134,27 @@
                 <stop offset="0" stop-color="#04171a"></stop>
                 <stop offset=".72" stop-color="#020d0d"></stop>
               </linearGradient>
-              <linearGradient id="rm-grad" gradientUnits="userSpaceOnUse" x1="8" y1="86" x2="80" y2="60">
+              <linearGradient id="rm-grad" gradientUnits="userSpaceOnUse" x1="0" y1="91" x2="88" y2="57">
                 <stop offset="0" stop-color="rgba(247,245,238,.10)"></stop>
                 <stop offset=".62" stop-color="rgba(170,179,34,.45)"></stop>
                 <stop offset="1" stop-color="rgba(234,242,154,.95)"></stop>
               </linearGradient>
               <linearGradient id="rm-horizon" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0" stop-color="rgba(247,245,238,0)"></stop>
-                <stop offset=".22" stop-color="rgba(247,245,238,.10)"></stop>
-                <stop offset=".76" stop-color="rgba(170,179,34,.34)"></stop>
-                <stop offset=".92" stop-color="rgba(247,245,238,.06)"></stop>
+                <stop offset=".3" stop-color="rgba(247,245,238,.07)"></stop>
+                <stop offset=".7" stop-color="rgba(247,245,238,.07)"></stop>
                 <stop offset="1" stop-color="rgba(247,245,238,0)"></stop>
               </linearGradient>
             </defs>
             <rect x="0" y="60" width="100" height="40" fill="url(#rm-ground)"></rect>
             <rect x="0" y="59.9" width="100" height=".2" fill="url(#rm-horizon)"></rect>
-            <path class="roadmap-cine__path-progress" d="M 2,92 C 24,88 40,76 56,69 S 72,63 79,60.4"
+            <path class="roadmap-cine__path-progress" d="M -2,91 C 8,88.5 12,87 17,85 S 40,74.5 48,71 S 68,63.5 76,60.5 S 84,58 88,57.2"
               fill="none" stroke="url(#rm-grad)" stroke-width="2.4" stroke-linecap="round"
               vector-effect="non-scaling-stroke"></path>
           </svg>
+          <span class="rpin rpin--1" aria-hidden="true"></span>
+          <span class="rpin rpin--2" aria-hidden="true"></span>
+          <span class="rpin rpin--3" aria-hidden="true"></span>
           <article class="phase phase--1 fragment" data-fragment="0">
             <p class="phase__year">2026</p>
             <h3>Fondare</h3>
@@ -4247,12 +4281,12 @@
         <div class="ov-sketch" aria-hidden="true"></div>
         <p class="ov-transito ov-transito--a" aria-hidden="true">Dal rendering&hellip;</p>
         <p class="ov-transito ov-transito--b" aria-hidden="true">&hellip;alla realt&agrave;.</p>
-        <div class="ov-marker" style="--mx: 46%; --my: 74%"><span>01</span></div>
-        <div class="ov-marker" style="--mx: 64%; --my: 48%"><span>02</span></div>
-        <div class="ov-marker" style="--mx: 17%; --my: 58%"><span>03</span></div>
+        <div class="ov-marker" data-label="01 · Sperimentazione" style="--mx: 46%; --my: 76%; --mc: var(--environment)"><span>01</span></div>
+        <div class="ov-marker" data-label="02 · Laboratori" style="--mx: 64%; --my: 50%; --mc: var(--food)"><span>02</span></div>
+        <div class="ov-marker" data-label="03 · Formazione" style="--mx: 16.9%; --my: 60.5%; --mc: var(--health)"><span>03</span></div>
       </div>
       <div class="overlay__list overlay__list--cols">
-        <div class="ov-item" style="--c: var(--environment)"><h3>01 · Aree di sperimentazione e monitoraggio</h3><p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo, biodiversità e pratiche agricole.</p></div>
+        <div class="ov-item" style="--c: var(--environment)"><h3>01 · Aree di sperimentazione e monitoraggio</h3><p>Campi, colture, percorsi sensorizzati e sistemi di osservazione per collegare clima, acqua, suolo e cibo.</p></div>
         <div class="ov-item" style="--c: var(--food)"><h3>02 · Ambienti controllati e laboratori</h3><p>Serre e moduli attrezzati per sperimentare coltivazioni, tecnologie, qualità e trasformazione del cibo e relazioni con la salute.</p></div>
         <div class="ov-item" style="--c: var(--health)"><h3>03 · Spazi per formare e condividere</h3><p>Ambienti utilizzabili per formazione, dimostrazioni, divulgazione ed eventi, nei quali rendere visibili attività, dati e risultati.</p></div>
       </div>
@@ -5215,7 +5249,7 @@
         } else if (name === 'roadmap-sign' || name === 'road-convoy') {
           // p13 · escono dalle finestre e avanzano in convoglio sulla strada,
           // verso la luce all'orizzonte. Punti presi sulla curva della strada.
-          const ROAD = [[17.5, 87.7], [28.6, 82.9], [38.9, 77.6], [48.8, 72.4]];
+          const ROAD = [[8.5, 87.9], [13.5, 86.2], [21.5, 83.1], [30.0, 79.2]];
           const SCALE = [.72, .66, .6, .54];
           DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * ROAD[i][0] / 100, innerHeight * ROAD[i][1] / 100, {
             opacity: .88,
