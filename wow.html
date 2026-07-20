@@ -6039,15 +6039,15 @@
             // il capofila deve TRANSITARE sul pin del 2026 (17%, 85%): si
             // campiona la distanza minima in una finestra, robusto ai drift
             const el = document.querySelector('#cineDots i[data-k="cibo"]');
-            let min = Infinity, xStart = null, xEnd = 0;
+            let min = Infinity, percorso = 0, px = null, py = null;
             for (let i = 0; i < 40; i++) {
               await sleep(100);
               const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
-              if (xStart === null && !Number.isNaN(x)) xStart = x;
-              xEnd = x;
+              if (px !== null) percorso += Math.hypot(x - px, y - py);
+              px = x; py = y;
               min = Math.min(min, Math.hypot(x - innerWidth * .17, y - innerHeight * .85));
             }
-            R.D12_traversata_in_moto = xEnd > xStart + 100;
+            R.D12_traversata_in_moto = percorso > 300;   // cammino totale, non direzione
             return min < 40;
           })();
           goi(11); await sleep(300);
