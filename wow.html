@@ -493,7 +493,13 @@
     .cinema-mode .missing__seeds { display: none !important; }
     /* le etichette orbitanti passano SOPRA i pallini (loro le passano sotto) */
     .cinema-mode .missing__frame { z-index: 40; }
-    body.cinema-mode.pillole-fisse .missing__anchors { z-index: 45; }   /* sopra cornice (40) e pallini (30) */
+    body.cinema-mode.pillole-fisse .missing__anchors { z-index: 45; }   /* sopra la cornice (40) */
+    /* Le etichette vivono in un layer fisso SOPRA #cineDots (z 30): da dentro
+       la scena nessuno z-index può coprire il layer dei pallini, che è un
+       fratello della scena sul body. */
+    #cineAnchors { position: fixed; inset: 0; z-index: 34; pointer-events: none; }
+    body:not(:has(.missing.is-active)) #cineAnchors { visibility: hidden; }
+    body:has(.missing.cine-collapse) #cineAnchors { opacity: 0; transition: opacity 1.1s ease; }
     .cinema-mode .missing__seeds {
       display: block;
       position: absolute;
@@ -4596,6 +4602,16 @@
         const cq = new URLSearchParams(location.search);
         if (cq.get('quadro')) document.body.dataset.quadro = cq.get('quadro');
         document.documentElement.style.overflow = 'hidden';
+        // Le etichette della casa (p04) si spostano in un layer fisso sopra i
+        // pallini: restando dentro la scena non potrebbero mai coprirli,
+        // perché #cineDots è un layer che sovrasta la scena intera.
+        const anchorsBox = document.querySelector('.missing__anchors');
+        if (anchorsBox) {
+          const lay = document.createElement('div');
+          lay.id = 'cineAnchors';
+          document.body.appendChild(lay);
+          lay.appendChild(anchorsBox);
+        }
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
         addEventListener('touchmove', block, { passive: false });
