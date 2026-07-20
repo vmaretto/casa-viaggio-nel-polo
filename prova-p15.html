@@ -18,16 +18,16 @@
   body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans);
     background:radial-gradient(ellipse 60% 45% at 50% 46%, #0b262b 0%, #071d21 70%), var(--ink);}
 
-  .frase{position:fixed; top:14vh; left:50%; transform:translateX(-50%); width:min(60ch,84vw);
+  .frase{position:fixed; top:10.5vh; left:50%; transform:translateX(-50%); width:min(60ch,84vw);
     text-align:center; font-family:var(--serif); font-weight:500; font-size:clamp(21px,2.5vw,34px);
     line-height:1.28; letter-spacing:.01em; color:var(--paper); opacity:.86;}
 
-  .lockup{position:fixed; top:47vh; left:50%; transform:translate(-50%,-50%);
+  .lockup{position:fixed; top:50.5vh; left:50%; transform:translate(-50%,-50%);
     display:flex; justify-content:center; align-items:flex-start; gap:clamp(18px,3.2vw,52px);}
   .col{flex:0 0 auto; min-width:clamp(90px,15vw,220px); display:flex; flex-direction:column; align-items:center;}
   .accento{width:clamp(13px,1.3vw,24px); height:clamp(13px,1.3vw,24px); border-radius:50%;
     margin:0 0 clamp(14px,2vh,32px); background:var(--c); box-shadow:0 0 clamp(11px,1.4vw,24px) var(--c), 0 0 clamp(26px,3vw,48px) var(--c);}
-  .lettera{font-family:var(--serif); font-weight:600; font-size:clamp(96px,17vw,260px); line-height:.9; color:var(--c); transform-origin:center 30%;}
+  .lettera{font-family:var(--serif); font-weight:600; font-size:clamp(96px,17vw,236px); line-height:.9; color:var(--c); transform-origin:center 30%;}
   .col.warm .lettera{text-shadow:0 0 clamp(14px,1.8vw,32px) color-mix(in srgb,var(--c) 46%,transparent), 0 0 clamp(38px,4.6vw,84px) color-mix(in srgb,var(--c) 22%,transparent);}
   .col.cool .lettera{text-shadow:0 0 clamp(16px,2vw,36px) color-mix(in srgb,var(--c) 60%,transparent), 0 0 clamp(44px,5.2vw,92px) color-mix(in srgb,var(--c) 30%,transparent);}
   .etichetta{margin-top:clamp(14px,2vh,26px); font-family:var(--sans); font-weight:600;
@@ -155,9 +155,12 @@
       l.style.transition='none';
       l.style.opacity=String(1-k);
       l.style.transform=`translateY(${-k*0.95}em) scale(${1-k})`;
-      l.parentElement.querySelector('.etichetta').style.opacity=String(0.92*tf);
+      const et=l.parentElement.querySelector('.etichetta');
+      et.style.transition='none'; et.style.opacity=String(0.92*tf);
     });
-    accenti.forEach(a=>a.style.opacity='0');
+    // spegnere SUBITO i pallini DOM: senza transition:none la dissolvenza ritardata
+    // li lascerebbe visibili nelle posizioni orizzontali mentre parte la cometa
+    accenti.forEach(a=>{ a.style.transition='none'; a.style.opacity='0'; });
     // canvas: pallini + scie (scia calcolata analiticamente da C → deterministica)
     ctx.clearRect(0,0,W,H);
     for(let i=0;i<4;i++){
