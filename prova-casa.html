@@ -143,6 +143,7 @@
 <script>
 (() => {
   'use strict';
+  window.onerror=(m,src,l,c)=>{document.title='JSERR '+m+' @'+l+':'+c;};
   const qs = new URLSearchParams(location.search);
   const TABLEAU = qs.has('tableau');
 
@@ -204,83 +205,84 @@
   const doorlight = document.getElementById('doorlight');
   const doorglow = document.getElementById('doorglow');
 
-  const ROW_ORDER = ['C','B','D','A']; // cibo, ambiente, salute, agricoltura
-  const placeRow = () => {
-    ROW_ORDER.forEach((k, i) => {
-      const d = els[k].dot;
-      d.style.left = (50 + (i - 1.5) * 2.1) + 'vw';
-      d.style.top = '76vh';
-      d.style.opacity = '.72';
-      d.style.transform = 'scale(.7)';
-    });
-  };
-  const dotToLamp = k => {
-    const d = els[k].dot, s = sill(k);
-    d.style.left = s.x + 'vw';
-    d.style.top = s.y + 'vh';
-    d.style.opacity = '1';
-    d.style.transform = 'scale(1)';
-    d.classList.add('lamp');
+  // ---------- animazione come funzione del tempo (verificabile con ?frame=T) ----------
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), smooth=k=>k*k*(3-2*k), lerp=(a,b,k)=>a+(b-a)*k;
+  const B = { SHOW:0, HOLD:1.15, RETREAT_END:1.75, LIGHT:1.5, DOT:1.5, DOT_DUR:1.35 };
+  const ROW_ORDER = ['C','B','D','A'];               // cibo, ambiente, salute, agricoltura
+  const rowPos = k => { const i=ROW_ORDER.indexOf(k); return { x:50+(i-1.5)*2.1, y:76 }; };
+
+  const setWord = beat => {
+    const big=word.querySelector('.big'), sub=word.querySelector('.sub');
+    if(word.dataset.k===beat.k) return;
+    word.dataset.k=beat.k;
+    big.className='big'+(beat.word.length>1?' two':'');
+    big.innerHTML=beat.word.join('<br>');
+    sub.textContent=WINS[beat.k].keys;
+    sub.style.color=rgba(WINS[beat.k].c,.85);
   };
 
-  const lightWin = k => {
-    const e = els[k];
-    e.div.classList.add('on');
-    e.tag.classList.add('on');
-    if (e.pool) e.pool.style.opacity = .75;
-  };
-
-  const showWord = beat => {
-    const big = word.querySelector('.big'), sub = word.querySelector('.sub');
-    big.className = 'big' + (beat.word.length > 1 ? ' two' : '');
-    big.innerHTML = beat.word.join('<br>');
-    sub.textContent = WINS[beat.k].keys;
-    sub.style.color = rgba(WINS[beat.k].c, .85);
-    word.style.transform = 'translate(-50%,-50%) scale(.96)';
-    word.style.filter = 'blur(0)';
-    word.classList.add('show');
-    requestAnimationFrame(() => { word.style.transform = 'translate(-50%,-50%) scale(1)'; });
-  };
-  const retreatWord = beat => {
-    const c = WINS[beat.k];
-    const dx = (c.x - 50), dy = (c.y - 40);
-    word.style.transform = `translate(-50%,-50%) translate(${dx}vw, ${dy}vh) scale(.06)`;
-    word.style.filter = 'blur(2px)';
-    word.style.opacity = '0';
-    setTimeout(() => { word.classList.remove('show'); word.style.filter = 'none'; }, 560);
-  };
-
-  const runBeat = beat => {
-    showWord(beat);
-    setTimeout(() => retreatWord(beat), 1150);
-    setTimeout(() => { lightWin(beat.k); dotToLamp(beat.k); }, 1500);
-  };
-
-  const play = () => {
+  const render = t => {
+    // titolo
+    titolo.style.transition='none';
+    titolo.style.opacity = String(t<0.7 ? 0 : (t<1.3 ? clamp((t-0.7)/0.5,0,1) : 0.5));
+    titolo.style.transform='translateX(-50%)';
     rim.classList.add('on');
-    placeRow();
-    setTimeout(() => titolo.classList.add('on'), 700);
-    setTimeout(() => titolo.classList.add('dim'), 1300);
-    BEATS.forEach(b => setTimeout(() => runBeat(b), b.at * 1000));
-    setTimeout(() => {
-      doorlight.animate([{opacity:0},{opacity:.85}], {duration:600, fill:'forwards', easing:'ease-out'});
-      doorglow.animate([{opacity:0},{opacity:.28}], {duration:800, fill:'forwards', easing:'ease-out'});
-      doorPool.style.opacity = .8;
-    }, 10800);
-    setTimeout(() => { titolo.classList.remove('dim'); titolo.classList.add('on'); }, 11000);
-    setTimeout(() => chiusa.classList.add('s1'), 11200);
-    setTimeout(() => chiusa.classList.add('s2'), 12000);
+
+    // parola gigante: quale beat è attivo
+    let active=null, local=0;
+    for(const b of BEATS){ const l=t-b.at; if(l>=0 && l<B.RETREAT_END){ active=b; local=l; } }
+    word.style.transition='none';
+    if(active){
+      setWord(active);
+      const c=WINS[active.k];
+      if(local<B.HOLD){                                  // compare grande al centro
+        const op=clamp(local/0.25,0,1), sc=0.96+0.04*clamp(local/0.5,0,1);
+        word.style.opacity=String(op);
+        word.style.transform=`translate(-50%,-50%) scale(${sc})`;
+        word.style.filter='none';
+      } else {                                            // si ritira DENTRO la finestra
+        const k=smooth((local-B.HOLD)/(B.RETREAT_END-B.HOLD));
+        const dx=(c.x-50), dy=(c.y-40);
+        word.style.opacity=String(1-k);
+        word.style.transform=`translate(-50%,-50%) translate(${dx*k}vw, ${dy*k}vh) scale(${1-0.94*k})`;
+        word.style.filter=`blur(${(k<0.5?k*2:(1-k)*2)*2}px)`;
+      }
+    } else { word.style.opacity='0'; }
+
+    // finestre, etichette, pallini-lampada, pozze
+    for(const b of BEATS){
+      const e=els[b.k], l=t-b.at;
+      const lit=l>=B.LIGHT;
+      e.div.style.transition='none';
+      e.div.style.opacity = String(lit ? e.cfg.peak*clamp((l-B.LIGHT)/0.45,0,1) : 0);
+      e.tag.style.transition='none';
+      e.tag.style.opacity = String(lit ? clamp((l-B.LIGHT-0.2)/0.5,0,1) : 0);
+      if(e.pool){ e.pool.style.transition='none'; e.pool.style.opacity=String(lit?0.75*clamp((l-B.LIGHT)/0.6,0,1):0); }
+      const r=rowPos(b.k), sp=sill(b.k);
+      const kd = lit ? smooth(clamp((l-B.DOT)/B.DOT_DUR,0,1)) : 0;
+      const d=e.dot;
+      d.style.transition='none';
+      d.style.left=lerp(r.x,sp.x,kd)+'vw';
+      d.style.top=lerp(r.y,sp.y,kd)+'vh';
+      d.style.opacity=String(t<0.2?0:lerp(0.72,1,kd));
+      d.style.transform=`scale(${lerp(0.7,1,kd)})`;
+    }
+
+    // porta e chiusa
+    const kd2=clamp((t-10.8)/0.6,0,1);
+    doorlight.setAttribute('opacity', String(0.85*kd2));
+    doorglow.setAttribute('opacity', String(0.28*kd2));
+    doorPool.style.transition='none'; doorPool.style.opacity=String(0.8*kd2);
+    chiusa.querySelector('.p1').style.opacity=String(clamp((t-11.2)/0.5,0,1));
+    const p2=chiusa.querySelector('.p2');
+    const k2=clamp((t-12.0)/0.5,0,1);
+    p2.style.opacity=String(k2); p2.style.transform=`translateY(${(1-k2)*1}vh)`;
+    chiusa.querySelectorAll('span').forEach(sp2=>sp2.style.transition='none');
   };
 
-  const tableau = () => {
-    rim.classList.add('on');
-    titolo.classList.add('on');
-    for (const k in els) { lightWin(k); dotToLamp(k); }
-    doorlight.setAttribute('opacity', '.85');
-    doorglow.setAttribute('opacity', '.28');
-    doorPool.style.opacity = .8;
-    chiusa.classList.add('s1', 's2');
-  };
+  const T_END = 14.5;
+  let t0=null;
+  const loop = now => { if(t0===null)t0=now; const t=(now-t0)/1000; render(t); if(t<T_END) requestAnimationFrame(loop); };
 
   /* pulviscolo: decorazione autonoma, non tocca nient'altro */
   const cv = document.getElementById('dust');
@@ -310,13 +312,23 @@
 
   document.getElementById('replay').onclick = () => location.reload();
 
-  if (TABLEAU) { placeRow(); requestAnimationFrame(() => requestAnimationFrame(tableau)); }
-  else if (qs.has('force')) play(); // solo per screenshot di test
+  const start = () => { t0=null; requestAnimationFrame(loop); };
+
+  // ?frame=T disegna esattamente quell'istante (collaudo deterministico)
+  if (qs.has('frame')) {
+    const T = parseFloat(qs.get('frame')) || 0;
+    const draw = () => { try{ render(T); document.title='OK t='+T; }catch(e){ document.title='ERR '+e.message; } };
+    requestAnimationFrame(() => requestAnimationFrame(draw));
+    addEventListener('resize', () => { fitDust(); draw(); });
+    setTimeout(draw, 250); setTimeout(draw, 800);
+  }
+  else if (TABLEAU) { requestAnimationFrame(() => requestAnimationFrame(() => render(13.5))); }
+  else if (qs.has('force')) start();
   else if (document.hidden) {
     document.addEventListener('visibilitychange', function once() {
-      if (!document.hidden) { document.removeEventListener('visibilitychange', once); play(); }
+      if (!document.hidden) { document.removeEventListener('visibilitychange', once); start(); }
     });
-  } else play();
+  } else start();
 })();
 </script>
 </body>
