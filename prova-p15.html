@@ -112,8 +112,10 @@
     const cy = starts[0].y;                         // riga dei pallini
     const cx = W/2;
     const L = {x:cx, y:cy};                          // punto di lancio della fila
-    const ctrl = {x:W*0.72, y:cy - H*0.30};          // controllo: arco verso l'alto
-    const exit = {x:W*1.18, y:H*0.02};               // fuori campo, alto-destra (stella cometa)
+    // arco dolce che sale e ATTRAVERSA lo schermo: esce dal bordo destro
+    // a ~35% di altezza, mai dal bordo alto — identico a ogni risoluzione.
+    const ctrl = {x:W*0.68, y:cy - H*0.24};
+    const exit = {x:W*1.12, y:H*0.35};
     // direzione iniziale, per allineare la fila indiana dietro il capofila
     const dir = {x:ctrl.x-L.x, y:ctrl.y-L.y}; const dl=Math.hypot(dir.x,dir.y)||1; dir.x/=dl; dir.y/=dl;
     const gap = Math.min(52, W*0.03);
