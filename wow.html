@@ -3260,6 +3260,30 @@
       background: url("assets/cinematic/casa-space-hero-v2.jpg") center 62% / cover no-repeat;
       overflow: hidden;
     }
+    /* p06 · dal rendering alla realta': lo sketch si dissolve nella foto */
+    .ov-sketch {
+      position: absolute; inset: 0; z-index: 2;
+      background: url("assets/cinematic/casa-space-sketch.jpg") center 40% / cover no-repeat;
+      opacity: 0; pointer-events: none;
+    }
+    .ov-transito {
+      position: absolute; z-index: 3; left: 50%; bottom: 4%;
+      margin: 0; padding: 6px 22px; border-radius: 999px;
+      transform: translateX(-50%);
+      background: rgba(7,29,33,.72); backdrop-filter: blur(6px);
+      color: var(--paper); font-family: var(--serif); font-style: italic;
+      font-size: clamp(15px, 1.4vw, 21px);
+      opacity: 0; pointer-events: none;
+    }
+    .cinema-mode .overlay.is-open .ov-sketch {
+      opacity: 1; animation: ovSketchOut 5.2s ease forwards;
+    }
+    @keyframes ovSketchOut { 0%, 55% { opacity: 1; } 90%, 100% { opacity: 0; } }
+    /* due pillole: "Dal rendering..." poi "...alla realta'." (solo opacity: robusto) */
+    .cinema-mode .overlay.is-open .ov-transito--a { animation: ovTransA 5.2s ease forwards; }
+    .cinema-mode .overlay.is-open .ov-transito--b { animation: ovTransB 9s ease forwards; }
+    @keyframes ovTransA { 0% { opacity: 0; } 8%, 58% { opacity: 1; } 70%, 100% { opacity: 0; } }
+    @keyframes ovTransB { 0%, 42% { opacity: 0; } 50%, 82% { opacity: 1; } 96%, 100% { opacity: 0; } }
     .ov-marker {
       position: absolute;
       left: var(--mx);
@@ -4220,6 +4244,9 @@
       <p class="eyebrow">Approfondimento · Lo spazio CASA</p>
       <h2 class="display overlay__title">Un ettaro di innovazione condivisa.</h2>
       <div class="ov-photo">
+        <div class="ov-sketch" aria-hidden="true"></div>
+        <p class="ov-transito ov-transito--a" aria-hidden="true">Dal rendering&hellip;</p>
+        <p class="ov-transito ov-transito--b" aria-hidden="true">&hellip;alla realt&agrave;.</p>
         <div class="ov-marker" style="--mx: 46%; --my: 74%"><span>01</span></div>
         <div class="ov-marker" style="--mx: 64%; --my: 48%"><span>02</span></div>
         <div class="ov-marker" style="--mx: 17%; --my: 58%"><span>03</span></div>
