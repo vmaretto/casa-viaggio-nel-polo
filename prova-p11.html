@@ -38,7 +38,7 @@
   }
   .title {
     margin:0; font-family:var(--serif); font-weight:500;
-    font-size:clamp(30px,4.4vw,60px); line-height:1.04; color:var(--paper);
+    font-size:clamp(25px,3.1vw,42px); line-height:1.08; color:var(--paper);
     max-width:17ch;
   }
   .title .acid { color:var(--acid); }
@@ -50,22 +50,22 @@
   body.in .rule { transform:scaleX(1); }
 
   /* box investitore: unico riquadro della scena, allineato alla colonna dei nomi */
-  .investor { margin:3vh 0 0; display:grid; grid-template-columns:var(--gutter) 1fr; column-gap:clamp(24px,3vw,56px); }
+  .investor { margin:2.2vh 0 0; display:grid; grid-template-columns:var(--gutter) 1fr; column-gap:clamp(14px,1.5vw,26px); }
   .ibox {
     grid-column:2; justify-self:start;
     display:inline-flex; flex-direction:column; gap:7px;
-    padding:22px 30px; border:1.5px solid var(--acid); border-radius:4px;
+    padding:15px 24px; border:1.5px solid var(--acid); border-radius:3px;
     background:rgba(170,179,34,.06);
     box-shadow:0 0 0 1px rgba(170,179,34,.14), 0 0 28px rgba(170,179,34,.16), 0 12px 46px -14px rgba(170,179,34,.3);
   }
   .irole { margin:0; font-size:clamp(10px,.85vw,12px); font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--acid); }
-  .iname { margin:0; font-family:var(--serif); font-weight:600; font-size:clamp(30px,3.8vw,52px); line-height:1; color:var(--paper); }
+  .iname { margin:0; font-family:var(--serif); font-weight:600; font-size:clamp(26px,3vw,40px); line-height:1.05; color:var(--paper); }
 
   /* lista cast */
-  .cast { margin:4.4vh 0 0; display:flex; flex-direction:column; gap:clamp(14px,2.4vh,26px); }
+  .cast { margin:2.8vh 0 0; display:flex; flex-direction:column; gap:clamp(8px,1.35vh,15px); }
   .row {
     display:grid; grid-template-columns:var(--gutter) 1fr;
-    column-gap:clamp(24px,3vw,56px); align-items:baseline;
+    column-gap:clamp(14px,1.5vw,26px); align-items:baseline;
   }
   .row.trio { align-items:center; } /* il ruolo si centra sull'intero blocco del trio */
   .role {
@@ -73,13 +73,13 @@
     letter-spacing:.16em; text-transform:uppercase; line-height:1.4;
     color:rgba(247,245,238,.62);
   }
-  .name { font-family:var(--serif); font-size:clamp(24px,3vw,40px); line-height:1.05; color:var(--paper); }
+  .name { font-family:var(--serif); font-size:clamp(21px,2.3vw,31px); line-height:1.08; color:var(--paper); }
   .name.dim { color:rgba(247,245,238,.85); }
   .name .ext { font-family:var(--serif); font-style:italic; font-size:clamp(15px,1.4vw,20px); color:rgba(247,245,238,.55); margin-left:.5em; }
 
   /* trio scientifico */
-  .trio .names { display:flex; flex-direction:column; gap:1.1vh; border-left:1px solid rgba(247,245,238,.10); padding-left:clamp(14px,1.4vw,22px); }
-  .sci { display:flex; align-items:baseline; font-family:var(--serif); font-size:clamp(20px,2.4vw,32px); line-height:1.05; color:var(--paper); }
+  .trio .names { display:flex; flex-direction:column; gap:.7vh; border-left:1px solid rgba(247,245,238,.10); padding-left:clamp(14px,1.4vw,22px); }
+  .sci { display:flex; align-items:baseline; font-family:var(--serif); font-size:clamp(19px,2.1vw,28px); line-height:1.08; color:var(--paper); }
   .sci .dots { flex:none; align-self:center; display:inline-flex; gap:6px; margin-right:14px; }
   .sci .dots i {
     width:clamp(9px,.85vw,12px); height:clamp(9px,.85vw,12px); border-radius:50%; background:var(--c);
