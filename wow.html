@@ -773,7 +773,7 @@
     .finale--exit .finale__statement,
     .finale--exit .finale__pillars { opacity: 0 !important; transition: opacity 1.2s ease !important; }
     .finale--dots .finale__lockup { opacity: 0 !important; transition: opacity 1.3s ease !important; }
-    #cineExit { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+    #cineExit { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 60; pointer-events: none; }
     #cineDots { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
     #cineDots .cine-dots__train {
       position: absolute;
@@ -5415,6 +5415,8 @@
         const ctx2 = cv.getContext('2d');
         const dpr = Math.min(2, devicePixelRatio || 1);
         cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+        cv.style.width = innerWidth + 'px';   // dimensione CSS esplicita: senza, su retina il canvas raddoppia
+        cv.style.height = innerHeight + 'px';
         ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
         const W = innerWidth, H = innerHeight;
         let starts = null;
