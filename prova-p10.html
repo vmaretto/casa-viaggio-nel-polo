@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROVA · P10 — Atrio di luce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#071d21; --paper:#f7f5ee; --acid:#aab322;
+    --food:#d8a94e; --env:#7ebdae; --health:#d08b80; --agr:#aab322;
+    --serif:"Cormorant Garamond",serif; --sans:"Outfit",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans); background:var(--ink);}
+  .scene{position:fixed; inset:0;}
+
+  /* Layer 0: la stanza — alone caldo condiviso, senza bordi */
+  .room{position:fixed; inset:0; background:
+    radial-gradient(46vw 42vh at 50% 47vh, rgba(247,245,238,.09), rgba(170,179,34,.035) 45%, transparent 72%);}
+
+  /* titolo scena */
+  .title{position:fixed; top:8vh; left:50%; transform:translateX(-50%); width:min(80vw,900px);
+    text-align:center; font-weight:500; font-size:clamp(1rem,1.75vw,1.5rem); letter-spacing:.06em; color:rgba(247,245,238,.92);}
+
+  /* CASA protagonista */
+  .casa{position:fixed; top:47vh; left:50%; transform:translate(-50%,-50%); text-align:center;}
+  .casa .word{font-family:var(--serif); font-weight:600; font-size:clamp(5.5rem,14vw,13rem); line-height:.9;
+    letter-spacing:.05em; color:var(--paper); text-shadow:0 0 50px rgba(247,245,238,.28), 0 0 130px rgba(170,179,34,.14);}
+  .casa .sub{margin-top:1.4vh; font-weight:300; font-size:clamp(.85rem,1.35vw,1.1rem); letter-spacing:.36em; text-transform:uppercase; color:rgba(247,245,238,.6);}
+  .casa .bar{width:60px; height:1px; margin:1.6vh auto 0; background:rgba(170,179,34,.5);}
+
+  /* i quattro ingressi */
+  .entrance{position:fixed; width:25vw; display:flex; align-items:center; gap:16px;}
+  .entrance.l{ flex-direction:row; justify-content:flex-end; text-align:right; }
+  .entrance.r{ flex-direction:row-reverse; justify-content:flex-end; text-align:left; }
+  .entrance .txt .nm{font-family:var(--serif); font-weight:500; font-size:clamp(1.15rem,2vw,1.7rem); line-height:1.05; color:var(--paper);}
+  .entrance .txt .ph{margin-top:.7vh; font-weight:300; font-size:clamp(.82rem,1.05vw,.98rem); line-height:1.4; letter-spacing:.03em; color:rgba(247,245,238,.66);}
+  .entrance .dot{position:relative; flex:none; width:16px; height:16px; border-radius:50%; background:var(--c); box-shadow:0 0 12px var(--c),0 0 26px var(--c);}
+  .entrance .dot::before{content:""; position:absolute; left:50%; top:50%; width:13vw; height:13vw; transform:translate(-50%,-50%);
+    border-radius:50%; background:radial-gradient(closest-side, var(--c) 0%, transparent 70%); opacity:.10; filter:blur(9px); z-index:-1;}
+
+  /* posizioni: pallino verso il centro, testo verso l'angolo */
+  .e1{ left:3vw;  top:27vh; }   /* Imprese — alto sx */
+  .e2{ right:3vw; top:27vh; }   /* Università — alto dx */
+  .e3{ left:3vw;  top:67vh; }   /* Persone — basso sx */
+  .e4{ right:3vw; top:67vh; }   /* Istituzioni — basso dx */
+
+  /* chiusa */
+  .chiusa{position:fixed; bottom:8vh; left:50%; transform:translateX(-50%); width:min(88vw,1050px);
+    text-align:center; font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(1.3rem,2.4vw,2rem); color:var(--paper);}
+  .chiusa em{font-style:italic; text-decoration:underline; text-decoration-color:var(--acid); text-decoration-thickness:1px; text-underline-offset:.3em;}
+
+  /* entrata */
+  .title,.casa,.chiusa{opacity:0; transform:translate(-50%,-50%);}
+  .title,.chiusa{transform:translateX(-50%) translateY(10px);}
+  .casa{transform:translate(-50%,calc(-50% + 12px));}
+  .title.on,.chiusa.on{opacity:1; transform:translateX(-50%);}
+  .casa.on{opacity:1; transform:translate(-50%,-50%);}
+  .title,.casa,.chiusa{transition:opacity .8s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);}
+  .entrance{opacity:0; transition:opacity .6s ease;}
+  .entrance.on{opacity:1;}
+  .entrance .txt{opacity:0; transform:translateY(6px); transition:opacity .5s ease .15s, transform .5s ease .15s;}
+  .entrance.on .txt{opacity:1; transform:none;}
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="room"></div>
+  <p class="title">Capacità avanzate, senza doverle possedere.</p>
+
+  <div class="casa">
+    <div class="word">CASA</div>
+    <div class="sub">capacità condivisa</div>
+    <div class="bar"></div>
+  </div>
+
+  <div class="entrance l e1" style="--c:var(--food)">
+    <div class="txt"><div class="nm">Imprese e startup</div><div class="ph">Testare senza costruire tutto.</div></div>
+    <span class="dot"></span>
+  </div>
+  <div class="entrance r e2" style="--c:var(--env)">
+    <div class="txt"><div class="nm">Università e ricerca</div><div class="ph">Integrare competenze e infrastrutture.</div></div>
+    <span class="dot"></span>
+  </div>
+  <div class="entrance l e3" style="--c:var(--health)">
+    <div class="txt"><div class="nm">Persone e professionisti</div><div class="ph">Trasformare lo studio in esperienza.</div></div>
+    <span class="dot"></span>
+  </div>
+  <div class="entrance r e4" style="--c:var(--agr)">
+    <div class="txt"><div class="nm">Istituzioni e territori</div><div class="ph">Decidere su evidenze condivise.</div></div>
+    <span class="dot"></span>
+  </div>
+
+  <p class="chiusa">Quattro ingressi. Uno spazio comune per trasformare bisogni e risorse in <em>capacità utilizzabile</em>.</p>
+</div>
+<script>
+  const seq=[['.title',400],['.casa',0],['.e1',1200],['.e2',1500],['.e3',1800],['.e4',2100],['.chiusa',4200]];
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelector('.casa').classList.add('on');
+    document.querySelector('.title').classList.add('on');
+    document.querySelectorAll('.entrance').forEach((e,i)=>setTimeout(()=>e.classList.add('on'),1200+i*300));
+    setTimeout(()=>document.querySelector('.chiusa').classList.add('on'),4200);
+  }));
+</script>
+</body>
+</html>
