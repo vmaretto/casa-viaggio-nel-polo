@@ -545,7 +545,9 @@
       padding: 9px 26px;
       border: 1.5px solid var(--c);
       border-radius: 999px;
-      background: rgba(7,29,33,.72);   /* semitrasparente, richiesta 21 lug */
+      background: rgba(7,29,33,.38);   /* ben trasparente: cornice e pallini si vedono sotto */
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
       color: var(--paper);
       font-family: var(--serif);
       font-style: italic;
@@ -5225,7 +5227,19 @@
         }, 40));
         setTimeout(() => c.remove(), ms + 220);
       };
-      const rectMid = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, r }; };
+      const rectMid = el => {
+        const r = el.getBoundingClientRect();
+        // Durante la carrellata la scena entrante è ancora traslata: i target
+        // vanno riportati alle coordinate FINALI sottraendo lo scostamento
+        // della scena attiva (a riposo vale 0: nessun effetto).
+        let dx = 0, dy = 0;
+        if (document.body.classList.contains('cinema-mode') && el.closest) {
+          const sc = el.closest('.scene.is-active');
+          if (sc) { const sr = sc.getBoundingClientRect(); dx = sr.left; dy = sr.top; }
+        }
+        const ra = { left: r.left - dx, right: r.right - dx, top: r.top - dy, bottom: r.bottom - dy, width: r.width, height: r.height };
+        return { x: ra.left + ra.width / 2, y: ra.top + ra.height / 2, r: ra };
+      };
       /* Coordinate di layout senza il transform d'ingresso del fragment. */
       const layoutMid = el => {
         let x = el.offsetWidth / 2, y = el.offsetHeight / 2, cur = el;
@@ -5622,6 +5636,12 @@
             const m = layoutMid(sp);
             dotGo(DOT_KEYS[i], m.x, y, { opacity: .68, scale: .64, instant: true });
           });
+        } else if (name === 'file-bottom') {
+          // fine p04: lasciano le etichette PRIMA dello stacco e si mettono
+          // in riga bassa — così tra la casa tratteggiata e la parola CASA
+          // non esiste mai una posa a rombo
+          const y = innerHeight * .86;
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 64, y));
         } else if (name === 'letters') {
           document.querySelectorAll('.brand__letter span').forEach((sp, i) => {
             const m = rectMid(sp); dotGo(DOT_KEYS[i], m.x, m.r.top - 26, { scale: .85 });
@@ -5759,14 +5779,15 @@
         const smooth = k => k * k * (3 - 2 * k);
         const t0 = performance.now();
         const VORTEX_AT = 1.2, GATHER_AT = 3.0, GO_AT = 4.4, END_AT = 9.2;
-        // La scia attraversa lo schermo: una S che scende, risale e esce a destra.
-        const sweep = (p0, k) => cubicPoint(
-          p0,
-          { x: W * .1, y: H * .74 },
-          { x: W * .6, y: H * .14 },
-          { x: W + 160, y: H * .4 },
-          k
-        );
+        // La scia sale a zig zag: ondeggia a destra e a sinistra convergendo
+        // verso il centro, e la fila esce dal bordo SUPERIORE dello schermo.
+        const sweep = (p0, k) => {
+          const y = p0.y - (p0.y + 180) * k;                 // da y0 fino a -180 (fuori in alto)
+          const drift = (W * .5 - p0.x) * k;                 // converge dolcemente al centro
+          const amp = W * .15 * (1 - k * .5);                // zig zag che si smorza salendo
+          const x = p0.x + drift + Math.sin(k * Math.PI * 2.5) * amp;
+          return { x, y };
+        };
         setTimeout(() => {
           const dl = document.getElementById('cineDots');
           starts = dl && dl.children.length >= 4
@@ -5803,7 +5824,7 @@
                 const p = sweep(file[i], kk);
                 x = p.x; y = p.y;
                 sz = base;
-                alpha = x > W ? Math.max(0, 1 - (x - W) / 160) : 1;
+                alpha = y < 0 ? Math.max(0, 1 + y / 180) : 1;   // dissolve uscendo dall'alto
               }
               const tr = trails[i];
               tr.push({ x, y, sz });
