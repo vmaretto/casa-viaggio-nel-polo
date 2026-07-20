@@ -1398,172 +1398,123 @@
     }
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
-    /* P11 · i cerchi della regia: la governance come sistema orbitale */
+    /* P11 · titoli di coda: la regia come cast, gutter tipografico */
+    .cinema-mode .actors .sci i { visibility: hidden; } /* il segno lo fanno i pallini del film */
+    .cinema-mode .actors { --gutter: 46%; }
+    .cinema-mode .actors header {
+      position: absolute; z-index: 8; top: 6.5vh; left: 6vw; width: 60vw;
+    }
+    .cinema-mode .actors header .display {
+      margin: 0; max-width: 17ch; text-align: left;
+      font-size: clamp(25px, 3.1vw, 42px); line-height: 1.08;
+    }
+    .cinema-mode .actors .eyebrow { text-align: left; }
     .cinema-mode .actors__grid {
-      position: absolute;
-      inset: 0;
-      display: block;
-      width: auto;
-      margin: 0;
-      overflow: hidden;
+      position: absolute; left: 6vw; right: 6vw; top: 20.5vh; bottom: 10vh;
+      display: flex; flex-direction: column; justify-content: center;
+      gap: clamp(8px, 1.35vh, 15px);
+      width: auto; margin: 0; overflow: visible;
     }
-    .cinema-mode .actors__grid::before,
+    /* la spina verticale dei credits */
+    .cinema-mode .actors__grid::before {
+      content: ""; display: block; position: absolute; top: 0; bottom: 4vh;
+      left: var(--gutter); width: 1px; background: rgba(247,245,238,.12);
+    }
     .cinema-mode .actors__grid::after { display: none; }
-    .actors-cine__orbits { display: none; }
-    .cinema-mode .actors-cine__orbits {
-      display: block;
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    .cine-ring {
-      position: absolute;
-      top: 54%;
-      left: 50%;
-      display: block;
-      aspect-ratio: 1;
-      border: 1px solid rgba(247,245,238,.13);
-      border-radius: 50%;
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(.94);
-      transition: opacity 1s ease, transform 1.25s var(--ease);
-    }
-    .cine-ring--1 { width: 60vh; border-color: rgba(170,179,34,.3); }
-    .cine-ring--2 { width: 68vh; }
-    .cine-ring--3 { width: 80vh; border-style: dashed; border-color: rgba(247,245,238,.11); }
-    .cinema-mode .actors[data-fragment-step="1"] .cine-ring--1,
-    .cinema-mode .actors[data-fragment-step="2"] .cine-ring--1,
-    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--1,
-    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--1,
-    .cinema-mode .actors[data-fragment-step="3"] .cine-ring--2,
-    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--2,
-    .cinema-mode .actors[data-fragment-step="4"] .cine-ring--3 {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    /* Ruoli: ogni attore prende il suo posto nell'orbita. */
-    .cinema-mode .actors .role,
-    .cinema-mode .actors .role--sci {
-      position: absolute;
-      z-index: 2;
-      display: block;
-      width: max-content;
-      max-width: 30vw;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      background: none;
-      text-align: center;
-      transform: translate(-50%, -50%) translateY(14px);
-      transition: opacity .7s ease, transform .85s var(--ease);
-    }
-    .cinema-mode .actors .role.is-current,
-    .cinema-mode .actors .role.is-done { transform: translate(-50%, -50%); }
-    .cinema-mode .actors .role.is-done { opacity: .92; }
-    .cinema-mode .actors .role.is-current { opacity: 1; }
-    .cinema-mode .actors .role::before,
-    .cinema-mode .actors .role--sci::before { display: none; }
+    .actors-cine__orbits, .cinema-mode .actors-cine__orbits { display: none; }
     .cinema-mode .actors .cine-role-desc { display: none; }
-    .cinema-mode .actors .role--promote { top: 54%; left: 50%; }
-    .cinema-mode .actors .role--manage { top: 54%; left: calc(50% - 30vh); max-width: 17vw; }
-    .cinema-mode .actors .role--train { top: 54%; left: calc(50% + 30vh); max-width: 17vw; }
-    .cinema-mode .actors .role--net {
-      top: calc(54% + 40vh);
-      left: 50%;
-      transform: translate(-50%, -100%) translateY(14px);
+    .cinema-mode .actors .role > p, .cinema-mode .actors .role .role__body { display: none; }
+    .cinema-mode .actors .sci > p { display: none; }
+    .cinema-mode .actors .actors-cine__spine-anchor { display: none; }
+
+    /* riga generica: ruolo a destra nella colonna sinistra, nome a sinistra nella colonna destra */
+    .cinema-mode .actors .role, .cinema-mode .actors .role--sci {
+      position: relative; display: grid; grid-template-columns: var(--gutter) 1fr;
+      column-gap: clamp(14px, 1.5vw, 26px); align-items: baseline;
+      width: auto; max-width: none; padding: 0; border: 0; border-radius: 0;
+      background: none; box-shadow: none; backdrop-filter: none; text-align: left;
     }
-    .cinema-mode .actors .role--net.is-current,
-    .cinema-mode .actors .role--net.is-done { transform: translate(-50%, -100%); }
-    /* Il trio scientifico si dispone sull'arco alto del secondo cerchio. */
-    .cinema-mode .actors .role--sci {
-      inset: 0;
-      width: auto;
-      max-width: none;
-      transform: none;
-      transition: opacity .7s ease;
-      pointer-events: none;
-    }
-    .cinema-mode .actors .role--sci.is-current,
-    .cinema-mode .actors .role--sci.is-done { transform: none; }
-    .cinema-mode .actors .role--sci.is-done { opacity: .92; }
-    .cinema-mode .actors .role--sci > h3 { display: none; }
-    .cinema-mode .actors .role--sci .sci__grid { display: contents; }
-    .cinema-mode .actors .sci {
-      position: absolute;
-      padding: 0;
-      border: 0;
-      text-align: center;
-      transform: translate(-50%, -50%);
-      pointer-events: auto;
-    }
-    .cinema-mode .actors .sci:nth-child(1) { top: calc(54% - 24vh); left: calc(50% - 24vh); }
-    .cinema-mode .actors .sci:nth-child(2) { top: calc(54% - 34vh); left: 50%; }
-    .cinema-mode .actors .sci:nth-child(3) { top: calc(54% - 24vh); left: calc(50% + 24vh); }
-    /* Etichette di ruolo: piccole, sopra il nome. */
-    .cinema-mode .actors .role h3 {
-      margin: 0 0 8px;
-      color: rgba(247,245,238,.55);
-      font-size: clamp(12px, .85vw, 14px);
-      font-weight: 500;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      line-height: 1.3;
-      text-align: center;
+    .cinema-mode .actors .role::before, .cinema-mode .actors .role--sci::before { display: none; }
+    .cinema-mode .actors .role h3, .cinema-mode .actors .role--sci > h3 {
+      margin: 0; text-align: right;
+      font-family: var(--sans); font-size: clamp(10px, .82vw, 12.5px); font-weight: 500;
+      letter-spacing: .16em; text-transform: uppercase; line-height: 1.4;
+      color: rgba(247,245,238,.62);
     }
     .cinema-mode .actors .role h4 {
-      display: inline-block;
-      margin: 0;
-      color: var(--paper);
-      font-size: clamp(30px, 2.45vw, 44px);
-      white-space: normal;
+      margin: 0; font-family: var(--serif); font-weight: 400;
+      font-size: clamp(21px, 2.3vw, 31px); line-height: 1.08; color: var(--paper);
     }
     .cinema-mode .actors .role h4 small {
-      margin-top: 5px;
-      font-size: clamp(12px, .86vw, 15px);
+      display: inline; margin-left: .5em; font-family: var(--serif); font-style: italic;
+      font-weight: 400; font-size: clamp(15px, 1.4vw, 20px); letter-spacing: 0;
+      text-transform: none; color: rgba(247,245,238,.55);
     }
-    /* Il box verde InnovaliaTech: requisito non negoziabile, sempre a piena luce. */
+
+    /* l'investitore: l'unico riquadro della scena */
+    .cinema-mode .actors .role--promote { margin-bottom: .6vh; align-items: start; }
+    .cinema-mode .actors .role--promote h3 {
+      align-self: center;
+      color: var(--acid); font-weight: 600; letter-spacing: .22em;
+      font-size: clamp(10px, .85vw, 12px);
+    }
     .cinema-mode .actors .role--promote h4 {
-      padding: clamp(10px, 1.4vh, 16px) clamp(20px, 1.8vw, 30px);
-      border: 1.5px solid var(--acid);
-      border-radius: 6px;
-      background: rgba(170,179,34,.09);
-      box-shadow: 0 0 36px rgba(170,179,34,.14);
+      justify-self: start; display: inline-block;
+      padding: 12px 24px; border: 1.5px solid var(--acid); border-radius: 3px;
+      background: rgba(170,179,34,.06);
+      box-shadow: 0 0 0 1px rgba(170,179,34,.14), 0 0 28px rgba(170,179,34,.16),
+                  0 12px 46px -14px rgba(170,179,34,.3);
+      font-weight: 600; font-size: clamp(26px, 3vw, 40px); line-height: 1.05;
     }
-    .cinema-mode .actors .role--promote.is-done { opacity: 1; }
-    .cinema-mode .actors .sci h4 { margin: 0; font-size: clamp(24px, 1.9vw, 34px); }
-    .cinema-mode .actors .sci small { margin: 4px 0 0; font-size: clamp(11px, .78vw, 13px); }
-    /* I pallini inline lasciano il posto ai pallini del filo, che arrivano sui nodi. */
-    .cinema-mode .actors .sci i { display: none; }
-    .cinema-mode .actors .more-link { display: none; }
-    /* Nota degli asterischi: piccola, a piè di pagina, senza rumore. */
+
+    /* il trio scientifico */
+    .cinema-mode .actors .role--sci { align-items: center; }
+    .cinema-mode .actors .role--sci .sci__grid {
+      display: flex; flex-direction: column; gap: .7vh;
+      border-left: 1px solid rgba(247,245,238,.10);
+      padding-left: clamp(14px, 1.4vw, 22px);
+    }
+    .cinema-mode .actors .sci {
+      display: flex; align-items: baseline;
+      padding: 0; border: 0; background: none; box-shadow: none; text-align: left;
+    }
+    .cinema-mode .actors .sci i {
+      flex: none; align-self: center; width: clamp(9px, .85vw, 12px); height: clamp(9px, .85vw, 12px);
+      margin-right: 14px; border-radius: 50%; background: var(--c);
+      box-shadow: 0 0 8px var(--c);
+    }
+    .cinema-mode .actors .sci i + i { margin-left: -8px; }
+    .cinema-mode .actors .sci h4 {
+      margin: 0; font-family: var(--serif); font-weight: 400;
+      font-size: clamp(19px, 2.1vw, 28px); line-height: 1.08; color: var(--paper);
+    }
+    .cinema-mode .actors .sci h4 .sci__mark { color: rgba(230,238,240,.45); font-size: .55em; }
+    .cinema-mode .actors .sci small {
+      align-self: center; margin-left: .7em;
+      font-family: var(--sans); font-size: clamp(11px, .85vw, 13px); font-weight: 400;
+      letter-spacing: .04em; text-transform: none; color: rgba(247,245,238,.5);
+    }
+
+    /* convenzioni: nome attenuato */
+    .cinema-mode .actors .role--net h4 { color: rgba(247,245,238,.85); }
+
+    /* ingresso: solo opacita e un passo verso l'alto */
+    .cinema-mode .actors .role.fragment, .cinema-mode .actors .role--sci.fragment {
+      opacity: 0; transform: translateY(8px); filter: none;
+      transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1);
+    }
+    .cinema-mode .actors .role.is-current, .cinema-mode .actors .role.is-done,
+    .cinema-mode .actors .role--sci.is-current, .cinema-mode .actors .role--sci.is-done {
+      opacity: 1; transform: none;
+    }
+
     .cinema-mode .actors__note {
-      position: fixed;
-      z-index: 7;
-      left: 50%;
-      bottom: 2.2vh;
-      width: max-content;
-      margin: 0;
-      color: rgba(247,245,238,.4);
-      font-size: 12px;
-      letter-spacing: .02em;
-      text-align: center;
-      white-space: nowrap;
+      position: absolute; left: 6vw; bottom: 4.5vh; margin: 0; transform: none;
+      font-size: clamp(10px, .75vw, 12px); letter-spacing: .02em;
+      color: rgba(247,245,238,.42); text-align: left; width: auto;
     }
-    /* La nota sfugge al gating dei reveal: sempre presente, mai protagonista. */
-    .cinema-mode .scene .actors__note.reveal {
-      opacity: .55;
-      filter: none;
-      transform: translateX(-50%);
-    }
-    .actors-cine__spine-anchor { display: none; }
-    .cinema-mode .actors-cine__spine-anchor {
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      display: block;
-      width: 1px;
-      height: 1px;
-    }
+    .cinema-mode .scene .actors__note.reveal { transform: translateY(10px); }
+    .cinema-mode .scene .actors__note.reveal.cine-in { transform: none; }
 
     /* P12 · la casa di notte: il patrimonio accende le finestre */
     .cinema-mode .heritage header {
@@ -1841,9 +1792,7 @@
     @media (max-height: 800px) and (min-width: 900px) {
       .cinema-mode .actors header .display { font-size: clamp(42px, 3.3vw, 58px); }
       /* p10 è a schermo pieno (atrio): inset e corpi gestiti nel blocco P10 */
-      .cinema-mode .actors__grid { inset: 19vh 9vw 8vh 14vw; }
-      .cinema-mode .actors .role h4 { font-size: clamp(25px, 2.15vw, 35px); }
-      .cinema-mode .actors .sci h4 { font-size: clamp(22px, 1.8vw, 30px); }
+      /* p11 titoli di coda: dimensioni definite nel blocco P11 */
       /* p12 è a schermo pieno (casa notturna): inset e corpi gestiti nel blocco P12 */
       /* p13 è a schermo pieno (strada notturna): inset e corpi nel blocco P13 */
     }
@@ -5091,18 +5040,16 @@
             dotGo(DOT_KEYS[i], x, m.y, { opacity: .9, scale: .8 });
           });
         } else if (name === 'actors-knot') {
-          // I pallini si affiancano ai nodi scientifici del loro ambito:
-          // ambiente→CMCC, agricoltura+cibo→CREA, salute→S.Lucia.
-          const sci = [...document.querySelectorAll('.actors .sci')];
-          if (sci.length === 3) {
-            const [cmcc, crea, lucia] = sci.map(el => {
-              const m = layoutMid(el);
-              return { x: m.x, y: m.y - el.offsetHeight / 2 - 24 };
-            });
-            dotGo('ambiente', cmcc.x, cmcc.y, { opacity: .78, scale: .7 });
-            dotGo('agricoltura', crea.x - 16, crea.y, { opacity: .78, scale: .7 });
-            dotGo('cibo', crea.x + 16, crea.y, { opacity: .78, scale: .7 });
-            dotGo('salute', lucia.x, lucia.y, { opacity: .78, scale: .7 });
+          // Titoli di coda: ogni pallino diventa il segno accanto al suo garante.
+          // ambiente→CMCC, agricoltura+cibo→CREA (due segni), salute→S.Lucia.
+          const marks = [...document.querySelectorAll('.actors .sci i')];
+          if (marks.length === 4) {
+            const at = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+            const [cmcc, creaA, creaB, lucia] = marks.map(at);
+            dotGo('ambiente', cmcc.x, cmcc.y, { opacity: .95, scale: .55 });
+            dotGo('agricoltura', creaA.x, creaA.y, { opacity: .95, scale: .55 });
+            dotGo('cibo', creaB.x, creaB.y, { opacity: .95, scale: .55 });
+            dotGo('salute', lucia.x, lucia.y, { opacity: .95, scale: .55 });
           } else {
             DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 62, {
               opacity: .66,
