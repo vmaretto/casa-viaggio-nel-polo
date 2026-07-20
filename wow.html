@@ -428,7 +428,8 @@
       stroke-dashoffset: 1200;
       transition: stroke-dashoffset 3.4s var(--ease) .4s;
     }
-    .missing.is-active .missing__frame path { stroke-dashoffset: 0; }
+    .missing.is-active .missing__frame path,
+    .cinema-mode .missing.cine-prev .missing__frame path { stroke-dashoffset: 0; }
     .missing__frame--mobile { display: none; }
     .missing__runners > g {
       opacity: 0;
@@ -569,20 +570,44 @@
     .cinema-mode .missing__kicker { display: none !important; }
     @keyframes cineZoomIn { from { transform: scale(1); } to { transform: scale(1.045); } }
     @keyframes cineZoomOut { from { transform: scale(1.045); } to { transform: scale(1); } }
-    .cinema-mode .scene.is-active { animation: cineZoomIn 32s linear forwards; }
-    .cinema-mode .scene:nth-of-type(even).is-active { animation-name: cineZoomOut; }
+    .cinema-mode .scene.is-active > .scene__safe { animation: cineZoomIn 32s linear forwards; }
+    .cinema-mode .scene:nth-of-type(even).is-active > .scene__safe { animation-name: cineZoomOut; }
+
+    /* ============ PANORAMICA ORIZZONTALE tra le scene ============ */
+    /* Le scene entrano da destra e escono a sinistra; i pallini (#cineDots,
+       livello fisso sopra tutto) NON seguono la carrellata: restano in scena
+       e continuano il loro gesto — il filo non si spezza mai. */
+    /* Tre tipi di stacco, scelti per scena con data-cine-enter sull'ENTRANTE:
+       (default) orizzontale · "up" verticale · "fade" dissolvenza. */
+    .cinema-mode .scene {
+      transform: translateX(100vw);
+      transition: transform 1.15s cubic-bezier(.5,.06,.18,1), opacity .95s ease;
+      visibility: hidden;   /* le scene fuori campo non lasciano fantasmi fissi */
+    }
+    .cinema-mode .scene[data-cine-enter="up"] { transform: translateY(100vh); }
+    .cinema-mode .scene[data-cine-enter="fade"] { transform: translateX(0); opacity: 0; }
+    /* nel film non si scrolla: la scena attiva e' un livello fisso a schermo */
+    .cinema-mode .scene.is-active { position: fixed; inset: 0; transform: translateX(0); opacity: 1; }
+    .cinema-mode .scene.is-active,
+    .cinema-mode .scene.cine-prev { visibility: visible; }
+    .cinema-mode .scene.cine-prev {
+      position: fixed; inset: 0; z-index: 26;
+      transform: translateX(-100vw);
+    }
+    .cinema-mode .scene.cine-prev--up { transform: translateY(-100vh); }
+    .cinema-mode .scene.cine-prev--fade { transform: translateX(0); opacity: 0; }
     /* Le scene con elementi ancorati al viewport richiedono una camera
        ferma, altrimenti pallini e riferimenti DOM divergono lentamente. */
-    .cinema-mode .effects.is-active,
-    .cinema-mode .missing.is-active,
-    .cinema-mode .brand.is-active,
-    .cinema-mode .heritage.is-active,
-    .cinema-mode .roadmap.is-active,
-    .cinema-mode .science.is-active,
-    .cinema-mode .actions.is-active,
-    .cinema-mode .who.is-active,
-    .cinema-mode .actors.is-active,
-    .cinema-mode .operate.is-active { animation: none; }
+    .cinema-mode .effects.is-active > .scene__safe,
+    .cinema-mode .missing.is-active > .scene__safe,
+    .cinema-mode .brand.is-active > .scene__safe,
+    .cinema-mode .heritage.is-active > .scene__safe,
+    .cinema-mode .roadmap.is-active > .scene__safe,
+    .cinema-mode .science.is-active > .scene__safe,
+    .cinema-mode .actions.is-active > .scene__safe,
+    .cinema-mode .who.is-active > .scene__safe,
+    .cinema-mode .actors.is-active > .scene__safe,
+    .cinema-mode .operate.is-active > .scene__safe { animation: none; }
     /* Ken Burns sul contenuto, mai sul contenitore: la cornice resta ferma. */
     @keyframes cinePortrait { from { background-size: 112%; } to { background-size: 128%; } }
     .cinema-mode .science.is-active .science__photo { animation: cinePortrait 15s linear forwards; }
@@ -1481,7 +1506,8 @@
     /* a scorrere sono le carte (il contenitore con la maschera e' fermo) */
     @keyframes creditsRoll { from { transform: translateY(100vh); } to { transform: translateY(-135vh); } }
     .cinema-mode .actors__grid > * { transform: translateY(100vh); }
-    .cinema-mode .actors.is-active .actors__grid > * {
+    .cinema-mode .actors.is-active .actors__grid > *,
+    .cinema-mode .actors.cine-prev .actors__grid > * {
       /* i titoli partono dopo il viaggio dei pallini dal quadrato alla firma */
       animation: creditsRoll 29.5s linear 2.1s forwards;
     }
@@ -1571,7 +1597,6 @@
     .cinema-mode .heritage header { display: none; }
     /* lo zoom cinema è inline sulla scena: qui va tolto, altrimenti i figli
        position:fixed si ancorano alla scena invece che al viewport */
-    body.cinema-mode #p12 { transform: none !important; }
     body.cinema-mode #p12 .scene__safe { position: static; }
     .cap__keywords, .heritage-cine__house, .heritage-cine__word { display: none; }
     body.cinema-mode .heritage.scene--light,
@@ -1588,7 +1613,8 @@
       margin: 0; padding: 0; overflow: visible; z-index: 2; pointer-events: none;
       visibility: hidden;
     }
-    .cinema-mode .heritage.is-active .heritage__grid { visibility: visible; }
+    .cinema-mode .heritage.is-active .heritage__grid,
+    .cinema-mode .heritage.cine-prev .heritage__grid { visibility: visible; }
     .cinema-mode .heritage-cine__house {
       display: block; position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 1;
       opacity: 1;
@@ -1691,7 +1717,6 @@
 
 
     /* P13 · tre orizzonti: la strada di notte verso la luce */
-    body.cinema-mode #p13 { transform: none !important; }
     body.cinema-mode #p13 .scene__safe { position: static; }
     body.cinema-mode .roadmap {
       background:
@@ -1704,7 +1729,8 @@
       margin: 0; padding: 0; overflow: visible; z-index: 2; pointer-events: none;
       visibility: hidden;
     }
-    .cinema-mode .roadmap.is-active .roadmap__track { visibility: visible; }
+    .cinema-mode .roadmap.is-active .roadmap__track,
+    .cinema-mode .roadmap.cine-prev .roadmap__track { visibility: visible; }
     .cinema-mode .roadmap-cine__path {
       display: block; position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 1; opacity: 1;
     }
@@ -1795,8 +1821,11 @@
     .cinema-mode .scene .roadmap__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .roadmap__closing.reveal.cine-in { transform: translateX(-50%); }
     .cinema-mode .roadmap.is-active > .scene__safe > header,
+    .cinema-mode .roadmap.cine-prev > .scene__safe > header,
     .cinema-mode .roadmap.is-active .roadmap__closing,
-    .cinema-mode .heritage.is-active .heritage__closing { visibility: visible; }
+    .cinema-mode .roadmap.cine-prev .roadmap__closing,
+    .cinema-mode .heritage.is-active .heritage__closing,
+    .cinema-mode .heritage.cine-prev .heritage__closing { visibility: visible; }
     .cinema-mode .roadmap .operate__more { display: none; }
 
     /* P14B · da dove si comincia: tre colonne, il numerale racconta lo stato */
@@ -3803,7 +3832,7 @@
     </section>
 
     <!-- 05 · PER QUESTO NASCE CASA -->
-    <section class="scene birth" id="p05" data-index="5" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
+    <section class="scene birth" data-cine-enter="fade" id="p05" data-index="5" data-title="Per questo nasce CASA" aria-label="Per questo nasce CASA">
       <div class="birth__halo" aria-hidden="true"></div>
       <div class="scene__safe scene__center">
         <div class="birth__grid">
@@ -4264,7 +4293,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" data-cine-enter="fade" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -4784,6 +4813,18 @@
       const setActive = (index, fromNav = false) => {
         active = Math.max(0, Math.min(scenes.length - 1, index));
         if (active === lastActive) return;
+        // carrellata: la scena uscente resta visibile e scivola a sinistra;
+        // i preset rAF si fermano subito (altrimenti seguirebbero la scena
+        // in uscita trascinando i pallini fuori schermo)
+        if (cinemaMode && !staticMode && lastActive >= 0) {
+          if (perimeterRaf) { cancelAnimationFrame(perimeterRaf); perimeterRaf = null; }
+          const prevSc = scenes[lastActive];
+          const mode = scenes[active].dataset.cineEnter || 'left';
+          prevSc.classList.add('cine-prev');
+          if (mode !== 'left') prevSc.classList.add('cine-prev--' + mode);
+          clearTimeout(prevSc._cinePrevT);
+          prevSc._cinePrevT = setTimeout(() => prevSc.classList.remove('cine-prev', 'cine-prev--up', 'cine-prev--fade'), 1250);
+        }
         lastActive = active;
         scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
         document.body.classList.toggle('on-light', scenes[active].matches('.scene--light, .finale'));
@@ -4818,8 +4859,10 @@
         const target = Math.max(0, Math.min(scenes.length - 1, index));
         const count = fragmentCount(scenes[target]);
         setFragment(scenes[target], cinemaMode ? -1 : (openAtEnd && count ? count - 1 : 0));
-        // cinema: stacco netto ('instant'); 'auto' verrebbe reso smooth dal CSS della versione scroll
-        scenes[target].scrollIntoView({ behavior: cinemaMode ? 'instant' : (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') });
+        // cinema: niente scroll — la scena attiva e' fissa a schermo; lo
+        // scrollIntoView innescava ri-scroll spurii che spostavano il viewport
+        if (!cinemaMode) scenes[target].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        else scrollTo(0, 0);
         setActive(target, true);
         if (cinemaMode && (target === 3 || target === 4)) {
           requestAnimationFrame(() => {
@@ -5725,7 +5768,10 @@
         ratios.forEach((r, i) => { if (r > bestRatio) { bestRatio = r; best = i; } });
         if (best >= 0) setActive(best);
       }, { threshold: [.12, .3, .5, .7] });
-      scenes.forEach(scene => observer.observe(scene));
+      // nel film la regia e' go()/setActive sincroni: l'observer dello scroll
+      // arriverebbe in ritardo dopo i salti istantanei e farebbe rimbalzare
+      // is-active, rompendo la carrellata
+      if (!cinemaMode) scenes.forEach(scene => observer.observe(scene));
 
       dots.forEach(dot => dot.addEventListener('click', () => go(Number(dot.dataset.go))));
       document.getElementById('prev').addEventListener('click', retreat);
@@ -5988,17 +6034,21 @@
             const fs = i => parseFloat(getComputedStyle(ph[i].querySelector('.phase__year')).fontSize);
             return fs(0) > fs(1) && fs(1) > fs(2);
           });
-          fx('dots', { p: 'road-convoy' }); await sleep(2650);
-          R.D12_traversata_sui_pin = (() => {
+          fx('dots', { p: 'road-convoy' });
+          R.D12_traversata_sui_pin = await (async () => {
+            // il capofila deve TRANSITARE sul pin del 2026 (17%, 85%): si
+            // campiona la distanza minima in una finestra, robusto ai drift
             const el = document.querySelector('#cineDots i[data-k="cibo"]');
-            const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
-            // a ~2.6s il capofila sta passando il pin del 2026 (17%, 85%)
-            return Math.hypot(x - innerWidth * .17, y - innerHeight * .85) < 40;
-          })();
-          await sleep(1200);
-          R.D12_traversata_in_moto = (() => {
-            const el = document.querySelector('#cineDots i[data-k="cibo"]');
-            return parseFloat(el.style.left) > innerWidth * .17 + 30;
+            let min = Infinity, xStart = null, xEnd = 0;
+            for (let i = 0; i < 40; i++) {
+              await sleep(100);
+              const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
+              if (xStart === null && !Number.isNaN(x)) xStart = x;
+              xEnd = x;
+              min = Math.min(min, Math.hypot(x - innerWidth * .17, y - innerHeight * .85));
+            }
+            R.D12_traversata_in_moto = xEnd > xStart + 100;
+            return min < 40;
           })();
           goi(11); await sleep(300);
           R.D13_paragrafo_nascosto = getComputedStyle(document.querySelector('.science__body')).display === 'none';
