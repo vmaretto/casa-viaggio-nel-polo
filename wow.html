@@ -1470,14 +1470,16 @@
       width: auto; margin: 0; overflow: hidden; pointer-events: none;
       /* la maschera resta ferma sullo schermo: le carte nascono nitide dal
          basso e si dissolvono salendo oltre meta' schermo */
-      -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 30%, #000 46%, #000 96%, transparent 100%);
-      mask-image: linear-gradient(180deg, transparent 0%, transparent 30%, #000 46%, #000 96%, transparent 100%);
+      /* la banda visibile si chiude sopra la firma dei pallini (~95vh) */
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, #000 44%, #000 80%, transparent 90%);
+      mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, #000 44%, #000 80%, transparent 90%);
     }
     /* a scorrere sono le carte (il contenitore con la maschera e' fermo) */
     @keyframes creditsRoll { from { transform: translateY(100vh); } to { transform: translateY(-135vh); } }
     .cinema-mode .actors__grid > * { transform: translateY(100vh); }
     .cinema-mode .actors.is-active .actors__grid > * {
-      animation: creditsRoll 31s linear .6s forwards;
+      /* i titoli partono dopo il viaggio dei pallini dal quadrato alla firma */
+      animation: creditsRoll 29.5s linear 2.1s forwards;
     }
     .actors-cine__orbits, .cinema-mode .actors-cine__orbits { display: none; }
     .cinema-mode .actors .cine-role-desc { display: none; }
