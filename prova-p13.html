@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROVA · P13 — Roadmap</title>
+<title>PROVA · P13 — Tre orizzonti</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -15,109 +15,110 @@
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
-  body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans);
+  body{margin:0; overflow:hidden; color:var(--paper); font-family:var(--sans); background:var(--ink);}
+
+  /* cielo notturno + terra: stesso mondo della casa */
+  #sky{position:fixed; inset:0;
     background:
-      radial-gradient(120vw 90vh at 78% 30%, rgba(170,179,34,.10), transparent 55%),
-      var(--ink);}
+      radial-gradient(38vw 26vh at 76% 46%, rgba(170,179,34,.16), transparent 62%),   /* la luce della meta */
+      radial-gradient(ellipse 140vw 120vh at 50% 26%, #082126 30%, #04151a 100%);}
+  #ground{position:fixed; left:0; right:0; top:60vh; bottom:0;
+    background:linear-gradient(180deg,#04171a,#020d0d 72%);}
+  #horizon{position:fixed; left:0; right:0; top:60vh; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(247,245,238,.10) 22%,rgba(170,179,34,.34) 76%,rgba(247,245,238,.06) 92%,transparent);}
 
-  /* anni giganti fantasma (dietro la curva) */
-  .year{position:fixed; font-family:var(--sans); font-weight:600; color:var(--paper); line-height:.85; z-index:0; white-space:nowrap;}
-  .y1{left:9vw;  bottom:16vh; font-size:clamp(5rem,11vw,11rem); opacity:.10;}
-  .y2{left:39vw; top:30vh;    font-size:clamp(6rem,13vw,13rem); opacity:.15;}
-  .y3{right:5vw; top:14vh;    font-size:clamp(7rem,15vw,15.5rem); opacity:.28;}
-  .y3 span{color:var(--acid); opacity:.5;}
+  /* la strada che si allontana verso la luce */
+  #road{position:fixed; inset:0; width:100vw; height:100vh;}
 
-  /* curva */
-  #road{position:fixed; inset:0; width:100vw; height:100vh; z-index:1; overflow:visible;}
+  .kick{position:fixed; top:8vh; left:8vw; font-size:clamp(11px,.9vw,13px); font-weight:600;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--acid);}
+  .title{position:fixed; top:11.5vh; left:8vw; max-width:34vw; margin:0;
+    font-family:var(--serif); font-weight:500; font-size:clamp(24px,3vw,42px); line-height:1.08; color:var(--paper);}
+  .title .b{color:var(--acid);}
 
-  /* nodi */
-  .node{position:fixed; z-index:2; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%;
-    background:var(--ink); border:1.5px solid var(--nc,rgba(247,245,238,.4));}
-  .n1{left:24vw; top:74vh; --nc:rgba(247,245,238,.35);}
-  .n2{left:54vw; top:55vh; --nc:rgba(170,179,34,.6);}
-  .n3{left:83vw; top:34vh; --nc:var(--acid); box-shadow:0 0 22px rgba(170,179,34,.55);}
+  /* tappe: si rimpiccioliscono e si schiariscono allontanandosi */
+  .stop{position:fixed; transform:translateX(-50%); text-align:center;}
+  .stop .yr{font-family:var(--serif); font-weight:600; line-height:.92; color:var(--paper);}
+  .stop .vb{margin-top:.8vh; font-family:var(--serif); font-style:italic; color:var(--acid);}
+  .stop .ln{margin-top:.7vh; font-weight:300; color:rgba(247,245,238,.62); letter-spacing:.01em;}
+  .stop .pin{width:9px; height:9px; margin:1.4vh auto 0; border-radius:50%; background:var(--acid); box-shadow:0 0 14px rgba(170,179,34,.6);}
 
-  /* titolo */
-  .title{position:fixed; top:12vh; left:8vw; max-width:42vw; z-index:3;
-    font-family:var(--serif); font-weight:500; font-size:clamp(2.2rem,4.2vw,4.4rem); line-height:1.02; color:var(--paper);}
-  .title .a{opacity:.82;} .title .b{color:var(--acid); font-weight:600;}
-  .title .fil{width:3vw; height:1px; margin-top:1.6vh; background:rgba(170,179,34,.5);}
+  /* vicino → lontano */
+  .s1{left:17%;  bottom:15vh;}
+  .s1 .yr{font-size:clamp(46px,5.4vw,84px);} .s1 .vb{font-size:clamp(19px,2vw,30px);} .s1 .ln{font-size:clamp(13px,1vw,16px); max-width:20vw;}
+  .s2{left:48%;  bottom:29vh; opacity:.9;}
+  .s2 .yr{font-size:clamp(34px,3.9vw,60px);} .s2 .vb{font-size:clamp(16px,1.6vw,24px);} .s2 .ln{font-size:clamp(12px,.9vw,14px); max-width:17vw;}
+  .s3{left:76%;  bottom:39.5vh; opacity:.82;}
+  .s3 .yr{font-size:clamp(24px,2.8vw,42px);} .s3 .vb{font-size:clamp(13px,1.3vw,19px);} .s3 .ln{font-size:clamp(11px,.82vw,13px); max-width:15vw;}
+  .s3 .pin{width:12px;height:12px;box-shadow:0 0 26px rgba(170,179,34,.85), 0 0 60px rgba(170,179,34,.4);}
 
-  /* etichette nodi */
-  .lab{position:fixed; z-index:3;}
-  .lab .v{font-family:var(--serif); font-weight:500; font-size:clamp(1.8rem,3vw,2.8rem); line-height:1; color:var(--paper);}
-  .lab .r{margin-top:.7vh; font-weight:300; font-size:clamp(.85rem,1.05vw,1.05rem); line-height:1.35; letter-spacing:.01em; color:rgba(247,245,238,.7); max-width:22vw;}
-  .l1{left:20vw; top:60vh;}
-  .l2{left:50vw; top:41vh;}
-  .l3{right:5vw; top:44vh; text-align:right;}
-  .l3 .r{max-width:24vw; margin-left:auto;}
+  .chiusa{position:fixed; bottom:7vh; left:50%; transform:translateX(-50%);
+    font-family:var(--serif); font-style:italic; font-weight:500;
+    font-size:clamp(19px,2.1vw,30px); color:var(--paper); opacity:.9; white-space:nowrap;}
 
-  /* chiusa */
-  .chiusa{position:fixed; bottom:6vh; left:8vw; max-width:38vw; z-index:3;
-    font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(1.3rem,2.1vw,2rem); color:var(--paper); opacity:.9;}
-
-  /* firma 4 pallini */
-  .sig{position:fixed; top:12vh; right:8vw; z-index:3; display:flex; gap:11px;}
-  .sig i{width:10px; height:10px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c);}
+  .sig{position:fixed; bottom:3.2vh; left:50%; transform:translateX(-50%); display:flex; gap:18px;}
+  .sig i{width:9px; height:9px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c);}
 
   /* entrata */
-  .year,.title,.lab,.chiusa,.node,.sig i{opacity:0; transform:translateY(12px);}
-  .y1{opacity:0;}
-  body.in .y1{opacity:.10;} body.in .y2{opacity:.15;} body.in .y3{opacity:.28;}
-  body.in .year{transform:none; transition:opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1);}
-  body.in .title,body.in .lab,body.in .chiusa,body.in .node,body.in .sig i{opacity:1; transform:none; transition:opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1);}
-  body.in .lab{opacity:1;}
+  .kick,.title,.stop,.chiusa,.sig i{opacity:0; transform:translateY(10px);}
+  .stop{transform:translateX(-50%) translateY(10px);}
+  body.in .kick,body.in .title,body.in .chiusa,body.in .sig i{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+  body.in .stop{transform:translateX(-50%); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  body.in .s1{opacity:1; transition-delay:.6s;}
+  body.in .s2{opacity:.9; transition-delay:1.15s;}
+  body.in .s3{opacity:.82; transition-delay:1.7s;}
   body.in .title{transition-delay:.1s;}
-  body.in .n1{transition-delay:.5s;} body.in .l1{transition-delay:.6s;}
-  body.in .n2{transition-delay:.8s;} body.in .l2{transition-delay:.9s;}
-  body.in .n3{transition-delay:1.1s;} body.in .l3{transition-delay:1.2s;}
-  body.in .chiusa{transition-delay:1.5s;}
-  #rise-run{transition:stroke-dashoffset 1.4s cubic-bezier(.5,0,.35,1) .4s;}
+  body.in .chiusa{transition-delay:2.3s;}
+  body.in .sig i:nth-child(1){transition-delay:2.5s;} body.in .sig i:nth-child(2){transition-delay:2.6s;}
+  body.in .sig i:nth-child(3){transition-delay:2.7s;} body.in .sig i:nth-child(4){transition-delay:2.8s;}
+  #roadline{opacity:0; transition:opacity 1.6s ease .3s;}
+  body.in #roadline{opacity:1;}
 </style>
 </head>
 <body>
-  <div class="year y1">2026</div>
-  <div class="year y2">2027</div>
-  <div class="year y3"><span>2</span>028–2030</div>
+  <div id="sky"></div>
+  <div id="ground"></div>
+  <div id="horizon"></div>
 
-  <svg id="road" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <svg id="road" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
     <defs>
-      <linearGradient id="rise" gradientUnits="userSpaceOnUse" x1="4" y1="84" x2="96" y2="27">
-        <stop offset="0" stop-color="#2a4247"></stop>
-        <stop offset=".55" stop-color="#5c6a2e"></stop>
-        <stop offset=".82" stop-color="#aab322"></stop>
-        <stop offset="1" stop-color="#eaf29a"></stop>
+      <linearGradient id="rd" gradientUnits="userSpaceOnUse" x1="8" y1="86" x2="80" y2="60">
+        <stop offset="0" stop-color="rgba(247,245,238,.10)"></stop>
+        <stop offset=".62" stop-color="rgba(170,179,34,.45)"></stop>
+        <stop offset="1" stop-color="rgba(234,242,154,.95)"></stop>
       </linearGradient>
     </defs>
-    <path d="M 4,84 C 20,83 22,75 34,72 S 50,58 54,55 S 78,39 83,34 S 93,29 96,27"
-      fill="none" stroke="#2a4247" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
-    <path id="rise-run" d="M 4,84 C 20,83 22,75 34,72 S 50,58 54,55 S 78,39 83,34 S 93,29 96,27"
-      fill="none" stroke="url(#rise)" stroke-width="3.4" stroke-linecap="round" vector-effect="non-scaling-stroke"
-      pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></path>
-    <path d="M 54,55 S 78,39 83,34 S 93,29 96,27"
-      fill="none" stroke="url(#rise)" stroke-width="5.4" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity=".9"></path>
+    <!-- la strada: si stringe allontanandosi (prospettiva) -->
+    <path d="M 2,92 C 24,88 40,76 56,69 S 72,63 79,60.4" fill="none" stroke="url(#rd)"
+      stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke" id="roadline"></path>
   </svg>
 
-  <div class="node n1"></div>
-  <div class="node n2"></div>
-  <div class="node n3"></div>
+  <p class="kick">Roadmap</p>
+  <h2 class="title">Costruire. Attivare. Verificare. <span class="b">Poi estendere.</span></h2>
 
-  <h2 class="title"><span class="a">Costruire. Attivare. Verificare.</span> <span class="b">Poi estendere.</span><div class="fil"></div></h2>
-
-  <div class="lab l1"><div class="v">Fondare</div><div class="r">Spazio, governance e risorse.</div></div>
-  <div class="lab l2"><div class="v">Attivare</div><div class="r">Il luogo e il primo ciclo operativo.</div></div>
-  <div class="lab l3"><div class="v">Verificare, poi estendere</div><div class="r">Risultati prima della replica.</div></div>
+  <div class="stop s1">
+    <div class="yr">2026</div>
+    <div class="vb">Fondare</div>
+    <div class="ln">Spazio, governance e risorse.</div>
+    <div class="pin"></div>
+  </div>
+  <div class="stop s2">
+    <div class="yr">2027</div>
+    <div class="vb">Attivare</div>
+    <div class="ln">Il luogo e il primo ciclo operativo.</div>
+    <div class="pin"></div>
+  </div>
+  <div class="stop s3">
+    <div class="yr">2028–2030</div>
+    <div class="vb">Verificare, poi estendere</div>
+    <div class="ln">Risultati prima della replica.</div>
+    <div class="pin"></div>
+  </div>
 
   <p class="chiusa">Prima si costruisce. Poi si prova. Solo dopo si scala.</p>
-
   <div class="sig">
     <i style="--c:var(--food)"></i><i style="--c:var(--env)"></i><i style="--c:var(--health)"></i><i style="--c:var(--agr)"></i>
   </div>
-<script>
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    document.body.classList.add('in');
-    setTimeout(()=>{document.getElementById('rise-run').style.strokeDashoffset='0';},400);
-  }));
-</script>
+<script>requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('in')));</script>
 </body>
 </html>
