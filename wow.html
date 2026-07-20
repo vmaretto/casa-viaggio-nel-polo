@@ -4871,6 +4871,7 @@
       const DOT_KEYS = ['cibo', 'ambiente', 'salute', 'agricoltura'];
       const DOT_CSS = { cibo: 'var(--food)', ambiente: 'var(--environment)', salute: 'var(--health)', agricoltura: 'var(--agriculture)' };
       let dotsEl = null, dotsTrain = null;
+      let perimeterRaf = null;
       const dotsInit = () => {
         if (dotsEl) return dotsEl;
         dotsEl = document.createElement('div');
@@ -5143,6 +5144,7 @@
         dotsInit();
         lastDotsPreset = { name, arg };
         if (name !== 'operate-cycle') stopOperateCycleDots();
+        if (name !== 'perimeter' && perimeterRaf) { cancelAnimationFrame(perimeterRaf); perimeterRaf = null; }
         if (name === 'word') {
           const el = coverWordEl(arg);
           if (el) {
@@ -5245,6 +5247,77 @@
             setTimeout(() => { el.style.transform = base; }, 340);
             setTimeout(() => { el.style.transition = ''; }, 700);
           }
+        } else if (name === 'perimeter') {
+          // p04 · dalla firma vanno alla cornice della casa e la percorrono
+          // in avanti, distanziandosi; ognuno si ferma alla sua ancora.
+          const path = document.querySelector('#p04 .missing__frame:not(.missing__frame--mobile) #housePath');
+          const anchorEls = {};
+          DOT_KEYS.forEach(k => { anchorEls[k] = document.querySelector('#p04 .missing__anchors .anchor[data-k="' + k + '"]'); });
+          if (!path || !anchorEls.cibo) { cineDotsPreset('anchors'); return; }
+          const L = path.getTotalLength();
+          const ctm = path.getScreenCTM();
+          const at = len => {
+            const q = path.getPointAtLength(((len % L) + L) % L);
+            return new DOMPoint(q.x, q.y).matrixTransform(ctm);
+          };
+          const nearest = (cx, cy) => {
+            let best = 0, bd = Infinity;
+            for (let i = 0; i <= 480; i++) {
+              const pt = at(L * i / 480);
+              const d = (pt.x - cx) ** 2 + (pt.y - cy) ** 2;
+              if (d < bd) { bd = d; best = L * i / 480; }
+            }
+            return best;
+          };
+          const target = {};
+          DOT_KEYS.forEach(k => {
+            const r = anchorEls[k].getBoundingClientRect();
+            target[k] = nearest(r.left + r.width / 2, r.top + r.height / 2);
+          });
+          // ingresso dal punto piu' basso e centrale della cornice
+          const entryLen = nearest(innerWidth / 2, innerHeight);
+          const entryPt = at(entryLen);
+          const startPos = {};
+          DOT_KEYS.forEach(k => {
+            const el = dot(k);
+            startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight - 58 };
+          });
+          const ENTRY = 1600;
+          const ARRIVE = { ambiente: 9100, agricoltura: 10500, cibo: 11800, salute: 13000 };
+          const sm = e => e * e * (3 - 2 * e);
+          const t0 = performance.now();
+          const step = now => {
+            const t = now - t0;
+            let done = true;
+            DOT_KEYS.forEach(k => {
+              const el = dot(k);
+              if (!el) return;
+              el.style.transition = 'none';
+              let x, y;
+              if (t < ENTRY) {
+                const e = sm(t / ENTRY);
+                x = startPos[k].x + (entryPt.x - startPos[k].x) * e;
+                y = startPos[k].y + (entryPt.y - startPos[k].y) * e;
+                done = false;
+              } else {
+                const dur = ARRIVE[k] - ENTRY;
+                const e = Math.min(1, (t - ENTRY) / dur);
+                if (e < 1) done = false;
+                let dist = target[k] - entryLen;
+                if (dist < 0) dist += L;
+                const pt = at(entryLen + dist * sm(e));
+                x = pt.x; y = pt.y;
+              }
+              el.style.left = x + 'px';
+              el.style.top = y + 'px';
+              el.style.opacity = '1';
+              el.style.transform = 'scale(1)';
+            });
+            if (!done) perimeterRaf = requestAnimationFrame(step);
+            else { perimeterRaf = null; DOT_KEYS.forEach(k => { const el = dot(k); if (el) el.style.transition = ''; }); }
+          };
+          if (perimeterRaf) cancelAnimationFrame(perimeterRaf);
+          perimeterRaf = requestAnimationFrame(step);
         } else if (name === 'house-door') {
           // p12 · arrivano in riga davanti alla porta, prima di salire alle finestre
           DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 34, innerHeight * .845, {
