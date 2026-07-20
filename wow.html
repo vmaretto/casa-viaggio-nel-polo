@@ -822,7 +822,7 @@
       border: 1px solid rgba(247,245,238,.13);
       border-top: 3px solid var(--aud-c);
       border-radius: 6px;
-      background: linear-gradient(180deg, color-mix(in srgb, var(--aud-c), transparent 92%), rgba(247,245,238,.02)) !important;
+      background: none !important; /* p10 atrio: niente card, solo testo e luce */
       transform: none !important;
     }
     .cinema-mode .aud--1 { --aud-c: var(--food); }
@@ -1315,206 +1315,89 @@
       display: block;
       padding: 0;
     }
-    .cinema-mode .who header,
-    .cinema-mode .actors header,
-    .cinema-mode .heritage header,
-    .cinema-mode .roadmap header {
+    .cinema-mode .actors header {
       position: absolute;
       z-index: 8;
       top: 5.8vh;
       left: 8.5vw;
       width: 83vw;
     }
-    .cinema-mode .who header .display,
-    .cinema-mode .actors header .display,
-    .cinema-mode .heritage header .display,
-    .cinema-mode .roadmap header .display {
+    .cinema-mode .actors header .display {
       margin: 0;
       font-size: clamp(48px, 3.7vw, 72px);
       line-height: 1.04;
     }
 
-    /* P10 · costellazione: quattro ingressi convergono in CASA */
+    /* P10 · atrio di luce: CASA protagonista, quattro ingressi ai lati */
+    .cinema-mode .who > .scene__safe > header {
+      position: absolute; z-index: 4; left: 50%; top: 8vh; transform: translateX(-50%);
+      width: min(80vw, 900px); margin: 0; padding: 0; text-align: center;
+    }
+    .cinema-mode .who .eyebrow { display: none; }
+    .cinema-mode .who .display {
+      margin: 0; font-family: var(--sans); font-weight: 500;
+      font-size: clamp(1rem, 1.75vw, 1.5rem); letter-spacing: .06em; line-height: 1.3;
+      color: rgba(247,245,238,.92);
+    }
     .cinema-mode .who__grid {
-      position: absolute;
-      inset: 17vh 7.5vw 9vh;
-      display: block;
-      width: auto;
-      margin: 0;
-      border: 0;
+      position: absolute; inset: 0; display: block; width: auto; margin: 0; border: 0;
       overflow: visible;
+      background: radial-gradient(46vw 42vh at 50% 47vh,
+        rgba(247,245,238,.09), rgba(170,179,34,.035) 45%, transparent 72%);
     }
-    .who-cine__links,
-    .who-cine__core { display: none; }
-    .cinema-mode .who-cine__links {
-      display: block;
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .cinema-mode .who-cine__links line {
-      vector-effect: non-scaling-stroke;
-      stroke: rgba(247,245,238,.18);
-      stroke-width: 1;
-      opacity: 0;
-      transition: opacity 1.1s ease, stroke .7s ease;
-    }
-    .cinema-mode .who[data-fragment-step="0"] .who-cine__link--1,
-    .cinema-mode .who[data-fragment-step="1"] .who-cine__link--1,
-    .cinema-mode .who[data-fragment-step="1"] .who-cine__link--2,
-    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--1,
-    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--2,
-    .cinema-mode .who[data-fragment-step="2"] .who-cine__link--3,
-    .cinema-mode .who[data-fragment-step="3"] .who-cine__links line { opacity: 1; }
+    .cinema-mode .who-cine__links { display: none; }
+    .cinema-mode .who .cine-quarter { display: none; }
+    .cinema-mode .who .aud > p:not(.cine-tag) { display: none; }
+
     .cinema-mode .who-cine__core {
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-      left: 50%;
-      display: grid;
-      place-items: center;
-      align-content: center;
-      width: clamp(200px, 19vw, 300px);
-      aspect-ratio: 1;
-      border: 1px solid rgba(170,179,34,.32);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(170,179,34,.11), rgba(7,29,33,.16) 65%, transparent);
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 72px rgba(170,179,34,.08);
+      position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%);
+      display: block; width: max-content; text-align: center;
+      padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none;
     }
     .cinema-mode .who-cine__core strong {
-      color: var(--acid);
-      font-family: var(--serif);
-      font-size: clamp(54px, 4.8vw, 88px);
-      font-style: italic;
-      font-weight: 400;
-      line-height: .9;
+      display: block; font-family: var(--serif); font-weight: 600;
+      font-size: clamp(5.5rem, 14vw, 13rem); line-height: .9; letter-spacing: .05em;
+      color: var(--paper);
+      text-shadow: 0 0 50px rgba(247,245,238,.28), 0 0 130px rgba(170,179,34,.14);
     }
     .cinema-mode .who-cine__core small {
-      margin-top: 10px;
-      color: rgba(247,245,238,.62);
-      font-family: var(--serif);
-      font-size: clamp(16px, 1.2vw, 22px);
-      font-style: italic;
+      display: block; margin-top: 1.4vh; font-family: var(--sans); font-weight: 300;
+      font-size: clamp(.85rem, 1.35vw, 1.1rem); letter-spacing: .36em; text-transform: uppercase;
+      color: rgba(247,245,238,.6);
     }
+    .cinema-mode .who-cine__core::after {
+      content: ""; display: block; width: 60px; height: 1px; margin: 1.6vh auto 0;
+      background: rgba(170,179,34,.5);
+    }
+
+    /* i quattro ingressi: pallino del film verso il centro, testo verso l'angolo */
     .cinema-mode .who .aud {
-      --qc: var(--acid);
-      position: absolute;
-      z-index: 3;
-      display: grid;
-      grid-template-columns: clamp(78px, 7.2vw, 112px) 1fr;
-      grid-template-rows: auto auto;
-      align-items: center;
-      gap: 6px 22px;
-      width: clamp(300px, 30vw, 470px);
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: none !important;
-      text-align: left;
-      transform: translateY(14px) !important;
+      position: absolute; display: block; width: 25vw; min-height: 0;
+      padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none;
     }
-    .cinema-mode .who .aud.is-current,
-    .cinema-mode .who .aud.is-done { transform: none !important; }
-    .cinema-mode .who .aud.is-done { opacity: .92; }
-    .cinema-mode .who .aud.is-current { opacity: 1; }
-    /* Geometria radiale rigorosa: quattro anchor simmetrici sulle diagonali. */
-    .cinema-mode .who .aud--1 { --qc: var(--food); top: 13%; left: 6.5%; }
-    .cinema-mode .who .aud--2 { --qc: var(--environment); top: 13%; right: 6.5%; }
-    .cinema-mode .who .aud--3 { --qc: var(--health); bottom: 7%; left: 6.5%; }
-    .cinema-mode .who .aud--4 { --qc: var(--agriculture); bottom: 7%; right: 6.5%; }
-    /* Blocchi a destra specchiati: il quarto sta sul lato esterno. */
-    .cinema-mode .who .aud--2,
-    .cinema-mode .who .aud--4 {
-      grid-template-columns: 1fr clamp(78px, 7.2vw, 112px);
-      text-align: right;
-    }
-    .cinema-mode .who .cine-quarter {
-      position: relative;
-      grid-row: 1 / span 2;
-      display: block;
-      width: clamp(78px, 7.2vw, 112px);
-      aspect-ratio: 1;
-    }
-    .cinema-mode .who .aud.aud--2 .cine-quarter,
-    .cinema-mode .who .aud.aud--4 .cine-quarter { grid-column: 2; grid-row: 1 / span 2; }
-    .cinema-mode .who .aud.aud--2 h3, .cinema-mode .who .aud.aud--4 h3,
-    .cinema-mode .who .aud.aud--2 p.cine-tag, .cinema-mode .who .aud.aud--4 p.cine-tag { grid-column: 1; grid-row: auto; }
-    /* I quattro quarti, ricomposti, formano il cerchio CASA: ognuno guarda il centro. */
-    .cinema-mode .who .cine-glyph {
-      display: block;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .cinema-mode .who .cine-glyph path {
-      fill: none;
-      stroke: var(--qc);
-      stroke-width: 2;
-      stroke-linecap: round;
-      vector-effect: non-scaling-stroke;
-      stroke-dasharray: 100;
-      stroke-dashoffset: 100;
-      transition: stroke-dashoffset 1s var(--ease) .15s;
-    }
-    .cinema-mode .who .aud.is-current .cine-glyph path,
-    .cinema-mode .who .aud.is-done .cine-glyph path { stroke-dashoffset: 0; }
-    /* Orientamento: 1 alto-sx, 2 alto-dx, 3 basso-sx, 4 basso-dx. */
-    .cinema-mode .who .aud--2 .cine-glyph { transform: rotate(90deg); }
-    .cinema-mode .who .aud--4 .cine-glyph { transform: rotate(180deg); }
-    .cinema-mode .who .aud--3 .cine-glyph { transform: rotate(270deg); }
-    .cinema-mode .who .cine-qnum {
-      position: absolute;
-      right: 12%;
-      bottom: 6%;
-      display: block;
-      color: rgba(247,245,238,.9);
-      font-family: var(--serif);
-      font-size: clamp(40px, 3.4vw, 58px);
-      font-style: italic;
-      line-height: 1;
-    }
-    .cinema-mode .who .aud--2 .cine-qnum { right: auto; left: 12%; }
-    /* In 3 e 4 l'ancora è in alto: serve più aria per avere lo stesso respiro di 1 e 2. */
-    .cinema-mode .who .aud--3 .cine-qnum { right: 14%; bottom: auto; top: 16%; }
-    .cinema-mode .who .aud--4 .cine-qnum { right: auto; left: 14%; bottom: auto; top: 16%; }
+    .cinema-mode .who .aud--1 { left: 3vw;  top: 27vh; text-align: right; }
+    .cinema-mode .who .aud--2 { right: 3vw; top: 27vh; text-align: left; }
+    .cinema-mode .who .aud--3 { left: 3vw;  top: 67vh; text-align: right; }
+    .cinema-mode .who .aud--4 { right: 3vw; top: 67vh; text-align: left; }
     .cinema-mode .who .aud h3 {
-      grid-column: 2;
-      margin: 0;
-      color: var(--paper);
-      font-family: var(--serif);
-      font-weight: 500;
-      font-size: clamp(28px, 2.25vw, 40px);
-      line-height: 1;
+      margin: 0; font-family: var(--serif); font-weight: 500;
+      font-size: clamp(1.15rem, 2vw, 1.7rem); line-height: 1.05; color: var(--paper);
     }
     .cinema-mode .who .aud p.cine-tag {
-      grid-column: 2;
-      display: block;
-      margin: 0;
-      color: rgba(247,245,238,.65);
-      font-size: clamp(15px, 1.1vw, 19px);
-      letter-spacing: .01em;
-      line-height: 1.3;
+      display: block; margin: .7vh 0 0; font-weight: 300;
+      font-size: clamp(.82rem, 1.05vw, .98rem); line-height: 1.4; letter-spacing: .03em;
+      color: rgba(247,245,238,.66);
     }
+
     .cinema-mode .who__closing {
-      position: absolute;
-      z-index: 7;
-      left: 50%;
-      bottom: 4.5vh;
-      width: min(74vw, 1100px);
-      margin: 0;
-      color: rgba(247,245,238,.86);
-      font-family: var(--serif);
-      font-size: clamp(22px, 1.75vw, 30px);
-      font-style: italic;
-      text-align: center;
-      transform: translateX(-50%);
+      position: absolute; z-index: 7; left: 50%; bottom: 8vh;
+      width: min(88vw, 1050px); margin: 0;
+      color: var(--paper); font-family: var(--serif);
+      font-size: clamp(1.3rem, 2.4vw, 2rem); font-style: italic; font-weight: 500;
+      text-align: center; transform: translateX(-50%);
     }
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
-
     /* P11 · i cerchi della regia: la governance come sistema orbitale */
     .cinema-mode .actors__grid {
       position: absolute;
@@ -1683,6 +1566,13 @@
     }
 
     /* P12 · la casa di notte: il patrimonio accende le finestre */
+    .cinema-mode .heritage header {
+      position: absolute; z-index: 8; top: 5.8vh; left: 8.5vw; width: 83vw;
+    }
+    .cinema-mode .heritage header .display {
+      margin: 0; font-size: clamp(48px, 3.7vw, 72px); line-height: 1.04; text-align: left;
+    }
+    .cinema-mode .heritage .eyebrow { text-align: left; }
     /* lo zoom cinema è inline sulla scena: qui va tolto, altrimenti i figli
        position:fixed si ancorano alla scena invece che al viewport */
     body.cinema-mode #p12 { transform: none !important; }
@@ -1949,12 +1839,8 @@
     }
 
     @media (max-height: 800px) and (min-width: 900px) {
-      .cinema-mode .who header .display,
-      .cinema-mode .actors header .display,
-      .cinema-mode .heritage header .display,
-      .cinema-mode .roadmap header .display { font-size: clamp(42px, 3.3vw, 58px); }
-      .cinema-mode .who__grid { inset: 18vh 7vw 10vh; }
-      .cinema-mode .who .aud h3 { font-size: clamp(24px, 2vw, 32px); }
+      .cinema-mode .actors header .display { font-size: clamp(42px, 3.3vw, 58px); }
+      /* p10 è a schermo pieno (atrio): inset e corpi gestiti nel blocco P10 */
       .cinema-mode .actors__grid { inset: 19vh 9vw 8vh 14vw; }
       .cinema-mode .actors .role h4 { font-size: clamp(25px, 2.15vw, 35px); }
       .cinema-mode .actors .sci h4 { font-size: clamp(22px, 1.8vw, 30px); }
@@ -4712,6 +4598,14 @@
         const cap = caps[n];
         if (!cap) return;
         scene.classList.add('door-on');
+        // recupero: se un beat precedente e' stato interrotto, la sua stanza
+        // si accende subito (niente finestre perse tra cue ravvicinati)
+        caps.forEach((c, i) => {
+          if (i < n && !c.classList.contains('lit')) {
+            c.classList.add('lit');
+            try { cineDotsPreset('windows-lamp', i); } catch (err) {}
+          }
+        });
         const h3 = cap.querySelector('h3');
         const kw = cap.querySelector('.cap__keywords');
         if (big) big.textContent = h3 ? h3.textContent : '';
@@ -5187,16 +5081,14 @@
           DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth / 2 + (i - 1.5) * 30, innerHeight - 42, { opacity: .5, scale: .55 }));
         } else if (name === 'who-field') {
           const audiences = [...document.querySelectorAll('.who .aud')];
+          // atrio: il pallino si posa sul lato interno dell'ingresso, verso CASA
           audiences.forEach((audience, i) => {
             const m = layoutMid(audience);
             const mirrored = audience.classList.contains('aud--2') || audience.classList.contains('aud--4');
             const x = mirrored
-              ? m.x + audience.offsetWidth / 2 + 22
-              : m.x - audience.offsetWidth / 2 - 22;
-            dotGo(DOT_KEYS[i], x, m.y - audience.offsetHeight / 2 + 28, {
-              opacity: .72,
-              scale: .66
-            });
+              ? m.x - audience.offsetWidth / 2 - 26
+              : m.x + audience.offsetWidth / 2 + 26;
+            dotGo(DOT_KEYS[i], x, m.y, { opacity: .9, scale: .8 });
           });
         } else if (name === 'actors-knot') {
           // I pallini si affiancano ai nodi scientifici del loro ambito:
