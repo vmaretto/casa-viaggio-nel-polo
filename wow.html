@@ -3370,15 +3370,15 @@
       opacity: 0; pointer-events: none;
     }
     .cinema-mode .overlay.is-open .ov-sketch {
-      opacity: 1; animation: ovSketchLoop 8.2s ease-in-out infinite;
+      opacity: 1; animation: ovSketchLoop 7.5s ease-in-out forwards;
     }
-    /* un ciclo intero nella finestra del film (~8s): sosta lunga sul rendering,
-       sosta lunga sulla foto reale, e ritorno all'immagine di partenza */
-    @keyframes ovSketchLoop { 0%, 30% { opacity: 1; } 40%, 72% { opacity: 0; } 82%, 100% { opacity: 1; } }
-    .cinema-mode .overlay.is-open .ov-transito--a { animation: ovTransA 8.2s ease-in-out infinite; }
-    .cinema-mode .overlay.is-open .ov-transito--b { animation: ovTransB 8.2s ease-in-out infinite; }
-    @keyframes ovTransA { 0%, 30% { opacity: 1; } 40%, 72% { opacity: 0; } 82%, 100% { opacity: 1; } }
-    @keyframes ovTransB { 0%, 30% { opacity: 0; } 40%, 72% { opacity: 1; } 82%, 100% { opacity: 0; } }
+    /* una sola andata: sosta sul rendering, dissolvenza, e si resta sulla
+       foto reale fino alla chiusura del popup (nessun ritorno al rendering) */
+    @keyframes ovSketchLoop { 0%, 32% { opacity: 1; } 46%, 100% { opacity: 0; } }
+    .cinema-mode .overlay.is-open .ov-transito--a { animation: ovTransA 7.5s ease-in-out forwards; }
+    .cinema-mode .overlay.is-open .ov-transito--b { animation: ovTransB 7.5s ease-in-out forwards; }
+    @keyframes ovTransA { 0%, 32% { opacity: 1; } 46%, 100% { opacity: 0; } }
+    @keyframes ovTransB { 0%, 32% { opacity: 0; } 46%, 100% { opacity: 1; } }
     /* niente testi sotto le immagini durante la finestra */
     .cinema-mode #ov-spazio .overlay__list { display: none; }
     .ov-marker {
