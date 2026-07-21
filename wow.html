@@ -674,6 +674,14 @@
       font-size: .66rem; font-weight: 600; letter-spacing: .4em; text-transform: uppercase;
       color: var(--acid);
     }
+    /* qualificatore del Nobel: previene l'unica obiezione fattuale facile
+       (il premio 2007 fu assegnato all'IPCC come organizzazione) */
+    .targa__ipcc { display: none; }
+    .cinema-mode .science__targa .targa__ipcc {
+      display: block; margin-top: 8px;
+      font-family: var(--serif); font-style: italic; font-size: clamp(.95rem, 1.1vw, 1.2rem);
+      color: rgba(247,245,238,.66);
+    }
     .cinema-mode .science__targa .targa__title {
       display: block; font-family: var(--serif); font-weight: 500;
       font-size: clamp(1.9rem, 3.4vw, 3rem); line-height: .98; letter-spacing: .01em; color: var(--paper);
@@ -3756,7 +3764,7 @@
           <p class="problem__line reveal delay-2">L’<span class="k-agr">agricoltura</span> dà forma al <span class="k-food">cibo</span> che produciamo.</p>
           <p class="problem__line reveal delay-3">Il <span class="k-food">cibo</span> incide sulla nostra <span class="k-health">salute</span>.</p>
         </div>
-        <p class="problem__break reveal delay-4">Eppure continuiamo a organizzare competenze, decisioni e attività <strong>separatamente</strong>.</p>
+        <p class="problem__break reveal delay-4"><span class="t-web">Eppure continuiamo a organizzare competenze, decisioni e attività <strong>separatamente</strong>.</span><span class="t-cine">Un ecosistema. <strong>Governato a compartimenti.</strong></span></p>
         <svg class="problem__web" viewBox="0 0 220 220" aria-hidden="true">
           <line x1="110" y1="30" x2="190" y2="110"/>
           <line x1="190" y1="110" x2="110" y2="190"/>
@@ -4293,7 +4301,7 @@
               <p class="science__name"><span class="science__pref">Prof.</span> Riccardo Valentini</p>
               <p class="science__cine reveal"><strong>Premio Nobel per la Pace 2007</strong> · Direzione scientifica di CASA</p>
               <div class="science__targa" aria-hidden="true">
-                <div><span class="targa__label">Premio</span><span class="targa__title">Nobel per la Pace</span></div>
+                <div><span class="targa__label">Premio</span><span class="targa__title">Nobel per la Pace</span><span class="targa__ipcc">con l’IPCC · Nazioni Unite</span></div>
                 <span class="targa__year">2007</span>
               </div>
               <p class="science__subrole">Direzione scientifica di CASA</p>
@@ -4316,23 +4324,23 @@
           <article class="action fragment" data-fragment="0">
             <span class="action__num">01</span>
             <div>
-              <h3>Coinvolgimento del CMCC</h3>
-              <p>Attivare la collaborazione per l’ambito ambiente — il percorso è già avviato.</p>
+              <h3><span class="t-web">Coinvolgimento del CMCC</span><span class="t-cine">Partner scientifici</span></h3>
+              <p><span class="t-web">Attivare la collaborazione per l’ambito ambiente — il percorso è già avviato.</span><span class="t-cine">Attivare le collaborazioni sui quattro ambiti — il percorso è già avviato.</span></p>
             </div>
           </article>
           <article class="action fragment" data-fragment="1">
             <span class="action__num">02</span>
             <div>
-              <h3>Convenzione UNIUST × Università della Tuscia</h3>
-              <p>Finalizzata ai docenti per l’avvio dei programmi e alle attività di ricerca nei quattro ambiti.</p>
+              <h3><span class="t-web">Convenzione UNIUST × Università della Tuscia</span><span class="t-cine">Veicolo societario</span></h3>
+              <p><span class="t-web">Finalizzata ai docenti per l’avvio dei programmi e alle attività di ricerca nei quattro ambiti.</span><span class="t-cine">Individuare la forma più adatta a governare CASA — la valutazione è in corso.</span></p>
               <div class="action__links"><button type="button" class="more-link" data-overlay="ov-tuscia">L’accordo ↗</button></div>
             </div>
           </article>
           <article class="action fragment" data-fragment="2">
             <span class="action__num">03</span>
             <div>
-              <h3>Ricerca dello spazio e sua predisposizione</h3>
-              <p>Individuare l’area secondo le caratteristiche del modello e predisporla ad accogliere le prime attività.</p>
+              <h3><span class="t-web">Ricerca dello spazio e sua predisposizione</span><span class="t-cine">Lo spazio</span></h3>
+              <p><span class="t-web">Individuare l’area secondo le caratteristiche del modello e predisporla ad accogliere le prime attività.</span><span class="t-cine">Individuare l’area secondo il modello e predisporla alle prime attività.</span></p>
               <div class="action__links">
                 <button type="button" class="more-link" data-overlay="ov-piano">Il piano ↗</button>
                 <button type="button" class="more-link" data-overlay="ov-costi">I costi ↗</button>
@@ -4894,6 +4902,10 @@
         // i preset rAF si fermano subito (altrimenti seguirebbero la scena
         // in uscita trascinando i pallini fuori schermo)
         if (cinemaMode && !staticMode && lastActive >= 0) {
+          // nessun popup sopravvive allo stacco: se un cue di chiusura cade
+          // oltre la fine della clip (voce più corta del previsto), l'overlay
+          // si chiude comunque al cambio scena
+          closeOverlays();
           if (perimeterRaf) { cancelAnimationFrame(perimeterRaf); perimeterRaf = null; }
           // i preset rAF lasciano transition:none inline: senza ripristino il
           // primo dotGo della scena nuova teletrasporta i pallini
