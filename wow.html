@@ -4889,6 +4889,13 @@
         }
         lastActive = active;
         scenes.forEach((scene, i) => scene.classList.toggle('is-active', i === active));
+        // Cintura di sicurezza p10: il titolo va in alto SEMPRE, con stili
+        // inline che vincono su qualunque stato del CSS (visto un caso sul
+        // campo — Chrome dell'utente — in cui finiva centrato sul cerchio)
+        if (cinemaMode && scenes[active].id === 'p10') {
+          const hd = scenes[active].querySelector('header');
+          if (hd) hd.style.cssText += ';position:absolute;top:8vh;left:50%;right:auto;bottom:auto;transform:translateX(-50%);width:min(80vw,900px);margin:0;padding:0;text-align:center;z-index:4';
+        }
         document.body.classList.toggle('on-light', scenes[active].matches('.scene--light, .finale'));
         dots.forEach((dot, i) => dot.setAttribute('aria-current', i === active ? 'true' : 'false'));
         progress.style.transform = `scaleX(${active + 1})`;
