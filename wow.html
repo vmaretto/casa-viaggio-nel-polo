@@ -553,7 +553,7 @@
       border-radius: 999px;
       /* velo leggero e NIENTE blur: la cornice tratteggiata e i pallini
          devono passare sotto l'etichetta restando nitidi e riconoscibili */
-      background: rgba(7,29,33,.26);
+      background: rgba(7,29,33,.52);
       color: var(--paper);
       font-family: var(--serif);
       font-style: italic;
@@ -1553,14 +1553,14 @@
       mask-image: linear-gradient(180deg, transparent 0%, transparent 28%, #000 44%, #000 80%, transparent 90%);
     }
     /* a scorrere sono le carte (il contenitore con la maschera e' fermo) */
-    @keyframes creditsRoll { from { transform: translateY(100vh); } to { transform: translateY(-135vh); } }
+    @keyframes creditsRoll { from { transform: translateY(100vh); } to { transform: translateY(-42vh); } }
     .cinema-mode .actors__grid > * { transform: translateY(100vh); }
     .cinema-mode .actors.is-active .actors__grid > *,
     .cinema-mode .actors.cine-prev .actors__grid > * {
       /* i titoli partono dopo il viaggio dei pallini dal quadrato alla firma;
          fill "both": durante il ritardo vale il fotogramma iniziale (100vh),
          così nessun ruolo è visibile prima che il roll cominci */
-      animation: creditsRoll 29.5s linear 2.1s both;
+      animation: creditsRoll 34.5s linear 2.1s both;
     }
     /* nessuna eccezione: anche i fragment del cast restano sotto lo schermo
        finché il roll non li porta su (il refuso dei ruoli "a caso") */
@@ -3466,8 +3466,9 @@
     }
     .cinema-mode #ov-arredo .tile span { color: rgba(247,245,238,.95); text-shadow: 0 1px 2px rgba(7,29,33,.5); }
     .arredo-mosaico, .arredo-unico { display: none; }
+    .cinema-mode #ov-arredo .overlay__panel { position: relative; overflow: hidden; }
     .cinema-mode #ov-arredo .arredo-mosaico {
-      display: block; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+      display: block; position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: inherit;
       opacity: 0;
       background-image:
         repeating-linear-gradient(0deg, rgba(7,29,33,.5) 0 2px, transparent 2px 100%),
@@ -3486,7 +3487,7 @@
       88%, 100%{ opacity: 1; background-size: 30px 30px; background-position: 0 0; }
     }
     .cinema-mode #ov-arredo .arredo-unico {
-      display: block; position: absolute; inset: 0; z-index: 7; pointer-events: none;
+      display: block; position: absolute; inset: 0; z-index: 7; pointer-events: none; border-radius: inherit;
       opacity: 0; background: #b4a967;
     }
     .cinema-mode #ov-arredo.is-open .arredo-unico { animation: arredoUnico 10.2s linear forwards; }
@@ -4501,50 +4502,50 @@
       <h2 class="display overlay__title">La casa è già arredata.</h2>
       <p class="overlay__lead">Trovato lo spazio, i contenuti ci sono già: progetti, tecnologie, eventi e competenze pronti a trasferirsi.</p>
       <div class="tiles" aria-hidden="true">
-        <div class="tile" style="--c: var(--food); --d: 0"><span>Avatar</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 7"><span>Cubo immersivo</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 0"><span>Avatar</span></div>
+        <div class="tile" style="--c: var(--health); --d: 7"><span>Cubo immersivo</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 14"><span>Tracciabilità</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 1"><span>Sensori in campo</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 8"><span>Eventi</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 15"><span>Workshop</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 2"><span>Formazione</span></div>
+        <div class="tile" style="--c: var(--food); --d: 9"><span>Dati ambientali</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 16"><span>Arte & Natura</span></div>
+        <div class="tile" style="--c: var(--food); --d: 3"><span>Conferenze</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 10"><span>Carbon farming</span></div>
+        <div class="tile" style="--c: var(--food); --d: 17"><span>Agricoltura digitale</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 4"><span>Open innovation</span></div>
+        <div class="tile" style="--c: var(--health); --d: 11"><span>Divulgazione</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 18"><span>Percorsi sensoriali</span></div>
+        <div class="tile" style="--c: var(--health); --d: 5"><span>Laboratori</span></div>
+        <div class="tile" style="--c: var(--health); --d: 12"><span>Ricerca applicata</span></div>
+        <div class="tile" style="--c: var(--food); --d: 19"><span>Serre sperimentali</span></div>
+        <div class="tile" style="--c: var(--food); --d: 6"><span>Osservazione</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 13"><span>Competenze ibride</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 0"><span>Avatar</span></div>
+        <div class="tile" style="--c: var(--food); --d: 7"><span>Cubo immersivo</span></div>
         <div class="tile" style="--c: var(--health); --d: 14"><span>Tracciabilità</span></div>
         <div class="tile" style="--c: var(--agriculture); --d: 1"><span>Sensori in campo</span></div>
-        <div class="tile" style="--c: var(--food); --d: 8"><span>Eventi</span></div>
+        <div class="tile" style="--c: var(--health); --d: 8"><span>Eventi</span></div>
         <div class="tile" style="--c: var(--environment); --d: 15"><span>Workshop</span></div>
         <div class="tile" style="--c: var(--health); --d: 2"><span>Formazione</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 9"><span>Dati ambientali</span></div>
-        <div class="tile" style="--c: var(--food); --d: 16"><span>Arte & Natura</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 3"><span>Conferenze</span></div>
-        <div class="tile" style="--c: var(--health); --d: 10"><span>Carbon farming</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 17"><span>Agricoltura digitale</span></div>
+        <div class="tile" style="--c: var(--health); --d: 9"><span>Dati ambientali</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 16"><span>Arte & Natura</span></div>
+        <div class="tile" style="--c: var(--health); --d: 3"><span>Conferenze</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 10"><span>Carbon farming</span></div>
+        <div class="tile" style="--c: var(--environment); --d: 17"><span>Agricoltura digitale</span></div>
         <div class="tile" style="--c: var(--food); --d: 4"><span>Open innovation</span></div>
         <div class="tile" style="--c: var(--environment); --d: 11"><span>Divulgazione</span></div>
-        <div class="tile" style="--c: var(--health); --d: 18"><span>Percorsi sensoriali</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 5"><span>Laboratori</span></div>
+        <div class="tile" style="--c: var(--agriculture); --d: 18"><span>Percorsi sensoriali</span></div>
+        <div class="tile" style="--c: var(--food); --d: 5"><span>Laboratori</span></div>
         <div class="tile" style="--c: var(--food); --d: 12"><span>Ricerca applicata</span></div>
         <div class="tile" style="--c: var(--environment); --d: 19"><span>Serre sperimentali</span></div>
         <div class="tile" style="--c: var(--health); --d: 6"><span>Osservazione</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 13"><span>Competenze ibride</span></div>
-        <div class="tile" style="--c: var(--food); --d: 0"><span>Avatar</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 7"><span>Cubo immersivo</span></div>
-        <div class="tile" style="--c: var(--health); --d: 14"><span>Tracciabilità</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 1"><span>Sensori in campo</span></div>
-        <div class="tile" style="--c: var(--food); --d: 8"><span>Eventi</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 15"><span>Workshop</span></div>
-        <div class="tile" style="--c: var(--health); --d: 2"><span>Formazione</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 9"><span>Dati ambientali</span></div>
-        <div class="tile" style="--c: var(--food); --d: 16"><span>Arte & Natura</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 3"><span>Conferenze</span></div>
-        <div class="tile" style="--c: var(--health); --d: 10"><span>Carbon farming</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 17"><span>Agricoltura digitale</span></div>
-        <div class="tile" style="--c: var(--food); --d: 4"><span>Open innovation</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 11"><span>Divulgazione</span></div>
-        <div class="tile" style="--c: var(--health); --d: 18"><span>Percorsi sensoriali</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 5"><span>Laboratori</span></div>
-        <div class="tile" style="--c: var(--food); --d: 12"><span>Ricerca applicata</span></div>
-        <div class="tile" style="--c: var(--environment); --d: 19"><span>Serre sperimentali</span></div>
-        <div class="tile" style="--c: var(--health); --d: 6"><span>Osservazione</span></div>
-        <div class="tile" style="--c: var(--agriculture); --d: 13"><span>Competenze ibride</span></div>
+        <div class="tile" style="--c: var(--food); --d: 13"><span>Competenze ibride</span></div>
       </div>
+      <div class="arredo-mosaico" aria-hidden="true"></div>
+      <div class="arredo-unico" aria-hidden="true"></div>
     </div>
-    <div class="arredo-mosaico" aria-hidden="true"></div>
-    <div class="arredo-unico" aria-hidden="true"></div>
   </div>
 
   <div class="overlay" id="ov-tuscia" role="dialog" aria-modal="true" aria-label="Approfondimento: accordo UNIUST e Tuscia">
@@ -5780,6 +5781,17 @@
           const viz = document.querySelector('.birth__viz');
           const m = viz ? rectMid(viz) : { x: innerWidth / 2, y: innerHeight / 2 };
           DOT_KEYS.forEach(k => dotGo(k, m.x, m.y, { opacity: 0, scale: .3 }));
+        } else if (name === 'emerge') {
+          // p05, dopo il popup: i quattro riemergono dal cerchio di pallini
+          // della nascita e si dispongono sul suo bordo, pronti a ripartire
+          const viz = document.querySelector('.birth__viz');
+          const m = viz ? rectMid(viz) : { x: innerWidth / 2, y: innerHeight / 2, r: { width: 320 } };
+          const R = (m.r.width || 320) / 2 + 18;
+          const ANG = [-135, -45, 45, 135];
+          DOT_KEYS.forEach((k, i) => {
+            const a = ANG[i] * Math.PI / 180;
+            dotGo(k, m.x + Math.cos(a) * R, m.y + Math.sin(a) * R);
+          });
         } else if (name === 'operate-title' || name === 'operate-phase') {
           if (operateFlow) stopOperateFlow();
           // I pallini attendono in fila dentro il quadrante e si posano sul
