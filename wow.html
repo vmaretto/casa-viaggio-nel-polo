@@ -1052,7 +1052,9 @@
     .operate-cine__field-base,
     .operate-cine__field-progress {
       fill: none;
-      vector-effect: non-scaling-stroke;
+      /* NIENTE non-scaling-stroke qui: con quello il tratteggio è contato in
+         pixel di schermo e i "quarti" da 326,7 unità sono esatti solo in
+         scala 1:1 — su schermi grandi il cerchio non si chiudeva mai */
     }
     .operate-cine__field-base { stroke: rgba(247,245,238,.12); stroke-width: 1; }
     .operate-cine__field-progress {
