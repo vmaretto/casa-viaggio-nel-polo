@@ -4207,7 +4207,7 @@
     </section>
 
     <!-- 13 · ROADMAP -->
-    <section class="scene roadmap" id="p13" data-index="10" data-title="Roadmap" aria-label="Roadmap">
+    <section class="scene roadmap" data-dots-enter="road-ride" id="p13" data-index="10" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">09 · Roadmap</p>
@@ -5511,19 +5511,13 @@
               const pt = at(len);
               let x = pt.x, y = pt.y;
               if (t < ENTRY) {
-                const prev = document.querySelector('.scene.cine-prev');
-                if (prev) {
-                  // i pallini restano ATTACCATI alle finestre e escono di
-                  // scena con la casa durante la carrellata; rientreranno
-                  // dall'imbocco della strada (nessuna gita al centro)
-                  x = startPos[k].x + prev.getBoundingClientRect().left;
-                  y = startPos[k].y;
-                } else {
-                  const e = sm(t / ENTRY);
-                  const p0 = at(-GAP * i2);
-                  x = startPos[k].x + (p0.x - startPos[k].x) * e;
-                  y = startPos[k].y + (p0.y - startPos[k].y) * e;
-                }
+                // l'uscita di scena la fa già il ponte "road-ride" allo stacco:
+                // qui si raccolgono i pallini (ormai fuori schermo a sinistra)
+                // e li si porta ai posti di fila prima dell'imbocco
+                const e = sm(t / ENTRY);
+                const p0 = at(-GAP * i2);
+                x = startPos[k].x + (p0.x - startPos[k].x) * e;
+                y = startPos[k].y + (p0.y - startPos[k].y) * e;
               }
               el.style.left = x + 'px';
               el.style.top = y + 'px';
@@ -5661,6 +5655,30 @@
             const m = layoutMid(sp);
             dotGo(DOT_KEYS[i], m.x, y, { opacity: .68, scale: .64, instant: true });
           });
+        } else if (name === 'road-ride') {
+          // ponte p12→p13: allo stacco i pallini restano incollati alle
+          // finestre e escono di scena INSIEME alla casa; quando la casa è
+          // fuori si fermano (fuori schermo), in attesa del cue road-stars
+          const startPos = {};
+          DOT_KEYS.forEach(k => {
+            const el = dot(k);
+            startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight / 2 };
+          });
+          const step = () => {
+            const prev = document.querySelector('.scene.cine-prev');
+            if (!prev) { perimeterRaf = null; return; }
+            const off = prev.getBoundingClientRect().left;
+            DOT_KEYS.forEach(k => {
+              const el = dot(k);
+              if (!el) return;
+              el.style.transition = 'none';
+              el.style.left = (startPos[k].x + off) + 'px';
+              el.style.top = startPos[k].y + 'px';
+            });
+            perimeterRaf = requestAnimationFrame(step);
+          };
+          if (perimeterRaf) cancelAnimationFrame(perimeterRaf);
+          perimeterRaf = requestAnimationFrame(step);
         } else if (name === 'file-bottom') {
           // fine p04: lasciano le etichette PRIMA dello stacco e si mettono
           // in riga bassa — così tra la casa tratteggiata e la parola CASA
