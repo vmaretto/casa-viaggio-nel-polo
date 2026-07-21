@@ -5476,9 +5476,10 @@
           };
           // tappe sui pin (coord viewBox della strada) e tabella di marcia del
           // capofila: pin1 a 2.4s, pin2 a 7.0s, pin3 a 10.5s dal preset
-          // ultima tappa ben oltre il capo destro (L*1.45): anche l'ultimo della
-          // fila esce davvero dallo schermo, pronto a ricomparire attorno al ritratto
-          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [16.0, L * 1.45]];
+          // ultima tappa in fondo alla strada ma DENTRO lo schermo: la fila
+          // resta visibile e allo stacco plana a vista fino all'orbita del
+          // ritratto (niente sparizione e ricomparsa)
+          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [16.0, L * .93]];
           const sm = e => e * e * (3 - 2 * e);
           const leaderLen = t => {
             if (t <= KF[0][0]) return 0;
