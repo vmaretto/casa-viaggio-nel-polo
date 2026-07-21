@@ -1045,6 +1045,12 @@
       border-radius: 50%;
       box-shadow: 0 0 110px rgba(170,179,34,.035), inset 0 0 90px rgba(126,189,174,.02);
     }
+    /* il cerchio si mostra PRIMA dei pallini: appena la scena è attiva */
+    .cinema-mode .operate.is-active .operate-cine__field {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(2vh) scale(1);
+      transition-delay: .7s, .7s;
+    }
     .cinema-mode .operate[data-fragment-step="0"] .operate-cine__field,
     .cinema-mode .operate[data-fragment-step="1"] .operate-cine__field,
     .cinema-mode .operate[data-fragment-step="2"] .operate-cine__field,
@@ -3462,6 +3468,7 @@
        griglia di partenza (8 -> 11 -> 14 -> 17 colonne); poi tutta la griglia
        pulsa alternando i 4 colori CASA e converge nel colore mix (#b4a967). */
     .cinema-mode #ov-arredo .tiles { position: relative; }
+    .cinema-mode #ov-arredo .tiles.arredo-fissa .tile { aspect-ratio: auto; height: 100%; min-height: 0; }
     .tile--clone { opacity: 0; transform: scale(.6); }
     .cinema-mode #ov-arredo .tile--clone { animation: tilePop .45s var(--ease) forwards; }
     @keyframes tilePop { to { opacity: 1; transform: none; } }
@@ -4247,7 +4254,7 @@
     </section>
 
     <!-- 13 · ROADMAP -->
-    <section class="scene roadmap" data-dots-enter="road-ride" id="p13" data-index="10" data-title="Roadmap" aria-label="Roadmap">
+    <section class="scene roadmap" id="p13" data-index="10" data-title="Roadmap" aria-label="Roadmap">
       <div class="scene__safe scene__center">
         <header>
           <p class="eyebrow reveal">09 · Roadmap</p>
@@ -5547,7 +5554,7 @@
           // ultima tappa in fondo alla strada ma DENTRO lo schermo: la fila
           // resta visibile e allo stacco plana a vista fino all'orbita del
           // ritratto (niente sparizione e ricomparsa)
-          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [16.0, L * .93]];
+          const KF = [[1.2, 0], [2.4, nearest(17, 85)], [7.0, nearest(48, 71)], [10.5, nearest(76, 60.5)], [19.5, L * 1.06]];
           const sm = e => e * e * (3 - 2 * e);
           const leaderLen = t => {
             if (t <= KF[0][0]) return 0;
@@ -5745,6 +5752,12 @@
           };
           if (perimeterRaf) cancelAnimationFrame(perimeterRaf);
           perimeterRaf = requestAnimationFrame(step);
+        } else if (name === 'fila-partenza') {
+          // p12, dopo il collage: giù dalle finestre, in fila indiana in basso
+          // a sinistra (dove arriverà l'imbocco della strada), incamminati
+          const sp = (Number(arg) || 0) * innerWidth * .045;
+          const P = [[24, 84], [18.5, 86], [13, 87.5], [7.5, 89]];
+          DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * P[i][0] / 100 + sp, innerHeight * P[i][1] / 100));
         } else if (name === 'file-bottom') {
           // fine p04: lasciano le etichette PRIMA dello stacco e si mettono
           // in riga bassa — così tra la casa tratteggiata e la parola CASA
@@ -6029,6 +6042,10 @@
         tiles.querySelectorAll('.tile--clone').forEach(el => el.remove());
         tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3', 'arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
         tiles.style.gridTemplateColumns = '';
+        tiles.style.gridAutoRows = '';
+        tiles.style.height = '';
+        tiles.style.overflow = '';
+        tiles.classList.remove('arredo-fissa');
         const velo = document.getElementById('arredoMixTiles');
         if (velo) velo.remove();
       };
@@ -6038,8 +6055,18 @@
         if (!tiles) return;
         const base = [...tiles.querySelectorAll('.tile')];
         const COL = ['--food', '--environment', '--health', '--agriculture'];
+        // il rettangolo delle tessere resta della SUA dimensione: si blocca
+        // l'altezza iniziale e le celle si rimpiccioliscono per far posto
+        const H0 = tiles.getBoundingClientRect().height;
+        tiles.style.height = H0 + 'px';
+        tiles.style.overflow = 'hidden';
+        tiles.classList.add('arredo-fissa');
         const onda = (n, colonne, dense) => {
+          const totale = tiles.querySelectorAll('.tile').length + n;
+          const righe = Math.ceil(totale / colonne);
+          const gap = 8;
           tiles.style.gridTemplateColumns = 'repeat(' + colonne + ', 1fr)';
+          tiles.style.gridAutoRows = ((H0 - (righe - 1) * gap) / righe) + 'px';
           tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3');
           if (dense) tiles.classList.add(dense);
           for (let i = 0; i < n; i++) {
@@ -6047,20 +6074,23 @@
             const c = src.cloneNode(true);
             c.classList.add('tile--clone');
             c.style.setProperty('--c', 'var(' + COL[(i * 7 + 3) % 4] + ')');
-            c.style.animationDelay = (i * 28) + 'ms';
-            tiles.appendChild(c);
+            c.style.animationDelay = (i * 24) + 'ms';
+            // proliferazione OVUNQUE: ogni clone entra in un punto casuale
+            const figli = tiles.children;
+            const pos = (i * 37 + 11) % (figli.length + 1);
+            tiles.insertBefore(c, figli[pos] || null);
           }
         };
         // ondate: 40 -> 88 -> 154 -> 238 tesserine, sempre nella griglia di partenza
         arredoTimers.push(setTimeout(() => onda(48, 11, 'arredo-dense1'), 4600));
-        arredoTimers.push(setTimeout(() => onda(66, 14, 'arredo-dense2'), 7200));
-        arredoTimers.push(setTimeout(() => onda(84, 17, 'arredo-dense3'), 9800));
+        arredoTimers.push(setTimeout(() => onda(66, 14, 'arredo-dense2'), 7000));
+        arredoTimers.push(setTimeout(() => onda(84, 17, 'arredo-dense3'), 9400));
         // alternanza dei 4 colori su tutta la griglia
         [1, 2, 3, 4, 1, 2, 3, 4].forEach((c, i) => {
           arredoTimers.push(setTimeout(() => {
             tiles.classList.remove('arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
             tiles.classList.add('arredo-c' + c);
-          }, 12400 + i * 500));
+          }, 11600 + i * 450));
         });
         // convergenza nel colore mix, dentro la griglia
         arredoTimers.push(setTimeout(() => {
@@ -6068,7 +6098,7 @@
           velo.id = 'arredoMixTiles';
           tiles.appendChild(velo);
           requestAnimationFrame(() => requestAnimationFrame(() => velo.classList.add('acceso')));
-        }, 16600));
+        }, 15400));
       };
       const closeOverlays = () => { arredoStop(); document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open')); };
       document.querySelectorAll('[data-overlay]').forEach(btn => {
