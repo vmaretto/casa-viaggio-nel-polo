@@ -4614,6 +4614,13 @@
           document.body.appendChild(lay);
           lay.appendChild(anchorsBox);
         }
+        // Blindatura p10 AL CARICO: il titolo nasce già assoluto in alto,
+        // prima di qualunque evento di scena — visto su Safari dell'utente
+        // (13:42, video) uno stato col titolo centrato sul cerchio che nessun
+        // laboratorio riproduce; con lo stile inline dal primo paint non può
+        // esistere in nessuna sequenza di eventi.
+        const p10hd = document.querySelector('#p10 > .scene__safe > header');
+        if (p10hd) p10hd.style.cssText += ';position:absolute;top:8vh;left:50%;right:auto;bottom:auto;transform:translateX(-50%);width:min(80vw,900px);margin:0;padding:0;text-align:center;z-index:4';
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
         addEventListener('touchmove', block, { passive: false });
