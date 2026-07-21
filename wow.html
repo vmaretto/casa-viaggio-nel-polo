@@ -1569,6 +1569,8 @@
     .cinema-mode .actors .cine-role-desc { display: none; }
     .cinema-mode .actors .role > p, .cinema-mode .actors .role .role__body { display: none; }
     .cinema-mode .actors .sci > p { display: none; }
+    /* film: niente bottoni web né segnaposto colorati accanto ai garanti */
+    .cinema-mode .actors .more-link, .cinema-mode .actors .sci i { display: none !important; }
     .cinema-mode .actors .actors-cine__spine-anchor { display: none; }
     .cinema-mode .actors__grid::before, .cinema-mode .actors__grid::after { display: none; }
 
@@ -3455,45 +3457,28 @@
     }
     .overlay.is-open .tile { animation: tileIn .6s var(--ease) forwards; animation-delay: calc(var(--d) * 60ms); }
     @keyframes tileIn { to { opacity: 1; transform: none; } }
-    /* == LA MOLTIPLICAZIONE (solo film) ==
-       Le tesserine si tingono dei 4 colori CASA; poi il mosaico si moltiplica
-       (le celle si suddividono sempre più fitte = "i progetti diventeranno
-       sempre di più"), pulsa alternando i colori, e converge nel colore unico
-       mix dei quattro (#b4a967) prima della chiusura. */
-    .cinema-mode #ov-arredo .tile {
-      border-color: color-mix(in srgb, var(--c), transparent 25%);
-      background: linear-gradient(160deg, color-mix(in srgb, var(--c), transparent 45%), color-mix(in srgb, var(--c), #071d21 55%));
+    /* == LA MOLTIPLICAZIONE v3 (solo film) ==
+       Le tesserine VERE, con le loro scritte, aumentano a ondate dentro la
+       griglia di partenza (8 -> 11 -> 14 -> 17 colonne); poi tutta la griglia
+       pulsa alternando i 4 colori CASA e converge nel colore mix (#b4a967). */
+    .cinema-mode #ov-arredo .tiles { position: relative; }
+    .tile--clone { opacity: 0; transform: scale(.6); }
+    .cinema-mode #ov-arredo .tile--clone { animation: tilePop .45s var(--ease) forwards; }
+    @keyframes tilePop { to { opacity: 1; transform: none; } }
+    .cinema-mode #ov-arredo .tiles.arredo-dense1 .tile span { font-size: clamp(8px, .7vw, 11px); }
+    .cinema-mode #ov-arredo .tiles.arredo-dense2 .tile span { font-size: clamp(7px, .58vw, 9px); }
+    .cinema-mode #ov-arredo .tiles.arredo-dense3 .tile span { font-size: clamp(6px, .48vw, 8px); }
+    .cinema-mode #ov-arredo .tiles[class*="arredo-c"] .tile { transition: background .35s ease, border-color .35s ease; }
+    .cinema-mode #ov-arredo .tiles.arredo-c1 .tile { background: color-mix(in srgb, var(--food), #071d21 18%); border-color: var(--food); }
+    .cinema-mode #ov-arredo .tiles.arredo-c2 .tile { background: color-mix(in srgb, var(--environment), #071d21 18%); border-color: var(--environment); }
+    .cinema-mode #ov-arredo .tiles.arredo-c3 .tile { background: color-mix(in srgb, var(--health), #071d21 18%); border-color: var(--health); }
+    .cinema-mode #ov-arredo .tiles.arredo-c4 .tile { background: color-mix(in srgb, var(--agriculture), #071d21 18%); border-color: var(--agriculture); }
+    #arredoMixTiles { display: none; }
+    .cinema-mode #ov-arredo #arredoMixTiles {
+      display: block; position: absolute; inset: -4px; z-index: 6; pointer-events: none;
+      border-radius: 10px; background: #b4a967; opacity: 0; transition: opacity 1.3s ease;
     }
-    .cinema-mode #ov-arredo .tile span { color: rgba(247,245,238,.95); text-shadow: 0 1px 2px rgba(7,29,33,.5); }
-    .arredo-mosaico, .arredo-unico { display: none; }
-    .cinema-mode #ov-arredo .overlay__panel { position: relative; overflow: hidden; }
-    .cinema-mode #ov-arredo .arredo-mosaico {
-      display: block; position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: inherit;
-      opacity: 0;
-      background-image:
-        repeating-linear-gradient(0deg, rgba(7,29,33,.5) 0 2px, transparent 2px 100%),
-        repeating-linear-gradient(90deg, rgba(7,29,33,.5) 0 2px, transparent 2px 100%),
-        conic-gradient(var(--food) 90deg, var(--environment) 90deg 180deg, var(--agriculture) 180deg 270deg, var(--health) 270deg);
-      background-size: 170px 170px;
-    }
-    .cinema-mode #ov-arredo.is-open .arredo-mosaico { animation: arredoMoltiplica 10.2s linear forwards; }
-    @keyframes arredoMoltiplica {
-      0%, 36%  { opacity: 0; background-size: 170px 170px; }
-      48%      { opacity: .40; background-size: 110px 110px; }
-      70%      { opacity: .78; background-size: 30px 30px; background-position: 0 0; }
-      74%      { background-position: 15px 0; }
-      78%      { background-position: 15px 15px; }
-      82%      { background-position: 0 15px; }
-      88%, 100%{ opacity: 1; background-size: 30px 30px; background-position: 0 0; }
-    }
-    .cinema-mode #ov-arredo .arredo-unico {
-      display: block; position: absolute; inset: 0; z-index: 7; pointer-events: none; border-radius: inherit;
-      opacity: 0; background: #b4a967;
-    }
-    .cinema-mode #ov-arredo.is-open .arredo-unico { animation: arredoUnico 10.2s linear forwards; }
-    /* anti-doppione: la frase lunga del finale la pronuncia la voce */
-    .cinema-mode .finale__statement { display: none; }
-    @keyframes arredoUnico { 0%, 86% { opacity: 0; } 97%, 100% { opacity: 1; } }
+    .cinema-mode #ov-arredo #arredoMixTiles.acceso { opacity: 1; }
     .tile span {
       color: rgba(247,245,238,.85);
       font-family: var(--serif);
@@ -4543,8 +4528,7 @@
         <div class="tile" style="--c: var(--health); --d: 6"><span>Osservazione</span></div>
         <div class="tile" style="--c: var(--food); --d: 13"><span>Competenze ibride</span></div>
       </div>
-      <div class="arredo-mosaico" aria-hidden="true"></div>
-      <div class="arredo-unico" aria-hidden="true"></div>
+
     </div>
   </div>
 
@@ -6037,7 +6021,56 @@
         closeOverlays();
         ov.classList.add('is-open');
       };
-      const closeOverlays = () => document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open'));
+      let arredoTimers = [];
+      const arredoStop = () => {
+        arredoTimers.forEach(clearTimeout); arredoTimers = [];
+        const tiles = document.querySelector('#ov-arredo .tiles');
+        if (!tiles) return;
+        tiles.querySelectorAll('.tile--clone').forEach(el => el.remove());
+        tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3', 'arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
+        tiles.style.gridTemplateColumns = '';
+        const velo = document.getElementById('arredoMixTiles');
+        if (velo) velo.remove();
+      };
+      const arredoMoltiplica = () => {
+        arredoStop();
+        const tiles = document.querySelector('#ov-arredo .tiles');
+        if (!tiles) return;
+        const base = [...tiles.querySelectorAll('.tile')];
+        const COL = ['--food', '--environment', '--health', '--agriculture'];
+        const onda = (n, colonne, dense) => {
+          tiles.style.gridTemplateColumns = 'repeat(' + colonne + ', 1fr)';
+          tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3');
+          if (dense) tiles.classList.add(dense);
+          for (let i = 0; i < n; i++) {
+            const src = base[i % base.length];
+            const c = src.cloneNode(true);
+            c.classList.add('tile--clone');
+            c.style.setProperty('--c', 'var(' + COL[(i * 7 + 3) % 4] + ')');
+            c.style.animationDelay = (i * 28) + 'ms';
+            tiles.appendChild(c);
+          }
+        };
+        // ondate: 40 -> 88 -> 154 -> 238 tesserine, sempre nella griglia di partenza
+        arredoTimers.push(setTimeout(() => onda(48, 11, 'arredo-dense1'), 4600));
+        arredoTimers.push(setTimeout(() => onda(66, 14, 'arredo-dense2'), 7200));
+        arredoTimers.push(setTimeout(() => onda(84, 17, 'arredo-dense3'), 9800));
+        // alternanza dei 4 colori su tutta la griglia
+        [1, 2, 3, 4, 1, 2, 3, 4].forEach((c, i) => {
+          arredoTimers.push(setTimeout(() => {
+            tiles.classList.remove('arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
+            tiles.classList.add('arredo-c' + c);
+          }, 12400 + i * 500));
+        });
+        // convergenza nel colore mix, dentro la griglia
+        arredoTimers.push(setTimeout(() => {
+          const velo = document.createElement('div');
+          velo.id = 'arredoMixTiles';
+          tiles.appendChild(velo);
+          requestAnimationFrame(() => requestAnimationFrame(() => velo.classList.add('acceso')));
+        }, 16600));
+      };
+      const closeOverlays = () => { arredoStop(); document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open')); };
       document.querySelectorAll('[data-overlay]').forEach(btn => {
         btn.addEventListener('click', () => openOverlay(btn.dataset.overlay));
       });
@@ -6067,7 +6100,7 @@
         else if (d.casa === 'go') go(Number(d.index) || 0);
         else if (d.casa === 'advance') advance();
         else if (d.casa === 'retreat') retreat();
-        else if (d.casa === 'overlay') { if (d.id) openOverlay(d.id); else closeOverlays(); }
+        else if (d.casa === 'overlay') { if (d.id) { openOverlay(d.id); if (d.id === 'ov-arredo' && document.body.classList.contains('cinema-mode')) arredoMoltiplica(); } else closeOverlays(); }
         else if (d.casa === 'fx') {
           if (d.name === 'show') {
             const el = scenes[active].querySelectorAll('.reveal')[d.n];
