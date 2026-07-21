@@ -266,6 +266,15 @@
   // sempre il wow.html appena salvato, anche dopo revisioni ravvicinate.
   stage.src = 'wow.html?cinema&v=' + Date.now();
 
+  // Bollino diagnostico di versione (primi secondi): dice quale cinema.html gira.
+  (() => {
+    const st = document.createElement('div');
+    st.textContent = 'C·21/07·15.1';
+    st.style.cssText = 'position:fixed;left:10px;bottom:22px;z-index:99;font:10px/1 monospace;color:rgba(247,245,238,.5);pointer-events:none';
+    document.body.appendChild(st);
+    setTimeout(() => st.remove(), 8000);
+  })();
+
   if (START_AT > 0) {
     const pageLabel = requestedStart || ('scena ' + START_AT);
     document.querySelector('#open .open__title').innerHTML = 'Dalle competenze all’impatto.<br><small style="font-size:.45em;opacity:.62">Da ' + pageLabel + ' fino alla fine</small>';

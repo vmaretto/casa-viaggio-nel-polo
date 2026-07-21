@@ -4621,6 +4621,13 @@
         // esistere in nessuna sequenza di eventi.
         const p10hd = document.querySelector('#p10 > .scene__safe > header');
         if (p10hd) p10hd.style.cssText += ';position:absolute;top:8vh;left:50%;right:auto;bottom:auto;transform:translateX(-50%);width:min(80vw,900px);margin:0;padding:0;text-align:center;z-index:4';
+        // Bollino diagnostico di versione: visibile nei primi secondi del film,
+        // serve a leggere nei video dell'utente QUALE build sta girando davvero.
+        const stamp = document.createElement('div');
+        stamp.textContent = 'W·21/07·15.1';
+        stamp.style.cssText = 'position:fixed;left:10px;bottom:8px;z-index:99;font:10px/1 monospace;color:rgba(247,245,238,.5);pointer-events:none';
+        document.body.appendChild(stamp);
+        setTimeout(() => stamp.remove(), 8000);
         const block = e => e.preventDefault();
         addEventListener('wheel', block, { passive: false });
         addEventListener('touchmove', block, { passive: false });
