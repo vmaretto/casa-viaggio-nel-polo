@@ -4336,7 +4336,7 @@
     </section>
 
     <!-- 15 · CASA (FINALE) -->
-    <section class="scene finale" data-cine-enter="fade" data-dots-enter="accents-final" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
+    <section class="scene finale" data-cine-enter="fade" data-dots-enter="file-bottom" id="p15" data-index="13" data-title="CASA" aria-label="CASA">
       <div class="scene__safe finale__content">
         <div class="finale__inner">
           <h2 class="finale__statement reveal">Il luogo in cui ambiente, agricoltura, cibo e salute tornano a lavorare insieme.</h2>
@@ -5511,13 +5511,19 @@
               const pt = at(len);
               let x = pt.x, y = pt.y;
               if (t < ENTRY) {
-                // dalle finestre all'imbocco della strada, in fila indiana:
-                // ognuno punta al proprio posto PRIMA dell'inizio del tracciato
-                // (fuori schermo a sinistra), senza mai passare da destra
-                const e = sm(t / ENTRY);
-                const p0 = at(-GAP * i2);
-                x = startPos[k].x + (p0.x - startPos[k].x) * e;
-                y = startPos[k].y + (p0.y - startPos[k].y) * e;
+                const prev = document.querySelector('.scene.cine-prev');
+                if (prev) {
+                  // i pallini restano ATTACCATI alle finestre e escono di
+                  // scena con la casa durante la carrellata; rientreranno
+                  // dall'imbocco della strada (nessuna gita al centro)
+                  x = startPos[k].x + prev.getBoundingClientRect().left;
+                  y = startPos[k].y;
+                } else {
+                  const e = sm(t / ENTRY);
+                  const p0 = at(-GAP * i2);
+                  x = startPos[k].x + (p0.x - startPos[k].x) * e;
+                  y = startPos[k].y + (p0.y - startPos[k].y) * e;
+                }
               }
               el.style.left = x + 'px';
               el.style.top = y + 'px';
