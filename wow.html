@@ -3469,6 +3469,19 @@
        pulsa alternando i 4 colori CASA e converge nel colore mix (#b4a967). */
     .cinema-mode #ov-arredo .tiles { position: relative; }
     .cinema-mode #ov-arredo .tiles.arredo-fissa .tile { aspect-ratio: auto; height: 100%; min-height: 0; }
+    /* durante la moltiplicazione ogni tessera è di uno dei 4 colori, pieno */
+    .cinema-mode #ov-arredo .tiles.arredo-fissa .tile {
+      background: color-mix(in srgb, var(--c), #071d21 14%);
+      border-color: color-mix(in srgb, var(--c), #f7f5ee 22%);
+    }
+    .cinema-mode #ov-arredo .tiles.arredo-fissa .tile span { color: rgba(7,29,33,.85); text-shadow: none; }
+    /* finale: le tessere RESTANO, tutte del colore mix */
+    .cinema-mode #ov-arredo .tiles .tile { transition: background .9s ease, border-color .9s ease; }
+    .cinema-mode #ov-arredo .tiles.arredo-mix .tile {
+      background: #b4a967 !important;
+      border-color: rgba(7,29,33,.28) !important;
+    }
+    .cinema-mode #ov-arredo .tiles.arredo-mix .tile span { color: rgba(7,29,33,.72); }
     .tile--clone { opacity: 0; transform: scale(.6); }
     .cinema-mode #ov-arredo .tile--clone { animation: tilePop .45s var(--ease) forwards; }
     @keyframes tilePop { to { opacity: 1; transform: none; } }
@@ -5568,12 +5581,14 @@
             // non a L: tornare a L riporterebbe il convoglio dentro lo schermo
             return KF[KF.length - 1][1];
           };
-          const GAP = L * .045, LAG = .38, ENTRY = 1.2;
+          const GAP = L * .045, LAG = .6, ENTRY = .9;
           const startPos = {}, t0 = performance.now();
           DOT_KEYS.forEach(k => {
             const el = dot(k);
             startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight / 2 };
           });
+          // coda al bordo sinistro: si uniscono all'imbocco e attendono il turno
+          const coda = i2 => { const p0 = at(0); return { x: p0.x - 16 * i2, y: p0.y + 2 * i2 }; };
           const step = now => {
             const t = (now - t0) / 1000;
             DOT_KEYS.forEach((k, i2) => {
@@ -5581,16 +5596,20 @@
               if (!el) return;
               el.style.transition = 'none';
               const len = leaderLen(t - i2 * LAG) - GAP * i2;
-              const pt = at(len);
-              let x = pt.x, y = pt.y;
+              let x, y;
               if (t < ENTRY) {
-                // l'uscita di scena la fa già il ponte "road-ride" allo stacco:
-                // qui si raccolgono i pallini (ormai fuori schermo a sinistra)
-                // e li si porta ai posti di fila prima dell'imbocco
+                // dalla fila della casa al bordo sinistro, tutti insieme
                 const e = sm(t / ENTRY);
-                const p0 = at(-GAP * i2);
-                x = startPos[k].x + (p0.x - startPos[k].x) * e;
-                y = startPos[k].y + (p0.y - startPos[k].y) * e;
+                const q = coda(i2);
+                x = startPos[k].x + (q.x - startPos[k].x) * e;
+                y = startPos[k].y + (q.y - startPos[k].y) * e;
+              } else if (len <= 0) {
+                // in coda al bordo: si sale sulla strada UNO ALLA VOLTA
+                const q = coda(i2);
+                x = q.x; y = q.y;
+              } else {
+                const pt = at(len);
+                x = pt.x; y = pt.y;
               }
               el.style.left = x + 'px';
               el.style.top = y + 'px';
@@ -5756,7 +5775,7 @@
           // p12, dopo il collage: giù dalle finestre, in fila indiana in basso
           // a sinistra (dove arriverà l'imbocco della strada), incamminati
           const sp = (Number(arg) || 0) * innerWidth * .045;
-          const P = [[24, 84], [18.5, 86], [13, 87.5], [7.5, 89]];
+          const P = [[26, 86], [20.5, 86], [15, 86], [9.5, 86]];
           DOT_KEYS.forEach((k, i) => dotGo(k, innerWidth * P[i][0] / 100 + sp, innerHeight * P[i][1] / 100));
         } else if (name === 'file-bottom') {
           // fine p04: lasciano le etichette PRIMA dello stacco e si mettono
@@ -6040,7 +6059,7 @@
         const tiles = document.querySelector('#ov-arredo .tiles');
         if (!tiles) return;
         tiles.querySelectorAll('.tile--clone').forEach(el => el.remove());
-        tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3', 'arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
+        tiles.classList.remove('arredo-dense1', 'arredo-dense2', 'arredo-dense3', 'arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4', 'arredo-mix');
         tiles.style.gridTemplateColumns = '';
         tiles.style.gridAutoRows = '';
         tiles.style.height = '';
@@ -6092,12 +6111,10 @@
             tiles.classList.add('arredo-c' + c);
           }, 11600 + i * 450));
         });
-        // convergenza nel colore mix, dentro la griglia
+        // convergenza: le tessere restano e diventano tutte del colore mix
         arredoTimers.push(setTimeout(() => {
-          const velo = document.createElement('div');
-          velo.id = 'arredoMixTiles';
-          tiles.appendChild(velo);
-          requestAnimationFrame(() => requestAnimationFrame(() => velo.classList.add('acceso')));
+          tiles.classList.remove('arredo-c1', 'arredo-c2', 'arredo-c3', 'arredo-c4');
+          tiles.classList.add('arredo-mix');
         }, 15400));
       };
       const closeOverlays = () => { arredoStop(); document.querySelectorAll('.overlay.is-open').forEach(o => o.classList.remove('is-open')); };
