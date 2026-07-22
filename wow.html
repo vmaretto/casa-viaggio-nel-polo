@@ -4334,7 +4334,7 @@
     </section>
 
     <!-- 14 · DIREZIONE SCIENTIFICA -->
-    <section class="scene science" id="p14" data-index="11" data-title="Direzione scientifica" aria-label="Direzione scientifica">
+    <section class="scene science" data-dots-enter="presidio" id="p14" data-index="11" data-title="Direzione scientifica" aria-label="Direzione scientifica">
       <div class="scene__safe science__content">
         <div class="science__inner">
           <p class="eyebrow reveal">10 · Direzione scientifica</p>
@@ -5581,14 +5581,14 @@
             // non a L: tornare a L riporterebbe il convoglio dentro lo schermo
             return KF[KF.length - 1][1];
           };
-          const GAP = L * .045, LAG = .6, ENTRY = .9;
+          const GAP = L * .045, LAG = .6, ENTRY = .5;
           const startPos = {}, t0 = performance.now();
           DOT_KEYS.forEach(k => {
             const el = dot(k);
             startPos[k] = { x: parseFloat(el.style.left) || innerWidth / 2, y: parseFloat(el.style.top) || innerHeight / 2 };
           });
-          // coda al bordo sinistro: si uniscono all'imbocco e attendono il turno
-          const coda = i2 => { const p0 = at(0); return { x: p0.x - 16 * i2, y: p0.y + 2 * i2 }; };
+          // tutti sovrapposti sull'imbocco: si distanziano partendo uno alla volta
+          const coda = () => at(0);
           const step = now => {
             const t = (now - t0) / 1000;
             DOT_KEYS.forEach((k, i2) => {
@@ -5600,12 +5600,12 @@
               if (t < ENTRY) {
                 // dalla fila della casa al bordo sinistro, tutti insieme
                 const e = sm(t / ENTRY);
-                const q = coda(i2);
+                const q = coda();
                 x = startPos[k].x + (q.x - startPos[k].x) * e;
                 y = startPos[k].y + (q.y - startPos[k].y) * e;
               } else if (len <= 0) {
-                // in coda al bordo: si sale sulla strada UNO ALLA VOLTA
-                const q = coda(i2);
+                // in attesa sull'imbocco: si sale sulla strada UNO ALLA VOLTA
+                const q = coda();
                 x = q.x; y = q.y;
               } else {
                 const pt = at(len);
@@ -5771,6 +5771,11 @@
           };
           if (perimeterRaf) cancelAnimationFrame(perimeterRaf);
           perimeterRaf = requestAnimationFrame(step);
+        } else if (name === 'stack-imbocco') {
+          // fine p12: i quattro convergono SOVRAPPOSTI nel punto esatto in cui
+          // arriverà l'imbocco della roadmap (fisso sullo schermo): allo
+          // stacco c'è un solo punto luminoso, mai pallini appesi nel vuoto
+          DOT_KEYS.forEach(k => dotGo(k, innerWidth * .012, innerHeight * .902));
         } else if (name === 'fila-partenza') {
           // p12, dopo il collage: giù dalle finestre, in fila indiana in basso
           // a sinistra (dove arriverà l'imbocco della strada), incamminati
