@@ -30,6 +30,7 @@
     --environment: #7ebdae;
     --health: #d08b80;
     --agriculture: #aab322;
+    --mix: #b4a967;
     --serif: "Cormorant CASA", Georgia, serif;
     --sans: "Outfit CASA", system-ui, sans-serif;
     --ease: cubic-bezier(.22, 1, .36, 1);
@@ -47,88 +48,81 @@
     background: radial-gradient(120vmax 120vmax at 50% 58%, #0d3038 0%, var(--ink-deep) 62%);
   }
 
-  /* ---------- pallini d'ambito ---------- */
+  /* ---------- fase A · mondi separati che si attraggono ---------- */
+  .parole { position: fixed; inset: 0; z-index: 10; }
+  .parola {
+    position: fixed; left: var(--x); top: var(--y);
+    transform: translate(-50%, -50%);
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(34px, 5vw, 76px); color: var(--c);
+    opacity: 0; white-space: nowrap;
+    transition: opacity 1.1s var(--ease), left 2.2s var(--ease), top 2.2s var(--ease), transform 1.1s var(--ease);
+    text-shadow: 0 0 34px color-mix(in srgb, var(--c), transparent 60%);
+  }
+  /* il pallino vive DENTRO la riga della parola: allineamento perfetto ovunque */
+  .parola i {
+    display: inline-block; width: .26em; height: .26em; border-radius: 50%;
+    background: var(--c); vertical-align: middle; margin-right: .38em;
+    transform: translateY(-.08em);
+    box-shadow: 0 0 .55em .12em color-mix(in srgb, var(--c), transparent 45%);
+  }
+  .parola.on { opacity: 1; }
+  /* su "smettono di essere mondi separati": le parole si attraggono verso il centro */
+  .parole.tira .parola { left: var(--cx); top: var(--cy); }
+  .parole.via .parola { opacity: 0; transform: translate(-50%, -50%) scale(.9); }
+
+  /* ---------- fase B · la moltiplicazione (la chicca del film) ---------- */
+  #tiles {
+    position: fixed; inset: 0; z-index: 20; padding: 10px;
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(64px, 7vw, 110px), 1fr));
+    grid-auto-rows: 1fr;
+    pointer-events: none;
+    transition: opacity 1.1s var(--ease), filter 1.1s var(--ease);
+  }
+  .tile {
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--c), #071d21 14%);
+    border: 1px solid color-mix(in srgb, var(--c), #f7f5ee 22%);
+    opacity: 0; transform: scale(.15);
+    transition: opacity .7s var(--ease) var(--d), transform .7s var(--ease) var(--d), background 1s ease;
+  }
+  #tiles.vivi .tile { opacity: 1; transform: scale(1); }
+  #tiles.mix .tile { background: var(--mix); border-color: rgba(7,29,33,.28); transition: opacity .7s var(--ease), transform .7s var(--ease), background 1s ease; }
+  #tiles.via { opacity: 0; filter: blur(6px); }
+  #tiles.via .tile { transform: scale(.5); transition: transform 1.1s var(--ease); }
+
+  /* ---------- pallini liberi (orbita e fila) ---------- */
   .dot {
     position: fixed; width: 16px; height: 16px; border-radius: 50%;
     background: var(--c); box-shadow: 0 0 18px 4px color-mix(in srgb, var(--c), transparent 45%);
-    left: var(--x); top: var(--y); transform: translate(-50%, -50%) scale(0);
+    left: 50%; top: 20%; transform: translate(-50%, -50%) scale(0);
+    opacity: 0; z-index: 30;
     transition: left 1.6s var(--ease), top 1.6s var(--ease), transform .9s var(--ease), opacity .9s var(--ease);
-    z-index: 30;
   }
-  body.dots-on .dot { transform: translate(-50%, -50%) scale(1); }
-  .dot--cibo        { --c: var(--food); }
-  .dot--ambiente    { --c: var(--environment); }
-  .dot--salute      { --c: var(--health); }
-  .dot--agricoltura { --c: var(--agriculture); }
-  .dot i {
-    position: absolute; inset: -6px; border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--c), transparent 55%);
-    opacity: 0; animation: none;
-  }
-  body.orbita .dot i { opacity: 1; animation: pulse 2.4s ease-out infinite; }
-  @keyframes pulse {
-    0% { transform: scale(.6); opacity: .8; }
-    100% { transform: scale(2.1); opacity: 0; }
-  }
+  .dot--cibo        { --c: var(--food);        --a0: 0deg;   --fx: -36px; }
+  .dot--ambiente    { --c: var(--environment); --a0: 90deg;  --fx: -12px; }
+  .dot--salute      { --c: var(--health);      --a0: 180deg; --fx: 12px; }
+  .dot--agricoltura { --c: var(--agriculture); --a0: 270deg; --fx: 36px; }
   @keyframes giro {
     from { transform: translate(-50%, -50%) rotate(var(--a0)) translateX(5.5vmin) rotate(calc(var(--a0) * -1)); }
     to   { transform: translate(-50%, -50%) rotate(calc(var(--a0) + 360deg)) translateX(5.5vmin) rotate(calc(-360deg - var(--a0))); }
   }
-  body.numeri .dot { opacity: .22; }
-  body.orbita .dot {
-    left: 50%; top: 20%;
-    animation: giro 7s linear infinite;
-    transition: opacity .9s var(--ease);
-  }
-  .dot--cibo        { --a0: 0deg; }
-  .dot--ambiente    { --a0: 90deg; }
-  .dot--salute      { --a0: 180deg; }
-  .dot--agricoltura { --a0: 270deg; }
+  body.orbita .dot { opacity: 1; animation: giro 7s linear infinite; }
   body.fila .dot {
-    animation: none;
+    opacity: 1; animation: none;
+    transform: translate(-50%, -50%) scale(1);
     left: calc(50% + var(--fx)); top: 80%;
   }
-  .dot--cibo        { --fx: -36px; }
-  .dot--ambiente    { --fx: -12px; }
-  .dot--salute      { --fx: 12px; }
-  .dot--agricoltura { --fx: 36px; }
 
-  /* ---------- scene ---------- */
+  /* ---------- fasi testuali ---------- */
   .fase {
-    position: fixed; inset: 0; display: grid; place-items: center;
+    position: fixed; inset: 0; display: grid; place-items: center; z-index: 25;
     opacity: 0; visibility: hidden;
     transition: opacity 1s var(--ease), visibility 0s 1s;
   }
   .fase.on { opacity: 1; visibility: visible; transition: opacity 1s var(--ease); }
 
-  /* fase A — le quattro parole */
-  .parole { position: fixed; inset: 0; }
-  .parola {
-    position: fixed; left: var(--x); top: var(--y);
-    transform: translate(-50%, -50%) translateY(14px);
-    font-family: var(--serif); font-style: italic;
-    font-size: clamp(34px, 5.2vw, 78px); color: var(--c);
-    opacity: 0; transition: opacity 1.1s var(--ease), transform 1.1s var(--ease);
-    text-shadow: 0 0 34px color-mix(in srgb, var(--c), transparent 60%);
-    white-space: nowrap;
-  }
-  .parola.on { opacity: 1; transform: translate(-50%, -50%); }
-  .parole.via .parola { opacity: 0; transform: translate(-50%, -50%) scale(.94); }
-
-  /* fase B — i numeri */
-  .numero { text-align: center; padding: 0 6vw; }
-  .numero strong {
-    display: block; font-family: var(--serif); font-style: italic; font-weight: 500;
-    font-size: clamp(64px, 13vw, 190px); line-height: 1; color: var(--c);
-    text-shadow: 0 0 44px color-mix(in srgb, var(--c), transparent 55%);
-  }
-  .numero strong small { font-size: .32em; font-style: normal; letter-spacing: .02em; }
-  .numero p {
-    margin: 3vh 0 0; font-size: clamp(14px, 1.3vw, 19px);
-    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
-  }
-
-  /* fase C — quattro mondi, una storia sola */
   .storia { text-align: center; padding: 0 6vw; }
   .storia p {
     margin: 0; font-family: var(--serif); font-style: italic;
@@ -145,7 +139,6 @@
   .storia .r2 { color: var(--muted); }
   .storia .on { opacity: 1; transform: none; }
 
-  /* fase D — l'invito */
   .invito { text-align: center; padding: 0 6vw; }
   .invito h2 {
     margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500;
@@ -203,40 +196,30 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .dot, .parola, .storia p, .storia h1, .invito h2, .invito .cta { transition-duration: .01s; }
-    body.orbita .dot { animation: none; left: 50%; top: 46%; }
+    .dot, .parola, .tile, #tiles, .storia p, .storia h1, .invito h2, .invito .cta { transition-duration: .01s; animation-duration: .01s; }
+    body.orbita .dot { animation: none; opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
 </style>
 </head>
 <body>
 <div class="stage" aria-hidden="true"></div>
 
-<span class="dot dot--cibo"        style="--x: 38%; --y: 30%"><i></i></span>
-<span class="dot dot--ambiente"    style="--x: 63%; --y: 42%"><i></i></span>
-<span class="dot dot--salute"      style="--x: 40%; --y: 56%"><i></i></span>
-<span class="dot dot--agricoltura" style="--x: 60%; --y: 70%"><i></i></span>
-
-<!-- fase A · le quattro parole -->
+<!-- fase A · quattro mondi separati: nascono lontani, poi si attraggono -->
 <div class="parole" id="fParole" aria-hidden="true">
-  <p class="parola" id="wCibo"        style="--c: var(--food);        --x: 46%; --y: 30%">Cibo</p>
-  <p class="parola" id="wAmbiente"    style="--c: var(--environment); --x: 52%; --y: 42%">Ambiente</p>
-  <p class="parola" id="wSalute"      style="--c: var(--health);      --x: 48%; --y: 56%">Salute</p>
-  <p class="parola" id="wAgricoltura" style="--c: var(--agriculture); --x: 49%; --y: 70%">Agricoltura</p>
+  <p class="parola" id="wCibo"        style="--c: var(--food);        --x: 20%; --y: 22%; --cx: 44%; --cy: 36%"><i></i>Cibo</p>
+  <p class="parola" id="wAmbiente"    style="--c: var(--environment); --x: 77%; --y: 30%; --cx: 56%; --cy: 46%"><i></i>Ambiente</p>
+  <p class="parola" id="wSalute"      style="--c: var(--health);      --x: 24%; --y: 72%; --cx: 45%; --cy: 57%"><i></i>Salute</p>
+  <p class="parola" id="wAgricoltura" style="--c: var(--agriculture); --x: 74%; --y: 78%; --cx: 55%; --cy: 67%"><i></i>Agricoltura</p>
 </div>
 
-<!-- fase B · i numeri -->
-<div class="fase" id="fNum1">
-  <div class="numero" style="--c: var(--agriculture)">
-    <strong>−21%</strong>
-    <p>produttività agricola persa · per il clima</p>
-  </div>
-</div>
-<div class="fase" id="fNum2">
-  <div class="numero" style="--c: var(--food)">
-    <strong>733<small> milioni</small></strong>
-    <p>di persone senza cibo adeguato</p>
-  </div>
-</div>
+<!-- fase B · la moltiplicazione -->
+<div id="tiles" aria-hidden="true"></div>
+
+<!-- pallini liberi: orbita e fila finale -->
+<span class="dot dot--cibo"></span>
+<span class="dot dot--ambiente"></span>
+<span class="dot dot--salute"></span>
+<span class="dot dot--agricoltura"></span>
 
 <!-- fase C · una storia sola -->
 <div class="fase" id="fStoria">
@@ -276,21 +259,34 @@
 (() => {
   const $ = id => document.getElementById(id);
   const voce = $('voce');
+  const tiles = $('tiles');
+
+  // Tessere: abbastanza da riempire lo schermo, colori distribuiti in modo pseudo-casuale
+  // ma deterministico; l'attesa (--d) cresce a ondate sparse, come nel collage del film.
+  const COLORI = ['var(--food)', 'var(--environment)', 'var(--health)', 'var(--agriculture)'];
+  const N = 160;
+  for (let i = 0; i < N; i++) {
+    const t = document.createElement('span');
+    t.className = 'tile';
+    t.style.setProperty('--c', COLORI[(i * 7 + ((i / 4) | 0)) % 4]);
+    const onda = (i * 37 + 11) % N;               // ordine sparso sullo schermo
+    t.style.setProperty('--d', (onda * 24) + 'ms'); // ~3.8s per riempire tutto
+    tiles.appendChild(t);
+  }
 
   // Cue in secondi sull'audio — attacchi di frase misurati con silencedetect sul parlato reale:
-  // P1 0→6.49 · P2 7.51→11.76 (virgola a 9.27) · "Un viaggio" 12.88 · "Quattro mondi" 14.61
+  // P1 0→6.49 ("smettono" ~4.3) · P2 7.51→11.76 · "Un viaggio" 12.88 · "Quattro mondi" 14.61
   // "Una storia sola" 15.91 · "Il nome?" 18.28 · "Lo scoprirai" 19.65 · fine 20.82
   const CUES = [
-    [0.2,  () => { document.body.classList.add('dots-on'); }],
     [1.3,  () => $('wCibo').classList.add('on')],
     [2.0,  () => $('wAmbiente').classList.add('on')],
     [2.7,  () => $('wSalute').classList.add('on')],
     [3.5,  () => $('wAgricoltura').classList.add('on')],
-    [7.4,  () => { $('fParole').classList.add('via'); document.body.classList.add('numeri'); $('fNum1').classList.add('on'); }],
-    [9.6,  () => { $('fNum1').classList.remove('on'); $('fNum2').classList.add('on'); }],
+    [4.4,  () => $('fParole').classList.add('tira')],
+    [7.4,  () => { $('fParole').classList.add('via'); tiles.classList.add('vivi'); }],
+    [11.5, () => tiles.classList.add('mix')],
     [12.7, () => {
-      $('fNum2').classList.remove('on');
-      document.body.classList.remove('numeri');
+      tiles.classList.add('via');
       document.body.classList.add('orbita');
       $('fStoria').classList.add('on'); $('sViaggio').classList.add('on');
     }],
@@ -327,7 +323,8 @@
       if (t0 === null) t0 = ts;
       const s = (ts - t0) / 1000;
       while (prossimo < CUES.length && s >= CUES[prossimo][0]) CUES[prossimo++][1]();
-      if (prossimo < CUES.length) requestAnimationFrame(finto);
+      if (s >= 21.4) { $('iCta').classList.add('on'); return; }
+      requestAnimationFrame(finto);
     };
     requestAnimationFrame(finto);
   }
