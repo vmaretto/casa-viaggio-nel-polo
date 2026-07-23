@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Un viaggio in quattro mondi — anteprima</title>
+<style>
+  @font-face {
+    font-family: "Cormorant CASA";
+    src: url("assets/originale/CormorantGaramond-Regular.woff2") format("woff2");
+    font-style: normal; font-weight: 300 700; font-display: swap;
+  }
+  @font-face {
+    font-family: "Cormorant CASA";
+    src: url("assets/originale/CormorantGaramond-Italic.woff2") format("woff2");
+    font-style: italic; font-weight: 300 700; font-display: swap;
+  }
+  @font-face {
+    font-family: "Outfit CASA";
+    src: url("assets/originale/Outfit.woff2") format("woff2");
+    font-style: normal; font-weight: 200 700; font-display: swap;
+  }
+  :root {
+    --ink: #0f2b30;
+    --ink-deep: #071d21;
+    --paper: #f7f5ee;
+    --muted: #b7c2bd;
+    --food: #d8a94e;
+    --environment: #7ebdae;
+    --health: #d08b80;
+    --agriculture: #aab322;
+    --mix: #b4a967;
+    --serif: "Cormorant CASA", Georgia, serif;
+    --sans: "Outfit CASA", system-ui, sans-serif;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background: var(--ink-deep);
+    color: var(--paper);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .stage {
+    position: fixed; inset: 0;
+    background: radial-gradient(120vmax 120vmax at 50% 58%, #0d3038 0%, var(--ink-deep) 62%);
+  }
+  #cielo { position: fixed; inset: 0; z-index: 5; }
+
+  /* ---------- le quattro parole (pallino in riga) ---------- */
+  .parole { position: fixed; inset: 0; z-index: 10; }
+  .parola {
+    position: fixed; left: var(--x); top: var(--y);
+    transform: translate(-50%, -50%);
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(34px, 5vw, 76px); color: var(--c);
+    opacity: 0; white-space: nowrap;
+    transition: opacity .9s var(--ease), left 2.2s var(--ease), top 2.2s var(--ease), transform .9s var(--ease);
+    text-shadow: 0 0 34px color-mix(in srgb, var(--c), transparent 60%);
+  }
+  .parola i {
+    display: inline-block; width: .26em; height: .26em; border-radius: 50%;
+    background: var(--c); vertical-align: middle; margin-right: .38em;
+    transform: translateY(-.08em);
+    box-shadow: 0 0 .55em .12em color-mix(in srgb, var(--c), transparent 45%);
+  }
+  .parola.on { opacity: 1; }
+  .parole.tira .parola { left: var(--cx); top: var(--cy); }
+  .parole.via .parola { opacity: 0; transform: translate(-50%, -50%) scale(.9); }
+
+  /* ---------- la moltiplicazione ---------- */
+  #tiles {
+    position: fixed; inset: 0; z-index: 20; padding: 10px;
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(64px, 7vw, 110px), 1fr));
+    grid-auto-rows: 1fr;
+    pointer-events: none;
+    transition: opacity 1.1s var(--ease), filter 1.1s var(--ease);
+  }
+  .tile {
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--c), #071d21 14%);
+    border: 1px solid color-mix(in srgb, var(--c), #f7f5ee 22%);
+    opacity: 0; transform: scale(.15);
+    transition: opacity .7s var(--ease) var(--d), transform .7s var(--ease) var(--d), background 1s ease;
+  }
+  #tiles.vivi .tile { opacity: 1; transform: scale(1); }
+  #tiles.mix .tile { background: var(--mix); border-color: rgba(7,29,33,.28); transition: opacity .7s var(--ease), transform .7s var(--ease), background 1s ease; }
+  #tiles.via { opacity: 0; filter: blur(6px); }
+  #tiles.via .tile { transform: scale(.5); transition: transform 1.1s var(--ease); }
+
+  /* ---------- pallini della fila finale ---------- */
+  .dot {
+    position: fixed; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--c); box-shadow: 0 0 18px 4px color-mix(in srgb, var(--c), transparent 45%);
+    left: calc(50% + var(--fx)); top: 78%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0; z-index: 30;
+    transition: transform .9s var(--ease), opacity .9s var(--ease);
+  }
+  .dot--cibo        { --c: var(--food);        --fx: -36px; }
+  .dot--ambiente    { --c: var(--environment); --fx: -12px; }
+  .dot--salute      { --c: var(--health);      --fx: 12px; }
+  .dot--agricoltura { --c: var(--agriculture); --fx: 36px; }
+  body.fila .dot { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* ---------- fasi testuali ---------- */
+  .fase {
+    position: fixed; inset: 0; display: grid; place-items: center; z-index: 25;
+    opacity: 0; visibility: hidden;
+    transition: opacity 1s var(--ease), visibility 0s 1s;
+  }
+  .fase.on { opacity: 1; visibility: visible; transition: opacity 1s var(--ease); }
+
+  /* testo a sinistra, la strada corre sulla metà destra */
+  #fStoria { place-items: center start; }
+  .storia { text-align: left; padding: 0 6vw 0 8vw; }
+  .storia p {
+    margin: 0; font-family: var(--serif); font-style: italic;
+    font-size: clamp(20px, 2vw, 30px); color: var(--muted);
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 1s var(--ease), transform 1s var(--ease);
+  }
+  .storia h1 {
+    margin: 2vh 0 0; font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(40px, 6vw, 96px); line-height: 1.12; letter-spacing: .01em;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+  }
+  .storia .r2 { color: var(--muted); }
+  .storia .on { opacity: 1; transform: none; }
+
+  .invito { text-align: center; padding: 0 6vw; }
+  .invito h2 {
+    margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(38px, 5.6vw, 92px); line-height: 1.14;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 1.1s var(--ease), transform 1.1s var(--ease);
+  }
+  .invito h2.on { opacity: 1; transform: none; }
+  .invito .quando {
+    margin: 4.5vh 0 0; opacity: 0; transform: translateY(12px);
+    transition: opacity 1.2s var(--ease) .2s, transform 1.2s var(--ease) .2s;
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(26px, 3.2vw, 52px); color: var(--mix);
+    text-shadow: 0 0 30px color-mix(in srgb, var(--mix), transparent 55%);
+  }
+  .invito .quando.on { opacity: 1; transform: none; }
+
+  /* ---------- il lampo ---------- */
+  #lampo {
+    position: fixed; inset: 0; z-index: 40; pointer-events: none;
+    background: radial-gradient(closest-side at 50% 46%, var(--paper) 0%, color-mix(in srgb, var(--paper), transparent 40%) 30%, transparent 70%);
+    opacity: 0; transform: scale(.1); transform-origin: 50% 46%;
+  }
+  #lampo.boom { animation: boom 1.1s var(--ease) forwards; }
+  @keyframes boom {
+    0% { opacity: 0; transform: scale(.06); }
+    22% { opacity: 1; }
+    100% { opacity: 0; transform: scale(2.4); }
+  }
+
+  /* ---------- schermata d'avvio ---------- */
+  .porta {
+    position: fixed; inset: 0; z-index: 60; display: grid; place-items: center;
+    background: radial-gradient(120vmax 120vmax at 50% 58%, #0d3038 0%, var(--ink-deep) 62%);
+    transition: opacity 1s var(--ease), visibility 0s 1s;
+  }
+  .porta.via { opacity: 0; visibility: hidden; }
+  .porta__in { text-align: center; padding: 0 6vw; }
+  .porta__dots { display: flex; gap: 14px; justify-content: center; margin-bottom: 5vh; }
+  .porta__dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 14px 2px color-mix(in srgb, var(--c), transparent 50%); }
+  .porta h1 {
+    margin: 0; font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(34px, 4.6vw, 72px); line-height: 1.16;
+  }
+  .porta button {
+    margin-top: 6vh; padding: 16px 36px; cursor: pointer;
+    border: 1px solid color-mix(in srgb, var(--agriculture), transparent 35%);
+    border-radius: 999px; color: var(--paper);
+    background: color-mix(in srgb, var(--agriculture), transparent 88%);
+    font-family: var(--serif); font-style: italic; font-size: clamp(19px, 1.8vw, 26px);
+    transition: background .35s ease, transform .35s var(--ease);
+  }
+  .porta button:hover, .porta button:focus-visible { background: color-mix(in srgb, var(--agriculture), transparent 74%); transform: translateY(-2px); }
+  .porta button:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+  .porta .nota {
+    margin-top: 2.6vh; font-size: clamp(12px, 1.05vw, 15px);
+    letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot, .parola, .tile, #tiles, .storia p, .storia h1, .invito h2, .invito .quando { transition-duration: .01s; }
+    #lampo.boom { animation-duration: .01s; }
+  }
+</style>
+</head>
+<body>
+<div class="stage" aria-hidden="true"></div>
+<canvas id="cielo" aria-hidden="true"></canvas>
+
+<div class="parole" id="fParole" aria-hidden="true">
+  <p class="parola" id="w0" style="--c: var(--food);        --x: 20%; --y: 22%; --cx: 44%; --cy: 36%"><i></i>Cibo</p>
+  <p class="parola" id="w1" style="--c: var(--environment); --x: 77%; --y: 30%; --cx: 56%; --cy: 46%"><i></i>Ambiente</p>
+  <p class="parola" id="w2" style="--c: var(--health);      --x: 24%; --y: 72%; --cx: 45%; --cy: 57%"><i></i>Salute</p>
+  <p class="parola" id="w3" style="--c: var(--agriculture); --x: 74%; --y: 78%; --cx: 55%; --cy: 67%"><i></i>Agricoltura</p>
+</div>
+
+<div id="tiles" aria-hidden="true"></div>
+
+<span class="dot dot--cibo"></span>
+<span class="dot dot--ambiente"></span>
+<span class="dot dot--salute"></span>
+<span class="dot dot--agricoltura"></span>
+
+<div class="fase" id="fStoria">
+  <div class="storia">
+    <p id="sViaggio">Un viaggio di sei minuti.</p>
+    <h1 id="sMondi">Quattro mondi.</h1>
+    <h1 class="r2" id="sStoria">Una storia sola.</h1>
+  </div>
+</div>
+
+<div class="fase" id="fInvito">
+  <div class="invito">
+    <h2 id="iNome">Il nome?</h2>
+    <p class="quando" id="iQuando">Lo scoprirai oggi · alle 12</p>
+  </div>
+</div>
+
+<div id="lampo" aria-hidden="true"></div>
+
+<div class="porta" id="porta">
+  <div class="porta__in">
+    <div class="porta__dots" aria-hidden="true">
+      <i style="--c: var(--food)"></i><i style="--c: var(--environment)"></i><i style="--c: var(--health)"></i><i style="--c: var(--agriculture)"></i>
+    </div>
+    <h1>Un minuto.<br>Poi vorrai vedere il resto.</h1>
+    <button id="start" type="button">▶&nbsp;&nbsp;Parti</button>
+    <p class="nota">Con audio · l’anteprima del viaggio</p>
+  </div>
+</div>
+
+<audio id="voce" src="assets/audio/voce/teaser2.mp3" preload="auto"></audio>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const voce = $('voce');
+  const tiles = $('tiles');
+
+  // ------------------------------------------------------------------
+  // Tempi delle frasi (da silencedetect sul parlato reale) — un solo
+  // posto da ritoccare se la voce viene rigenerata.
+  const F = {
+    split:   5.2,   // "Poi ne arrivano altri tre."
+    land:    7.4,   // i 4 pallini arrivano agli angoli
+    w: [7.6, 9.05, 10.88, 12.76],   // Cibo / Ambiente / Salute / Agricoltura
+    tira:    15.2,  // "Quattro mondi che hanno sempre viaggiato separati."
+    molt:    18.77, // "Ma quando si incontrano, tutto si moltiplica..."
+    mix:     26.3,  // fine frase moltiplicazione
+    road:    27.56, // "Un viaggio di sei minuti."
+    mondi:   29.5,  // "Quattro mondi."
+    storia:  30.91, // "Una storia sola."
+    flash:   32.6,  // pausa prima de "Il nome?"
+    nome:    33.6,  // "Il nome?"
+    fine:    36.4   // "…alle dodici."
+  };
+
+  // ------------------------------------------------------------------
+  // Tessere della moltiplicazione
+  const COLORI_CSS = ['var(--food)', 'var(--environment)', 'var(--health)', 'var(--agriculture)'];
+  const N = 160;
+  for (let i = 0; i < N; i++) {
+    const t = document.createElement('span');
+    t.className = 'tile';
+    t.style.setProperty('--c', COLORI_CSS[(i * 7 + ((i / 4) | 0)) % 4]);
+    const onda = (i * 37 + 11) % N;
+    t.style.setProperty('--d', (onda * 22) + 'ms');
+    tiles.appendChild(t);
+  }
+
+  // ------------------------------------------------------------------
+  // Canvas: cometa, scia, strada, cavalcata — tutto funzione del tempo T
+  const cv = $('cielo'), cx2 = cv.getContext('2d');
+  const COLORI = ['#d8a94e', '#7ebdae', '#d08b80', '#aab322'];
+  const CORNERS = [[.20, .22], [.77, .30], [.24, .72], [.74, .78]];
+  let W = 0, H = 0;
+  const misura = () => {
+    const dpr = devicePixelRatio || 1;
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';   // canvas su retina: sempre anche la taglia CSS
+    cx2.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  misura(); addEventListener('resize', misura);
+
+  const easeIO = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+  const clamp01 = u => Math.max(0, Math.min(1, u));
+  const lerp = (a, b, u) => a + (b - a) * u;
+
+  // zig-zag della cometa (percentuali dello schermo)
+  const ZIG = [[-.05, .34], [.16, .20], [.30, .42], [.44, .24], [.58, .40], [.58, .40]];
+  const lungoPolilinea = (P, u) => {
+    const n = P.length - 1, s = clamp01(u) * n, i = Math.min(n - 1, s | 0), f = s - i;
+    return [lerp(P[i][0], P[i + 1][0], f), lerp(P[i][1], P[i + 1][1], f)];
+  };
+
+  // strada: curva cubica sulla metà destra (il testo sta a sinistra)
+  const roadPt = u => {
+    const p0 = [.34, .94], p1 = [.72, .88], p2 = [.62, .28], p3 = [.96, .08];
+    const a = 1 - u;
+    return [
+      a*a*a*p0[0] + 3*a*a*u*p1[0] + 3*a*u*u*p2[0] + u*u*u*p3[0],
+      a*a*a*p0[1] + 3*a*a*u*p1[1] + 3*a*u*u*p2[1] + u*u*u*p3[1]
+    ];
+  };
+
+  const punto = (x, y, c, r, alone) => {
+    cx2.save();
+    cx2.shadowColor = c; cx2.shadowBlur = alone;
+    cx2.fillStyle = c;
+    cx2.beginPath(); cx2.arc(x * W, y * H, r, 0, 7); cx2.fill();
+    cx2.restore();
+  };
+
+  const parolaAccesa = [false, false, false, false];
+  let canvasSpento = false;
+
+  // Posizione del pallino k all'istante T (fase cometa → divisione → angolo).
+  // Prima della divisione i quattro coincidono con la cometa.
+  const posVolo = (k, T) => {
+    if (T < F.split) return lungoPolilinea(ZIG, T / F.split);
+    if (T < F.land) {
+      const u = easeIO((T - F.split) / (F.land - F.split));
+      const [sx, sy] = ZIG[ZIG.length - 1];
+      return [lerp(sx, CORNERS[k][0], u), lerp(sy, CORNERS[k][1], u)];
+    }
+    return CORNERS[k];
+  };
+
+  // Posizione del pallino k sulla cavalcata della strada.
+  const posStrada = (k, T) => {
+    const tracciato = clamp01((T - F.road) / 2.6);
+    const capo = clamp01((T - F.road - .5) / (F.flash - F.road - .5));
+    const p = clamp01(capo - k * .085);
+    if (p <= 0) return null;
+    return roadPt(Math.min(p, tracciato));   // mai oltre il tracciato già disegnato
+  };
+
+  // Scia = la stessa funzione campionata all'indietro nel tempo: pura, identica a ogni framerate.
+  const scia = (posDiT, k, T, da, colore) => {
+    const CAMP = 22, DT = .035;
+    for (let s = CAMP; s >= 1; s--) {
+      const tt = T - s * DT;
+      if (tt < da) continue;
+      const p = posDiT(k, tt);
+      if (!p) continue;
+      const a = 1 - s / CAMP;
+      punto(p[0], p[1], colore, 6.5 * (0.35 + .65 * a), 14 * a);
+    }
+  };
+
+  // Ogni fotogramma si ridisegna da zero: niente accumuli, niente fantasmi.
+  const disegna = T => {
+    if (canvasSpento) return;
+    cx2.clearRect(0, 0, W, H);
+
+    if (T < F.land + .4) {                   // cometa, poi divisione in quattro
+      if (T < F.split) {
+        scia(posVolo, 0, T, 0, '#d8a94e');
+        const [x, y] = posVolo(0, T);
+        punto(x, y, '#d8a94e', 7, 26);
+      } else {
+        for (let k = 0; k < 4; k++) {
+          scia(posVolo, k, T, 0, COLORI[k]);
+          const [x, y] = posVolo(k, T);
+          punto(x, y, COLORI[k], 6.5, 22);
+        }
+      }
+    } else if (T < F.molt) {                 // presidio agli angoli finché la parola non si accende
+      for (let k = 0; k < 4; k++) {
+        if (parolaAccesa[k]) continue;
+        const puls = 1 + .18 * Math.sin((T - F.land) * 5 + k);
+        punto(CORNERS[k][0], CORNERS[k][1], COLORI[k], 6.5 * puls, 24);
+      }
+    } else if (T >= F.road && T < F.flash) { // la strada e la cavalcata
+      const u = clamp01((T - F.road) / 2.6);
+      cx2.save();
+      cx2.strokeStyle = 'rgba(247, 245, 238, .34)';
+      cx2.lineWidth = 2;
+      cx2.beginPath();
+      const passi = 90;
+      for (let i = 0; i <= passi * u; i++) {
+        const [x, y] = roadPt(i / passi);
+        i === 0 ? cx2.moveTo(x * W, y * H) : cx2.lineTo(x * W, y * H);
+      }
+      cx2.stroke();
+      cx2.restore();
+      for (let k = 0; k < 4; k++) {
+        scia(posStrada, k, T, F.road, COLORI[k]);
+        const p = posStrada(k, T);
+        if (p) punto(p[0], p[1], COLORI[k], 6.5, 22);
+      }
+    } else if (T >= F.flash && T < F.flash + 1.2) { // convergenza nel punto del lampo
+      const u = easeIO(clamp01((T - F.flash) / .9));
+      for (let k = 0; k < 4; k++) {
+        const [x0, y0] = roadPt(clamp01(1 - k * .085));
+        punto(lerp(x0, .5, u), lerp(y0, .46, u), COLORI[k], 6.5, 26);
+      }
+    } else if (T >= F.flash + 1.2) {
+      canvasSpento = true;
+      cx2.clearRect(0, 0, W, H);
+    }
+  };
+
+  // ------------------------------------------------------------------
+  // Cue discreti (DOM)
+  const CUES = [
+    [F.w[0], () => { $('w0').classList.add('on'); parolaAccesa[0] = true; }],
+    [F.w[1], () => { $('w1').classList.add('on'); parolaAccesa[1] = true; }],
+    [F.w[2], () => { $('w2').classList.add('on'); parolaAccesa[2] = true; }],
+    [F.w[3], () => { $('w3').classList.add('on'); parolaAccesa[3] = true; }],
+    [F.tira + .8, () => $('fParole').classList.add('tira')],
+    [F.molt, () => { $('fParole').classList.add('via'); tiles.classList.add('vivi'); }],
+    [F.mix,  () => tiles.classList.add('mix')],
+    [F.road - .3, () => tiles.classList.add('via')],
+    [F.road, () => { $('fStoria').classList.add('on'); $('sViaggio').classList.add('on'); }],
+    [F.mondi, () => $('sMondi').classList.add('on')],
+    [F.storia, () => $('sStoria').classList.add('on')],
+    [F.flash + .5, () => { $('fStoria').classList.remove('on'); $('lampo').classList.add('boom'); }],
+    [F.nome, () => { $('fInvito').classList.add('on'); $('iNome').classList.add('on'); }],
+    [F.fine, () => { $('iQuando').classList.add('on'); document.body.classList.add('fila'); }],
+  ];
+  CUES.sort((a, b) => a[0] - b[0]);
+  voce.addEventListener('ended', () => setTimeout(() => {
+    $('iQuando').classList.add('on'); document.body.classList.add('fila');
+  }, 500));
+
+  let prossimo = 0, avviato = false;
+  const passo = () => {
+    const T = voce.currentTime;
+    while (prossimo < CUES.length && T >= CUES[prossimo][0]) CUES[prossimo++][1]();
+    disegna(T);
+    if (!voce.ended || prossimo < CUES.length || !canvasSpento) requestAnimationFrame(passo);
+  };
+
+  $('start').addEventListener('click', () => {
+    if (avviato) return; avviato = true;
+    $('porta').classList.add('via');
+    voce.play().catch(() => {});
+    requestAnimationFrame(passo);
+  });
+
+  // ?demo: orologio finto senza audio (per verifiche automatiche)
+  if (new URLSearchParams(location.search).has('demo')) {
+    let t0 = null;
+    $('porta').classList.add('via');
+    const finto = ts => {
+      if (t0 === null) t0 = ts;
+      const T = (ts - t0) / 1000;
+      while (prossimo < CUES.length && T >= CUES[prossimo][0]) CUES[prossimo++][1]();
+      disegna(T);
+      if (T < F.fine + 4) requestAnimationFrame(finto);
+    };
+    requestAnimationFrame(finto);
+  }
+})();
+</script>
+</body>
+</html>
