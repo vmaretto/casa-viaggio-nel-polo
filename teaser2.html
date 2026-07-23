@@ -72,22 +72,20 @@
 
   /* ---------- la moltiplicazione ---------- */
   #tiles {
-    position: fixed; inset: 0; z-index: 20; padding: 10px;
-    display: grid; gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(clamp(64px, 7vw, 110px), 1fr));
-    grid-auto-rows: 1fr;
+    position: fixed; inset: 0; z-index: 20;
+    display: grid; place-items: center;   /* righe e colonne le calcola il JS: campo sempre completo */
     pointer-events: none;
     transition: opacity 1.1s var(--ease), filter 1.1s var(--ease);
   }
   .tile {
-    border-radius: 10px;
-    background: color-mix(in srgb, var(--c), #071d21 14%);
-    border: 1px solid color-mix(in srgb, var(--c), #f7f5ee 22%);
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: 0 0 14px 2px color-mix(in srgb, var(--c), transparent 55%);
     opacity: 0; transform: scale(.15);
-    transition: opacity .7s var(--ease) var(--d), transform .7s var(--ease) var(--d), background 1s ease;
+    transition: opacity .7s var(--ease) var(--d), transform .7s var(--ease) var(--d), background 1s ease, box-shadow 1s ease;
   }
   #tiles.vivi .tile { opacity: 1; transform: scale(1); }
-  #tiles.mix .tile { background: var(--mix); border-color: rgba(7,29,33,.28); transition: opacity .7s var(--ease), transform .7s var(--ease), background 1s ease; }
+  #tiles.mix .tile { background: var(--mix); box-shadow: 0 0 10px 1px color-mix(in srgb, var(--mix), transparent 60%); transition: opacity .7s var(--ease), transform .7s var(--ease), background 1s ease, box-shadow 1s ease; }
   #tiles.via { opacity: 0; filter: blur(6px); }
   #tiles.via .tile { transform: scale(.5); transition: transform 1.1s var(--ease); }
 
@@ -270,16 +268,26 @@
   };
 
   // ------------------------------------------------------------------
-  // Tessere della moltiplicazione
+  // La moltiplicazione: un campo di pallini che riempie ESATTAMENTE lo schermo
+  // (righe × colonne calcolate sulla viewport: mai file incomplete).
   const COLORI_CSS = ['var(--food)', 'var(--environment)', 'var(--health)', 'var(--agriculture)'];
-  const N = 160;
-  for (let i = 0; i < N; i++) {
-    const t = document.createElement('span');
-    t.className = 'tile';
-    t.style.setProperty('--c', COLORI_CSS[(i * 7 + ((i / 4) | 0)) % 4]);
-    const onda = (i * 37 + 11) % N;
-    t.style.setProperty('--d', (onda * 22) + 'ms');
-    tiles.appendChild(t);
+  {
+    const passoPx = Math.max(52, Math.min(innerWidth, innerHeight) * .085);
+    const colonne = Math.max(4, Math.round(innerWidth / passoPx));
+    const righe = Math.max(4, Math.round(innerHeight / passoPx));
+    tiles.style.gridTemplateColumns = `repeat(${colonne}, 1fr)`;
+    tiles.style.gridTemplateRows = `repeat(${righe}, 1fr)`;
+    const n = colonne * righe;
+    const diam = Math.round(Math.min(innerWidth / colonne, innerHeight / righe) * .56);
+    for (let i = 0; i < n; i++) {
+      const t = document.createElement('span');
+      t.className = 'tile';
+      t.style.width = t.style.height = diam + 'px';
+      t.style.setProperty('--c', COLORI_CSS[(i * 7 + ((i / 4) | 0)) % 4]);
+      const onda = (i * 37 + 11) % n;
+      t.style.setProperty('--d', Math.round(onda * 3400 / n) + 'ms');
+      tiles.appendChild(t);
+    }
   }
 
   // ------------------------------------------------------------------
@@ -301,8 +309,10 @@
   const clamp01 = u => Math.max(0, Math.min(1, u));
   const lerp = (a, b, u) => a + (b - a) * u;
 
-  // zig-zag della cometa (percentuali dello schermo)
-  const ZIG = [[-.05, .34], [.16, .20], [.30, .42], [.44, .24], [.58, .40], [.58, .40]];
+  // zig-zag della cometa (percentuali dello schermo): finisce all'angolo del Cibo
+  const ZIG = [[-.06, .36], [.14, .22], [.30, .44], [.42, .28], [.20, .22]];
+  // gli altri tre entrano da tre bordi diversi, ognuno verso il proprio angolo
+  const ENTRATE = [null, [1.07, .12], [-.07, .85], [.85, 1.08]];
   const lungoPolilinea = (P, u) => {
     const n = P.length - 1, s = clamp01(u) * n, i = Math.min(n - 1, s | 0), f = s - i;
     return [lerp(P[i][0], P[i + 1][0], f), lerp(P[i][1], P[i + 1][1], f)];
@@ -329,16 +339,14 @@
   const parolaAccesa = [false, false, false, false];
   let canvasSpento = false;
 
-  // Posizione del pallino k all'istante T (fase cometa → divisione → angolo).
-  // Prima della divisione i quattro coincidono con la cometa.
+  // Posizione del pallino k all'istante T. Il primo (Cibo) fa lo zig-zag e
+  // parcheggia al suo angolo; gli "altri tre" partono sfalsati dai bordi.
   const posVolo = (k, T) => {
-    if (T < F.split) return lungoPolilinea(ZIG, T / F.split);
-    if (T < F.land) {
-      const u = easeIO((T - F.split) / (F.land - F.split));
-      const [sx, sy] = ZIG[ZIG.length - 1];
-      return [lerp(sx, CORNERS[k][0], u), lerp(sy, CORNERS[k][1], u)];
-    }
-    return CORNERS[k];
+    if (k === 0) return T < F.split ? lungoPolilinea(ZIG, T / F.split) : CORNERS[0];
+    const partenza = F.split + (k - 1) * .45;
+    if (T < partenza) return null;
+    const u = easeIO(clamp01((T - partenza) / (F.land - partenza)));
+    return [lerp(ENTRATE[k][0], CORNERS[k][0], u), lerp(ENTRATE[k][1], CORNERS[k][1], u)];
   };
 
   // Posizione del pallino k sulla cavalcata della strada.
@@ -368,16 +376,18 @@
     if (canvasSpento) return;
     cx2.clearRect(0, 0, W, H);
 
-    if (T < F.land + .4) {                   // cometa, poi divisione in quattro
+    if (T < F.land + .4) {                   // la cometa parcheggia, gli altri tre arrivano
       if (T < F.split) {
         scia(posVolo, 0, T, 0, '#d8a94e');
         const [x, y] = posVolo(0, T);
         punto(x, y, '#d8a94e', 7, 26);
       } else {
-        for (let k = 0; k < 4; k++) {
+        const puls = 1 + .15 * Math.sin((T - F.split) * 5);   // il primo pulsa fermo al suo angolo
+        punto(CORNERS[0][0], CORNERS[0][1], COLORI[0], 6.5 * puls, 24);
+        for (let k = 1; k < 4; k++) {
           scia(posVolo, k, T, 0, COLORI[k]);
-          const [x, y] = posVolo(k, T);
-          punto(x, y, COLORI[k], 6.5, 22);
+          const p = posVolo(k, T);
+          if (p) punto(p[0], p[1], COLORI[k], 6.5, 22);
         }
       }
     } else if (T < F.molt) {                 // presidio agli angoli finché la parola non si accende
