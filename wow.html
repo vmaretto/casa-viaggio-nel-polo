@@ -1529,6 +1529,16 @@
     }
     .cinema-mode .scene .who__closing.reveal { transform: translate(-50%, 26px); }
     .cinema-mode .scene .who__closing.reveal.cine-in { transform: translateX(-50%); }
+    /* la firma del principio: arriva per ultima, sotto la chiusura */
+    .cinema-mode .who__ior {
+      position: absolute; z-index: 7; left: 50%; bottom: 2.6vh;
+      margin: 0; transform: translateX(-50%);
+      font-family: var(--serif); font-style: italic; font-weight: 500;
+      font-size: clamp(1.15rem, 2vw, 1.7rem);
+      color: rgba(247, 245, 238, .82); text-align: center; white-space: nowrap;
+    }
+    .cinema-mode .scene .who__ior.reveal { transform: translate(-50%, 26px); }
+    .cinema-mode .scene .who__ior.reveal.cine-in { transform: translateX(-50%); }
     /* P11 · titoli di coda veri: il cast scorre dal basso e si dissolve a meta' schermo */
     .cinema-mode .actors header { display: none; }
     .actors__grid .role--opening { display: none; }
@@ -2770,6 +2780,16 @@
       background: linear-gradient(90deg, rgba(247,245,238,.055), transparent 72%);
       transform: translateX(12px);
     }
+    .who__ior {
+      width: min(1240px, 100%);
+      margin: clamp(8px, 1.4vh, 14px) auto 0;
+      color: var(--paper);
+      font-family: var(--serif);
+      font-size: clamp(15px, 1.4vw, 22px);
+      font-style: italic;
+      text-align: center;
+    }
+    .who__ior strong { color: var(--acid); font-weight: 600; }
     .who__closing {
       width: min(1240px, 100%);
       margin: clamp(14px, 2.4vh, 24px) auto 0;
@@ -4119,6 +4139,7 @@
           </article>
         </div>
         <p class="who__closing reveal delay-3">Quattro ingressi. Uno spazio comune per trasformare bisogni e risorse in capacità utilizzabile.</p>
+        <p class="who__ior reveal delay-4">È l’<strong>Internet delle risorse</strong>.</p>
       </div>
     </section>
 
