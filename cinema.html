@@ -248,6 +248,19 @@
     p10: 7, p11: 8, p12: 9, p13: 10, p14: 11, p14b: 12, p15: 13
   };
   const PARAMS = new URLSearchParams(location.search);
+
+  // ?pubblico — versione distribuibile: salta la scena delle prossime azioni (p14b).
+  // Ogni blocco dichiara la sua scena, quindi basta togliere il blocco: da p14
+  // si passa dritti al finale. Gli indici di PAGE_TO_BLOCK vanno riallineati.
+  if (PARAMS.has('pubblico')) {
+    const via = BLOCKS.findIndex(b => b.scene === 12);
+    if (via >= 0) {
+      BLOCKS.splice(via, 1);
+      delete PAGE_TO_BLOCK.p14b;
+      Object.keys(PAGE_TO_BLOCK).forEach(k => { if (PAGE_TO_BLOCK[k] > via) PAGE_TO_BLOCK[k]--; });
+    }
+  }
+
   const requestedStart = (PARAMS.get('da') || PARAMS.get('start') || '').toLowerCase();
   const numericStart = /^\d+$/.test(requestedStart) ? Number(requestedStart) : NaN;
   const START_AT = Number.isInteger(numericStart) && numericStart >= 0 && numericStart < BLOCKS.length
