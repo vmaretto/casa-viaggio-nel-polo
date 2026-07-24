@@ -146,7 +146,6 @@
   <div id="end">
     <div class="open__inner">
       <h2 class="open__title">Questa è CASA.</h2>
-      <button id="replay" type="button">↺&nbsp; Rivedi il viaggio</button>
     </div>
   </div>
 
@@ -242,7 +241,7 @@
   ];
   const MUSIC_BASE = .55;      // musica quando la voce tace
   const MUSIC_PEAK = .9;       // reveal e finale
-  const FINAL_HOLD = 10500;     // coda musicale dopo l'ultima frase
+  const FINAL_HOLD = 5000;     // coda musicale dopo l'ultima frase (accorciata: "Questa è CASA." arriva prima)
   const PAGE_TO_BLOCK = {
     p01: 0, p02: 1, p03: 2, p04: 3, p04b: 4, p05: 5, p09: 6,
     p10: 7, p11: 8, p12: 9, p13: 10, p14: 11, p14b: 12, p15: 13
@@ -377,8 +376,8 @@
     await wait(1200); if (cancelled) return;
     deck({ casa: 'fx', name: 'finale-exit' });
     await wait(FINAL_HOLD); if (cancelled) return;
-    rampMusic(0, 4000);
-    await wait(4200);
+    rampMusic(0, 2200);
+    await wait(2300);
     playing = false;
     endScreen.classList.add('shown');
   }
@@ -410,7 +409,6 @@
   };
 
   document.getElementById('start').addEventListener('click', start);
-  document.getElementById('replay').addEventListener('click', () => { stopAll(); start(); });
   document.getElementById('btnRestart').addEventListener('click', () => { stopAll(); start(); });
 
   let pausedAt = false;
